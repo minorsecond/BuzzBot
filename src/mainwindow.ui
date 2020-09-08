@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Bartabs</string>
+   <string>Beertabs</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QDateEdit" name="drinkDateInput">
