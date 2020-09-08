@@ -1,6 +1,6 @@
 #include "database.h"
 #include <boost/filesystem.hpp>
-
+using namespace sqlite_orm;
 std::string Database::path() {
     /*
      * Find database path and create it if it doens't exist.
@@ -90,3 +90,27 @@ Beer Database::read_row(Storage storage, int row_num) {
 void Database::update(Storage storage, const Beer& beer) {
     storage.update(beer);
 }
+
+std::vector<Beer> Database::filter(const std::string& filter_type, const std::string& filter_text, Storage storage) {
+    std::vector<Beer> filtered_beers;
+
+    // Filter by name
+    if (filter_type == "Name") {
+        filtered_beers = storage.get_all<Beer>(where(c(&Beer::name) == filter_text));
+    } else if (filter_type == "Type") {
+        filtered_beers = storage.get_all<Beer>(where(c(&Beer::type) == filter_text));
+    } else if (filter_type == "Brewery") {
+        filtered_beers = storage.get_all<Beer>(where(c(&Beer::brewery) == filter_text));
+    } else if (filter_type == "Date") {
+        int year = stoi(filter_text.substr(6, 8));
+        int month = stoi(filter_text.substr(3, 2));
+        int day = stoi(filter_text.substr(0, 2));
+
+        std::cout << "Year: " << year << " Month: " << month << " Day: " << day << std::endl;
+
+        filtered_beers = storage.get_all<Beer>(where(c(&Beer::drink_year) == year && c(&Beer::drink_month) == month && c(&Beer::drink_day) == day));
+    }
+
+    return filtered_beers;
+}
+

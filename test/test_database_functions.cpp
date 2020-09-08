@@ -199,3 +199,37 @@ TEST_CASE("Update Row", "[Update Row]") {
     Beer etrwo_read2 = Database::read_row(storage_1, 1);
     REQUIRE(etrwo_read2.notes == "Very good hazy IPA. Will buy again!");
 }
+
+TEST_CASE("Filter DB", "[Filter DB]") {
+    std::string current_path = std::filesystem::current_path();
+    const char *file_name = "testdb.db";
+    std::string db_path = current_path + "/" + file_name;
+
+    if (remove(db_path.c_str())) {
+        std::cout << "Removed existing testdb.sqlite file" << std::endl;
+    }
+
+    Storage storage_1 = initStorage(db_path);
+    Database::write_db_to_disk(storage_1);
+
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+               "Roughtail Brewing", 8.0, 60.0, "Very good hazy IPA."};
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+                "Community Brewing", 8.4, 75.0, ""};
+    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA",
+               "Roughtail Brewing", 8.0, 60.0, ""};
+
+    storage_1.insert(etrwo);
+    storage_1.insert(mosaic);
+    storage_1.insert(etrwo2);
+    Database::write_db_to_disk(storage_1);
+
+    std::vector<Beer> filtered_beers = Database::filter("Date", "08/09/2020", storage_1);
+
+    Beer etrwo_read = filtered_beers.at(0);
+    Beer mosaic_read = filtered_beers.at(1);
+
+    REQUIRE(filtered_beers.empty() == false);
+    REQUIRE(filtered_beers.size() == 2);
+    REQUIRE(etrwo_read.drink_day == 8);
+}
