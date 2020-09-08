@@ -127,8 +127,6 @@ std::vector<Beer> Database::filter(const std::string& filter_type, const std::st
         int month = stoi(filter_text.substr(3, 2));
         int day = stoi(filter_text.substr(0, 2));
 
-        std::cout << "Year: " << year << " Month: " << month << " Day: " << day << std::endl;
-
         filtered_beers = storage.get_all<Beer>(where(c(&Beer::drink_year) == year && c(&Beer::drink_month) == month && c(&Beer::drink_day) == day));
     }
 
