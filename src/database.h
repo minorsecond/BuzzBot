@@ -40,7 +40,8 @@ class Database
 
 public:
     static std::vector<Beer> read();
-    Storage write(Beer beer);
+    static Storage write(Beer beer);
+    static void truncate(Storage storage);
     static void write_db_to_disk(Storage storage);
 
 public:

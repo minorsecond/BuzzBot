@@ -62,3 +62,8 @@ Storage Database::write(Beer beer) {
 
     return storage;
 }
+
+void Database::truncate(Storage storage) {
+    storage.remove_all<Beer>();
+    write_db_to_disk(storage);
+}

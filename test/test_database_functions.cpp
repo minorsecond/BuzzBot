@@ -53,8 +53,8 @@ TEST_CASE("DB IO", "[DB IO]") {
 
     Storage storage_2 = initStorage(db_path);
 
-    Beer etrwo_read = storage_1.get<Beer>(1);
-    Beer mosaic_read = storage_1.get<Beer>(2);
+    Beer etrwo_read = storage_2.get<Beer>(1);
+    Beer mosaic_read = storage_2.get<Beer>(2);
 
     REQUIRE(etrwo_read.abv == 8.0);
     REQUIRE(etrwo_read.ibu == 60.0);
@@ -63,4 +63,34 @@ TEST_CASE("DB IO", "[DB IO]") {
     REQUIRE(mosaic_read.brewery == "Community Brewing");
     REQUIRE(mosaic_read.drink_day == 8);
     REQUIRE(mosaic_read.type == "IPA");
+}
+
+TEST_CASE("Truncate DB", "[Truncate DB]") {
+    std::string current_path = std::filesystem::current_path();
+    const char *file_name = "testdb.db";
+    std::string db_path = current_path + "/" + file_name;
+
+    if (remove(db_path.c_str())) {
+        std::cout << "Removed existing testdb.sqlite file" << std::endl;
+    }
+
+    Storage storage_1 = initStorage(db_path);
+    Database::write_db_to_disk(storage_1);
+
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+               "Roughtail Brewing", 8.0, 60.0, "Very good hazy IPA."};
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+                "Community Brewing", 8.4, 75.0, ""};
+
+    storage_1.insert(etrwo);
+    storage_1.insert(mosaic);
+
+    Database::write_db_to_disk(storage_1);
+
+    REQUIRE(storage_1.get_all<Beer>().size() == 2);
+
+    Database::truncate(storage_1);
+
+    REQUIRE(storage_1.get_all<Beer>().empty() == true);
+
 }
