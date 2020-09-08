@@ -1,11 +1,17 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "database.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    Database db;
+    std::string database_path = db.path();
+    Storage storage = initStorage(database_path);
+    db.write_db_to_disk(storage);
 
     // Set datepicker to today's date
     QDate todays_date = QDate::currentDate();
