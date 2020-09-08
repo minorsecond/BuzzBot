@@ -1,13 +1,12 @@
 #include "database.h"
 #include <boost/filesystem.hpp>
 
-std::vector<Beer> Database::read() {
+std::vector<Beer> Database::read(std::string database_path) {
     /*
      * Read all rows from the database.
      * @return all_beers A vector containing Beer, storing all rows in the database.
      */
 
-    std::string database_path = Database::path();
     std::cout << "Reading or building the database at " << database_path << std::endl;
     Storage storage = initStorage(database_path);
     std::vector<Beer> all_beers = storage.get_all<Beer>();
@@ -64,6 +63,21 @@ Storage Database::write(Beer beer) {
 }
 
 void Database::truncate(Storage storage) {
+    /*
+     * Delete all rows from the sqlite database while retaining columns.
+     * @param storage: a storage instance.
+     */
+
     storage.remove_all<Beer>();
     write_db_to_disk(storage);
+}
+
+void Database::delete_row(Storage storage, int row_num) {
+    /*
+     * Delete a specific row from the database.
+     * @param storage: A storage instance
+     * @param row_num: Integer denoting row number to delete. This corresponds to DB primary key.
+     */
+
+    storage.remove<Beer>(row_num);
 }
