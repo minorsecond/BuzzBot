@@ -17,3 +17,12 @@ before_script:
    
 script:
   - cmake --build .
+  - zip -r Beertabs.zip Beertabs.app
+  
+deploy:
+  provider: releases
+  api_key: "d388fcedbac566064186af2c55c2a3db9f89b423"
+  file: "Beertabs.zip"
+  skip_cleanup: true
+  on:
+    tags: true
