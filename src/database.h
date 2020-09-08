@@ -44,6 +44,7 @@ public:
     static void truncate(Storage storage);
     static void delete_row(Storage storage, int row_num);
     static Beer read_row(Storage storage, int row_num);
+    static void update(Storage storage, const Beer& beer);
     static void write_db_to_disk(Storage storage);
 
 public:

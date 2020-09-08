@@ -167,3 +167,35 @@ TEST_CASE("Read Row", "[Read Row]") {
     REQUIRE(etrwo_read.ibu == 60.0);
     REQUIRE(etrwo_read.notes == "Very good hazy IPA.");
 }
+
+TEST_CASE("Update Row", "[Update Row]") {
+    std::string current_path = std::filesystem::current_path();
+    const char *file_name = "testdb.db";
+    std::string db_path = current_path + "/" + file_name;
+
+    if (remove(db_path.c_str())) {
+        std::cout << "Removed existing testdb.sqlite file" << std::endl;
+    }
+
+    Storage storage_1 = initStorage(db_path);
+    Database::write_db_to_disk(storage_1);
+
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+               "Roughtail Brewing", 8.0, 60.0, "Very good hazy IPA."};
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+                "Community Brewing", 8.4, 75.0, ""};
+
+    storage_1.insert(etrwo);
+    storage_1.insert(mosaic);
+    Database::write_db_to_disk(storage_1);
+
+    Beer etrwo_read = Database::read_row(storage_1, 1);
+    REQUIRE(etrwo_read.notes == "Very good hazy IPA.");
+
+    Beer etrwo_update{1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+                      "Roughtail Brewing", 8.0, 60.0, "Very good hazy IPA. Will buy again!"};
+    Database::update(storage_1, etrwo_update);
+    Database::write_db_to_disk(storage_1);
+    Beer etrwo_read2 = Database::read_row(storage_1, 1);
+    REQUIRE(etrwo_read2.notes == "Very good hazy IPA. Will buy again!");
+}

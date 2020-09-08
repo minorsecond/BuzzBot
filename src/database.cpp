@@ -86,3 +86,7 @@ Beer Database::read_row(Storage storage, int row_num) {
     Beer beer = storage.get<Beer>(row_num);
     return beer;
 }
+
+void Database::update(Storage storage, const Beer& beer) {
+    storage.update(beer);
+}
