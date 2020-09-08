@@ -83,15 +83,36 @@ void Database::delete_row(Storage storage, int row_num) {
 }
 
 Beer Database::read_row(Storage storage, int row_num) {
+    /*
+     * Read a specific row from the database.
+     * @param storage: A storage instance.
+     * @param row_num: The row number that should be read.
+     * @return beer: The results of the database query.
+     */
+
     Beer beer = storage.get<Beer>(row_num);
     return beer;
 }
 
 void Database::update(Storage storage, const Beer& beer) {
+    /*
+     * Update a specific database row.
+     * @param storage: A storage instance.
+     * @param beer: The row to update. The ID of the beer must match the internal primary key on the DB.
+     */
+
     storage.update(beer);
 }
 
 std::vector<Beer> Database::filter(const std::string& filter_type, const std::string& filter_text, Storage storage) {
+    /*
+     * Retrieve DB rows based on filter column and text.
+     * @param filter_type: Column on which to filter.
+     * @param filter_text: Text to search columns for.
+     * @param storage: A storage instance.
+     * @return filtered_beers: The results of the database query.
+     */
+
     std::vector<Beer> filtered_beers;
 
     // Filter by name
