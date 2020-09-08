@@ -10,7 +10,7 @@
 #include <filesystem>
 
 inline bool exists (const std::string& name) {
-    struct stat buffer;
+    struct stat buffer{};
     return (stat (name.c_str(), &buffer) == 0);
 }
 
@@ -46,12 +46,10 @@ TEST_CASE("Read DB", "[DB Read]") {
     Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
                 "Community Brewing", 8.4, 75.0, ""};
 
-    int first_inserted_id = storage.insert(etrwo);
-    int second_inserted_id = storage.insert(mosaic);
+    storage.insert(etrwo);
+    storage.insert(mosaic);
 
     Database::write_db_to_disk(storage);
-
-    std::cout << "First inserted ID: " << first_inserted_id << std::endl;
 
     Beer etrwo_read = storage.get<Beer>(1);
     Beer mosaic_read = storage.get<Beer>(2);
