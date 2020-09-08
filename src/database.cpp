@@ -1,6 +1,4 @@
 #include "database.h"
-#include "../include/sqlite_orm.h"
-#include <CoreServices/CoreServices.h>
 #include <boost/filesystem.hpp>
 
 std::vector<Beer> Database::read() {
@@ -26,18 +24,10 @@ std::string Database::path() {
      * @return full_path Path where database file should be stored.
      */
     // Find path to application support directory
-    FSRef ref;
-    OSType folderType = kApplicationSupportFolderType;
-    char db_path[PATH_MAX];
 
-    FSFindFolder( kUserDomain, folderType, kCreateFolder, &ref );
-
-    FSRefMakePath( &ref, (UInt8*)&db_path, PATH_MAX );
-
-    // Create db path
-    std::string directory = std::string(db_path);
-    directory += "/Beertabs";
-    //directory = "/Users/rwardrup/Desktop/Beertabs";
+    std::string username = getenv("USER");
+    std::cout << "User: " << username << std::endl;
+    std::string directory = "/Users/" + username + "/Library/Application Support/Beertabs";
 
     // Remove spaces from path
     directory.erase(std::remove_if(
