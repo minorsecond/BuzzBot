@@ -46,3 +46,19 @@ std::string Database::path() {
 
     return full_path;
 }
+
+Storage Database::write(Beer beer) {
+    /*
+     * Write a row to the SQLite database.
+     * @param beer: a beer
+     * @return Storage: The storage instance
+     */
+
+    std::string database_path = path();
+    Storage storage = initStorage(database_path);
+    int inserted_id = storage.insert(beer);
+    beer.id = inserted_id;
+    write_db_to_disk(storage);
+
+    return storage;
+}
