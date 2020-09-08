@@ -3,11 +3,11 @@
 #include <CoreServices/CoreServices.h>
 #include <boost/filesystem.hpp>
 
-//Database::Database()
-//{
-//}
-
 std::vector<Beer> Database::read() {
+    /*
+     * Read all rows from the database.
+     * @return all_beers A vector containing Beer, storing all rows in the database.
+     */
     std::string database_path = Database::path();
     std::cout << "Reading or building the database at " << database_path << std::endl;
     Storage storage = initStorage(database_path);
@@ -21,7 +21,10 @@ void Database::write_db_to_disk(Storage storage) {
 }
 
 std::string Database::path() {
-
+    /*
+     * Find database path and create it if it doens't exist.
+     * @return full_path Path where database file should be stored.
+     */
     // Find path to application support directory
     FSRef ref;
     OSType folderType = kApplicationSupportFolderType;

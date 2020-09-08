@@ -39,7 +39,6 @@ class Database
 {
 
 public:
-    //Database();
     std::vector<Beer> read();
     void write_db_to_disk(Storage storage);
 
