@@ -13,7 +13,7 @@ before_script:
   - export PATH=/usr/local/opt/qt5/bin:$PATH
   - mkdir build
   - cd build
-  - cmake .. -D CMAKE_BUILD_TYPE=Release .
+  - cmake -D CMAKE_BUILD_TYPE=Release ..
    
 script:
   - cmake --build .
