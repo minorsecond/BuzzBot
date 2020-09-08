@@ -3,6 +3,7 @@
 #include <CoreServices/CoreServices.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <boost/filesystem.hpp>
 
 //Database::Database()
 //{
@@ -31,10 +32,19 @@ std::string Database::path() {
     FSRefMakePath( &ref, (UInt8*)&db_path, PATH_MAX );
 
     std::string directory = std::string(db_path);
-    directory += "/beertabs";
-    std::string full_path = directory += "/beertabs.db";
+    directory += "/Beertabs";
+    //directory = "/Users/rwardrup/Desktop/Beertabs";
 
-    mkdir(directory.c_str(), 0777);
+    // Remove spaces from path
+    directory.erase(std::remove_if(
+                        begin(directory), end(directory),
+                        [l = std::locale{}](auto ch) {return std::isspace(ch, l);}),
+                    end(directory));
+
+    std::cout << "Creating app support directory: " << directory << std::endl;
+    std::string full_path = directory + "/beertabs.db";
+
+    boost::filesystem::create_directory(directory);
 
     return full_path;
 }
