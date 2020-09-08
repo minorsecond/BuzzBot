@@ -8,8 +8,12 @@ before_install:
       brew install qt5 cmake boost sqlite3 catch2;
       brew link --force qt ;
     fi
+    
+before_script:
+  - export PATH=/usr/local/opt/qt5/bin:$PATH
+  - mkdir build
+  - cd build
+  - cmake .. -D CMAKE_BUILD_TYPE=Release .
    
 script:
-  - export PATH=/usr/local/opt/qt5/bin:$PATH
-  - cmake -D CMAKE_BUILD_TYPE=Release .
-  - cmake --build
+  - cmake --build .
