@@ -4,7 +4,7 @@
 
 #include "../include/Catch2.hpp"
 #include "../src/database.h"
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 #include <sys/stat.h>
 #include <filesystem>
