@@ -39,11 +39,11 @@ class Database
 {
 
 public:
-    std::vector<Beer> read();
-    void write_db_to_disk(Storage storage);
+    static std::vector<Beer> read();
+    static void write_db_to_disk(Storage storage);
 
 public:
-    std::string path();
+    static std::string path();
 };
 
 #endif // DATABASE_H
