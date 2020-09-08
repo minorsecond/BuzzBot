@@ -9,4 +9,4 @@ before_install:
     fi
    
 script:
-  - cmake --build /Users/rwardrup/Projects/Beertabs/cmake-build-debug --target Beertabs
+  - cmake -D CMAKE_BUILD_TYPE=Release .
