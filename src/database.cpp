@@ -1,8 +1,6 @@
 #include "database.h"
 #include "../include/sqlite_orm.h"
 #include <CoreServices/CoreServices.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <boost/filesystem.hpp>
 
 //Database::Database()
@@ -23,6 +21,8 @@ void Database::write_db_to_disk(Storage storage) {
 }
 
 std::string Database::path() {
+
+    // Find path to application support directory
     FSRef ref;
     OSType folderType = kApplicationSupportFolderType;
     char db_path[PATH_MAX];
@@ -31,6 +31,7 @@ std::string Database::path() {
 
     FSRefMakePath( &ref, (UInt8*)&db_path, PATH_MAX );
 
+    // Create db path
     std::string directory = std::string(db_path);
     directory += "/Beertabs";
     //directory = "/Users/rwardrup/Desktop/Beertabs";
