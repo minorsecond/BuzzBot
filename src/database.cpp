@@ -31,8 +31,8 @@ std::string Database::path() {
     FSRefMakePath( &ref, (UInt8*)&db_path, PATH_MAX );
 
     std::string directory = std::string(db_path);
-    directory += "/Alcool";
-    std::string full_path = directory += "/alcool.db";
+    directory += "/beertabs";
+    std::string full_path = directory += "/beertabs.db";
 
     mkdir(directory.c_str(), 0777);
 
