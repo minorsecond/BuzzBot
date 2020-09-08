@@ -13,8 +13,8 @@ struct Beer {
     std::string name;
     std::string type;
     std::string brewery;
-    float abv;
-    float ibu;
+    double abv;
+    double ibu;
     std::string notes;
 };
 
@@ -39,10 +39,11 @@ class Database
 {
 
 public:
-    static std::vector<Beer> read(std::string database_path);
+    static std::vector<Beer> read(const std::string& database_path);
     static Storage write(Beer beer);
     static void truncate(Storage storage);
     static void delete_row(Storage storage, int row_num);
+    static Beer read_row(Storage storage, int row_num);
     static void write_db_to_disk(Storage storage);
 
 public:

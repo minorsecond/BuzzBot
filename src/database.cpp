@@ -1,7 +1,31 @@
 #include "database.h"
 #include <boost/filesystem.hpp>
 
-std::vector<Beer> Database::read(std::string database_path) {
+std::string Database::path() {
+    /*
+     * Find database path and create it if it doens't exist.
+     * @return full_path Path where database file should be stored.
+     */
+    // Find path to application support directory
+
+    std::string username = getenv("USER");
+    std::string directory = "/Users/" + username + "/Library/Application Support/Beertabs";
+
+    // Remove spaces from path
+    directory.erase(std::remove_if(
+            begin(directory), end(directory),
+            [l = std::locale{}](auto ch) {return std::isspace(ch, l);}),
+                    end(directory));
+
+    std::cout << "Creating app support directory: " << directory << std::endl;
+    std::string full_path = directory + "/beertabs.db";
+
+    boost::filesystem::create_directory(directory);
+
+    return full_path;
+}
+
+std::vector<Beer> Database::read(const std::string& database_path) {
     /*
      * Read all rows from the database.
      * @return all_beers A vector containing Beer, storing all rows in the database.
@@ -20,30 +44,6 @@ void Database::write_db_to_disk(Storage storage) {
      */
 
     storage.sync_schema(false);
-}
-
-std::string Database::path() {
-    /*
-     * Find database path and create it if it doens't exist.
-     * @return full_path Path where database file should be stored.
-     */
-    // Find path to application support directory
-
-    std::string username = getenv("USER");
-    std::string directory = "/Users/" + username + "/Library/Application Support/Beertabs";
-
-    // Remove spaces from path
-    directory.erase(std::remove_if(
-                        begin(directory), end(directory),
-                        [l = std::locale{}](auto ch) {return std::isspace(ch, l);}),
-                    end(directory));
-
-    std::cout << "Creating app support directory: " << directory << std::endl;
-    std::string full_path = directory + "/beertabs.db";
-
-    boost::filesystem::create_directory(directory);
-
-    return full_path;
 }
 
 Storage Database::write(Beer beer) {
@@ -80,4 +80,9 @@ void Database::delete_row(Storage storage, int row_num) {
      */
 
     storage.remove<Beer>(row_num);
+}
+
+Beer Database::read_row(Storage storage, int row_num) {
+    Beer beer = storage.get<Beer>(row_num);
+    return beer;
 }
