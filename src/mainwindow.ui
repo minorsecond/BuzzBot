@@ -23,6 +23,9 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::WheelFocus</enum>
+    </property>
     <property name="displayFormat">
      <string>M/d/yyyy</string>
     </property>
@@ -284,6 +287,11 @@
     <column>
      <property name="text">
       <string>Size</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Rating</string>
      </property>
     </column>
     <column>
@@ -694,6 +702,35 @@
     </property>
     <property name="text">
      <string>Filter</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="ratingInput">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>240</y>
+      <width>42</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>10</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ratingLabel">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>220</y>
+      <width>58</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Rating</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
