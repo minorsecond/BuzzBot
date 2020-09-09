@@ -41,8 +41,8 @@ class Database
 {
 
 public:
-    static std::vector<Beer> read(const std::string& database_path);
-    static Storage write(Beer beer);
+    static std::vector<Beer> read(const std::string& database_path, Storage storage);
+    static Storage write(Beer beer, Storage storage);
     static void truncate(Storage storage);
     static void delete_row(Storage storage, int row_num);
     static Beer read_row(int row_num, Storage storage);
