@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     Database::write_db_to_disk(storage);
 
     // Set up button and input states
+
     ui->deleteRowButton->setDisabled(true);
     ui->nameInput->setDuplicatesEnabled(false);
     ui->typeInput->setDuplicatesEnabled(false);
