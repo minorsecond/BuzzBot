@@ -27,7 +27,7 @@
      <enum>Qt::WheelFocus</enum>
     </property>
     <property name="displayFormat">
-     <string>M/d/yyyy</string>
+     <string>MMM/dd/yyyy</string>
     </property>
     <property name="calendarPopup">
      <bool>true</bool>
