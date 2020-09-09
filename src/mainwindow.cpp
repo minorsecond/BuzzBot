@@ -29,7 +29,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Set table filter options to default values (all)
     ui->filterCategoryInput->addItem("None");
-    ui->filterTextInput->addItem("All");
+    ui->filterCategoryInput->setCurrentText("None");
+    ui->filterCategoryInput->addItem("Beer Name");
+    ui->filterCategoryInput->addItem("Beer Type");
+    ui->filterCategoryInput->addItem("Brewery");
+
+    ui->filterTextInput->setDisabled(true);
 
     // Set column widths
     ui->drinkLogTable->setColumnWidth(0, 100);
@@ -47,6 +52,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->drinkLogTable->selectionModel(),
             SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection&)),
             this, SLOT(populate_fields(const QItemSelection &, const QItemSelection &)));
+    connect(ui->filterCategoryInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(enable_filter_text(const QString&)));
     connect(ui->submitRowButton, SIGNAL(clicked()), this, SLOT(submit_button_clicked()));
     connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(clear_fields()));
     connect(ui->deleteRowButton, SIGNAL(clicked()), this, SLOT(delete_row()));
@@ -195,4 +201,50 @@ void MainWindow::delete_row() {
     int row_to_delete = (ui->drinkLogTable->item(select, 7)->text().toUtf8().toInt());
     Database::delete_row(storage, row_to_delete);
     update_table();
+}
+
+void MainWindow::populate_filter_menus(std::string filter_type) {
+    std::set<QString> beer_names;
+    std::set<QString> beer_types;
+    std::set<QString> breweries;
+
+    std::vector<Beer> all_beers = Database::read(Database::path());
+
+    ui->filterTextInput->clear();
+
+    // Add items to the sets
+    for (auto beer : all_beers) {
+        QString beer_name = QString::fromStdString(beer.name);
+        QString beer_type = QString::fromStdString(beer.type);
+        QString brewery = QString::fromStdString(beer.brewery);
+
+        beer_names.insert(beer_name);
+        beer_types.insert(beer_type);
+        breweries.insert(brewery);
+    }
+
+    if (filter_type == "Beer Name") {
+        for (const auto& name : beer_names) {
+            ui->filterTextInput->addItem(name);
+        }
+    } else if (filter_type == "Beer Type") {
+        for (const auto& type : beer_types) {
+            ui->filterTextInput->addItem(type);
+        }
+    } else if (filter_type == "Brewery") {
+        for (const auto& brewery : breweries) {
+            ui->filterTextInput->addItem(brewery);
+        }
+    }
+}
+
+void MainWindow::enable_filter_text(const QString&) {
+    std::cout << "Current text: " << ui->filterCategoryInput->currentText().toStdString() << std::endl;
+    if (ui->filterCategoryInput->currentText().toStdString() == "None")
+        ui->filterTextInput->setDisabled(true);
+    else
+        ui->filterTextInput->setEnabled(true);
+
+    std::string filter_type = ui->filterCategoryInput->currentText().toStdString();
+    populate_filter_menus(filter_type);
 }
