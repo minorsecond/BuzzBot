@@ -22,7 +22,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->drinkDateInput->setDate(todays_date);
 
     // Enable this on release
-    //ui->drinkLogTable->setRowCount(0);
+    ui->drinkLogTable->setRowCount(0);
+
+    update_table();
 
     // Set table filter options to default values (all)
     ui->filterCategoryInput->addItem("None");
@@ -36,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->drinkLogTable->setColumnWidth(4, 50);
     ui->drinkLogTable->setColumnWidth(5, 50);
     ui->drinkLogTable->setColumnWidth(6, 50);
+    ui->drinkLogTable->horizontalHeader()->setStretchLastSection(true);
     //QHeaderView* drink_log_header = ui->drinkLogTable->horizontalHeader();
     //drink_log_header->setSectionResizeMode(7, QHeaderView::Stretch);
 
@@ -119,9 +122,9 @@ void MainWindow::update_table() {
         auto *name = new QTableWidgetItem(beer.name.c_str());
         auto *type = new QTableWidgetItem(beer.type.c_str());
         auto *brewery = new QTableWidgetItem(beer.brewery.c_str());
-        auto *abv = new QTableWidgetItem(std::to_string(beer.abv).c_str());
-        auto *ibu = new QTableWidgetItem(std::to_string(beer.ibu).c_str());
-        auto *size = new QTableWidgetItem(std::to_string(beer.size).c_str());
+        auto *abv = new QTableWidgetItem(double_to_string(beer.abv).c_str());
+        auto *ibu = new QTableWidgetItem(double_to_string(beer.ibu).c_str());
+        auto *size = new QTableWidgetItem(double_to_string(beer.size).c_str());
         std::string notes = beer.notes;
 
         ui->drinkLogTable->setItem(table_row_num, 0, date);
@@ -135,4 +138,12 @@ void MainWindow::update_table() {
         table_row_num += 1;
     }
 
+}
+
+std::string MainWindow::double_to_string(double input_double) {
+    double purchase_price = std::ceil(input_double * 10.0) / 10.0;
+    std::ostringstream price_stream;
+    price_stream << purchase_price;
+
+    return price_stream.str();
 }

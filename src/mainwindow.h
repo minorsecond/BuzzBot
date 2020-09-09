@@ -17,6 +17,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    static std::string double_to_string(double input_double);
 
 private slots:
     void submit_button_clicked();
