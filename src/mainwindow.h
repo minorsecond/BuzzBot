@@ -29,5 +29,6 @@ private slots:
     void populate_fields(const QItemSelection &, const QItemSelection &);
     void delete_row();
     void enable_filter_text(const QString&);
+    void changed_filter_text(const QString&);
 };
 #endif // MAINWINDOW_H
