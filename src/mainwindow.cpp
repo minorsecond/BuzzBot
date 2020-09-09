@@ -14,6 +14,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setFixedSize(1397, 699);
 
+    // Fixed row height in table
+    QHeaderView *verticalHeader = ui->drinkLogTable->verticalHeader();
+    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+    ui->drinkLogTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+
+
     //std::string database_path = Database::path();
     Database::write_db_to_disk(storage);
 
