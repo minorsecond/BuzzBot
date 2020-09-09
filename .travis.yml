@@ -17,7 +17,8 @@ before_script:
    
 script:
   - cmake --build .
-  - ctest -VV
+  - ls -alh
+  - ctest -VV functions_test
   - zip -r Beertabs.zip Beertabs.app
   
 deploy:
