@@ -45,9 +45,9 @@ public:
     static Storage write(Beer beer);
     static void truncate(Storage storage);
     static void delete_row(Storage storage, int row_num);
-    static Beer read_row(int row_num);
+    static Beer read_row(int row_num, Storage storage);
     static void update(Storage storage, const Beer& beer);
-    static std::vector<Beer> filter(const std::string& filter_type, const std::string& filter_text);
+    static std::vector<Beer> filter(const std::string& filter_type, const std::string& filter_text, Storage storage);
     static void write_db_to_disk(Storage storage);
 
 public:
