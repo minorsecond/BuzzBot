@@ -30,8 +30,8 @@ MainWindow::MainWindow(QWidget *parent)
     // Set table filter options to default values (all)
     ui->filterCategoryInput->addItem("None");
     ui->filterCategoryInput->setCurrentText("None");
-    ui->filterCategoryInput->addItem("Beer Name");
-    ui->filterCategoryInput->addItem("Beer Type");
+    ui->filterCategoryInput->addItem("Name");
+    ui->filterCategoryInput->addItem("Type");
     ui->filterCategoryInput->addItem("Brewery");
 
     ui->filterTextInput->setDisabled(true);
@@ -53,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
             SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection&)),
             this, SLOT(populate_fields(const QItemSelection &, const QItemSelection &)));
     connect(ui->filterCategoryInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(enable_filter_text(const QString&)));
+    connect(ui->filterTextInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(changed_filter_text(const QString&)));
     connect(ui->submitRowButton, SIGNAL(clicked()), this, SLOT(submit_button_clicked()));
     connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(clear_fields()));
     connect(ui->deleteRowButton, SIGNAL(clicked()), this, SLOT(delete_row()));
@@ -223,11 +224,11 @@ void MainWindow::populate_filter_menus(std::string filter_type) {
         breweries.insert(brewery);
     }
 
-    if (filter_type == "Beer Name") {
+    if (filter_type == "Name") {
         for (const auto& name : beer_names) {
             ui->filterTextInput->addItem(name);
         }
-    } else if (filter_type == "Beer Type") {
+    } else if (filter_type == "Type") {
         for (const auto& type : beer_types) {
             ui->filterTextInput->addItem(type);
         }
@@ -247,4 +248,10 @@ void MainWindow::enable_filter_text(const QString&) {
 
     std::string filter_type = ui->filterCategoryInput->currentText().toStdString();
     populate_filter_menus(filter_type);
+    update_table();
+}
+
+void MainWindow::changed_filter_text(const QString &) {
+    std::cout << "Changed filter text" << std::endl;
+    update_table();
 }
