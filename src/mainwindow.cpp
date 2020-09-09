@@ -112,10 +112,12 @@ void MainWindow::update_table() {
      * Populate the table with data from the database.
      */
 
+    Storage storage = initStorage(Database::path());
+
     std::string filter_category = ui->filterCategoryInput->currentText().toStdString();
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
 
-    std::vector<Beer> beers = Database::filter(filter_category, filter_text);
+    std::vector<Beer> beers = Database::filter(filter_category, filter_text, storage);
 
     ui->drinkLogTable->setRowCount(beers.size());
 
@@ -157,6 +159,8 @@ std::string MainWindow::double_to_string(double input_double) {
 
 void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &) {
 
+    Storage storage = initStorage(Database::path());
+
     QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
     int selection = ui->drinkLogTable->selectionModel()->currentIndex().row();
     int column_count = ui->drinkLogTable->columnCount();
@@ -165,7 +169,7 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
         ui->deleteRowButton->setEnabled(true);
     else
         ui->deleteRowButton->setDisabled(true);
-    Beer beer = Database::read_row(row_to_get);
+    Beer beer = Database::read_row(row_to_get, storage);
 
     std::ostringstream month_padded;
     std::ostringstream day_padded;
