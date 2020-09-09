@@ -158,6 +158,11 @@ void MainWindow::update_table() {
 }
 
 std::string MainWindow::double_to_string(double input_double) {
+    /*
+     * Convert a double to a string with 1 decimal value.
+     * @param input_double: Double value that should be converted.
+     */
+
     double purchase_price = std::ceil(input_double * 10.0) / 10.0;
     std::ostringstream price_stream;
     price_stream << purchase_price;
@@ -166,12 +171,14 @@ std::string MainWindow::double_to_string(double input_double) {
 }
 
 void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &) {
+    /*
+     * Populate user entry fields when user clicks on a row in the table.
+     */
 
     Storage storage = initStorage(Database::path());
 
     QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
     int selection = ui->drinkLogTable->selectionModel()->currentIndex().row();
-    int column_count = ui->drinkLogTable->columnCount();
     int row_to_get = ui->drinkLogTable->item(selection, 7)->text().toUtf8().toInt();
     if (select->isRowSelected(selection))
         ui->deleteRowButton->setEnabled(true);
@@ -197,6 +204,10 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
 }
 
 void MainWindow::delete_row() {
+    /*
+     * Delete the row in the database that corresponds to the row selected in the table.
+     */
+
     Storage storage = initStorage(Database::path());
     int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
     int row_to_delete = (ui->drinkLogTable->item(select, 7)->text().toUtf8().toInt());
@@ -204,17 +215,25 @@ void MainWindow::delete_row() {
     update_table();
 }
 
-void MainWindow::populate_filter_menus(std::string filter_type) {
+void MainWindow::populate_filter_menus(const std::string& filter_type) {
+    /*
+     * Populate the filter menus depending on user selection.
+     * @param filter type: Type of filter to use. Options in beer name (name), beer type (type) and brewery.
+     */
+
     std::set<QString> beer_names;
     std::set<QString> beer_types;
     std::set<QString> breweries;
+
+    // This fixes crashes when changing filters with rows selected.
+    QSignalBlocker filterTextInputSignalBlocker(ui->filterTextInput);
 
     std::vector<Beer> all_beers = Database::read(Database::path());
 
     ui->filterTextInput->clear();
 
     // Add items to the sets
-    for (auto beer : all_beers) {
+    for (const auto& beer : all_beers) {
         QString beer_name = QString::fromStdString(beer.name);
         QString beer_type = QString::fromStdString(beer.type);
         QString brewery = QString::fromStdString(beer.brewery);
@@ -240,7 +259,10 @@ void MainWindow::populate_filter_menus(std::string filter_type) {
 }
 
 void MainWindow::enable_filter_text(const QString&) {
-    std::cout << "Current text: " << ui->filterCategoryInput->currentText().toStdString() << std::endl;
+    /*
+     * Enable the filter text combobox when user selects anything other than None in the filter category box.
+     */
+
     if (ui->filterCategoryInput->currentText().toStdString() == "None")
         ui->filterTextInput->setDisabled(true);
     else
@@ -252,6 +274,9 @@ void MainWindow::enable_filter_text(const QString&) {
 }
 
 void MainWindow::changed_filter_text(const QString &) {
-    std::cout << "Changed filter text" << std::endl;
+    /*
+     * Update the table when user selects a value from the filterText combobox.
+     */
+
     update_table();
 }

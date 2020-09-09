@@ -17,7 +17,6 @@ std::string Database::path() {
             [l = std::locale{}](auto ch) {return std::isspace(ch, l);}),
                     end(directory));
 
-    std::cout << "Creating app support directory: " << directory << std::endl;
     std::string full_path = directory + "/beertabs.db";
 
     boost::filesystem::create_directory(directory);
