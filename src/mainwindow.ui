@@ -55,6 +55,9 @@
       <height>30</height>
      </rect>
     </property>
+    <property name="editable">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="breweryLabel">
     <property name="geometry">
@@ -97,6 +100,9 @@
       <height>30</height>
      </rect>
     </property>
+    <property name="editable">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QComboBox" name="nameInput">
     <property name="geometry">
@@ -106,6 +112,9 @@
       <width>361</width>
       <height>30</height>
      </rect>
+    </property>
+    <property name="editable">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="nameLabel">

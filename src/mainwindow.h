@@ -15,10 +15,11 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
-private slots:
-    void submit_button_clicked();
-
 private:
     Ui::MainWindow *ui;
+    void update_table();
+
+private slots:
+    void submit_button_clicked();
 };
 #endif // MAINWINDOW_H
