@@ -37,3 +37,16 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::submit_button_clicked() {
+    int drink_year = ui->drinkDateInput->date().year();
+    int drink_month = ui->drinkDateInput->date().month();
+    int drink_day = ui->drinkDateInput->date().day();
+    std::string beer_name = ui->nameInput->currentText().toStdString();
+    std::string beer_type = ui->typeInput->currentText().toStdString();
+    std::string brewery_name = ui->breweryInput->currentText().toStdString();
+    double beer_ibu = ui->ibuInput->value();
+    double beer_abv = ui->abvInput->value();
+    std::string notes = ui->notesInput->toPlainText().toStdString();
+
+}
+
