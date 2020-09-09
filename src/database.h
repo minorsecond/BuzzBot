@@ -16,6 +16,7 @@ struct Beer {
     double abv;
     double ibu;
     double size;
+    int rating;
     std::string notes;
 };
 
@@ -33,6 +34,7 @@ inline auto initStorage(const std::string& file_name) {
                                                           sqlite_orm::make_column("abv", &Beer::abv),
                                                           sqlite_orm::make_column("ibu", &Beer::ibu),
                                                           sqlite_orm::make_column("size", &Beer::size),
+                                                          sqlite_orm::make_column("rating", &Beer::rating),
                                                           sqlite_orm::make_column("notes", &Beer::notes)));
 }
 using Storage = decltype (initStorage(""));

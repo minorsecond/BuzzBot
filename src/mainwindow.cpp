@@ -38,20 +38,21 @@ MainWindow::MainWindow(QWidget *parent)
     ui->filterCategoryInput->addItem("Name");
     ui->filterCategoryInput->addItem("Type");
     ui->filterCategoryInput->addItem("Brewery");
+    ui->filterCategoryInput->addItem("Rating");
 
     ui->filterTextInput->setDisabled(true);
 
     // Set column widths
     ui->drinkLogTable->setColumnWidth(0, 100);
-    ui->drinkLogTable->setColumnWidth(1, 453);
+    ui->drinkLogTable->setColumnWidth(1, 428);
     ui->drinkLogTable->setColumnWidth(2, 200);
-    ui->drinkLogTable->setColumnWidth(3, 453);
+    ui->drinkLogTable->setColumnWidth(3, 428);
     ui->drinkLogTable->setColumnWidth(4, 50);
     ui->drinkLogTable->setColumnWidth(5, 50);
     ui->drinkLogTable->setColumnWidth(6, 50);
-    ui->drinkLogTable->horizontalHeader()->setStretchLastSection(true);
-    //QHeaderView* drink_log_header = ui->drinkLogTable->horizontalHeader();
-    //drink_log_header->setSectionResizeMode(7, QHeaderView::Stretch);
+    ui->drinkLogTable->setColumnHidden(8, true);  // Hide ID column
+    QHeaderView* drink_log_header = ui->drinkLogTable->horizontalHeader();
+    drink_log_header->setSectionResizeMode(7, QHeaderView::Stretch);
 
     // Slot connections
     connect(ui->drinkLogTable->selectionModel(),
@@ -83,6 +84,7 @@ void MainWindow::submit_button_clicked() {
     double beer_ibu = ui->ibuInput->value();
     double beer_abv = ui->abvInput->value();
     double beer_size = ui->sizeInput->value();
+    int rating = ui->ratingInput->value();
     std::string notes = ui->notesInput->toPlainText().toStdString();
 
     Beer beer{
@@ -96,6 +98,7 @@ void MainWindow::submit_button_clicked() {
         beer_abv,
         beer_ibu,
         beer_size,
+        rating,
         notes
     };
     Database::write(beer, storage);
@@ -118,6 +121,7 @@ void MainWindow::clear_fields() {
     ui->abvInput->setValue(0.0);
     ui->ibuInput->setValue(0.0);
     ui->sizeInput->setValue(0.0);
+    ui->ratingInput->setValue(0);
 }
 
 void MainWindow::update_table() {
@@ -129,6 +133,8 @@ void MainWindow::update_table() {
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
 
     std::vector<Beer> beers = Database::filter(filter_category, filter_text, storage);
+
+    std::cout << beers.size() << " rows in the database." << std::endl;
 
     ui->drinkLogTable->setRowCount(beers.size());
 
@@ -142,6 +148,7 @@ void MainWindow::update_table() {
         auto *abv = new QTableWidgetItem(double_to_string(beer.abv).c_str());
         auto *ibu = new QTableWidgetItem(double_to_string(beer.ibu).c_str());
         auto *size = new QTableWidgetItem(double_to_string(beer.size).c_str());
+        auto *rating = new QTableWidgetItem(std::to_string(beer.rating).c_str());
         auto *id = new QTableWidgetItem(std::to_string(beer.id).c_str());
 
         std::string notes = beer.notes;
@@ -153,11 +160,12 @@ void MainWindow::update_table() {
         ui->drinkLogTable->setItem(table_row_num, 4, abv);
         ui->drinkLogTable->setItem(table_row_num, 5, ibu);
         ui->drinkLogTable->setItem(table_row_num, 6, size);
-        ui->drinkLogTable->setItem(table_row_num, 7, id);
+        ui->drinkLogTable->setItem(table_row_num, 7, rating);
+        ui->drinkLogTable->setItem(table_row_num, 8, id);
 
         table_row_num += 1;
     }
-
+    std::cout << table_row_num << " rows in the table." << std::endl;
 }
 
 std::string MainWindow::double_to_string(double input_double) {
@@ -180,7 +188,9 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
 
     QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
     int selection = ui->drinkLogTable->selectionModel()->currentIndex().row();
-    int row_to_get = ui->drinkLogTable->item(selection, 7)->text().toUtf8().toInt();
+    std::cout << "Getting row " << selection << " from table." << std::endl;
+    int row_to_get = ui->drinkLogTable->item(selection, 8)->text().toUtf8().toInt();
+    std::cout << "Getting row " << row_to_get << " from database." << std::endl;
     if (select->isRowSelected(selection))
         ui->deleteRowButton->setEnabled(true);
     else
@@ -202,6 +212,7 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
     ui->abvInput->setValue(beer.abv);
     ui->ibuInput->setValue(beer.ibu);
     ui->sizeInput->setValue(beer.size);
+    ui->sizeInput->setValue(beer.rating);
 }
 
 void MainWindow::delete_row() {
@@ -209,9 +220,8 @@ void MainWindow::delete_row() {
      * Delete the row in the database that corresponds to the row selected in the table.
      */
 
-
     int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
-    int row_to_delete = (ui->drinkLogTable->item(select, 7)->text().toUtf8().toInt());
+    int row_to_delete = (ui->drinkLogTable->item(select, 8)->text().toUtf8().toInt());
     Database::delete_row(storage, row_to_delete);
     update_table();
 }
@@ -225,6 +235,7 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
     std::set<QString> beer_names;
     std::set<QString> beer_types;
     std::set<QString> breweries;
+    std::set<QString> ratings;
 
     // This fixes crashes when changing filters with rows selected.
     QSignalBlocker filterTextInputSignalBlocker(ui->filterTextInput);
@@ -238,10 +249,12 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
         QString beer_name = QString::fromStdString(beer.name);
         QString beer_type = QString::fromStdString(beer.type);
         QString brewery = QString::fromStdString(beer.brewery);
+        QString rating = QString::fromStdString(std::to_string(beer.rating));
 
         beer_names.insert(beer_name);
         beer_types.insert(beer_type);
         breweries.insert(brewery);
+        ratings.insert(rating);
     }
 
     if (filter_type == "Name") {
@@ -255,6 +268,10 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
     } else if (filter_type == "Brewery") {
         for (const auto& brewery : breweries) {
             ui->filterTextInput->addItem(brewery);
+        }
+    } else if (filter_type == "Rating") {
+        for (auto rating : ratings) {
+            ui->filterTextInput->addItem(rating);
         }
     }
 }

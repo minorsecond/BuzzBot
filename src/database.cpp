@@ -126,6 +126,8 @@ std::vector<Beer> Database::filter(const std::string& filter_type, const std::st
 
         filtered_beers = storage.get_all<Beer>(where(c(&Beer::drink_year) == year && c(&Beer::drink_month) == month &&
                 c(&Beer::drink_day) == day));
+    } else if (filter_type == "Rating") {
+        filtered_beers = storage.get_all<Beer>(where(c(&Beer::rating) == filter_text));
     } else {
         filtered_beers = storage.get_all<Beer>();
     }
