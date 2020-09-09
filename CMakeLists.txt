@@ -8,6 +8,8 @@ set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
+enable_testing()
+
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(Boost COMPONENTS filesystem)
