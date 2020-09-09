@@ -13,10 +13,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->setupUi(this);
 
-    Database db;
-    std::string database_path = db.path();
-    Storage storage = initStorage(database_path);
-    db.write_db_to_disk(storage);
+    //std::string database_path = Database::path();
+    Database::write_db_to_disk(storage);
+
+    // Set up button and input states
+    ui->deleteRowButton->setDisabled(true);
+    ui->nameInput->setDuplicatesEnabled(false);
+    ui->typeInput->setDuplicatesEnabled(false);
+    ui->breweryInput->setDuplicatesEnabled(false);
 
     // Set datepicker to today's date
     QDate todays_date = QDate::currentDate();
@@ -93,7 +97,7 @@ void MainWindow::submit_button_clicked() {
         beer_size,
         notes
     };
-    Database::write(beer);
+    Database::write(beer, storage);
     update_table();
 }
 
@@ -119,8 +123,6 @@ void MainWindow::update_table() {
     /*
      * Populate the table with data from the database.
      */
-
-    Storage storage = initStorage(Database::path());
 
     std::string filter_category = ui->filterCategoryInput->currentText().toStdString();
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
@@ -175,8 +177,6 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
      * Populate user entry fields when user clicks on a row in the table.
      */
 
-    Storage storage = initStorage(Database::path());
-
     QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
     int selection = ui->drinkLogTable->selectionModel()->currentIndex().row();
     int row_to_get = ui->drinkLogTable->item(selection, 7)->text().toUtf8().toInt();
@@ -208,7 +208,7 @@ void MainWindow::delete_row() {
      * Delete the row in the database that corresponds to the row selected in the table.
      */
 
-    Storage storage = initStorage(Database::path());
+
     int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
     int row_to_delete = (ui->drinkLogTable->item(select, 7)->text().toUtf8().toInt());
     Database::delete_row(storage, row_to_delete);
@@ -228,7 +228,7 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
     // This fixes crashes when changing filters with rows selected.
     QSignalBlocker filterTextInputSignalBlocker(ui->filterTextInput);
 
-    std::vector<Beer> all_beers = Database::read(Database::path());
+    std::vector<Beer> all_beers = Database::read(Database::path(), storage);
 
     ui->filterTextInput->clear();
 
