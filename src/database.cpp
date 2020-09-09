@@ -82,14 +82,14 @@ void Database::delete_row(Storage storage, int row_num) {
     storage.remove<Beer>(row_num);
 }
 
-Beer Database::read_row(Storage storage, int row_num) {
+Beer Database::read_row(int row_num, Storage storage) {
     /*
      * Read a specific row from the database.
      * @param storage: A storage instance.
      * @param row_num: The row number that should be read.
      * @return beer: The results of the database query.
      */
-
+    
     Beer beer = storage.get<Beer>(row_num);
     return beer;
 }
@@ -129,6 +129,8 @@ std::vector<Beer> Database::filter(const std::string& filter_type, const std::st
 
         filtered_beers = storage.get_all<Beer>(where(c(&Beer::drink_year) == year && c(&Beer::drink_month) == month &&
                 c(&Beer::drink_day) == day));
+    } else {
+        filtered_beers = storage.get_all<Beer>();
     }
 
     return filtered_beers;

@@ -55,6 +55,9 @@
       <height>30</height>
      </rect>
     </property>
+    <property name="editable">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="breweryLabel">
     <property name="geometry">
@@ -97,6 +100,9 @@
       <height>30</height>
      </rect>
     </property>
+    <property name="editable">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QComboBox" name="nameInput">
     <property name="geometry">
@@ -106,6 +112,9 @@
       <width>361</width>
       <height>30</height>
      </rect>
+    </property>
+    <property name="editable">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="nameLabel">
@@ -127,7 +136,7 @@
    <widget class="QDoubleSpinBox" name="abvInput">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>320</x>
       <y>190</y>
       <width>62</width>
       <height>22</height>
@@ -137,7 +146,7 @@
    <widget class="QDoubleSpinBox" name="ibuInput">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>430</x>
       <y>190</y>
       <width>62</width>
       <height>22</height>
@@ -147,7 +156,7 @@
    <widget class="QLabel" name="abvLabel">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>320</x>
       <y>170</y>
       <width>58</width>
       <height>16</height>
@@ -163,7 +172,7 @@
    <widget class="QLabel" name="ibuLabel">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>430</x>
       <y>170</y>
       <width>58</width>
       <height>16</height>
@@ -179,7 +188,7 @@
    <widget class="QLabel" name="sizeLabel">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>540</x>
       <y>170</y>
       <width>58</width>
       <height>16</height>
@@ -195,7 +204,7 @@
    <widget class="QDoubleSpinBox" name="sizeInput">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>540</x>
       <y>190</y>
       <width>62</width>
       <height>22</height>
@@ -205,9 +214,9 @@
    <widget class="QTextEdit" name="notesInput">
     <property name="geometry">
      <rect>
-      <x>285</x>
+      <x>15</x>
       <y>190</y>
-      <width>351</width>
+      <width>231</width>
       <height>131</height>
      </rect>
     </property>
@@ -215,9 +224,9 @@
    <widget class="QLabel" name="notesLabel">
     <property name="geometry">
      <rect>
-      <x>285</x>
+      <x>15</x>
       <y>170</y>
-      <width>351</width>
+      <width>231</width>
       <height>20</height>
      </rect>
     </property>
@@ -275,6 +284,11 @@
     <column>
      <property name="text">
       <string>Size</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>ID</string>
      </property>
     </column>
     <item row="0" column="0">
@@ -589,6 +603,97 @@
     </property>
     <property name="text">
      <string>Drink Data</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="submitRowButton">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>290</y>
+      <width>112</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Submit</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="clearFieldsButton">
+    <property name="geometry">
+     <rect>
+      <x>415</x>
+      <y>290</y>
+      <width>112</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Clear</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="deleteRowButton">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>290</y>
+      <width>112</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Delete Row</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="filterCategoryInput">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>290</y>
+      <width>251</width>
+      <height>32</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="filterTextInput">
+    <property name="geometry">
+     <rect>
+      <x>1040</x>
+      <y>290</y>
+      <width>341</width>
+      <height>32</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="filterCategoryLabel">
+    <property name="geometry">
+     <rect>
+      <x>767</x>
+      <y>275</y>
+      <width>241</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Filter Category</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="filterLabel">
+    <property name="geometry">
+     <rect>
+      <x>1050</x>
+      <y>275</y>
+      <width>321</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Filter</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
