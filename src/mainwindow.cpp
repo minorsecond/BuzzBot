@@ -6,6 +6,10 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    /*
+     * Set up the main window
+     */
+
     ui->setupUi(this);
 
     Database db;
@@ -30,6 +34,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->drinkLogTable->setColumnWidth(6, 50);
     //QHeaderView* drink_log_header = ui->drinkLogTable->horizontalHeader();
     //drink_log_header->setSectionResizeMode(7, QHeaderView::Stretch);
+
+    // Slot connections
+    connect(ui->submitRowButton, SIGNAL(clicked()), this, SLOT(submit_button_clicked()));
 }
 
 MainWindow::~MainWindow()
@@ -38,6 +45,10 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::submit_button_clicked() {
+    /*
+     * Create a beer from user input and write it to the database.
+     */
+
     int drink_year = ui->drinkDateInput->date().year();
     int drink_month = ui->drinkDateInput->date().month();
     int drink_day = ui->drinkDateInput->date().day();
@@ -48,5 +59,17 @@ void MainWindow::submit_button_clicked() {
     double beer_abv = ui->abvInput->value();
     std::string notes = ui->notesInput->toPlainText().toStdString();
 
+    Beer beer{
+        -1,
+        drink_year,
+        drink_month,
+        drink_day,
+        beer_name,
+        beer_type,
+        brewery_name,
+        beer_abv,
+        beer_ibu,
+        notes
+    };
+    Database::write(beer);
 }
-

@@ -127,7 +127,7 @@
    <widget class="QDoubleSpinBox" name="abvInput">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>320</x>
       <y>190</y>
       <width>62</width>
       <height>22</height>
@@ -137,7 +137,7 @@
    <widget class="QDoubleSpinBox" name="ibuInput">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>430</x>
       <y>190</y>
       <width>62</width>
       <height>22</height>
@@ -147,7 +147,7 @@
    <widget class="QLabel" name="abvLabel">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>320</x>
       <y>170</y>
       <width>58</width>
       <height>16</height>
@@ -163,7 +163,7 @@
    <widget class="QLabel" name="ibuLabel">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>430</x>
       <y>170</y>
       <width>58</width>
       <height>16</height>
@@ -179,7 +179,7 @@
    <widget class="QLabel" name="sizeLabel">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>540</x>
       <y>170</y>
       <width>58</width>
       <height>16</height>
@@ -195,7 +195,7 @@
    <widget class="QDoubleSpinBox" name="sizeInput">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>540</x>
       <y>190</y>
       <width>62</width>
       <height>22</height>
@@ -205,9 +205,9 @@
    <widget class="QTextEdit" name="notesInput">
     <property name="geometry">
      <rect>
-      <x>285</x>
+      <x>15</x>
       <y>190</y>
-      <width>351</width>
+      <width>231</width>
       <height>131</height>
      </rect>
     </property>
@@ -215,9 +215,9 @@
    <widget class="QLabel" name="notesLabel">
     <property name="geometry">
      <rect>
-      <x>285</x>
+      <x>15</x>
       <y>170</y>
-      <width>351</width>
+      <width>231</width>
       <height>20</height>
      </rect>
     </property>
@@ -592,6 +592,45 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="submitRowButton">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>290</y>
+      <width>112</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Submit</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="clearFieldsButton">
+    <property name="geometry">
+     <rect>
+      <x>415</x>
+      <y>290</y>
+      <width>112</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Clear</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="deleteRowButton">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>290</y>
+      <width>112</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Delete Row</string>
     </property>
    </widget>
   </widget>
