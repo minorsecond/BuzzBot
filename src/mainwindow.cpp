@@ -73,3 +73,7 @@ void MainWindow::submit_button_clicked() {
     };
     Database::write(beer);
 }
+
+void MainWindow::update_table() {
+
+}
