@@ -20,6 +20,7 @@ public:
 private:
     Ui::MainWindow *ui;
     static std::string double_to_string(double input_double);
+    void populate_filter_menus(std::string filter_type);
 
 private slots:
     void submit_button_clicked();
@@ -27,5 +28,6 @@ private slots:
     void update_table();
     void populate_fields(const QItemSelection &, const QItemSelection &);
     void delete_row();
+    void enable_filter_text(const QString&);
 };
 #endif // MAINWINDOW_H
