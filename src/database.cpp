@@ -24,14 +24,13 @@ std::string Database::path() {
     return full_path;
 }
 
-std::vector<Beer> Database::read(const std::string& database_path) {
+std::vector<Beer> Database::read(const std::string& database_path, Storage storage) {
     /*
      * Read all rows from the database.
      * @return all_beers A vector containing Beer, storing all rows in the database.
      */
 
     std::cout << "Reading or building the database at " << database_path << std::endl;
-    Storage storage = initStorage(database_path);
     std::vector<Beer> all_beers = storage.get_all<Beer>();
 
     return all_beers;
@@ -45,7 +44,7 @@ void Database::write_db_to_disk(Storage storage) {
     storage.sync_schema(false);
 }
 
-Storage Database::write(Beer beer) {
+Storage Database::write(Beer beer, Storage storage) {
     /*
      * Write a row to the SQLite database.
      * @param beer: a beer
@@ -53,7 +52,6 @@ Storage Database::write(Beer beer) {
      */
 
     std::string database_path = path();
-    Storage storage = initStorage(database_path);
     int inserted_id = storage.insert(beer);
     beer.id = inserted_id;
     write_db_to_disk(storage);

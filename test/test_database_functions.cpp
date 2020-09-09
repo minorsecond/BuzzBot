@@ -122,7 +122,7 @@ TEST_CASE("Delete Row", "[Delete Row]") {
 
     Database::delete_row(storage_1, 1);
     Database::write_db_to_disk(storage_1);
-    std::vector<Beer> beers = Database::read(db_path);
+    std::vector<Beer> beers = Database::read(db_path, storage_1);
 
     for(const auto& beer : beers) {
         if (beer.id > max_id)
