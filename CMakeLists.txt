@@ -8,6 +8,8 @@ set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
+enable_testing()
+
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(Boost COMPONENTS filesystem)
@@ -28,7 +30,9 @@ add_executable(functions_test src/database.cpp src/database.h test/test-main.cpp
 
 set_target_properties(Beertabs PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
 target_link_libraries(Beertabs Qt5::Core Qt5::Widgets SQLite3 Boost::filesystem)
-target_link_libraries(functions_test SQLite3 Boost::filesystem)
+target_link_libraries(functions_test SQLite3 Boost::filesystem Catch2::Catch2)
+
 include(CTest)
-#include(ParseAndCatchTests)
-#ParseAndAddCatchTests(functions_test)
+include(Catch)
+catch_discover_tests(functions_test)
+add_test(NAME functions_test COMMAND functions_test)
