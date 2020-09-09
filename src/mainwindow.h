@@ -17,9 +17,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    void update_table();
 
 private slots:
     void submit_button_clicked();
+    void clear_fields();
 };
 #endif // MAINWINDOW_H

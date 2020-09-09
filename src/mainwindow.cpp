@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Slot connections
     connect(ui->submitRowButton, SIGNAL(clicked()), this, SLOT(submit_button_clicked()));
+    connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(clear_fields()));
 }
 
 MainWindow::~MainWindow()
@@ -74,6 +75,20 @@ void MainWindow::submit_button_clicked() {
     Database::write(beer);
 }
 
-void MainWindow::update_table() {
+void MainWindow::clear_fields() {
+    /*
+     * Clear user entry fields for entering a new beer.
+     */
 
+    std::cout << "clearing fields" << std::endl;
+
+    QDate todays_date = QDate::currentDate();
+    ui->drinkDateInput->setDate(todays_date);
+    ui->breweryInput->setCurrentIndex(0);
+    ui->typeInput->setCurrentIndex(0);
+    ui->nameInput->setCurrentIndex(0);
+    ui->notesInput->clear();
+    ui->abvInput->setValue(0.0);
+    ui->ibuInput->setValue(0.0);
+    ui->sizeInput->setValue(0.0);
 }
