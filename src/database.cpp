@@ -104,7 +104,7 @@ void Database::update(Storage storage, const Beer& beer) {
     storage.update(beer);
 }
 
-std::vector<Beer> Database::filter(const std::string& filter_type, const std::string& filter_text, Storage storage) {
+std::vector<Beer> Database::filter(const std::string& filter_type, const std::string& filter_text) {
     /*
      * Retrieve DB rows based on filter column and text.
      * @param filter_type: Column on which to filter.
@@ -112,6 +112,8 @@ std::vector<Beer> Database::filter(const std::string& filter_type, const std::st
      * @param storage: A storage instance.
      * @return filtered_beers: The results of the database query.
      */
+
+    Storage storage = initStorage(path());
 
     std::vector<Beer> filtered_beers;
 
@@ -129,6 +131,8 @@ std::vector<Beer> Database::filter(const std::string& filter_type, const std::st
 
         filtered_beers = storage.get_all<Beer>(where(c(&Beer::drink_year) == year && c(&Beer::drink_month) == month &&
                 c(&Beer::drink_day) == day));
+    } else {
+        filtered_beers = storage.get_all<Beer>();
     }
 
     return filtered_beers;
