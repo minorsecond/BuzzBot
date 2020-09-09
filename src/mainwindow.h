@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "ui_mainwindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,5 +24,6 @@ private slots:
     void submit_button_clicked();
     void clear_fields();
     void update_table();
+    void populate_fields(const QItemSelection &, const QItemSelection &);
 };
 #endif // MAINWINDOW_H

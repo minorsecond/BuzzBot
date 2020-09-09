@@ -82,14 +82,14 @@ void Database::delete_row(Storage storage, int row_num) {
     storage.remove<Beer>(row_num);
 }
 
-Beer Database::read_row(Storage storage, int row_num) {
+Beer Database::read_row(int row_num) {
     /*
      * Read a specific row from the database.
      * @param storage: A storage instance.
      * @param row_num: The row number that should be read.
      * @return beer: The results of the database query.
      */
-
+    Storage storage = initStorage(path());
     Beer beer = storage.get<Beer>(row_num);
     return beer;
 }
