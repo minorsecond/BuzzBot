@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "database.h"
+#include <iomanip>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -43,6 +44,9 @@ MainWindow::MainWindow(QWidget *parent)
     //drink_log_header->setSectionResizeMode(7, QHeaderView::Stretch);
 
     // Slot connections
+    connect(ui->drinkLogTable->selectionModel(),
+            SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection&)),
+            this, SLOT(populate_fields(const QItemSelection &, const QItemSelection &)));
     connect(ui->submitRowButton, SIGNAL(clicked()), this, SLOT(submit_button_clicked()));
     connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(clear_fields()));
 }
@@ -125,6 +129,8 @@ void MainWindow::update_table() {
         auto *abv = new QTableWidgetItem(double_to_string(beer.abv).c_str());
         auto *ibu = new QTableWidgetItem(double_to_string(beer.ibu).c_str());
         auto *size = new QTableWidgetItem(double_to_string(beer.size).c_str());
+        auto *id = new QTableWidgetItem(std::to_string(beer.id).c_str());
+
         std::string notes = beer.notes;
 
         ui->drinkLogTable->setItem(table_row_num, 0, date);
@@ -134,6 +140,7 @@ void MainWindow::update_table() {
         ui->drinkLogTable->setItem(table_row_num, 4, abv);
         ui->drinkLogTable->setItem(table_row_num, 5, ibu);
         ui->drinkLogTable->setItem(table_row_num, 6, size);
+        ui->drinkLogTable->setItem(table_row_num, 7, id);
 
         table_row_num += 1;
     }
@@ -146,4 +153,33 @@ std::string MainWindow::double_to_string(double input_double) {
     price_stream << purchase_price;
 
     return price_stream.str();
+}
+
+void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &) {
+
+    QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
+    int selection = ui->drinkLogTable->selectionModel()->currentIndex().row();
+    int column_count = ui->drinkLogTable->columnCount();
+    int row_to_get = ui->drinkLogTable->item(selection, 7)->text().toUtf8().toInt();
+    if (select->isRowSelected(selection))
+        ui->deleteRowButton->setEnabled(true);
+    else
+        ui->deleteRowButton->setDisabled(true);
+    Beer beer = Database::read_row(row_to_get);
+
+    std::ostringstream month_padded;
+    std::ostringstream day_padded;
+
+    month_padded << std::setw(2) << std::setfill('0') << beer.drink_month;
+    day_padded << std::setw(2) << std::setfill('0') << beer.drink_day;
+    std::string date_from_db = day_padded.str() + "/" + month_padded.str() + "/" + std::to_string(beer.drink_year);
+    QDate date = QDate::fromString(QString::fromUtf8(date_from_db.c_str()), "dd/MM/yyyy");
+
+    ui->drinkDateInput->setDate(date);
+    ui->nameInput->setCurrentText(beer.name.c_str());
+    ui->typeInput->setCurrentText(beer.type.c_str());
+    ui->breweryInput->setCurrentText(beer.type.c_str());
+    ui->abvInput->setValue(beer.abv);
+    ui->ibuInput->setValue(beer.ibu);
+    ui->sizeInput->setValue(beer.size);
 }
