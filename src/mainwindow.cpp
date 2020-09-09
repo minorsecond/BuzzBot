@@ -24,6 +24,10 @@ MainWindow::MainWindow(QWidget *parent)
     // Enable this on release
     //ui->drinkLogTable->setRowCount(0);
 
+    // Set table filter options to default values (all)
+    ui->filterCategoryInput->addItem("None");
+    ui->filterTextInput->addItem("All");
+
     // Set column widths
     ui->drinkLogTable->setColumnWidth(0, 100);
     ui->drinkLogTable->setColumnWidth(1, 453);
@@ -58,6 +62,7 @@ void MainWindow::submit_button_clicked() {
     std::string brewery_name = ui->breweryInput->currentText().toStdString();
     double beer_ibu = ui->ibuInput->value();
     double beer_abv = ui->abvInput->value();
+    double beer_size = ui->sizeInput->value();
     std::string notes = ui->notesInput->toPlainText().toStdString();
 
     Beer beer{
@@ -70,9 +75,11 @@ void MainWindow::submit_button_clicked() {
         brewery_name,
         beer_abv,
         beer_ibu,
+        beer_size,
         notes
     };
     Database::write(beer);
+    update_table();
 }
 
 void MainWindow::clear_fields() {
@@ -98,5 +105,34 @@ void MainWindow::update_table() {
      * Populate the table with data from the database.
      */
 
-    std::vector<Beer> beers = Database::read();
+    std::string filter_category = ui->filterCategoryInput->currentText().toStdString();
+    std::string filter_text = ui->filterTextInput->currentText().toStdString();
+
+    std::vector<Beer> beers = Database::filter(filter_category, filter_text);
+
+    ui->drinkLogTable->setRowCount(beers.size());
+
+    int table_row_num = 0;
+    for (const auto& beer : beers) {
+        auto *date = new QTableWidgetItem((std::to_string(beer.drink_year) + "/" +
+                std::to_string(beer.drink_month) + "/" + std::to_string(beer.drink_day)).c_str());
+        auto *name = new QTableWidgetItem(beer.name.c_str());
+        auto *type = new QTableWidgetItem(beer.type.c_str());
+        auto *brewery = new QTableWidgetItem(beer.brewery.c_str());
+        auto *abv = new QTableWidgetItem(std::to_string(beer.abv).c_str());
+        auto *ibu = new QTableWidgetItem(std::to_string(beer.ibu).c_str());
+        auto *size = new QTableWidgetItem(std::to_string(beer.size).c_str());
+        std::string notes = beer.notes;
+
+        ui->drinkLogTable->setItem(table_row_num, 0, date);
+        ui->drinkLogTable->setItem(table_row_num, 1, name);
+        ui->drinkLogTable->setItem(table_row_num, 2, type);
+        ui->drinkLogTable->setItem(table_row_num, 3, brewery);
+        ui->drinkLogTable->setItem(table_row_num, 4, abv);
+        ui->drinkLogTable->setItem(table_row_num, 5, ibu);
+        ui->drinkLogTable->setItem(table_row_num, 6, size);
+
+        table_row_num += 1;
+    }
+
 }
