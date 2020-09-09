@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
      */
 
     ui->setupUi(this);
+    this->setFixedSize(1397, 699);
 
     //std::string database_path = Database::path();
     Database::write_db_to_disk(storage);
