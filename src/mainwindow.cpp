@@ -92,3 +92,11 @@ void MainWindow::clear_fields() {
     ui->ibuInput->setValue(0.0);
     ui->sizeInput->setValue(0.0);
 }
+
+void MainWindow::update_table() {
+    /*
+     * Populate the table with data from the database.
+     */
+
+    std::vector<Beer> beers = Database::read();
+}

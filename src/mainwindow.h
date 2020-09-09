@@ -21,5 +21,6 @@ private:
 private slots:
     void submit_button_clicked();
     void clear_fields();
+    void update_table();
 };
 #endif // MAINWINDOW_H
