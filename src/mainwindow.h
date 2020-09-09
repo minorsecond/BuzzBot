@@ -26,5 +26,6 @@ private slots:
     void clear_fields();
     void update_table();
     void populate_fields(const QItemSelection &, const QItemSelection &);
+    void delete_row();
 };
 #endif // MAINWINDOW_H

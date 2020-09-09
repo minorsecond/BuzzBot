@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
             this, SLOT(populate_fields(const QItemSelection &, const QItemSelection &)));
     connect(ui->submitRowButton, SIGNAL(clicked()), this, SLOT(submit_button_clicked()));
     connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(clear_fields()));
+    connect(ui->deleteRowButton, SIGNAL(clicked()), this, SLOT(delete_row()));
 }
 
 MainWindow::~MainWindow()
@@ -186,4 +187,12 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
     ui->abvInput->setValue(beer.abv);
     ui->ibuInput->setValue(beer.ibu);
     ui->sizeInput->setValue(beer.size);
+}
+
+void MainWindow::delete_row() {
+    Storage storage = initStorage(Database::path());
+    int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
+    int row_to_delete = (ui->drinkLogTable->item(select, 7)->text().toUtf8().toInt());
+    Database::delete_row(storage, row_to_delete);
+    update_table();
 }
