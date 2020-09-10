@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
      */
 
     ui->setupUi(this);
-    this->setFixedSize(1393, 665);
+    this->setFixedSize(1392, 665);
 
     // Read program options
     std::cout << "Got sex: " << sex << std::endl;
