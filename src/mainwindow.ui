@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1397</width>
-    <height>699</height>
+    <height>686</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -747,8 +747,24 @@
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>drinkDateInput</tabstop>
+  <tabstop>breweryInput</tabstop>
+  <tabstop>typeInput</tabstop>
+  <tabstop>nameInput</tabstop>
+  <tabstop>abvInput</tabstop>
+  <tabstop>ibuInput</tabstop>
+  <tabstop>sizeInput</tabstop>
+  <tabstop>ratingInput</tabstop>
+  <tabstop>deleteRowButton</tabstop>
+  <tabstop>clearFieldsButton</tabstop>
+  <tabstop>submitRowButton</tabstop>
+  <tabstop>filterCategoryInput</tabstop>
+  <tabstop>filterTextInput</tabstop>
+  <tabstop>notesInput</tabstop>
+  <tabstop>drinkLogTable</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
