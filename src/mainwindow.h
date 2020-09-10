@@ -22,6 +22,7 @@ private:
     Storage storage = initStorage(Database::path());
     static std::string double_to_string(double input_double);
     void populate_filter_menus(const std::string& filter_type);
+    void update_beer_fields();
 
 private slots:
     void submit_button_clicked();
