@@ -3,7 +3,7 @@
 using namespace sqlite_orm;
 std::string Database::path() {
     /*
-     * Find database path and create it if it doens't exist.
+     * Find database path and create it if it doesn't exist.
      * @return full_path Path where database file should be stored.
      */
     // Find path to application support directory

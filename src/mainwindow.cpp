@@ -318,7 +318,7 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
             ui->filterTextInput->addItem(brewery);
         }
     } else if (filter_type == "Rating") {
-        for (auto rating : ratings) {
+        for (const auto& rating : ratings) {
             ui->filterTextInput->addItem(rating);
         }
     }
