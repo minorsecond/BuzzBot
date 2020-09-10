@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "database.h"
 #include <iomanip>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -61,6 +62,8 @@ MainWindow::MainWindow(QWidget *parent)
     QHeaderView* drink_log_header = ui->drinkLogTable->horizontalHeader();
     drink_log_header->setSectionResizeMode(7, QHeaderView::Stretch);
 
+    update_beer_fields();
+
     // Slot connections
     connect(ui->drinkLogTable->selectionModel(),
             SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection&)),
@@ -82,6 +85,9 @@ void MainWindow::submit_button_clicked() {
      * Create a beer from user input and write it to the database.
      */
 
+    QItemSelectionModel *selection_model = ui->drinkLogTable->selectionModel();
+    QModelIndexList selected_rows = selection_model->selectedRows();
+
     int drink_year = ui->drinkDateInput->date().year();
     int drink_month = ui->drinkDateInput->date().month();
     int drink_day = ui->drinkDateInput->date().day();
@@ -94,22 +100,57 @@ void MainWindow::submit_button_clicked() {
     int rating = ui->ratingInput->value();
     std::string notes = ui->notesInput->toPlainText().toStdString();
 
-    Beer beer{
-        -1,
-        drink_year,
-        drink_month,
-        drink_day,
-        beer_name,
-        beer_type,
-        brewery_name,
-        beer_abv,
-        beer_ibu,
-        beer_size,
-        rating,
-        notes
-    };
-    Database::write(beer, storage);
-    update_table();
+    // Prevent blank submissions
+    if (beer_name.empty() || beer_abv == 0.0) {
+        QMessageBox::critical(nullptr, "Error", "Please enter beer name and ABV.");
+    } else {
+        // Handle updating existing rows
+        QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
+        if (select->hasSelection()) {
+            int selection = select->selectedRows().at(0).row();
+            int row_to_update = ui->drinkLogTable->item(selection, 8)->text().toUtf8().toInt();
+            std::cout << "Updating row " << row_to_update << std::endl;
+
+            Beer beer{
+                row_to_update,
+                drink_year,
+                drink_month,
+                drink_day,
+                beer_name,
+                beer_type,
+                brewery_name,
+                beer_abv,
+                beer_ibu,
+                beer_size,
+                rating,
+                notes
+            };
+
+            Database::update(storage, beer);
+        } else {
+            Beer beer{
+                    -1,
+                    drink_year,
+                    drink_month,
+                    drink_day,
+                    beer_name,
+                    beer_type,
+                    brewery_name,
+                    beer_abv,
+                    beer_ibu,
+                    beer_size,
+                    rating,
+                    notes
+            };
+            Database::write(beer, storage);
+        }
+        update_table();
+        ui->drinkLogTable->sortByColumn(8, Qt::AscendingOrder);
+        if (selected_rows.empty()) {
+            clear_fields();
+        }
+        update_beer_fields();
+    }
 }
 
 void MainWindow::clear_fields() {
@@ -304,4 +345,46 @@ void MainWindow::changed_filter_text(const QString &) {
      */
 
     update_table();
+}
+
+void MainWindow::update_beer_fields() {
+    /*
+     * Read rows in the DB and populate the brewery, type, and name dropdowns with unique values.
+     */
+
+    std::set<QString> breweries;
+    std::set<QString> types;
+    std::set<QString> names;
+    std::vector<Beer> all_beers = Database::read(Database::path(), storage);
+
+    // Block signals to avoid crashing
+    QSignalBlocker brewery_signal_blocker(ui->breweryInput);
+    QSignalBlocker type_signal_blocker(ui->typeInput);
+    QSignalBlocker name_signal_blocker(ui->nameInput);
+
+    ui->breweryInput->clear();
+    ui->typeInput->clear();
+    ui->nameInput->clear();
+
+    for (const auto& beer : all_beers) {
+        QString brewery_name = QString::fromStdString(beer.brewery);
+        QString beer_type = QString::fromStdString(beer.type);
+        QString beer_name = QString::fromStdString(beer.name);
+
+        breweries.insert(brewery_name);
+        types.insert(beer_type);
+        names.insert(beer_name);
+    }
+
+    for (const auto& brewery : breweries) {
+        ui->breweryInput->addItem(brewery);
+    }
+
+    for (const auto& type : types) {
+        ui->typeInput->addItem(type);
+    }
+
+    for (const auto& name : names) {
+        ui->nameInput->addItem(name);
+    }
 }
