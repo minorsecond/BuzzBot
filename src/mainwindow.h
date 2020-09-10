@@ -22,7 +22,8 @@ private:
     void update_beer_fields();
     static std::string settings_path();
     static std::string program_options(const std::string& sex, bool write);
-    double update_standard_drinks_this_week();
+    void update_standard_drinks_this_week();
+    void update_standard_drinks_this_week();
     void update_standard_drinks_left_this_week(double std_drinks_consumed);
 
 private slots:
