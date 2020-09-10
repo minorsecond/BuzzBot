@@ -28,5 +28,6 @@ private slots:
     void delete_row();
     void enable_filter_text(const QString&);
     void changed_filter_text(const QString&);
+    void open_user_settings();
 };
 #endif // MAINWINDOW_H
