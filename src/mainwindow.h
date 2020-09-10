@@ -34,5 +34,6 @@ private slots:
     void enable_filter_text(const QString&);
     void changed_filter_text(const QString&);
     void open_user_settings();
+    void reset_table_sort();
 };
 #endif // MAINWINDOW_H
