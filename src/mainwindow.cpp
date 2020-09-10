@@ -58,8 +58,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->drinkLogTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     update_table();
+
     // Sort table by date column, by default
     ui->drinkLogTable->sortItems(0, Qt::AscendingOrder);
+
+    // Enable table sorting by columns
+    ui->drinkLogTable->setSortingEnabled(true);
 
     // Set table filter options to default values (all)
     ui->filterCategoryInput->addItem("None");
@@ -85,7 +89,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     update_beer_fields();
 
+    // Set up corner button
+    auto *corner_button = ui->drinkLogTable->findChild<QAbstractButton*>();
+    if (corner_button) {
+        corner_button->disconnect();
+    }
+
     // Slot connections
+    connect(corner_button, SIGNAL(clicked()), this, SLOT(reset_table_sort()));
     connect(ui->drinkLogTable->selectionModel(),
             SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection&)),
             this, SLOT(populate_fields(const QItemSelection &, const QItemSelection &)));
@@ -521,4 +532,12 @@ void MainWindow::update_standard_drinks_this_week() {
 void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consumed) {
     double std_drinks_left = Calculate::standard_drinks_remaining(sex, std_drinks_consumed);
     ui->drinksLeftOutput->setText(QString::fromStdString(double_to_string(std_drinks_left)));
+}
+
+void MainWindow::reset_table_sort() {
+    /*
+     * Reset table sort to default, by date descending.
+     */
+
+    ui->drinkLogTable->sortItems(0, Qt::AscendingOrder);
 }
