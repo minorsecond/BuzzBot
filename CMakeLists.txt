@@ -25,7 +25,7 @@ set(beertabs_ICON ${ICON_PATH})
 set_source_files_properties(${beertabs_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 file(COPY ${ICON_PATH} DESTINATION "Beertabs.app/Contents/Resources")
 
-add_executable(Beertabs MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp src/mainwindow.h src/database.h)
+add_executable(Beertabs MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp src/mainwindow.h src/database.h src/usersettings.cpp src/usersettings.h)
 add_executable(functions_test src/database.cpp src/database.h test/test-main.cpp test/test_database_functions.cpp)
 
 set_target_properties(Beertabs PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})

@@ -1,7 +1,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "database.h"
+#include "usersettings.h"
 #include <iomanip>
+#include <boost/filesystem.hpp>
+#include <boost/program_options.hpp>
+#include <iostream>
 #include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -15,6 +19,16 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setFixedSize(1397, 699);
 
+    // Read program options
+    std::cout << "Got sex: " << sex << std::endl;
+
+    // Add menubar items
+    QAction * editAction = new QAction("User Settings");
+
+    QMenu * menu = menuBar()->addMenu("Edit");
+    menu->addAction(editAction);
+
+
     // Fixed row height in table
     QHeaderView *verticalHeader = ui->drinkLogTable->verticalHeader();
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
@@ -25,7 +39,6 @@ MainWindow::MainWindow(QWidget *parent)
     Database::write_db_to_disk(storage);
 
     // Set up button and input states
-
     ui->deleteRowButton->setDisabled(true);
     ui->nameInput->setDuplicatesEnabled(false);
     ui->typeInput->setDuplicatesEnabled(false);
@@ -76,6 +89,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->submitRowButton, SIGNAL(clicked()), this, SLOT(submit_button_clicked()));
     connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(clear_fields()));
     connect(ui->deleteRowButton, SIGNAL(clicked()), this, SLOT(delete_row()));
+    connect(editAction, SIGNAL(triggered()), this, SLOT(open_user_settings()));
 }
 
 MainWindow::~MainWindow()
@@ -391,3 +405,80 @@ void MainWindow::update_beer_fields() {
         ui->nameInput->addItem(name);
     }
 }
+
+void MainWindow::open_user_settings() {
+
+    std::cout << "Opening user settings." << std::endl;
+    UserSettings user_settings = UserSettings(nullptr, sex);
+    user_settings.setModal(true);
+    if (user_settings.exec() == QDialog::Accepted) {
+        sex = user_settings.get_sex();
+        std::cout << "Sex: " << sex << std::endl;
+    }
+    program_options(sex, true);
+}
+
+std::string MainWindow::settings_path() {
+    /*
+     * Find database path and create it if it doesn't exist.
+     * @return full_path Path where database file should be stored.
+     */
+    // Find path to application support directory
+
+    std::string username = getenv("USER");
+    std::string directory = "/Users/" + username + "/Library/Application Support/Beertabs";
+
+    // Remove spaces from path
+    directory.erase(std::remove_if(
+            begin(directory), end(directory),
+            [l = std::locale{}](auto ch) {return std::isspace(ch, l);}),
+                    end(directory));
+
+    std::string settings_path = directory + "/beertabs_settings.conf";
+
+    boost::filesystem::create_directory(directory);
+
+    return settings_path;
+}
+
+std::string MainWindow::program_options(const std::string &sex, bool write) {
+    /*
+     * Read or write to/from the settings file.
+     * @param sex: Sex of user.
+     * @param write: Boolean denoting whether function should write to the file or not.
+     * If false, assume should read.
+     */
+
+    std::string path = settings_path();
+    std::string read_sex;
+
+    if (write) {
+        std::string sex_setting = "sex:" + sex;
+        std::ofstream out_data;
+
+        if (!out_data) {
+            std::cerr << "Error: settings file could not be opened." << std::endl;
+            exit(1);
+        }
+
+        out_data.open(path);
+        out_data << sex_setting;
+        out_data.close();
+    } else {
+        std::cout << "Reading user settings from " << path << std::endl;
+        int line_counter = 0;
+        // Read from the file
+        std::string line;
+        std::ifstream options_file(path);
+        if (options_file.is_open()) {
+            while (std::getline(options_file, line)) {
+                if (line_counter == 0) {  // First line should be sex
+                    read_sex = line.substr(line.find(':') + 1);
+                }
+                line_counter += 1;
+            }
+        }
+    }
+    return read_sex;
+}
+
