@@ -20,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->setFixedSize(1397, 699);
 
     // Read program options
-    std::string sex = program_options("", false);
     std::cout << "Got sex: " << sex << std::endl;
 
     // Add menubar items
@@ -409,10 +408,8 @@ void MainWindow::update_beer_fields() {
 
 void MainWindow::open_user_settings() {
 
-    std::string sex;
-
     std::cout << "Opening user settings." << std::endl;
-    UserSettings user_settings = UserSettings();
+    UserSettings user_settings = UserSettings(nullptr, sex);
     user_settings.setModal(true);
     if (user_settings.exec() == QDialog::Accepted) {
         sex = user_settings.get_sex();
