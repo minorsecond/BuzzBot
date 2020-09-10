@@ -7,7 +7,6 @@
 #include <iomanip>
 #include <boost/filesystem.hpp>
 #include <iostream>
-#include <ctime>
 #include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
