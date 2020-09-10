@@ -493,7 +493,7 @@ std::string MainWindow::program_options(const std::string &sex, bool write) {
     return read_sex;
 }
 
-double MainWindow::update_standard_drinks_this_week() {
+void MainWindow::update_standard_drinks_this_week() {
     /*
      * Calculate number of standard drinks consumed since Sunday.
      */
