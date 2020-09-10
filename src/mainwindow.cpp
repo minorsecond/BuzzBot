@@ -15,6 +15,14 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setFixedSize(1397, 699);
 
+    // Add menubar items
+
+    QAction * editAction = new QAction("User Settings");
+
+    QMenu * menu = menuBar()->addMenu("Edit");
+    menu->addAction(editAction);
+
+
     // Fixed row height in table
     QHeaderView *verticalHeader = ui->drinkLogTable->verticalHeader();
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
@@ -25,7 +33,6 @@ MainWindow::MainWindow(QWidget *parent)
     Database::write_db_to_disk(storage);
 
     // Set up button and input states
-
     ui->deleteRowButton->setDisabled(true);
     ui->nameInput->setDuplicatesEnabled(false);
     ui->typeInput->setDuplicatesEnabled(false);
@@ -76,6 +83,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->submitRowButton, SIGNAL(clicked()), this, SLOT(submit_button_clicked()));
     connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(clear_fields()));
     connect(ui->deleteRowButton, SIGNAL(clicked()), this, SLOT(delete_row()));
+    connect(editAction, SIGNAL(triggered()), this, SLOT(open_user_settings()));
 }
 
 MainWindow::~MainWindow()
@@ -390,4 +398,8 @@ void MainWindow::update_beer_fields() {
     for (const auto& name : names) {
         ui->nameInput->addItem(name);
     }
+}
+
+void MainWindow::open_user_settings() {
+    std::cout << "Opening user settings." << std::endl;
 }
