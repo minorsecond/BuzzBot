@@ -3,6 +3,9 @@
 #include "database.h"
 #include "usersettings.h"
 #include <iomanip>
+#include <boost/filesystem.hpp>
+#include <boost/program_options.hpp>
+#include <iostream>
 #include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -16,8 +19,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setFixedSize(1397, 699);
 
-    // Add menubar items
+    // Read program options
+    std::string sex = program_options("", false);
+    std::cout << "Got sex: " << sex << std::endl;
 
+    // Add menubar items
     QAction * editAction = new QAction("User Settings");
 
     QMenu * menu = menuBar()->addMenu("Edit");
@@ -412,4 +418,70 @@ void MainWindow::open_user_settings() {
         sex = user_settings.get_sex();
         std::cout << "Sex: " << sex << std::endl;
     }
+    program_options(sex, true);
 }
+
+std::string MainWindow::settings_path() {
+    /*
+     * Find database path and create it if it doesn't exist.
+     * @return full_path Path where database file should be stored.
+     */
+    // Find path to application support directory
+
+    std::string username = getenv("USER");
+    std::string directory = "/Users/" + username + "/Library/Application Support/Beertabs";
+
+    // Remove spaces from path
+    directory.erase(std::remove_if(
+            begin(directory), end(directory),
+            [l = std::locale{}](auto ch) {return std::isspace(ch, l);}),
+                    end(directory));
+
+    std::string settings_path = directory + "/beertabs_settings.conf";
+
+    boost::filesystem::create_directory(directory);
+
+    return settings_path;
+}
+
+std::string MainWindow::program_options(const std::string &sex, bool write) {
+    /*
+     * Read or write to/from the settings file.
+     * @param sex: Sex of user.
+     * @param write: Boolean denoting whether function should write to the file or not.
+     * If false, assume should read.
+     */
+
+    std::string path = settings_path();
+    std::string read_sex;
+
+    if (write) {
+        std::string sex_setting = "sex:" + sex;
+        std::ofstream out_data;
+
+        if (!out_data) {
+            std::cerr << "Error: settings file could not be opened." << std::endl;
+            exit(1);
+        }
+
+        out_data.open(path);
+        out_data << sex_setting;
+        out_data.close();
+    } else {
+        std::cout << "Reading user settings from " << path << std::endl;
+        int line_counter = 0;
+        // Read from the file
+        std::string line;
+        std::ifstream options_file(path);
+        if (options_file.is_open()) {
+            while (std::getline(options_file, line)) {
+                if (line_counter == 0) {  // First line should be sex
+                    read_sex = line.substr(line.find(':') + 1);
+                }
+                line_counter += 1;
+            }
+        }
+    }
+    return read_sex;
+}
+
