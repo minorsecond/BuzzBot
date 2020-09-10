@@ -58,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->drinkLogTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     update_table();
+    // Sort table by date column, by default
+    ui->drinkLogTable->sortItems(0, Qt::AscendingOrder);
 
     // Set table filter options to default values (all)
     ui->filterCategoryInput->addItem("None");
