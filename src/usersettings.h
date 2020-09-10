@@ -14,7 +14,7 @@ class UserSettings : public QDialog, public Ui::userSettingsDialog {
     Q_OBJECT
     Ui::userSettingsDialog ui{};
 public:
-    explicit UserSettings(QWidget *parent = nullptr);
+    explicit UserSettings(QWidget *parent = nullptr, const std::string& sex = "male");
     std::string get_sex();
 };
 

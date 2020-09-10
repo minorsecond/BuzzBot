@@ -4,7 +4,7 @@
 
 #include "usersettings.h"
 
-UserSettings::UserSettings(QWidget *parent) {
+UserSettings::UserSettings(QWidget *parent, const std::string& sex) {
     /*
      * Dialog box for user settings.
      * @param parent: parent widget.
@@ -12,7 +12,11 @@ UserSettings::UserSettings(QWidget *parent) {
 
     ui.setupUi(this);
     this->setFixedSize(242, 117);
-    ui.maleSelection->setChecked(true);
+    if (sex == "male") {
+        ui.maleSelection->setChecked(true);
+    } else if (sex == "female") {
+        ui.femaleSelection->setChecked(true);
+    }
 }
 
 std::string UserSettings::get_sex() {
