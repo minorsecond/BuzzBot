@@ -275,11 +275,11 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
         ui->drinkDateInput->setDate(date);
         ui->nameInput->setCurrentText(beer.name.c_str());
         ui->typeInput->setCurrentText(beer.type.c_str());
-        ui->breweryInput->setCurrentText(beer.type.c_str());
+        ui->breweryInput->setCurrentText(beer.brewery.c_str());
         ui->abvInput->setValue(beer.abv);
         ui->ibuInput->setValue(beer.ibu);
         ui->sizeInput->setValue(beer.size);
-        ui->sizeInput->setValue(beer.rating);
+        ui->ratingInput->setValue(beer.rating);
     } else {
         std::cout << "Empty table." << std::endl;
     }
