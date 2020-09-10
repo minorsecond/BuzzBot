@@ -203,8 +203,6 @@ void MainWindow::update_table() {
 
     std::vector<Beer> beers = Database::filter(filter_category, filter_text, storage);
 
-    std::cout << beers.size() << " rows in the database." << std::endl;
-
     ui->drinkLogTable->setRowCount(beers.size());
 
     int table_row_num = 0;
@@ -234,7 +232,6 @@ void MainWindow::update_table() {
 
         table_row_num += 1;
     }
-    std::cout << table_row_num << " rows in the table." << std::endl;
 }
 
 std::string MainWindow::double_to_string(double input_double) {
@@ -510,12 +507,11 @@ void MainWindow::update_standard_drinks_this_week() {
     std::string query_date = day + "/" + month + "/" + year;
 
     std::vector<Beer> beers_this_week = Database::filter("After Date", query_date, storage);
-    std::cout << "Results size: " << beers_this_week.size() << std::endl;
 
     for (const auto& beer : beers_this_week) {
         standard_drinks += Calculate::standard_drinks(beer.abv, beer.size);
     }
-    std::cout << "Number of standard drinks: " << standard_drinks << std::endl;
+
     ui->drinksThisWeekOutput->setText( QString::fromStdString(double_to_string(standard_drinks)));
     update_standard_drinks_left_this_week(standard_drinks);
 }

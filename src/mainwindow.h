@@ -29,7 +29,7 @@ private slots:
     void submit_button_clicked();
     void clear_fields();
     void update_table();
-    void populate_fields(const QItemSelection &, const QItemSelection &);
+    void populate_fields(const QItemSe`lection &, const QItemSelection &);
     void delete_row();
     void enable_filter_text(const QString&);
     void changed_filter_text(const QString&);
