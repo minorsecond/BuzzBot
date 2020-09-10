@@ -2,9 +2,10 @@
 #include "ui_mainwindow.h"
 #include "database.h"
 #include "usersettings.h"
+#include "calculate.h"
+#include "../include/date.h"
 #include <iomanip>
 #include <boost/filesystem.hpp>
-#include <boost/program_options.hpp>
 #include <iostream>
 #include <QMessageBox>
 
@@ -21,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Read program options
     std::cout << "Got sex: " << sex << std::endl;
+
+    update_standard_drinks_this_week();
 
     // Add menubar items
     QAction * editAction = new QAction("User Settings");
@@ -167,6 +170,7 @@ void MainWindow::submit_button_clicked() {
             clear_fields();
         }
         update_beer_fields();
+        update_standard_drinks_this_week();
     }
 }
 
@@ -199,8 +203,6 @@ void MainWindow::update_table() {
 
     std::vector<Beer> beers = Database::filter(filter_category, filter_text, storage);
 
-    std::cout << beers.size() << " rows in the database." << std::endl;
-
     ui->drinkLogTable->setRowCount(beers.size());
 
     int table_row_num = 0;
@@ -230,7 +232,6 @@ void MainWindow::update_table() {
 
         table_row_num += 1;
     }
-    std::cout << table_row_num << " rows in the table." << std::endl;
 }
 
 std::string MainWindow::double_to_string(double input_double) {
@@ -253,31 +254,35 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
 
     QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
     int selection = ui->drinkLogTable->selectionModel()->currentIndex().row();
-    std::cout << "Getting row " << selection << " from table." << std::endl;
-    int row_to_get = ui->drinkLogTable->item(selection, 8)->text().toUtf8().toInt();
-    std::cout << "Getting row " << row_to_get << " from database." << std::endl;
-    if (select->isRowSelected(selection))
-        ui->deleteRowButton->setEnabled(true);
-    else
-        ui->deleteRowButton->setDisabled(true);
-    Beer beer = Database::read_row(row_to_get, storage);
+    if (selection >= 0) {
+        std::cout << "Getting row " << selection << " from table." << std::endl;
+        int row_to_get = ui->drinkLogTable->item(selection, 8)->text().toUtf8().toInt();
+        std::cout << "Getting row " << row_to_get << " from database." << std::endl;
+        if (select->isRowSelected(selection))
+            ui->deleteRowButton->setEnabled(true);
+        else
+            ui->deleteRowButton->setDisabled(true);
+        Beer beer = Database::read_row(row_to_get, storage);
 
-    std::ostringstream month_padded;
-    std::ostringstream day_padded;
+        std::ostringstream month_padded;
+        std::ostringstream day_padded;
 
-    month_padded << std::setw(2) << std::setfill('0') << beer.drink_month;
-    day_padded << std::setw(2) << std::setfill('0') << beer.drink_day;
-    std::string date_from_db = day_padded.str() + "/" + month_padded.str() + "/" + std::to_string(beer.drink_year);
-    QDate date = QDate::fromString(QString::fromUtf8(date_from_db.c_str()), "dd/MM/yyyy");
+        month_padded << std::setw(2) << std::setfill('0') << beer.drink_month;
+        day_padded << std::setw(2) << std::setfill('0') << beer.drink_day;
+        std::string date_from_db = day_padded.str() + "/" + month_padded.str() + "/" + std::to_string(beer.drink_year);
+        QDate date = QDate::fromString(QString::fromUtf8(date_from_db.c_str()), "dd/MM/yyyy");
 
-    ui->drinkDateInput->setDate(date);
-    ui->nameInput->setCurrentText(beer.name.c_str());
-    ui->typeInput->setCurrentText(beer.type.c_str());
-    ui->breweryInput->setCurrentText(beer.type.c_str());
-    ui->abvInput->setValue(beer.abv);
-    ui->ibuInput->setValue(beer.ibu);
-    ui->sizeInput->setValue(beer.size);
-    ui->sizeInput->setValue(beer.rating);
+        ui->drinkDateInput->setDate(date);
+        ui->nameInput->setCurrentText(beer.name.c_str());
+        ui->typeInput->setCurrentText(beer.type.c_str());
+        ui->breweryInput->setCurrentText(beer.type.c_str());
+        ui->abvInput->setValue(beer.abv);
+        ui->ibuInput->setValue(beer.ibu);
+        ui->sizeInput->setValue(beer.size);
+        ui->sizeInput->setValue(beer.rating);
+    } else {
+        std::cout << "Empty table." << std::endl;
+    }
 }
 
 void MainWindow::delete_row() {
@@ -289,6 +294,8 @@ void MainWindow::delete_row() {
     int row_to_delete = (ui->drinkLogTable->item(select, 8)->text().toUtf8().toInt());
     Database::delete_row(storage, row_to_delete);
     update_table();
+    update_standard_drinks_this_week();
+    ui->deleteRowButton->setDisabled(true);
 }
 
 void MainWindow::populate_filter_menus(const std::string& filter_type) {
@@ -482,3 +489,34 @@ std::string MainWindow::program_options(const std::string &sex, bool write) {
     return read_sex;
 }
 
+void MainWindow::update_standard_drinks_this_week() {
+    /*
+     * Calculate number of standard drinks consumed since Sunday.
+     */
+
+    double standard_drinks = 0;
+
+    // This returns yyyy-mm-dd
+    auto todays_date = date::floor<date::days>(std::chrono::system_clock::now());
+    date::year_month_day last_sunday = todays_date - (date::weekday{todays_date} - date::Sunday);
+
+    // Create the date for the SQL query
+    std::string year = date::format("%Y", last_sunday.year());
+    std::string month = date::format("%m", last_sunday.month());
+    std::string day = date::format("%d", last_sunday.day());
+    std::string query_date = day + "/" + month + "/" + year;
+
+    std::vector<Beer> beers_this_week = Database::filter("After Date", query_date, storage);
+
+    for (const auto& beer : beers_this_week) {
+        standard_drinks += Calculate::standard_drinks(beer.abv, beer.size);
+    }
+
+    ui->drinksThisWeekOutput->setText( QString::fromStdString(double_to_string(standard_drinks)));
+    update_standard_drinks_left_this_week(standard_drinks);
+}
+
+void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consumed) {
+    double std_drinks_left = Calculate::standard_drinks_remaining(sex, std_drinks_consumed);
+    ui->drinksLeftOutput->setText(QString::fromStdString(double_to_string(std_drinks_left)));
+}

@@ -13,8 +13,6 @@ public:
     static double oz_alcohol(double abv, int amount);
     static double standard_drinks(double abv, int amount);
     static double standard_drinks_remaining(const std::string& sex, double standard_drinks_consumed);
-
-private:
     static double round_to_one_decimal_point(double val);
 };
 
