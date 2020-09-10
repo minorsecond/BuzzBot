@@ -38,6 +38,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Enable this on release
     ui->drinkLogTable->setRowCount(0);
 
+    // Disable cell editing
+    ui->drinkLogTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
     update_table();
 
     // Set table filter options to default values (all)
