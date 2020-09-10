@@ -748,6 +748,23 @@
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>drinkDateInput</tabstop>
+  <tabstop>breweryInput</tabstop>
+  <tabstop>typeInput</tabstop>
+  <tabstop>nameInput</tabstop>
+  <tabstop>abvInput</tabstop>
+  <tabstop>ibuInput</tabstop>
+  <tabstop>sizeInput</tabstop>
+  <tabstop>ratingInput</tabstop>
+  <tabstop>deleteRowButton</tabstop>
+  <tabstop>clearFieldsButton</tabstop>
+  <tabstop>submitRowButton</tabstop>
+  <tabstop>filterCategoryInput</tabstop>
+  <tabstop>filterTextInput</tabstop>
+  <tabstop>notesInput</tabstop>
+  <tabstop>drinkLogTable</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
