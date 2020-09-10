@@ -525,4 +525,3 @@ void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consume
     double std_drinks_left = Calculate::standard_drinks_remaining(sex, std_drinks_consumed);
     ui->drinksLeftOutput->setText(QString::fromStdString(double_to_string(std_drinks_left)));
 }
-
