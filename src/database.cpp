@@ -126,10 +126,12 @@ std::vector<Beer> Database::filter(const std::string& filter_type, const std::st
 
         filtered_beers = storage.get_all<Beer>(where(c(&Beer::drink_year) == year && c(&Beer::drink_month) == month &&
                 c(&Beer::drink_day) == day));
-    } else if (filter_type == "Afer Date") {
+    } else if (filter_type == "After Date") {
         int year = stoi(filter_text.substr(6, 8));
         int month = stoi(filter_text.substr(3, 2));
         int day = stoi(filter_text.substr(0, 2));
+
+        std::cout << "Getting beers after " << filter_text << std::endl;
 
         filtered_beers = storage.get_all<Beer>(where(c(&Beer::drink_year) == year && c(&Beer::drink_month) == month &&
                                                      c(&Beer::drink_day) >= day));
