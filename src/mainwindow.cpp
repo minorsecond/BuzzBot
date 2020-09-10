@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "database.h"
+#include "usersettings.h"
 #include <iomanip>
 #include <QMessageBox>
 
@@ -401,5 +402,14 @@ void MainWindow::update_beer_fields() {
 }
 
 void MainWindow::open_user_settings() {
+
+    std::string sex;
+
     std::cout << "Opening user settings." << std::endl;
+    UserSettings user_settings = UserSettings();
+    user_settings.setModal(true);
+    if (user_settings.exec() == QDialog::Accepted) {
+        sex = user_settings.get_sex();
+        std::cout << "Sex: " << sex << std::endl;
+    }
 }
