@@ -6,7 +6,7 @@
 #include "ui_mainwindow.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui { class [[maybe_unused]] MainWindow; }
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
