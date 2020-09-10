@@ -16,9 +16,12 @@ public:
 private:
     Ui::MainWindow *ui;
     Storage storage = initStorage(Database::path());
+    std::string sex = program_options("", false);
     static std::string double_to_string(double input_double);
     void populate_filter_menus(const std::string& filter_type);
     void update_beer_fields();
+    static std::string settings_path();
+    static std::string program_options(const std::string& sex, bool write);
 
 private slots:
     void submit_button_clicked();
@@ -28,5 +31,6 @@ private slots:
     void delete_row();
     void enable_filter_text(const QString&);
     void changed_filter_text(const QString&);
+    void open_user_settings();
 };
 #endif // MAINWINDOW_H
