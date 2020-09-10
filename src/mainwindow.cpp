@@ -211,11 +211,14 @@ void MainWindow::update_table() {
      * Populate the table with data from the database.
      */
 
+    // Temporarily sort by database ID to fix issues with blank rows
+    ui->drinkLogTable->sortItems(8, Qt::AscendingOrder);
+
     std::string filter_category = ui->filterCategoryInput->currentText().toStdString();
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
 
     std::vector<Beer> beers = Database::filter(filter_category, filter_text, storage);
-
+    std::cout << "Query returned " << beers.size() << " rows." << std::endl;
     ui->drinkLogTable->setRowCount(beers.size());
 
     int table_row_num = 0;
@@ -233,6 +236,8 @@ void MainWindow::update_table() {
 
         std::string notes = beer.notes;
 
+        std::cout << "Beer: " << beer.name << "Row num:" << table_row_num << std::endl;
+
         ui->drinkLogTable->setItem(table_row_num, 0, date);
         ui->drinkLogTable->setItem(table_row_num, 1, name);
         ui->drinkLogTable->setItem(table_row_num, 2, type);
@@ -245,6 +250,7 @@ void MainWindow::update_table() {
 
         table_row_num += 1;
     }
+    ui->drinkLogTable->sortItems(0, Qt::AscendingOrder);
 }
 
 std::string MainWindow::double_to_string(double input_double) {
