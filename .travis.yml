@@ -26,7 +26,7 @@ deploy:
   provider: releases
   file: "Beertabs.zip"
   skip_cleanup: true
-  github_token: $GITHUB_TOKEN
+  api_key: $GITHUB_TOKEN
   on:
     tags: true
 
