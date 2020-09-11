@@ -1,6 +1,7 @@
 os: osx
 osx_image: xcode12
 language: cpp
+cache: ccache
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
@@ -8,17 +9,23 @@ before_install:
       brew install qt5 cmake boost sqlite3 catch2;
       brew link --force qt ;
     fi
+  - export core_count=$(nproc || echo 4) && echo core_count = $core_count
+  - ccache --version
+  - ccache --zero-stats
+  - export CCACHE_COMPRESS=true
+  - export CCACHE_COMPRESSLEVEL=9
     
 before_script:
   - export PATH=/usr/local/opt/qt5/bin:$PATH
   - mkdir build
   - cd build
-  - cmake -D CMAKE_BUILD_TYPE=Release ..
+  - cmake -DCMAKE_BUILD_TYPE=Release -DUSE_CCACHE=ON ..
    
 script:
-  - cmake --build .
+  - cmake --build . --target Beertabs -- -j$core_count
   - ctest functions_test
   - zip -r Beertabs.zip Beertabs.app
+  - ccache --show-stats
   
 deploy:
   provider: releases
@@ -26,6 +33,13 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
+
+notifications:
+  email:
+    recipients:
+      minorsecond@gmail.com
+    on_success: change
+    on_failure: always
 
 env:
   global:
