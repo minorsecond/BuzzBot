@@ -57,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent)
     update_table();
 
     // Sort table by date column, by default
-    ui->drinkLogTable->sortItems(0, Qt::AscendingOrder);
+    reset_table_sort();
 
     // Enable table sorting by columns
     ui->drinkLogTable->setSortingEnabled(true);
@@ -179,7 +179,7 @@ void MainWindow::submit_button_clicked() {
             Database::write(beer, storage);
         }
         update_table();
-        ui->drinkLogTable->sortByColumn(8, Qt::AscendingOrder);
+        reset_table_sort();
         if (selected_rows.empty()) {
             clear_fields();
         }
@@ -250,7 +250,7 @@ void MainWindow::update_table() {
 
         table_row_num += 1;
     }
-    ui->drinkLogTable->sortItems(0, Qt::AscendingOrder);
+    reset_table_sort();
 }
 
 std::string MainWindow::double_to_string(double input_double) {
@@ -542,8 +542,8 @@ void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consume
 
 void MainWindow::reset_table_sort() {
     /*
-     * Reset table sort to default, by date descending.
+     * Reset table sort to default, by datetime descending.
      */
 
-    ui->drinkLogTable->sortItems(0, Qt::AscendingOrder);
+    ui->drinkLogTable->sortItems(9, Qt::DescendingOrder);
 }
