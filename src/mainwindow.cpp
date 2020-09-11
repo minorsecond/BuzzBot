@@ -81,6 +81,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->drinkLogTable->setColumnWidth(5, 50);
     ui->drinkLogTable->setColumnWidth(6, 50);
     ui->drinkLogTable->setColumnHidden(8, true);  // Hide ID column
+    ui->drinkLogTable->setColumnHidden(9, true);  // Hide Timestamp column
     QHeaderView* drink_log_header = ui->drinkLogTable->horizontalHeader();
     drink_log_header->setSectionResizeMode(7, QHeaderView::Stretch);
 
@@ -139,7 +140,8 @@ void MainWindow::submit_button_clicked() {
         if (select->hasSelection()) {
             int selection = select->selectedRows().at(0).row();
             int row_to_update = ui->drinkLogTable->item(selection, 8)->text().toUtf8().toInt();
-            std::cout << "Updating row " << row_to_update << std::endl;
+            std::string timestamp = ui->drinkLogTable->item(selection, 9)->text().toStdString();
+            std::cout << "Updating row " << row_to_update << "Timestamp: " << timestamp << std::endl;
 
             Beer beer{
                 row_to_update,
@@ -153,7 +155,8 @@ void MainWindow::submit_button_clicked() {
                 beer_ibu,
                 beer_size,
                 rating,
-                notes
+                notes,
+                timestamp
             };
 
             Database::update(storage, beer);
@@ -170,7 +173,8 @@ void MainWindow::submit_button_clicked() {
                     beer_ibu,
                     beer_size,
                     rating,
-                    notes
+                    notes,
+                    storage.select(sqlite_orm::datetime("now")).front()
             };
             Database::write(beer, storage);
         }
@@ -229,6 +233,7 @@ void MainWindow::update_table() {
         auto *size = new QTableWidgetItem(double_to_string(beer.size).c_str());
         auto *rating = new QTableWidgetItem(std::to_string(beer.rating).c_str());
         auto *id = new QTableWidgetItem(std::to_string(beer.id).c_str());
+        auto *timestamp = new QTableWidgetItem(beer.timestamp.c_str());
 
         std::string notes = beer.notes;
 
@@ -241,6 +246,7 @@ void MainWindow::update_table() {
         ui->drinkLogTable->setItem(table_row_num, 6, size);
         ui->drinkLogTable->setItem(table_row_num, 7, rating);
         ui->drinkLogTable->setItem(table_row_num, 8, id);
+        ui->drinkLogTable->setItem(table_row_num, 9, timestamp);
 
         table_row_num += 1;
     }
