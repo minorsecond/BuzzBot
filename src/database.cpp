@@ -30,7 +30,6 @@ std::vector<Beer> Database::read(const std::string& database_path, Storage stora
      * @return all_beers A vector containing Beer, storing all rows in the database.
      */
 
-    std::cout << "Reading or building the database at " << database_path << std::endl;
     std::vector<Beer> all_beers = storage.get_all<Beer>();
 
     return all_beers;
@@ -40,7 +39,7 @@ void Database::write_db_to_disk(Storage storage) {
     /*
      * Flush in-memory database data to disk.
      */
-
+    std::cout << "Writing data to disk" << std::endl;
     storage.sync_schema(false);
 }
 
