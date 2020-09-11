@@ -69,7 +69,12 @@ double Calculate::oz_alcohol_remaining(const std::string& sex, double oz_consume
     } else {
         oz_alcohol_remaining = (0.6 * 7) - oz_consumed;
     }
-    return oz_alcohol_remaining;
+
+    if (oz_alcohol_remaining < 0) {
+        oz_alcohol_remaining = 0;
+    }
+
+    return round_to_one_decimal_point(oz_alcohol_remaining);
 }
 
 std::string Calculate::favorite_brewery(Storage storage) {
@@ -151,7 +156,7 @@ double Calculate::mean_abv(Storage storage) {
         abv_sum += beer.abv;
     }
 
-    return abv_sum / beer_count;
+    return round_to_one_decimal_point(abv_sum / beer_count);
 }
 
 double Calculate::mean_ibu(Storage storage) {
