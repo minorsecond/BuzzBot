@@ -1,7 +1,6 @@
 os: osx
 osx_image: xcode12
 language: cpp
-cache: ccache
 
 before_install:
   - set -e  # Fail build if a command fails
