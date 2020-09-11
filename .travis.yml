@@ -21,7 +21,6 @@ script:
   - cmake --build . --target functions_test -- -j$core_count
   - ctest functions_test
   - zip -r Beertabs.zip Beertabs.app
-  - ccache --show-stats
 
 deploy:
   provider: releases
