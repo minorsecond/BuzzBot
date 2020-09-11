@@ -4,6 +4,7 @@ language: cpp
 cache: ccache
 
 before_install:
+  - set -e  # Fail build if a command fails
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew update ;
       brew install qt5 cmake boost sqlite3 catch2;
