@@ -20,11 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setFixedSize(1392, 665);
 
-    // Read program options
-    std::cout << "Got sex: " << sex << std::endl;
-
     // Add menubar items
-    QAction * editAction = new QAction("User Settings");
+    auto * editAction = new QAction("User Settings");
 
     QMenu * menu = menuBar()->addMenu("Edit");
     menu->addAction(editAction);
@@ -39,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
     //std::string database_path = Database::path();
     Database::write_db_to_disk(storage);
 
-    update_standard_drinks_this_week();
+    update_stat_panel();
 
     // Set up button and input states
     ui->deleteRowButton->setDisabled(true);
@@ -60,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent)
     update_table();
 
     // Sort table by date column, by default
-    ui->drinkLogTable->sortItems(0, Qt::AscendingOrder);
+    reset_table_sort();
 
     // Enable table sorting by columns
     ui->drinkLogTable->setSortingEnabled(true);
@@ -84,6 +81,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->drinkLogTable->setColumnWidth(5, 50);
     ui->drinkLogTable->setColumnWidth(6, 50);
     ui->drinkLogTable->setColumnHidden(8, true);  // Hide ID column
+    ui->drinkLogTable->setColumnHidden(9, true);  // Hide Timestamp column
     QHeaderView* drink_log_header = ui->drinkLogTable->horizontalHeader();
     drink_log_header->setSectionResizeMode(7, QHeaderView::Stretch);
 
@@ -129,7 +127,7 @@ void MainWindow::submit_button_clicked() {
     std::string brewery_name = ui->breweryInput->currentText().toStdString();
     double beer_ibu = ui->ibuInput->value();
     double beer_abv = ui->abvInput->value();
-    double beer_size = ui->sizeInput->value();
+    int beer_size = ui->sizeInput->value();
     int rating = ui->ratingInput->value();
     std::string notes = ui->notesInput->toPlainText().toStdString();
 
@@ -142,7 +140,8 @@ void MainWindow::submit_button_clicked() {
         if (select->hasSelection()) {
             int selection = select->selectedRows().at(0).row();
             int row_to_update = ui->drinkLogTable->item(selection, 8)->text().toUtf8().toInt();
-            std::cout << "Updating row " << row_to_update << std::endl;
+            std::string timestamp = ui->drinkLogTable->item(selection, 9)->text().toStdString();
+            std::cout << "Updating row " << row_to_update << "Timestamp: " << timestamp << std::endl;
 
             Beer beer{
                 row_to_update,
@@ -156,7 +155,8 @@ void MainWindow::submit_button_clicked() {
                 beer_ibu,
                 beer_size,
                 rating,
-                notes
+                notes,
+                timestamp
             };
 
             Database::update(storage, beer);
@@ -173,17 +173,18 @@ void MainWindow::submit_button_clicked() {
                     beer_ibu,
                     beer_size,
                     rating,
-                    notes
+                    notes,
+                    storage.select(sqlite_orm::datetime("now")).front()
             };
             Database::write(beer, storage);
         }
         update_table();
-        ui->drinkLogTable->sortByColumn(8, Qt::AscendingOrder);
+        reset_table_sort();
         if (selected_rows.empty()) {
             clear_fields();
         }
         update_beer_fields();
-        update_standard_drinks_this_week();
+        update_stat_panel();
     }
 }
 
@@ -232,6 +233,7 @@ void MainWindow::update_table() {
         auto *size = new QTableWidgetItem(double_to_string(beer.size).c_str());
         auto *rating = new QTableWidgetItem(std::to_string(beer.rating).c_str());
         auto *id = new QTableWidgetItem(std::to_string(beer.id).c_str());
+        auto *timestamp = new QTableWidgetItem(beer.timestamp.c_str());
 
         std::string notes = beer.notes;
 
@@ -244,10 +246,11 @@ void MainWindow::update_table() {
         ui->drinkLogTable->setItem(table_row_num, 6, size);
         ui->drinkLogTable->setItem(table_row_num, 7, rating);
         ui->drinkLogTable->setItem(table_row_num, 8, id);
+        ui->drinkLogTable->setItem(table_row_num, 9, timestamp);
 
         table_row_num += 1;
     }
-    ui->drinkLogTable->sortItems(0, Qt::AscendingOrder);
+    reset_table_sort();
 }
 
 std::string MainWindow::double_to_string(double input_double) {
@@ -310,7 +313,7 @@ void MainWindow::delete_row() {
     int row_to_delete = (ui->drinkLogTable->item(select, 8)->text().toUtf8().toInt());
     Database::delete_row(storage, row_to_delete);
     update_table();
-    update_standard_drinks_this_week();
+    update_stat_panel();
     ui->deleteRowButton->setDisabled(true);
 }
 
@@ -505,7 +508,7 @@ std::string MainWindow::program_options(const std::string &sex, bool write) {
     return read_sex;
 }
 
-void MainWindow::update_standard_drinks_this_week() {
+void MainWindow::update_stat_panel() {
     /*
      * Calculate number of standard drinks consumed since Sunday.
      */
@@ -527,9 +530,20 @@ void MainWindow::update_standard_drinks_this_week() {
     for (const auto& beer : beers_this_week) {
         standard_drinks += Calculate::standard_drinks(beer.abv, beer.size);
     }
+    if (standard_drinks == 0.0) {
+        ui->drinksThisWeekOutput->clear();
+    } else {
+        ui->drinksThisWeekOutput->setText(QString::fromStdString(double_to_string(standard_drinks)));
+    }
 
-    ui->drinksThisWeekOutput->setText( QString::fromStdString(double_to_string(standard_drinks)));
+    // TODO: refactor this
     update_standard_drinks_left_this_week(standard_drinks);
+    double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week);
+    update_oz_alcohol_remaining(oz_alc_consumed);
+    update_favorite_brewery();
+    update_favorite_beer();
+    update_mean_abv();
+    update_mean_ibu();
 }
 
 void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consumed) {
@@ -539,8 +553,56 @@ void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consume
 
 void MainWindow::reset_table_sort() {
     /*
-     * Reset table sort to default, by date descending.
+     * Reset table sort to default, by datetime descending.
      */
 
-    ui->drinkLogTable->sortItems(0, Qt::AscendingOrder);
+    ui->drinkLogTable->sortItems(9, Qt::DescendingOrder);
+}
+
+double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>& beers_this_week) {
+    double oz_consumed = 0;
+
+    for (const auto& beer : beers_this_week) {
+        double beer_oz_alcohol = (beer.abv/100) * beer.size;
+        oz_consumed += beer_oz_alcohol;
+    }
+
+    if (oz_consumed == 0.0) {
+        ui->ozAlcoholConsumedOutput->clear();
+    } else {
+        ui->ozAlcoholConsumedOutput->setText(QString::fromStdString(double_to_string(oz_consumed)));
+    }
+
+    return oz_consumed;
+}
+
+void MainWindow::update_oz_alcohol_remaining(double oz_alcohol_consumed) {
+    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(sex, oz_alcohol_consumed);
+    ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(double_to_string(oz_alcohol_remaining)));
+}
+
+void MainWindow::update_favorite_brewery() {
+    std::string fave_brewery = Calculate::favorite_brewery(storage);
+    ui->favoriteBreweryOutput->setText(QString::fromStdString(fave_brewery));
+}
+
+void MainWindow::update_favorite_beer() {
+    std::string fave_beer = Calculate::favorite_beer(storage);
+    ui->favoriteBeerOutput->setText(QString::fromStdString(fave_beer));
+}
+
+void MainWindow::update_mean_abv() {
+    std::string mean_abv = double_to_string(Calculate::mean_abv(storage));
+    if (mean_abv == "nan") {
+        mean_abv = " ";
+    }
+    ui->avgAbvDrinkOutput->setText(QString::fromStdString(mean_abv));
+}
+
+void MainWindow::update_mean_ibu() {
+    std::string mean_ibu = double_to_string(Calculate::mean_ibu(storage));
+    if (mean_ibu == "nan") {
+        mean_ibu = " ";
+    }
+    ui->avgIbuDrinkOutput->setText(QString::fromStdString(mean_ibu));
 }
