@@ -219,10 +219,11 @@ void MainWindow::update_table() {
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
 
     std::vector<Beer> beers = Database::filter(filter_category, filter_text, storage);
-    ui->drinkLogTable->setRowCount(beers.size());
 
-    int table_row_num = 0;
+    ui->drinkLogTable->setRowCount(0);
     for (const auto& beer : beers) {
+        int table_row_num = ui->drinkLogTable->rowCount();
+        ui->drinkLogTable->insertRow(table_row_num);
         auto *date = new QTableWidgetItem((std::to_string(beer.drink_year) + "/" +
                 std::to_string(beer.drink_month) + "/" + std::to_string(beer.drink_day)).c_str());
         auto *name = new QTableWidgetItem(beer.name.c_str());
@@ -247,8 +248,6 @@ void MainWindow::update_table() {
         ui->drinkLogTable->setItem(table_row_num, 7, rating);
         ui->drinkLogTable->setItem(table_row_num, 8, id);
         ui->drinkLogTable->setItem(table_row_num, 9, timestamp);
-
-        table_row_num += 1;
     }
     reset_table_sort();
 }
@@ -556,7 +555,7 @@ void MainWindow::reset_table_sort() {
      * Reset table sort to default, by datetime descending.
      */
 
-    ui->drinkLogTable->sortItems(9, Qt::DescendingOrder);
+    ui->drinkLogTable->sortItems(0, Qt::AscendingOrder);
 }
 
 double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>& beers_this_week) {
