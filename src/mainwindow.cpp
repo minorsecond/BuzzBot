@@ -179,7 +179,6 @@ void MainWindow::submit_button_clicked() {
             Database::write(beer, storage);
         }
         update_table();
-        reset_table_sort();
         if (selected_rows.empty()) {
             clear_fields();
         }
@@ -233,8 +232,11 @@ void MainWindow::update_table() {
         auto *ibu = new QTableWidgetItem(double_to_string(beer.ibu).c_str());
         auto *size = new QTableWidgetItem(double_to_string(beer.size).c_str());
         auto *rating = new QTableWidgetItem(std::to_string(beer.rating).c_str());
-        auto *id = new QTableWidgetItem(std::to_string(beer.id).c_str());
+        auto *id = new QTableWidgetItem;
         auto *timestamp = new QTableWidgetItem(beer.timestamp.c_str());
+
+        // Sort ID numerically
+        id->setData(Qt::DisplayRole, beer.id);
 
         std::string notes = beer.notes;
 
@@ -555,7 +557,7 @@ void MainWindow::reset_table_sort() {
      * Reset table sort to default, by datetime descending.
      */
 
-    ui->drinkLogTable->sortItems(0, Qt::AscendingOrder);
+    ui->drinkLogTable->sortItems(8, Qt::DescendingOrder);
 }
 
 double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>& beers_this_week) {
