@@ -289,6 +289,11 @@
       <string>ID</string>
      </property>
     </column>
+    <column>
+     <property name="text">
+      <string>Timestamp</string>
+     </property>
+    </column>
     <item row="0" column="0">
      <property name="text">
       <string>09/07/2020</string>
