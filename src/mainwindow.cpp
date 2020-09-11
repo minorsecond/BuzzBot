@@ -530,8 +530,11 @@ void MainWindow::update_stat_panel() {
     for (const auto& beer : beers_this_week) {
         standard_drinks += Calculate::standard_drinks(beer.abv, beer.size);
     }
-
-    ui->drinksThisWeekOutput->setText( QString::fromStdString(double_to_string(standard_drinks)));
+    if (standard_drinks == 0.0) {
+        ui->drinksThisWeekOutput->clear();
+    } else {
+        ui->drinksThisWeekOutput->setText(QString::fromStdString(double_to_string(standard_drinks)));
+    }
 
     // TODO: refactor this
     update_standard_drinks_left_this_week(standard_drinks);
@@ -563,7 +566,12 @@ double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>&
         double beer_oz_alcohol = (beer.abv/100) * beer.size;
         oz_consumed += beer_oz_alcohol;
     }
-    ui->ozAlcoholConsumedOutput->setText(QString::fromStdString(double_to_string(oz_consumed)));
+
+    if (oz_consumed == 0.0) {
+        ui->ozAlcoholConsumedOutput->clear();
+    } else {
+        ui->ozAlcoholConsumedOutput->setText(QString::fromStdString(double_to_string(oz_consumed)));
+    }
 
     return oz_consumed;
 }
@@ -585,10 +593,16 @@ void MainWindow::update_favorite_beer() {
 
 void MainWindow::update_mean_abv() {
     std::string mean_abv = double_to_string(Calculate::mean_abv(storage));
+    if (mean_abv == "nan") {
+        mean_abv = " ";
+    }
     ui->avgAbvDrinkOutput->setText(QString::fromStdString(mean_abv));
 }
 
 void MainWindow::update_mean_ibu() {
     std::string mean_ibu = double_to_string(Calculate::mean_ibu(storage));
+    if (mean_ibu == "nan") {
+        mean_ibu = " ";
+    }
     ui->avgIbuDrinkOutput->setText(QString::fromStdString(mean_ibu));
 }
