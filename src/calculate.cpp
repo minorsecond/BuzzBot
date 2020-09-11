@@ -139,3 +139,31 @@ std::string Calculate::favorite_beer(Storage storage) {
 
     return favorite_beer;
 }
+
+double Calculate::mean_abv(Storage storage) {
+    double mean_abv = 0.0;
+    double abv_sum = 0.0;
+    unsigned beer_count = 0;
+    std::vector<Beer> all_beers = storage.get_all<Beer>();
+
+    for (auto beer : all_beers) {
+        beer_count += 1;
+        abv_sum += beer.abv;
+    }
+
+    return abv_sum / beer_count;
+}
+
+double Calculate::mean_ibu(Storage storage) {
+    double mean_ibu = 0.0;
+    double ibu_sum = 0.0;
+    unsigned beer_count = 0;
+    std::vector<Beer> all_beers = storage.get_all<Beer>();
+
+    for (auto beer : all_beers) {
+        beer_count += 1;
+        ibu_sum += beer.ibu;
+    }
+
+    return ibu_sum / beer_count;
+}
