@@ -13,9 +13,12 @@ struct Beer {
     std::string name;
     std::string type;
     std::string brewery;
-    float abv;
-    float ibu;
+    double abv;
+    double ibu;
+    int size;
+    int rating;
     std::string notes;
+    std::string timestamp;
 };
 
 inline auto initStorage(const std::string& file_name) {
@@ -31,7 +34,10 @@ inline auto initStorage(const std::string& file_name) {
                                                           sqlite_orm::make_column("brewery", &Beer::brewery),
                                                           sqlite_orm::make_column("abv", &Beer::abv),
                                                           sqlite_orm::make_column("ibu", &Beer::ibu),
-                                                          sqlite_orm::make_column("notes", &Beer::notes)));
+                                                          sqlite_orm::make_column("size", &Beer::size),
+                                                          sqlite_orm::make_column("rating", &Beer::rating),
+                                                          sqlite_orm::make_column("notes", &Beer::notes),
+                                                          sqlite_orm::make_column("timestamp", &Beer::timestamp, sqlite_orm::default_value(sqlite_orm::datetime("now", "localtime")))));
 }
 using Storage = decltype (initStorage(""));
 
@@ -39,10 +45,13 @@ class Database
 {
 
 public:
-    static std::vector<Beer> read(std::string database_path);
-    static Storage write(Beer beer);
+    static std::vector<Beer> read(const std::string& database_path, Storage storage);
+    static Storage write(Beer beer, Storage storage);
     static void truncate(Storage storage);
     static void delete_row(Storage storage, int row_num);
+    static Beer read_row(int row_num, Storage storage);
+    static void update(Storage storage, const Beer& beer);
+    static std::vector<Beer> filter(const std::string& filter_type, const std::string& filter_text, Storage storage);
     static void write_db_to_disk(Storage storage);
 
 public:
