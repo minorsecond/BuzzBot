@@ -24,6 +24,10 @@ private:
     static std::string program_options(const std::string& sex, bool write);
     void update_standard_drinks_this_week();
     void update_standard_drinks_left_this_week(double std_drinks_consumed);
+    double update_oz_alcohol_consumed_this_week(const std::vector<Beer>& beers_this_week);
+    void update_oz_alcohol_remaining(double oz_alcohol_consumed);
+    void update_favorite_brewery();
+    void update_favorite_beer();
 
 private slots:
     void submit_button_clicked();

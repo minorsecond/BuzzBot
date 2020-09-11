@@ -532,7 +532,13 @@ void MainWindow::update_standard_drinks_this_week() {
     }
 
     ui->drinksThisWeekOutput->setText( QString::fromStdString(double_to_string(standard_drinks)));
+
+    // TODO: refactor this
     update_standard_drinks_left_this_week(standard_drinks);
+    double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week);
+    update_oz_alcohol_remaining(oz_alc_consumed);
+    update_favorite_brewery();
+    update_favorite_beer();
 }
 
 void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consumed) {
@@ -546,4 +552,31 @@ void MainWindow::reset_table_sort() {
      */
 
     ui->drinkLogTable->sortItems(9, Qt::DescendingOrder);
+}
+
+double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>& beers_this_week) {
+    double oz_consumed = 0;
+
+    for (const auto& beer : beers_this_week) {
+        double beer_oz_alcohol = (beer.abv/100) * beer.size;
+        oz_consumed += beer_oz_alcohol;
+    }
+    ui->ozAlcoholConsumedOutput->setText(QString::fromStdString(double_to_string(oz_consumed)));
+
+    return oz_consumed;
+}
+
+void MainWindow::update_oz_alcohol_remaining(double oz_alcohol_consumed) {
+    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(sex, oz_alcohol_consumed);
+    ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(double_to_string(oz_alcohol_remaining)));
+}
+
+void MainWindow::update_favorite_brewery() {
+    std::string fave_brewery = Calculate::favorite_brewery(storage);
+    ui->favoriteBreweryOutput->setText(QString::fromStdString(fave_brewery));
+}
+
+void MainWindow::update_favorite_beer() {
+    std::string fave_beer = Calculate::favorite_beer(storage);
+    ui->favoriteBeerOutput->setText(QString::fromStdString(fave_beer));
 }

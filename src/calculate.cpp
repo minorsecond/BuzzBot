@@ -61,3 +61,81 @@ double Calculate::round_to_one_decimal_point(double val) {
     double value = floor((val * 10) + .5);
     return value / 10;
 }
+
+double Calculate::oz_alcohol_remaining(const std::string& sex, double oz_consumed) {
+    double oz_alcohol_remaining = 0;
+    if (sex == "male") {
+        oz_alcohol_remaining = (0.6 * 14) - oz_consumed;
+    } else {
+        oz_alcohol_remaining = (0.6 * 7) - oz_consumed;
+    }
+    return oz_alcohol_remaining;
+}
+
+std::string Calculate::favorite_brewery(Storage storage) {
+    /*
+     * Get the number of time each brewery appears in the database.
+     * @param storage: A Storage instance.
+     * @return favorite_brewery: The brewery that appears most often.
+     */
+
+    std::map<std::string, unsigned> brewery_counts;
+    std::vector<std::string> breweries;
+    std::string favorite_brewery;
+
+    std::vector<Beer> all_beers = storage.get_all<Beer>();
+
+    breweries.reserve(all_beers.size());
+    for (const auto& beer: all_beers) {
+        breweries.push_back(beer.brewery);
+    }
+    for (const auto& brewery : breweries) {
+        int brewery_count = std::count(breweries.begin(), breweries.end(), brewery);
+        brewery_counts[brewery] = brewery_count;
+    }
+
+    unsigned current_max = 0;
+
+    for (const auto & brewery_count : brewery_counts) {
+        if (brewery_count.second > current_max) {
+            favorite_brewery = brewery_count.first;
+            current_max = brewery_count.second;
+        }
+    }
+
+    return favorite_brewery;
+}
+
+std::string Calculate::favorite_beer(Storage storage) {
+    /*
+     * Calculates favorite beer based on most common beer in database
+     * @param Storage: a Storage instance
+     * @return favorite_beer: The most common beer in the database.
+     */
+
+    std::map<std::string, unsigned> beer_counts;
+    std::vector<std::string> beers;
+    std::string favorite_beer;
+
+    std::vector<Beer> all_beers = storage.get_all<Beer>();
+
+    beers.reserve(all_beers.size());
+    for (const auto& beer: all_beers) {
+        beers.push_back(beer.name);
+    }
+    for (const auto& brewery : beers) {
+        int brewery_count = std::count(beers.begin(), beers.end(), brewery);
+        beer_counts[brewery] = brewery_count;
+    }
+
+    unsigned current_max = 0;
+
+    for (const auto & beer_count : beer_counts) {
+        if (beer_count.second > current_max) {
+            favorite_beer = beer_count.first;
+            current_max = beer_count.second;
+        }
+    }
+
+    return favorite_beer;
+}
