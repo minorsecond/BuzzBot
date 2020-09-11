@@ -53,7 +53,7 @@
     <property name="geometry">
      <rect>
       <x>280</x>
-      <y>66</y>
+      <y>126</y>
       <width>361</width>
       <height>30</height>
      </rect>
@@ -66,7 +66,7 @@
     <property name="geometry">
      <rect>
       <x>290</x>
-      <y>50</y>
+      <y>110</y>
       <width>341</width>
       <height>20</height>
      </rect>
@@ -111,7 +111,7 @@
     <property name="geometry">
      <rect>
       <x>280</x>
-      <y>126</y>
+      <y>66</y>
       <width>361</width>
       <height>30</height>
      </rect>
@@ -124,7 +124,7 @@
     <property name="geometry">
      <rect>
       <x>290</x>
-      <y>110</y>
+      <y>50</y>
       <width>341</width>
       <height>20</height>
      </rect>
@@ -202,16 +202,6 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QDoubleSpinBox" name="sizeInput">
-    <property name="geometry">
-     <rect>
-      <x>540</x>
-      <y>190</y>
-      <width>62</width>
-      <height>22</height>
-     </rect>
     </property>
    </widget>
    <widget class="QTextEdit" name="notesInput">
@@ -297,6 +287,11 @@
     <column>
      <property name="text">
       <string>ID</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Timestamp</string>
      </property>
     </column>
     <item row="0" column="0">
@@ -499,7 +494,7 @@
      <rect>
       <x>920</x>
       <y>150</y>
-      <width>31</width>
+      <width>271</width>
       <height>16</height>
      </rect>
     </property>
@@ -512,7 +507,7 @@
      <rect>
       <x>920</x>
       <y>180</y>
-      <width>31</width>
+      <width>271</width>
       <height>16</height>
      </rect>
     </property>
@@ -734,6 +729,16 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="sizeInput">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>190</y>
+      <width>61</width>
+      <height>22</height>
+     </rect>
     </property>
    </widget>
   </widget>

@@ -22,8 +22,14 @@ private:
     void update_beer_fields();
     static std::string settings_path();
     static std::string program_options(const std::string& sex, bool write);
-    void update_standard_drinks_this_week();
+    void update_stat_panel();
     void update_standard_drinks_left_this_week(double std_drinks_consumed);
+    double update_oz_alcohol_consumed_this_week(const std::vector<Beer>& beers_this_week);
+    void update_oz_alcohol_remaining(double oz_alcohol_consumed);
+    void update_favorite_brewery();
+    void update_favorite_beer();
+    void update_mean_abv();
+    void update_mean_ibu();
 
 private slots:
     void submit_button_clicked();
