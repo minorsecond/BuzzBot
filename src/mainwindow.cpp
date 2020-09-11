@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
     //std::string database_path = Database::path();
     Database::write_db_to_disk(storage);
 
-    update_standard_drinks_this_week();
+    update_stat_panel();
 
     // Set up button and input states
     ui->deleteRowButton->setDisabled(true);
@@ -184,7 +184,7 @@ void MainWindow::submit_button_clicked() {
             clear_fields();
         }
         update_beer_fields();
-        update_standard_drinks_this_week();
+        update_stat_panel();
     }
 }
 
@@ -313,7 +313,7 @@ void MainWindow::delete_row() {
     int row_to_delete = (ui->drinkLogTable->item(select, 8)->text().toUtf8().toInt());
     Database::delete_row(storage, row_to_delete);
     update_table();
-    update_standard_drinks_this_week();
+    update_stat_panel();
     ui->deleteRowButton->setDisabled(true);
 }
 
@@ -508,7 +508,7 @@ std::string MainWindow::program_options(const std::string &sex, bool write) {
     return read_sex;
 }
 
-void MainWindow::update_standard_drinks_this_week() {
+void MainWindow::update_stat_panel() {
     /*
      * Calculate number of standard drinks consumed since Sunday.
      */
@@ -539,6 +539,8 @@ void MainWindow::update_standard_drinks_this_week() {
     update_oz_alcohol_remaining(oz_alc_consumed);
     update_favorite_brewery();
     update_favorite_beer();
+    update_mean_abv();
+    update_mean_ibu();
 }
 
 void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consumed) {
@@ -579,4 +581,14 @@ void MainWindow::update_favorite_brewery() {
 void MainWindow::update_favorite_beer() {
     std::string fave_beer = Calculate::favorite_beer(storage);
     ui->favoriteBeerOutput->setText(QString::fromStdString(fave_beer));
+}
+
+void MainWindow::update_mean_abv() {
+    std::string mean_abv = double_to_string(Calculate::mean_abv(storage));
+    ui->avgAbvDrinkOutput->setText(QString::fromStdString(mean_abv));
+}
+
+void MainWindow::update_mean_ibu() {
+    std::string mean_ibu = double_to_string(Calculate::mean_ibu(storage));
+    ui->avgIbuDrinkOutput->setText(QString::fromStdString(mean_ibu));
 }
