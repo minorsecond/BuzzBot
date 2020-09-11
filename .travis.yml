@@ -7,9 +7,10 @@ before_install:
   - set -e  # Fail build if a command fails
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew update ;
-      brew install qt5 cmake boost sqlite3 catch2;
+      brew install ccache qt5 cmake boost sqlite3 catch2;
       brew link --force qt ;
     fi
+  - export PATH="/usr/local/opt/ccache/libexec:$PATH"
   - export core_count=$(nproc || echo 4) && echo core_count = $core_count
   - ccache --version
   - ccache --zero-stats
