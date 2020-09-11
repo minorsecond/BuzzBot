@@ -23,8 +23,6 @@ MainWindow::MainWindow(QWidget *parent)
     // Read program options
     std::cout << "Got sex: " << sex << std::endl;
 
-    update_standard_drinks_this_week();
-
     // Add menubar items
     QAction * editAction = new QAction("User Settings");
 
@@ -40,6 +38,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     //std::string database_path = Database::path();
     Database::write_db_to_disk(storage);
+
+    update_standard_drinks_this_week();
 
     // Set up button and input states
     ui->deleteRowButton->setDisabled(true);
