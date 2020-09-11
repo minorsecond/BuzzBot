@@ -15,7 +15,7 @@ struct Beer {
     std::string brewery;
     double abv;
     double ibu;
-    double size;
+    int size;
     int rating;
     std::string notes;
 };

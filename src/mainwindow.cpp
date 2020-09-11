@@ -20,11 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setFixedSize(1392, 665);
 
-    // Read program options
-    std::cout << "Got sex: " << sex << std::endl;
-
     // Add menubar items
-    QAction * editAction = new QAction("User Settings");
+    auto * editAction = new QAction("User Settings");
 
     QMenu * menu = menuBar()->addMenu("Edit");
     menu->addAction(editAction);
@@ -129,7 +126,7 @@ void MainWindow::submit_button_clicked() {
     std::string brewery_name = ui->breweryInput->currentText().toStdString();
     double beer_ibu = ui->ibuInput->value();
     double beer_abv = ui->abvInput->value();
-    double beer_size = ui->sizeInput->value();
+    int beer_size = ui->sizeInput->value();
     int rating = ui->ratingInput->value();
     std::string notes = ui->notesInput->toPlainText().toStdString();
 

@@ -204,16 +204,6 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QDoubleSpinBox" name="sizeInput">
-    <property name="geometry">
-     <rect>
-      <x>540</x>
-      <y>190</y>
-      <width>62</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QTextEdit" name="notesInput">
     <property name="geometry">
      <rect>
@@ -734,6 +724,16 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="sizeInput">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>190</y>
+      <width>61</width>
+      <height>22</height>
+     </rect>
     </property>
    </widget>
   </widget>
