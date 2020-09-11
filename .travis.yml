@@ -26,6 +26,7 @@ deploy:
   provider: releases
   file: "Beertabs.zip"
   skip_cleanup: true
+  github_token: $GITHUB_TOKEN
   on:
     tags: true
 
@@ -35,7 +36,3 @@ notifications:
       - minorsecond@gmail.com
     on_success: change
     on_failure: always
-
-env:
-  global:
-    secure: VNbiRK9BslkmQY76d6mSmAYr1VNkKxBEevbalb9vqtpK+Oum1ZWFWitnP+7K2nNZdTDwDd0jOxBNLhsJrTV6VgDukb/6JsjlyqfPmDBt1kB5fnPop+IL/cVABazMzMUHMNB4yzO+H1/WrpZJnYNvq0O6/RFRHE1GOAW85xGqQnplxzjUv9TKbTaTAGXrjIu/3I/MlftlIYZOH8iNddhSrljM27GHF41Q8SY/LUEWFe34hJk+OCnciMLQIByU/mVeujeiW821Ny6F/9K1dmR7W3BLtpY2mleGSlKwSEN0+b8+mLKT0v1hCs9zJQOHp+clWwIs77yL2+6yD/CK03/6Md8DR9iN9spesgQwloY7vWHHOBWZDThKLyZ/UJls9AH+ncmRMjYuBFnC09oMLa7dkTvllID+YOSRGgVbbExM66un/R+tPv+e8PJThwo/MMXcet895GE+bMA04b8dqK9yTdZO37Uraw30gtae2sZtHSKNjUDVStO0sedXU6ol6o+nCzPdnzsSdEVcp8gYeJuA3tJXwTG4NWttx2sjDJxu8tQmBDEtwn56cJ2zkbyKbTsVo8344WLhDYVuquLhdd/odrjLL72S9aGIh7oAVgsxTeRsgW/MuCSGowL3FFVPoBvMXA6h5udWW0CFqWplpFGehaPNzRRnIN/w2b9aeTn6Ip0=
