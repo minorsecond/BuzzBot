@@ -18,7 +18,10 @@ MainWindow::MainWindow(QWidget *parent)
      */
 
     ui->setupUi(this);
-    this->setFixedSize(1392, 665);
+    //this->setFixedSize(1392, 665);
+
+    // Set size hints
+    ui->drinkDateInput->setProperty("sizeHint", QVariant(QSizeF(241, 22)));
 
     // Add menubar items
     auto * editAction = new QAction("User Settings");
@@ -82,8 +85,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->drinkLogTable->setColumnWidth(6, 50);
     ui->drinkLogTable->setColumnHidden(8, true);  // Hide ID column
     ui->drinkLogTable->setColumnHidden(9, true);  // Hide Timestamp column
-    QHeaderView* drink_log_header = ui->drinkLogTable->horizontalHeader();
-    drink_log_header->setSectionResizeMode(7, QHeaderView::Stretch);
+    //QHeaderView* drink_log_header = ui->drinkLogTable->horizontalHeader();
+    //drink_log_header->setSectionResizeMode(7, QHeaderView::Stretch);
+    ui->drinkLogTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     update_beer_fields();
 
