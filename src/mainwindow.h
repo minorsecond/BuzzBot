@@ -30,6 +30,7 @@ private:
     void update_favorite_beer();
     void update_mean_abv();
     void update_mean_ibu();
+    void update_fields_on_beer_name();
 
 private slots:
     void submit_button_clicked();
@@ -43,6 +44,6 @@ private slots:
     void reset_table_sort();
     void name_input_changed(const QString&);
     void type_input_changed(const QString&);
-    //void brewery_input_changed();
+    void brewery_input_changed(const QString&);
 };
 #endif // MAINWINDOW_H
