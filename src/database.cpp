@@ -1,5 +1,6 @@
 #include "database.h"
 #include <boost/filesystem.hpp>
+#include <utility>
 using namespace sqlite_orm;
 std::string Database::path() {
     /*
@@ -140,5 +141,10 @@ std::vector<Beer> Database::filter(const std::string& filter_type, const std::st
     }
 
     return filtered_beers;
+}
+
+Beer Database::get_beer_by_name(Storage storage, std::string beer_name) {
+    Beer beer_by_name = storage.get_all<Beer>(where(c(&Beer::name) == std::move(beer_name))).at(0);
+    return beer_by_name;
 }
 

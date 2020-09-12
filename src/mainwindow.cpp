@@ -110,6 +110,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(clear_fields()));
     connect(ui->deleteRowButton, SIGNAL(clicked()), this, SLOT(delete_row()));
     connect(editAction, SIGNAL(triggered()), this, SLOT(open_user_settings()));
+    connect(ui->nameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
+
+    // Update fields to match beer that comes first alphabetically
+    name_input_changed(nullptr);
 }
 
 MainWindow::~MainWindow()
@@ -605,4 +609,22 @@ void MainWindow::update_mean_ibu() {
         mean_ibu = " ";
     }
     ui->avgIbuDrinkOutput->setText(QString::fromStdString(mean_ibu));
+}
+
+void MainWindow::name_input_changed(const QString&) {
+    std::string input_beer = ui->nameInput->currentText().toStdString();
+    Beer selected_beer = Database::get_beer_by_name(storage, input_beer);
+    std::string beer_type = selected_beer.type;
+    std::string brewery = selected_beer.brewery;
+    double abv = selected_beer.abv;
+    double ibu = selected_beer.ibu;
+    int size = selected_beer.size;
+    int rating = selected_beer.rating;
+
+    ui->typeInput->setCurrentText(QString::fromStdString(beer_type));
+    ui->breweryInput->setCurrentText(QString::fromStdString(brewery));
+    ui->abvInput->setValue(abv);
+    ui->ibuInput->setValue(ibu);
+    ui->sizeInput->setValue(size);
+    ui->ratingInput->setValue(rating);
 }
