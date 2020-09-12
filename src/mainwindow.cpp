@@ -111,6 +111,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->deleteRowButton, SIGNAL(clicked()), this, SLOT(delete_row()));
     connect(editAction, SIGNAL(triggered()), this, SLOT(open_user_settings()));
     connect(ui->nameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
+    connect(ui->typeInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(type_input_changed(const QString&)));
 
     // Update fields to match beer that comes first alphabetically
     name_input_changed(nullptr);
@@ -627,4 +628,39 @@ void MainWindow::name_input_changed(const QString&) {
     ui->ibuInput->setValue(ibu);
     ui->sizeInput->setValue(size);
     ui->ratingInput->setValue(rating);
+}
+
+void MainWindow::type_input_changed(const QString &) {
+    std::string input_type = ui->typeInput->currentText().toStdString();
+    std::cout << input_type << std::endl;
+    std::vector<Beer> selected_beers = Database::get_beers_by_type(storage, input_type);
+    std::set<QString> beer_names;
+    std::set<QString> brewery_names;
+
+    // This fixes crashes when changing with rows selected.
+    QSignalBlocker name_input_signal_blocker(ui->nameInput);
+    QSignalBlocker brewery_input_signal_blocker(ui->breweryInput);
+
+    ui->abvInput->setValue(0.0);
+    ui->ibuInput->setValue(0.0);
+    ui->sizeInput->setValue(0);
+    ui->ratingInput->setValue(0);
+    ui->nameInput->clear();
+    ui->breweryInput->clear();
+
+    for (const auto& selected_beer : selected_beers) {
+        beer_names.insert(QString::fromStdString(selected_beer.name));
+        brewery_names.insert(QString::fromStdString(selected_beer.brewery));
+    }
+
+    for (const auto& brewery : brewery_names) {
+        ui->breweryInput->addItem(brewery);
+    }
+
+    for (const auto& beer : beer_names) {
+        ui->nameInput->addItem(beer);
+    }
+
+    // Update fields based on newly selected beer
+    name_input_changed(nullptr);
 }
