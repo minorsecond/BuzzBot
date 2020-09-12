@@ -36,7 +36,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Clear</string>
+       <string>Clear Selections</string>
       </property>
      </widget>
     </item>
