@@ -83,11 +83,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->drinkLogTable->setColumnWidth(4, 50);
     ui->drinkLogTable->setColumnWidth(5, 50);
     ui->drinkLogTable->setColumnWidth(6, 50);
+    ui->drinkLogTable->setColumnWidth(7, 50);
     ui->drinkLogTable->setColumnHidden(8, true);  // Hide ID column
     ui->drinkLogTable->setColumnHidden(9, true);  // Hide Timestamp column
-    //QHeaderView* drink_log_header = ui->drinkLogTable->horizontalHeader();
-    //drink_log_header->setSectionResizeMode(7, QHeaderView::Stretch);
-    ui->drinkLogTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    QHeaderView* drink_log_header = ui->drinkLogTable->horizontalHeader();
+    drink_log_header->setSectionResizeMode(1, QHeaderView::Stretch);
+    drink_log_header->setSectionResizeMode(2, QHeaderView::Stretch);
+    drink_log_header->setSectionResizeMode(3, QHeaderView::Stretch);
 
     update_beer_fields();
 
