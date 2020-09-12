@@ -435,7 +435,6 @@ void MainWindow::update_beer_fields() {
 }
 
 void MainWindow::open_user_settings() {
-
     std::cout << "Opening user settings." << std::endl;
     UserSettings user_settings = UserSettings(nullptr, sex);
     user_settings.setModal(true);
