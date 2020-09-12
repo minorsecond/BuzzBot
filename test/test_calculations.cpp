@@ -7,7 +7,6 @@
 #include "boost/filesystem.hpp"
 
 TEST_CASE("Standard Drinks", "[Drink Calculations]") {
-
     double mosaic_standard_drinks = Calculate::standard_drinks(8.6, 12);
     double etrwo_standard_drinks = Calculate::standard_drinks(6.5, 12);
     double old_rasputin_standard_drinks = Calculate::standard_drinks(9, 12);
