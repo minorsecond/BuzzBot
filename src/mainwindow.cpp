@@ -107,7 +107,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->filterCategoryInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(enable_filter_text(const QString&)));
     connect(ui->filterTextInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(changed_filter_text(const QString&)));
     connect(ui->submitRowButton, SIGNAL(clicked()), this, SLOT(submit_button_clicked()));
-    connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(clear_fields()));
+    connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(reset_fields()));
     connect(ui->deleteRowButton, SIGNAL(clicked()), this, SLOT(delete_row()));
     connect(editAction, SIGNAL(triggered()), this, SLOT(open_user_settings()));
     connect(ui->nameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
@@ -185,14 +185,14 @@ void MainWindow::submit_button_clicked() {
         }
         update_table();
         if (selected_rows.empty()) {
-            clear_fields();
+            reset_fields();
         }
         update_beer_fields();
         update_stat_panel();
     }
 }
 
-void MainWindow::clear_fields() {
+void MainWindow::reset_fields() {
     /*
      * Clear user entry fields for entering a new beer.
      */
@@ -209,6 +209,7 @@ void MainWindow::clear_fields() {
     ui->ibuInput->setValue(0.0);
     ui->sizeInput->setValue(0.0);
     ui->ratingInput->setValue(0);
+    name_input_changed(nullptr);
 }
 
 void MainWindow::update_table() {
