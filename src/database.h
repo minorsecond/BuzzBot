@@ -54,6 +54,7 @@ public:
     static void write_db_to_disk(Storage storage);
     static Beer get_beer_by_name(Storage storage, std::string beer_name);
     static std::vector<Beer> get_beers_by_type(Storage storage, std::string beer_type);
+    static std::vector<Beer> get_beers_by_brewery(Storage storage, std::string brewery);
 
 public:
     static std::string path();
