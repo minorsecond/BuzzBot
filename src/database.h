@@ -43,7 +43,6 @@ using Storage = decltype (initStorage(""));
 
 class Database
 {
-
 public:
     static std::vector<Beer> read(const std::string& database_path, Storage storage);
     static Storage write(Beer beer, Storage storage);
