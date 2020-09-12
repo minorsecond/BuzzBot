@@ -148,3 +148,8 @@ Beer Database::get_beer_by_name(Storage storage, std::string beer_name) {
     return beer_by_name;
 }
 
+std::vector<Beer> Database::get_beers_by_type(Storage storage, std::string beer_type) {
+    std::vector<Beer> beers_by_type = storage.get_all<Beer>(where(c(&Beer::type) == std::move(beer_type)));
+    return beers_by_type;
+}
+

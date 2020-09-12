@@ -42,7 +42,7 @@ private slots:
     void open_user_settings();
     void reset_table_sort();
     void name_input_changed(const QString&);
-    //void type_input_changed();
+    void type_input_changed(const QString&);
     //void brewery_input_changed();
 };
 #endif // MAINWINDOW_H
