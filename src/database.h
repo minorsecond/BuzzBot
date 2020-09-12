@@ -52,6 +52,7 @@ public:
     static void update(Storage storage, const Beer& beer);
     static std::vector<Beer> filter(const std::string& filter_type, const std::string& filter_text, Storage storage);
     static void write_db_to_disk(Storage storage);
+    static Beer get_beer_by_name(Storage storage, std::string beer_name);
 
 public:
     static std::string path();
