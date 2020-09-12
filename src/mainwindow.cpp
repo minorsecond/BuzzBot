@@ -141,47 +141,42 @@ void MainWindow::submit_button_clicked() {
     if (beer_name.empty() || beer_abv == 0.0) {
         QMessageBox::critical(nullptr, "Error", "Please enter beer name and ABV.");
     } else {
+
+        Beer beer{
+            -1,
+            drink_year,
+            drink_month,
+            drink_day,
+            beer_name,
+            beer_type,
+            brewery_name,
+            beer_abv,
+            beer_ibu,
+            beer_size,
+            rating,
+            notes,
+            "placeholder"
+        };
+
         // Handle updating existing rows
         QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
         if (select->hasSelection()) {
+            // Get the selected row
             int selection = select->selectedRows().at(0).row();
             int row_to_update = ui->drinkLogTable->item(selection, 8)->text().toUtf8().toInt();
+
+            // Get the existing timestamp
             std::string timestamp = ui->drinkLogTable->item(selection, 9)->text().toStdString();
             std::cout << "Updating row " << row_to_update << "Timestamp: " << timestamp << std::endl;
 
-            Beer beer{
-                row_to_update,
-                drink_year,
-                drink_month,
-                drink_day,
-                beer_name,
-                beer_type,
-                brewery_name,
-                beer_abv,
-                beer_ibu,
-                beer_size,
-                rating,
-                notes,
-                timestamp
-            };
-
+            // Update the variables in the beer struct
+            beer.id = row_to_update;
+            beer.timestamp = timestamp;
             Database::update(storage, beer);
         } else {
-            Beer beer{
-                    -1,
-                    drink_year,
-                    drink_month,
-                    drink_day,
-                    beer_name,
-                    beer_type,
-                    brewery_name,
-                    beer_abv,
-                    beer_ibu,
-                    beer_size,
-                    rating,
-                    notes,
-                    storage.select(sqlite_orm::datetime("now")).front()
-            };
+            // Get a new timestamp
+            std::string timestamp = storage.select(sqlite_orm::datetime("now")).front();
+            beer.timestamp = timestamp;
             Database::write(beer, storage);
         }
         update_table();
@@ -440,7 +435,6 @@ void MainWindow::update_beer_fields() {
 }
 
 void MainWindow::open_user_settings() {
-
     std::cout << "Opening user settings." << std::endl;
     UserSettings user_settings = UserSettings(nullptr, sex);
     user_settings.setModal(true);
