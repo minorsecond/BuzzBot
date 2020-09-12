@@ -141,7 +141,6 @@ void MainWindow::submit_button_clicked() {
     if (beer_name.empty() || beer_abv == 0.0) {
         QMessageBox::critical(nullptr, "Error", "Please enter beer name and ABV.");
     } else {
-
         Beer beer{
             -1,
             drink_year,
