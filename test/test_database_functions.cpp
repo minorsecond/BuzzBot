@@ -232,3 +232,96 @@ TEST_CASE("Filter DB", "[Filter DB]") {
     REQUIRE(filtered_beers.size() == 2);
     REQUIRE(etrwo_read.drink_day == 8);
 }
+
+TEST_CASE("Get Beer By Name", "[DB Filter]") {
+    std::string current_path = std::filesystem::current_path();
+    const char *file_name = "testdb.db";
+    std::string db_path = current_path + "/" + file_name;
+
+    if (remove(db_path.c_str())) {
+        std::cout << "Removed existing testdb.sqlite file" << std::endl;
+    }
+
+    Storage storage_1 = initStorage(db_path);
+    Database::write_db_to_disk(storage_1);
+
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+                "Community Brewing", 8.4, 75.0, 12, 8, ""};
+    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
+
+    storage_1.insert(etrwo);
+    storage_1.insert(mosaic);
+    storage_1.insert(etrwo2);
+    Database::write_db_to_disk(storage_1);
+
+    Beer selected_beer = Database::get_beer_by_name(storage_1, "Everything Rhymes with Orange");
+
+    REQUIRE(selected_beer.id == 1);
+    REQUIRE(selected_beer.name == "Everything Rhymes with Orange");
+    REQUIRE(selected_beer.notes == "Very good hazy IPA.");
+}
+
+TEST_CASE("Get Beers By Type", "[DB Filter]") {
+    std::string current_path = std::filesystem::current_path();
+    const char *file_name = "testdb.db";
+    std::string db_path = current_path + "/" + file_name;
+
+    if (remove(db_path.c_str())) {
+        std::cout << "Removed existing testdb.sqlite file" << std::endl;
+    }
+
+    Storage storage_1 = initStorage(db_path);
+    Database::write_db_to_disk(storage_1);
+
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+                "Community Brewing", 8.4, 75.0, 12, 8, ""};
+    Beer etrwo2{-1, 2020, 9, 11, "Old Rasputin", "Russian Imperial Stout",
+                "North Coast Brewing Co.", 9.0, 75.0, 12, 8, ""};
+
+    storage_1.insert(etrwo);
+    storage_1.insert(mosaic);
+    storage_1.insert(etrwo2);
+    Database::write_db_to_disk(storage_1);
+
+    std::vector<Beer> selected_beers = Database::get_beers_by_type(storage_1, "IPA");
+
+    REQUIRE(selected_beers.size() == 2);
+    REQUIRE(selected_beers.at(0).type == "IPA");
+    REQUIRE(selected_beers.at(1).name == "Mosaic");
+}
+
+TEST_CASE("Get Beers By Brewery", "[DB Filter]") {
+    std::string current_path = std::filesystem::current_path();
+    const char *file_name = "testdb.db";
+    std::string db_path = current_path + "/" + file_name;
+
+    if (remove(db_path.c_str())) {
+        std::cout << "Removed existing testdb.sqlite file" << std::endl;
+    }
+
+    Storage storage_1 = initStorage(db_path);
+    Database::write_db_to_disk(storage_1);
+
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+                "Community Brewing", 8.4, 75.0, 12, 8, ""};
+    Beer etrwo2{-1, 2020, 9, 11, "Old Rasputin", "Russian Imperial Stout",
+                "North Coast Brewing Co.", 9.0, 75.0, 12, 8, ""};
+
+    storage_1.insert(etrwo);
+    storage_1.insert(mosaic);
+    storage_1.insert(etrwo2);
+    Database::write_db_to_disk(storage_1);
+
+    std::vector<Beer> selected_beers = Database::get_beers_by_brewery(storage_1, "North Coast Brewing Co.");
+
+    REQUIRE(selected_beers.size() == 1);
+    REQUIRE(selected_beers.at(0).type == "Russian Imperial Stout");
+    REQUIRE(selected_beers.at(0).name == "Old Rasputin");
+}
