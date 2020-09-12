@@ -20,6 +20,12 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>664</height>
+    </size>
+   </property>
    <layout class="QGridLayout" name="gridLayout_4">
     <item row="13" column="2">
      <widget class="QPushButton" name="clearFieldsButton">
@@ -44,6 +50,28 @@
       </property>
       <property name="text">
        <string>Date</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="5" colspan="5">
+     <widget class="QLabel" name="statsLabel">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Stats</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -203,28 +231,6 @@
       </property>
       <property name="text">
        <string>Filter</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="4">
-     <widget class="QLabel" name="drinkDataLabel">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Drink Data</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -714,8 +720,8 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="5" colspan="5">
-     <widget class="QLabel" name="statsLabel">
+    <item row="0" column="0" colspan="4">
+     <widget class="QLabel" name="drinkDataLabel">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -729,7 +735,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Stats</string>
+       <string>Drink Data</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
