@@ -153,3 +153,31 @@ TEST_CASE("Favorite Beer", "[Favorite Calculations]") {
     std::string favorite_beer = Calculate::favorite_beer(storage_1);
     REQUIRE(favorite_beer == "Everything Rhymes with Orange");
 }
+
+TEST_CASE("Favorite Type", "[Favorite Calculations]") {
+    std::string current_path = std::filesystem::current_path();
+    const char *file_name = "testdb.db";
+    std::string db_path = current_path + "/" + file_name;
+
+    if (remove(db_path.c_str())) {
+        std::cout << "Removed existing testdb.sqlite file" << std::endl;
+    }
+
+    Storage storage_1 = initStorage(db_path);
+    Database::write_db_to_disk(storage_1);
+
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+                "Community Brewing", 8.4, 75.0, 12, 8, ""};
+    Beer etrwo2{-1, 2020, 9, 10, "Old Rasputin", "Russian Imperial Stout",
+                "North Coast Brewing", 9.0, 75.0, 12, 8, ""};
+
+    storage_1.insert(etrwo);
+    storage_1.insert(mosaic);
+    storage_1.insert(etrwo2);
+    Database::write_db_to_disk(storage_1);
+
+    std::string favorite_type = Calculate::favorite_type(storage_1);
+    REQUIRE(favorite_type == "IPA");
+}

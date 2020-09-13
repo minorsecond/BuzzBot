@@ -172,3 +172,37 @@ double Calculate::mean_ibu(Storage storage) {
 
     return ibu_sum / beer_count;
 }
+
+std::string Calculate::favorite_type(Storage storage) {
+    /*
+     * Calculates favorite beer type based on most common type in database
+     * @param Storage: a Storage instance
+     * @return favorite_type: The most common type in the database.
+     */
+
+    std::map<std::string, unsigned> type_counts;
+    std::vector<std::string> types;
+    std::string favorite_type;
+
+    std::vector<Beer> all_beers = storage.get_all<Beer>();
+
+    types.reserve(all_beers.size());
+    for (const auto& beer: all_beers) {
+        types.push_back(beer.type);
+    }
+    for (const auto& type : types) {
+        int brewery_count = std::count(types.begin(), types.end(), type);
+        type_counts[type] = brewery_count;
+    }
+
+    unsigned current_max = 0;
+
+    for (const auto & type_count : type_counts) {
+        if (type_count.second > current_max) {
+            favorite_type = type_count.first;
+            current_max = type_count.second;
+        }
+    }
+
+    return favorite_type;
+}

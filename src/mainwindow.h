@@ -28,6 +28,7 @@ private:
     void update_oz_alcohol_remaining(double oz_alcohol_consumed);
     void update_favorite_brewery();
     void update_favorite_beer();
+    void update_favorite_type();
     void update_mean_abv();
     void update_mean_ibu();
     void update_fields_on_beer_name();
