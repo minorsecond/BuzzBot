@@ -1,6 +1,9 @@
 #include "database.h"
 #include <boost/filesystem.hpp>
 #include <utility>
+#include <QStandardPaths>
+#include <QDebug>
+
 using namespace sqlite_orm;
 std::string Database::path() {
     /*
@@ -9,14 +12,7 @@ std::string Database::path() {
      */
     // Find path to application support directory
 
-    std::string username = getenv("USER");
-    std::string directory = "/Users/" + username + "/Library/Application Support/Beertabs";
-
-    // Remove spaces from path
-    directory.erase(std::remove_if(
-            begin(directory), end(directory),
-            [l = std::locale{}](auto ch) {return std::isspace(ch, l);}),
-                    end(directory));
+    std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
 
     std::string full_path = directory + "/beertabs.db";
 
