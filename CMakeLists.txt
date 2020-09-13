@@ -30,7 +30,7 @@ add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp 
 
 set_target_properties(Beertabs PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
 target_link_libraries(Beertabs Qt5::Core Qt5::Widgets SQLite3 Boost::filesystem)
-target_link_libraries(functions_test SQLite3 Boost::filesystem Catch2::Catch2)
+target_link_libraries(functions_test SQLite3 Boost::filesystem Catch2::Catch2 Qt5::Core)
 
 include(CTest)
 include(Catch)
