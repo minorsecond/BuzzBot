@@ -18,6 +18,7 @@ public:
     static double round_to_one_decimal_point(double val);
     static std::string favorite_brewery(Storage storage);
     static std::string favorite_beer(Storage storage);
+    static std::string favorite_type(Storage storage);
     static double mean_abv(Storage storage);  // TODO write test
     static double mean_ibu(Storage storage);  // TODO write test
 };

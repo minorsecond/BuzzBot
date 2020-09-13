@@ -540,6 +540,7 @@ void MainWindow::update_stat_panel() {
     update_oz_alcohol_remaining(oz_alc_consumed);
     update_favorite_brewery();
     update_favorite_beer();
+    update_favorite_type();
     update_mean_abv();
     update_mean_ibu();
 }
@@ -717,4 +718,9 @@ void MainWindow::update_fields_on_beer_name() {
         ui->sizeInput->setValue(size);
         ui->ratingInput->setValue(rating);
     }
+}
+
+void MainWindow::update_favorite_type() {
+    std::string fave_type = Calculate::favorite_type(storage);
+    ui->favoriteTypeOutput->setText(QString::fromStdString(fave_type));
 }
