@@ -20,6 +20,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     //this->setFixedSize(1392, 665);
 
+    // Upgrade DB version
+    Database::increment_version(storage, 1);
+
     // Set size hints
     ui->drinkDateInput->setProperty("sizeHint", QVariant(QSizeF(241, 22)));
 
