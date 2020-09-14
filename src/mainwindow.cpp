@@ -224,8 +224,8 @@ void MainWindow::update_table() {
     for (const auto& beer : beers) {
         int table_row_num = ui->drinkLogTable->rowCount();
         ui->drinkLogTable->insertRow(table_row_num);
-        auto *date = new QTableWidgetItem((std::to_string(beer.drink_year) + "/" +
-                std::to_string(beer.drink_month) + "/" + std::to_string(beer.drink_day)).c_str());
+        QDate date = QDate(beer.drink_year, beer.drink_month, beer.drink_day);
+        auto *date_qtw = new QTableWidgetItem;
         auto *name = new QTableWidgetItem(beer.name.c_str());
         auto *type = new QTableWidgetItem(beer.type.c_str());
         auto *brewery = new QTableWidgetItem(beer.brewery.c_str());
@@ -238,10 +238,11 @@ void MainWindow::update_table() {
 
         // Sort ID numerically
         id->setData(Qt::DisplayRole, beer.id);
+        date_qtw->setData(Qt::DisplayRole, date);
 
         std::string notes = beer.notes;
 
-        ui->drinkLogTable->setItem(table_row_num, 0, date);
+        ui->drinkLogTable->setItem(table_row_num, 0, date_qtw);
         ui->drinkLogTable->setItem(table_row_num, 1, name);
         ui->drinkLogTable->setItem(table_row_num, 2, type);
         ui->drinkLogTable->setItem(table_row_num, 3, brewery);
