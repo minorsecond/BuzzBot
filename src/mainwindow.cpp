@@ -533,7 +533,8 @@ void MainWindow::update_stat_panel() {
         standard_drinks += Calculate::standard_drinks(beer.abv, beer.size);
     }
     if (standard_drinks == 0.0) {
-        ui->drinksThisWeekOutput->clear();
+        ui->drinksThisWeekOutput->setText("0.0");
+        ui->ozAlcoholConsumedOutput->setText("0.0");
     } else {
         ui->drinksThisWeekOutput->setText(QString::fromStdString(double_to_string(standard_drinks)));
     }
@@ -571,7 +572,7 @@ double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>&
     }
 
     if (oz_consumed == 0.0) {
-        ui->ozAlcoholConsumedOutput->clear();
+        ui->ozAlcoholConsumedOutput->setText("0.0");
     } else {
         ui->ozAlcoholConsumedOutput->setText(QString::fromStdString(double_to_string(oz_consumed)));
     }
