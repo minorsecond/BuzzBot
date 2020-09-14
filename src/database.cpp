@@ -154,3 +154,19 @@ std::vector<Beer> Database::get_beers_by_brewery(Storage storage, std::string br
     return beers_by_brewery;
 }
 
+int Database::get_version(Storage storage) {
+    std::cout << "Current DB version: " << storage.pragma.user_version() << std::endl;
+    return storage.pragma.user_version();
+}
+
+int Database::increment_version(Storage storage, int current_version) {
+    /*
+     * Increment database version to current version.
+     */
+
+    if (get_version(storage) == 0) {  // Never use 0
+        storage.pragma.user_version(storage.pragma.user_version() + 1);
+        std::cout << "Migrated DB from version 0 to version " << storage.pragma.user_version() << std::endl;
+    }
+    return storage.pragma.user_version();
+}
