@@ -441,6 +441,7 @@ void MainWindow::open_user_settings() {
     user_settings.setModal(true);
     if (user_settings.exec() == QDialog::Accepted) {
         sex = user_settings.get_sex();
+        update_stat_panel();
         std::cout << "Sex: " << sex << std::endl;
     }
     program_options(sex, true);
