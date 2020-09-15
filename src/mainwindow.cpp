@@ -569,8 +569,10 @@ void MainWindow::update_stat_panel() {
     }
 
     // Update text
-    std::string drinksThisWeekLabelText = "Drinks since " + options.weekday_start + ":";
+    std::string drinksThisWeekLabelText = "Std. drinks since " + options.weekday_start + ":";
+    std::string ozThisWeekLabelText = "Oz. alcohol since " + options.weekday_start + ":";
     ui->drinksThisWeekLabel->setText(QString::fromStdString(drinksThisWeekLabelText));
+    ui->ozAlcoholConsumedLabel->setText(QString::fromStdString(ozThisWeekLabelText));
 
     // TODO: refactor this
     update_standard_drinks_left_this_week(standard_drinks);
