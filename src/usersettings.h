@@ -6,18 +6,21 @@
 #define BEERTABS_USERSETTINGS_H
 
 #include "ui_user_settings.h"
+#include "mainwindow.h"
 
 class UserSettings : public QDialog, public Ui::userSettingsDialog {
     /*
      * User settings dialog
      */
+
     Q_OBJECT
     Ui::userSettingsDialog ui{};
 public:
-    explicit UserSettings(QWidget *parent = nullptr, const std::string& sex = "male");
+    explicit UserSettings(QWidget *parent, const Options &options);
     std::string get_sex();
     std::string get_weekday_start();
-};
 
+    static std::string test(const Options &options);
+};
 
 #endif //BEERTABS_USERSETTINGS_H

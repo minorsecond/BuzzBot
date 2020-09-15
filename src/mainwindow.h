@@ -5,6 +5,11 @@
 #include "database.h"
 #include "ui_mainwindow.h"
 
+struct Options {
+    std::string sex;
+    std::string weekday_start;
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -12,13 +17,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
-    struct Options {
-        std::string sex;
-        std::string weekday_start;
-    };
+    Options options;
 
 private:
-    Options options;
     Ui::MainWindow *ui;
     Storage storage = initStorage(Database::path());
     static std::string double_to_string(double input_double);

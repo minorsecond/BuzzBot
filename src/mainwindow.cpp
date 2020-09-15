@@ -437,12 +437,13 @@ void MainWindow::update_beer_fields() {
 
 void MainWindow::open_user_settings() {
     std::cout << "Opening user settings." << std::endl;
-    UserSettings user_settings = UserSettings(nullptr, options.sex);
+    UserSettings user_settings = UserSettings(nullptr, options);
     user_settings.setModal(true);
     if (user_settings.exec() == QDialog::Accepted) {
         options.sex = user_settings.get_sex();
+        options.weekday_start = user_settings.get_weekday_start();
         update_stat_panel();
-        std::cout << "Sex: " << options.sex << std::endl;
+        std::cout << "Sex: " << options.sex << ", Weekday starts on " << options.weekday_start << std::endl;
     }
     program_options(true);
 }
