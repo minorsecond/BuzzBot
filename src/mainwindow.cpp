@@ -20,6 +20,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     //this->setFixedSize(1392, 665);
 
+    // Read options
+    program_options(false);
+
     // Upgrade DB version
     Database::increment_version(storage, 1);
 
@@ -471,7 +474,7 @@ std::string MainWindow::settings_path() {
     return settings_path;
 }
 
-std::string MainWindow::program_options(bool write) {
+void MainWindow::program_options(bool write) {
     /*
      * Read or write to/from the settings file.
      * @param sex: Sex of user.
@@ -484,6 +487,7 @@ std::string MainWindow::program_options(bool write) {
 
     if (write) {
         std::string sex_setting = "sex:" + options.sex;
+        std::string start_day = "start_day:" + options.weekday_start;
         std::ofstream out_data;
 
         if (!out_data) {
@@ -492,7 +496,8 @@ std::string MainWindow::program_options(bool write) {
         }
 
         out_data.open(path);
-        out_data << sex_setting;
+        out_data << sex_setting + '\n';
+        out_data << start_day + '\n';
         out_data.close();
     } else {
         std::cout << "Reading user settings from " << path << std::endl;
@@ -503,13 +508,14 @@ std::string MainWindow::program_options(bool write) {
         if (options_file.is_open()) {
             while (std::getline(options_file, line)) {
                 if (line_counter == 0) {  // First line should be sex
-                    read_sex = line.substr(line.find(':') + 1);
+                    options.sex = line.substr(line.find(':') + 1);
+                } else if (line_counter == 1) { // Second line should be week start day
+                    options.weekday_start = line.substr(line.find(':') + 1);
                 }
                 line_counter += 1;
             }
         }
     }
-    return read_sex;
 }
 
 void MainWindow::update_stat_panel() {
