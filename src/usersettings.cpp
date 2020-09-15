@@ -11,6 +11,8 @@ UserSettings::UserSettings(QWidget *parent, const std::string& sex) {
      */
 
     ui.setupUi(this);
+    this->setFixedSize(405, 119);
+
     if (sex == "male") {
         ui.maleSelection->setChecked(true);
     } else if (sex == "female") {
