@@ -19,6 +19,14 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
     } else if (options.sex == "female") {
         ui.femaleSelection->setChecked(true);
     }
+
+    // Set weekday selector
+    std::string current_date = options.weekday_start;
+    if (!current_date.empty()) {
+        ui.weekdayStartInput->setCurrentText(QString::fromStdString(current_date));
+    } else {
+        ui.weekdayStartInput->setCurrentText(QString::fromStdString("Sunday"));
+    }
 }
 
 std::string UserSettings::get_sex() {
