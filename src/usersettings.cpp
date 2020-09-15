@@ -32,3 +32,11 @@ std::string UserSettings::get_sex() {
     }
 }
 
+std::string UserSettings::get_weekday_start() {
+    /*
+     * Return the weekday selected for which day the week begins on.
+     * @return: String containing the day of week.
+     */
+    return ui.weekdayStartInput->currentText().toStdString();
+}
+

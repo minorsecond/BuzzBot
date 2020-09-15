@@ -37,7 +37,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="1" column="0">
-       <widget class="QComboBox" name="comboBox">
+       <widget class="QComboBox" name="weekdayStartInput">
         <item>
          <property name="text">
           <string>Sunday</string>
@@ -76,7 +76,7 @@
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="weekdayStartLabel">
         <property name="text">
          <string>Week begins on:</string>
         </property>
