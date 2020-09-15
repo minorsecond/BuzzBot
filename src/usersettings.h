@@ -16,6 +16,7 @@ class UserSettings : public QDialog, public Ui::userSettingsDialog {
 public:
     explicit UserSettings(QWidget *parent = nullptr, const std::string& sex = "male");
     std::string get_sex();
+    std::string get_weekday_start();
 };
 
 
