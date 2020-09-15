@@ -7,7 +7,7 @@
 
 struct Options {
     std::string sex = "male";
-    std::string weekday_start = "sunday";
+    std::string weekday_start = "Sunday";
 };
 
 class MainWindow : public QMainWindow
