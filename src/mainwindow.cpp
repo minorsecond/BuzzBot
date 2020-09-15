@@ -305,6 +305,7 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
         ui->ibuInput->setValue(beer.ibu);
         ui->sizeInput->setValue(beer.size);
         ui->ratingInput->setValue(beer.rating);
+        ui->notesInput->setText(beer.notes.c_str());
     } else {
         std::cout << "Empty table." << std::endl;
     }
