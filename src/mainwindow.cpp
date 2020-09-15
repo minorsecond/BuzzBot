@@ -437,14 +437,14 @@ void MainWindow::update_beer_fields() {
 
 void MainWindow::open_user_settings() {
     std::cout << "Opening user settings." << std::endl;
-    UserSettings user_settings = UserSettings(nullptr, sex);
+    UserSettings user_settings = UserSettings(nullptr, options.sex);
     user_settings.setModal(true);
     if (user_settings.exec() == QDialog::Accepted) {
-        sex = user_settings.get_sex();
+        options.sex = user_settings.get_sex();
         update_stat_panel();
-        std::cout << "Sex: " << sex << std::endl;
+        std::cout << "Sex: " << options.sex << std::endl;
     }
-    program_options(sex, true);
+    program_options(true);
 }
 
 std::string MainWindow::settings_path() {
@@ -470,7 +470,7 @@ std::string MainWindow::settings_path() {
     return settings_path;
 }
 
-std::string MainWindow::program_options(const std::string &sex, bool write) {
+std::string MainWindow::program_options(bool write) {
     /*
      * Read or write to/from the settings file.
      * @param sex: Sex of user.
@@ -482,7 +482,7 @@ std::string MainWindow::program_options(const std::string &sex, bool write) {
     std::string read_sex;
 
     if (write) {
-        std::string sex_setting = "sex:" + sex;
+        std::string sex_setting = "sex:" + options.sex;
         std::ofstream out_data;
 
         if (!out_data) {
@@ -552,7 +552,7 @@ void MainWindow::update_stat_panel() {
 }
 
 void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consumed) {
-    double std_drinks_left = Calculate::standard_drinks_remaining(sex, std_drinks_consumed);
+    double std_drinks_left = Calculate::standard_drinks_remaining(options.sex, std_drinks_consumed);
     ui->drinksLeftOutput->setText(QString::fromStdString(double_to_string(std_drinks_left)));
 }
 
@@ -582,7 +582,7 @@ double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>&
 }
 
 void MainWindow::update_oz_alcohol_remaining(double oz_alcohol_consumed) {
-    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(sex, oz_alcohol_consumed);
+    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(options.sex, oz_alcohol_consumed);
     ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(double_to_string(oz_alcohol_remaining)));
 }
 
