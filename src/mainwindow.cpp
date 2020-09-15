@@ -265,7 +265,7 @@ std::string MainWindow::double_to_string(double input_double) {
      * @param input_double: Double value that should be converted.
      */
 
-    double purchase_price = std::ceil(input_double * 10.0) / 10.0;
+    double purchase_price = std::ceil(input_double * 100.0) / 100.0;
     std::ostringstream price_stream;
     price_stream << purchase_price;
 
