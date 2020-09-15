@@ -20,6 +20,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     //this->setFixedSize(1392, 665);
 
+    // Read options
+    program_options(false);
+
     // Upgrade DB version
     Database::increment_version(storage, 1);
 
@@ -437,14 +440,15 @@ void MainWindow::update_beer_fields() {
 
 void MainWindow::open_user_settings() {
     std::cout << "Opening user settings." << std::endl;
-    UserSettings user_settings = UserSettings(nullptr, sex);
+    UserSettings user_settings = UserSettings(nullptr, options);
     user_settings.setModal(true);
     if (user_settings.exec() == QDialog::Accepted) {
-        sex = user_settings.get_sex();
+        options.sex = user_settings.get_sex();
+        options.weekday_start = user_settings.get_weekday_start();
         update_stat_panel();
-        std::cout << "Sex: " << sex << std::endl;
+        std::cout << "Sex: " << options.sex << ", Weekday starts on " << options.weekday_start << std::endl;
     }
-    program_options(sex, true);
+    program_options(true);
 }
 
 std::string MainWindow::settings_path() {
@@ -470,7 +474,7 @@ std::string MainWindow::settings_path() {
     return settings_path;
 }
 
-std::string MainWindow::program_options(const std::string &sex, bool write) {
+void MainWindow::program_options(bool write) {
     /*
      * Read or write to/from the settings file.
      * @param sex: Sex of user.
@@ -482,7 +486,8 @@ std::string MainWindow::program_options(const std::string &sex, bool write) {
     std::string read_sex;
 
     if (write) {
-        std::string sex_setting = "sex:" + sex;
+        std::string sex_setting = "sex:" + options.sex;
+        std::string start_day = "start_day:" + options.weekday_start;
         std::ofstream out_data;
 
         if (!out_data) {
@@ -491,7 +496,8 @@ std::string MainWindow::program_options(const std::string &sex, bool write) {
         }
 
         out_data.open(path);
-        out_data << sex_setting;
+        out_data << sex_setting + '\n';
+        out_data << start_day + '\n';
         out_data.close();
     } else {
         std::cout << "Reading user settings from " << path << std::endl;
@@ -502,13 +508,14 @@ std::string MainWindow::program_options(const std::string &sex, bool write) {
         if (options_file.is_open()) {
             while (std::getline(options_file, line)) {
                 if (line_counter == 0) {  // First line should be sex
-                    read_sex = line.substr(line.find(':') + 1);
+                    options.sex = line.substr(line.find(':') + 1);
+                } else if (line_counter == 1) { // Second line should be week start day
+                    options.weekday_start = line.substr(line.find(':') + 1);
                 }
                 line_counter += 1;
             }
         }
     }
-    return read_sex;
 }
 
 void MainWindow::update_stat_panel() {
@@ -517,15 +524,35 @@ void MainWindow::update_stat_panel() {
      */
 
     double standard_drinks = 0;
+    date::weekday filter_day{};
 
+    std::cout << "Stats filter day: " << options.weekday_start << std::endl;
+
+    // Get date to filter on
+    if (options.weekday_start == "Monday") {
+        filter_day = date::Monday;
+    } else if (options.weekday_start == "Tuesday") {
+        filter_day = date::Tuesday;
+    } else if (options.weekday_start == "Wednesday") {
+        filter_day = date::Wednesday;
+    } else if (options.weekday_start == "Thursday") {
+        filter_day = date::Thursday;
+    } else if (options.weekday_start == "Friday") {
+        filter_day = date::Friday;
+    } else {
+        filter_day = date::Sunday;
+    }
     // This returns yyyy-mm-dd
     auto todays_date = date::floor<date::days>(std::chrono::system_clock::now());
-    date::year_month_day last_sunday = todays_date - (date::weekday{todays_date} - date::Sunday);
+
+    // Get date of last filter_day
+    date::year_month_day start_date = todays_date - (date::weekday{todays_date} - filter_day);
+    std::cout << "Last filter day: " << start_date << std::endl;
 
     // Create the date for the SQL query
-    std::string year = date::format("%Y", last_sunday.year());
-    std::string month = date::format("%m", last_sunday.month());
-    std::string day = date::format("%d", last_sunday.day());
+    std::string year = date::format("%Y", start_date.year());
+    std::string month = date::format("%m", start_date.month());
+    std::string day = date::format("%d", start_date.day());
     std::string query_date = day + "/" + month + "/" + year;
 
     std::vector<Beer> beers_this_week = Database::filter("After Date", query_date, storage);
@@ -540,6 +567,10 @@ void MainWindow::update_stat_panel() {
         ui->drinksThisWeekOutput->setText(QString::fromStdString(double_to_string(standard_drinks)));
     }
 
+    // Update text
+    std::string drinksThisWeekLabelText = "Drinks since " + options.weekday_start + ":";
+    ui->drinksThisWeekLabel->setText(QString::fromStdString(drinksThisWeekLabelText));
+
     // TODO: refactor this
     update_standard_drinks_left_this_week(standard_drinks);
     double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week);
@@ -552,7 +583,7 @@ void MainWindow::update_stat_panel() {
 }
 
 void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consumed) {
-    double std_drinks_left = Calculate::standard_drinks_remaining(sex, std_drinks_consumed);
+    double std_drinks_left = Calculate::standard_drinks_remaining(options.sex, std_drinks_consumed);
     ui->drinksLeftOutput->setText(QString::fromStdString(double_to_string(std_drinks_left)));
 }
 
@@ -582,7 +613,7 @@ double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>&
 }
 
 void MainWindow::update_oz_alcohol_remaining(double oz_alcohol_consumed) {
-    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(sex, oz_alcohol_consumed);
+    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(options.sex, oz_alcohol_consumed);
     ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(double_to_string(oz_alcohol_remaining)));
 }
 
