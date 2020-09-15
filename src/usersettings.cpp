@@ -3,8 +3,9 @@
 //
 
 #include "usersettings.h"
+#include "mainwindow.h"
 
-UserSettings::UserSettings(QWidget *parent, const std::string& sex) {
+UserSettings::UserSettings(QWidget *parent, const Options& options) {
     /*
      * Dialog box for user settings.
      * @param parent: parent widget.
@@ -13,9 +14,9 @@ UserSettings::UserSettings(QWidget *parent, const std::string& sex) {
     ui.setupUi(this);
     this->setFixedSize(405, 119);
 
-    if (sex == "male") {
+    if (options.sex == "male") {
         ui.maleSelection->setChecked(true);
-    } else if (sex == "female") {
+    } else if (options.sex == "female") {
         ui.femaleSelection->setChecked(true);
     }
 }
@@ -40,3 +41,6 @@ std::string UserSettings::get_weekday_start() {
     return ui.weekdayStartInput->currentText().toStdString();
 }
 
+std::string UserSettings::test(const Options& options) {
+    return std::string();
+}
