@@ -524,15 +524,35 @@ void MainWindow::update_stat_panel() {
      */
 
     double standard_drinks = 0;
+    date::weekday filter_day{};
 
+    std::cout << "Stats filter day: " << options.weekday_start << std::endl;
+
+    // Get date to filter on
+    if (options.weekday_start == "Monday") {
+        filter_day = date::Monday;
+    } else if (options.weekday_start == "Tuesday") {
+        filter_day = date::Tuesday;
+    } else if (options.weekday_start == "Wednesday") {
+        filter_day = date::Wednesday;
+    } else if (options.weekday_start == "Thursday") {
+        filter_day = date::Thursday;
+    } else if (options.weekday_start == "Friday") {
+        filter_day = date::Friday;
+    } else {
+        filter_day = date::Sunday;
+    }
     // This returns yyyy-mm-dd
     auto todays_date = date::floor<date::days>(std::chrono::system_clock::now());
-    date::year_month_day last_sunday = todays_date - (date::weekday{todays_date} - date::Sunday);
+
+    // Get date of last filter_day
+    date::year_month_day start_date = todays_date - (date::weekday{todays_date} - filter_day);
+    std::cout << "Last filter day: " << start_date << std::endl;
 
     // Create the date for the SQL query
-    std::string year = date::format("%Y", last_sunday.year());
-    std::string month = date::format("%m", last_sunday.month());
-    std::string day = date::format("%d", last_sunday.day());
+    std::string year = date::format("%Y", start_date.year());
+    std::string month = date::format("%m", start_date.month());
+    std::string day = date::format("%d", start_date.day());
     std::string query_date = day + "/" + month + "/" + year;
 
     std::vector<Beer> beers_this_week = Database::filter("After Date", query_date, storage);
