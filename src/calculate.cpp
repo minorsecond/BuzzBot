@@ -3,7 +3,7 @@
 //
 
 #include "calculate.h"
-#include <math.h>
+#include <cmath>
 
 double Calculate::standard_drinks(double abv, int amount) {
     /*
