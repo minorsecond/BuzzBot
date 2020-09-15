@@ -11,9 +11,9 @@ TEST_CASE("Standard Drinks", "[Drink Calculations]") {
     double etrwo_standard_drinks = Calculate::standard_drinks(6.5, 12);
     double old_rasputin_standard_drinks = Calculate::standard_drinks(9, 12);
 
-    REQUIRE(mosaic_standard_drinks == 1.7);
-    REQUIRE(etrwo_standard_drinks == 1.3);
-    REQUIRE(old_rasputin_standard_drinks == 1.8);
+    REQUIRE(mosaic_standard_drinks == 1.72);
+    REQUIRE(etrwo_standard_drinks == 1.30);
+    REQUIRE(old_rasputin_standard_drinks == 1.80);
 }
 
 TEST_CASE("Oz Alcohol", "[Drink Calculations]") {
@@ -67,7 +67,7 @@ TEST_CASE("Mean ABV", "[Drink Calculations]") {
     Database::write_db_to_disk(storage_1);
     double mean_abv = Calculate::mean_abv(storage_1);
 
-    REQUIRE(mean_abv == 8.1);
+    REQUIRE(mean_abv == 8.13);
 }
 
 TEST_CASE("Mean IBU", "[Drink Calculations]") {
