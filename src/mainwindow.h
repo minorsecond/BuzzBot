@@ -22,9 +22,6 @@ public:
 private:
     Ui::MainWindow *ui;
     Storage storage = initStorage(Database::path());
-    //QMenuBar *mainMenuBar;
-    QMenu *mainMenu;
-    QAction *preferencesAction;
     static std::string double_to_string(double input_double);
     void populate_filter_menus(const std::string& filter_type);
     void update_beer_fields();
