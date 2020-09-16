@@ -227,6 +227,27 @@
          <property name="focusPolicy">
           <enum>Qt::WheelFocus</enum>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QCalendarWidget QWidget#qt_calendar_navigationbar
+{
+	color: transparent;
+	background-color: transparent;
+}
+QCalendarWidget QToolButton {
+  	background-color: rgba(128, 128, 128, 0);
+}
+ /* header row */
+QCalendarWidget QWidget { alternate-background-color: rgba(128, 128, 128, 0); }
+QCalendarWidget QToolButton#qt_calendar_prevmonth 
+{
+	qproperty-icon: url(&quot;../Resources/previous.png&quot;);
+}
+
+QCalendarWidget QToolButton#qt_calendar_nextmonth 
+{
+	qproperty-icon: url(&quot;../Resources/next.png&quot;);
+}</string>
+         </property>
          <property name="displayFormat">
           <string>MMM/dd/yyyy</string>
          </property>
@@ -849,6 +870,8 @@
  <tabstops>
   <tabstop>drinkLogTable</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../res/resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
