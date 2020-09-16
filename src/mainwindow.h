@@ -47,6 +47,7 @@ private slots:
     void enable_filter_text(const QString&);
     void changed_filter_text(const QString&);
     void open_user_settings();
+    void open_about_dialog();
     void reset_table_sort();
     void name_input_changed(const QString&);
     void type_input_changed(const QString&);

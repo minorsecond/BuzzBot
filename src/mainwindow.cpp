@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "database.h"
 #include "usersettings.h"
+#include "about.h"
 #include "calculate.h"
 #include "../include/date.h"
 #include <iomanip>
@@ -30,9 +31,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Add menubar items
     auto * preferences_action = new QAction("Preferences");
+    auto * about_action = new QAction("About");
     QMenu * app_menu = menuBar()->addMenu("App Menu");
     preferences_action->setMenuRole(QAction::PreferencesRole);
+    about_action->setMenuRole(QAction::AboutRole);
     app_menu->addAction(preferences_action);
+    app_menu->addAction(about_action);
 
 
     // Fixed row height in table
@@ -115,6 +119,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(reset_fields()));
     connect(ui->deleteRowButton, SIGNAL(clicked()), this, SLOT(delete_row()));
     connect(preferences_action, SIGNAL(triggered()), this, SLOT(open_user_settings()));
+    connect(about_action, SIGNAL(triggered()), this, SLOT(open_about_dialog()));
     connect(ui->nameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
     connect(ui->typeInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(type_input_changed(const QString&)));
     connect(ui->breweryInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(brewery_input_changed(const QString&)));
@@ -436,6 +441,12 @@ void MainWindow::update_beer_fields() {
     for (const auto& name : names) {
         ui->nameInput->addItem(name);
     }
+}
+
+void MainWindow::open_about_dialog() {
+    About about_dialog = About(nullptr);
+    about_dialog.setModal(false);
+    about_dialog.exec();
 }
 
 void MainWindow::open_user_settings() {
