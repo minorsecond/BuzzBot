@@ -37,7 +37,7 @@ void Database::write_db_to_disk(Storage storage) {
      * Flush in-memory database data to disk.
      */
     std::cout << "Writing data to disk" << std::endl;
-    storage.sync_schema(false);
+    storage.sync_schema(true);
 }
 
 Storage Database::write(Beer beer, Storage storage) {
@@ -113,13 +113,14 @@ std::vector<Beer> Database::filter(const std::string& filter_type, const std::st
         filtered_beers = storage.get_all<Beer>(where(c(&Beer::name) == filter_text));
     } else if (filter_type == "Type") {
         filtered_beers = storage.get_all<Beer>(where(c(&Beer::type) == filter_text));
+    } else if (filter_type == "Subtype") {
+        filtered_beers = storage.get_all<Beer>(where(c(&Beer::subtype) == filter_text));
     } else if (filter_type == "Brewery") {
         filtered_beers = storage.get_all<Beer>(where(c(&Beer::brewery) == filter_text));
     } else if (filter_type == "Date") {
         int year = stoi(filter_text.substr(6, 8));
         int month = stoi(filter_text.substr(3, 2));
         int day = stoi(filter_text.substr(0, 2));
-
         filtered_beers = storage.get_all<Beer>(where(c(&Beer::drink_year) == year && c(&Beer::drink_month) == month &&
                 c(&Beer::drink_day) == day));
     } else if (filter_type == "After Date") {
@@ -166,6 +167,7 @@ int Database::increment_version(Storage storage, int current_version) {
 
     if (get_version(storage) == 0) {  // Never use 0
         storage.pragma.user_version(storage.pragma.user_version() + 1);
+        storage.sync_schema(true);
         std::cout << "Migrated DB from version 0 to version " << storage.pragma.user_version() << std::endl;
     }
     return storage.pragma.user_version();

@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     program_options(false);
 
     // Upgrade DB version
-    Database::increment_version(storage, 1);
+    Database::increment_version(storage, 2);
 
     // Set size hints
     ui->drinkDateInput->setProperty("sizeHint", QVariant(QSizeF(241, 22)));
@@ -44,8 +44,6 @@ MainWindow::MainWindow(QWidget *parent)
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
     ui->drinkLogTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
-
-    //std::string database_path = Database::path();
     Database::write_db_to_disk(storage);
 
     update_stat_panel();
@@ -79,26 +77,29 @@ MainWindow::MainWindow(QWidget *parent)
     ui->filterCategoryInput->setCurrentText("None");
     ui->filterCategoryInput->addItem("Name");
     ui->filterCategoryInput->addItem("Type");
+    ui->filterCategoryInput->addItem("Subtype");
     ui->filterCategoryInput->addItem("Brewery");
     ui->filterCategoryInput->addItem("Rating");
 
     ui->filterTextInput->setDisabled(true);
 
     // Set column widths
-    ui->drinkLogTable->setColumnWidth(0, 100);
+    ui->drinkLogTable->setColumnWidth(0, 75);
     ui->drinkLogTable->setColumnWidth(1, 428);
     ui->drinkLogTable->setColumnWidth(2, 200);
-    ui->drinkLogTable->setColumnWidth(3, 428);
-    ui->drinkLogTable->setColumnWidth(4, 50);
+    ui->drinkLogTable->setColumnWidth(3, 200);
+    ui->drinkLogTable->setColumnWidth(4, 428);
     ui->drinkLogTable->setColumnWidth(5, 50);
     ui->drinkLogTable->setColumnWidth(6, 50);
     ui->drinkLogTable->setColumnWidth(7, 50);
-    ui->drinkLogTable->setColumnHidden(8, true);  // Hide ID column
-    ui->drinkLogTable->setColumnHidden(9, true);  // Hide Timestamp column
+    ui->drinkLogTable->setColumnWidth(8, 55);
+    ui->drinkLogTable->setColumnHidden(9, true);  // Hide ID column
+    ui->drinkLogTable->setColumnHidden(10, true);  // Hide Timestamp column
     QHeaderView* drink_log_header = ui->drinkLogTable->horizontalHeader();
     drink_log_header->setSectionResizeMode(1, QHeaderView::Stretch);
     drink_log_header->setSectionResizeMode(2, QHeaderView::Stretch);
     drink_log_header->setSectionResizeMode(3, QHeaderView::Stretch);
+    drink_log_header->setSectionResizeMode(4, QHeaderView::Stretch);
 
     update_beer_fields();
 
@@ -146,6 +147,7 @@ void MainWindow::submit_button_clicked() {
     int drink_day = ui->drinkDateInput->date().day();
     std::string beer_name = ui->nameInput->currentText().toStdString();
     std::string beer_type = ui->typeInput->currentText().toStdString();
+    std::string beer_subtype = ui->subtypeInput->currentText().toStdString();
     std::string brewery_name = ui->breweryInput->currentText().toStdString();
     double beer_ibu = ui->ibuInput->value();
     double beer_abv = ui->abvInput->value();
@@ -164,6 +166,7 @@ void MainWindow::submit_button_clicked() {
             drink_day,
             beer_name,
             beer_type,
+            beer_subtype,
             brewery_name,
             beer_abv,
             beer_ibu,
@@ -178,10 +181,10 @@ void MainWindow::submit_button_clicked() {
         if (select->hasSelection()) {
             // Get the selected row
             int selection = select->selectedRows().at(0).row();
-            int row_to_update = ui->drinkLogTable->item(selection, 8)->text().toUtf8().toInt();
+            int row_to_update = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
 
             // Get the existing timestamp
-            std::string timestamp = ui->drinkLogTable->item(selection, 9)->text().toStdString();
+            std::string timestamp = ui->drinkLogTable->item(selection, 10)->text().toStdString();
             std::cout << "Updating row " << row_to_update << "Timestamp: " << timestamp << std::endl;
 
             // Update the variables in the beer struct
@@ -220,7 +223,7 @@ void MainWindow::update_table() {
      */
 
     // Temporarily sort by database ID to fix issues with blank rows
-    ui->drinkLogTable->sortItems(8, Qt::AscendingOrder);
+    ui->drinkLogTable->sortItems(9, Qt::AscendingOrder);
 
     std::string filter_category = ui->filterCategoryInput->currentText().toStdString();
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
@@ -235,6 +238,7 @@ void MainWindow::update_table() {
         auto *date_qtw = new QTableWidgetItem;
         auto *name = new QTableWidgetItem(beer.name.c_str());
         auto *type = new QTableWidgetItem(beer.type.c_str());
+        auto *subtype = new QTableWidgetItem(beer.subtype.c_str());
         auto *brewery = new QTableWidgetItem(beer.brewery.c_str());
         auto *abv = new QTableWidgetItem(double_to_string(beer.abv).c_str());
         auto *ibu = new QTableWidgetItem(double_to_string(beer.ibu).c_str());
@@ -252,13 +256,14 @@ void MainWindow::update_table() {
         ui->drinkLogTable->setItem(table_row_num, 0, date_qtw);
         ui->drinkLogTable->setItem(table_row_num, 1, name);
         ui->drinkLogTable->setItem(table_row_num, 2, type);
-        ui->drinkLogTable->setItem(table_row_num, 3, brewery);
-        ui->drinkLogTable->setItem(table_row_num, 4, abv);
-        ui->drinkLogTable->setItem(table_row_num, 5, ibu);
-        ui->drinkLogTable->setItem(table_row_num, 6, size);
-        ui->drinkLogTable->setItem(table_row_num, 7, rating);
-        ui->drinkLogTable->setItem(table_row_num, 8, id);
-        ui->drinkLogTable->setItem(table_row_num, 9, timestamp);
+        ui->drinkLogTable->setItem(table_row_num, 3, subtype);
+        ui->drinkLogTable->setItem(table_row_num, 4, brewery);
+        ui->drinkLogTable->setItem(table_row_num, 5, abv);
+        ui->drinkLogTable->setItem(table_row_num, 6, ibu);
+        ui->drinkLogTable->setItem(table_row_num, 7, size);
+        ui->drinkLogTable->setItem(table_row_num, 8, rating);
+        ui->drinkLogTable->setItem(table_row_num, 9, id);
+        ui->drinkLogTable->setItem(table_row_num, 10, timestamp);
     }
     reset_table_sort();
 }
@@ -285,12 +290,13 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
     int selection = ui->drinkLogTable->selectionModel()->currentIndex().row();
     if (selection >= 0) {
         std::cout << "Getting row " << selection << " from table." << std::endl;
-        int row_to_get = ui->drinkLogTable->item(selection, 8)->text().toUtf8().toInt();
+        int row_to_get = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
         std::cout << "Getting row " << row_to_get << " from database." << std::endl;
         if (select->isRowSelected(selection))
             ui->deleteRowButton->setEnabled(true);
         else
             ui->deleteRowButton->setDisabled(true);
+
         Beer beer = Database::read_row(row_to_get, storage);
 
         std::ostringstream month_padded;
@@ -304,6 +310,7 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
         ui->drinkDateInput->setDate(date);
         ui->nameInput->setCurrentText(beer.name.c_str());
         ui->typeInput->setCurrentText(beer.type.c_str());
+        ui->subtypeInput->setCurrentText(beer.subtype.c_str());
         ui->breweryInput->setCurrentText(beer.brewery.c_str());
         ui->abvInput->setValue(beer.abv);
         ui->ibuInput->setValue(beer.ibu);
@@ -336,6 +343,7 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
 
     std::set<QString> beer_names;
     std::set<QString> beer_types;
+    std::set<QString> beer_subtypes;
     std::set<QString> breweries;
     std::set<QString> ratings;
 
@@ -350,11 +358,13 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
     for (const auto& beer : all_beers) {
         QString beer_name = QString::fromStdString(beer.name);
         QString beer_type = QString::fromStdString(beer.type);
+        QString beer_subtype = QString::fromStdString(beer.subtype);
         QString brewery = QString::fromStdString(beer.brewery);
         QString rating = QString::fromStdString(std::to_string(beer.rating));
 
         beer_names.insert(beer_name);
         beer_types.insert(beer_type);
+        beer_subtypes.insert(beer_subtype);
         breweries.insert(brewery);
         ratings.insert(rating);
     }
@@ -366,6 +376,12 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
     } else if (filter_type == "Type") {
         for (const auto& type : beer_types) {
             ui->filterTextInput->addItem(type);
+        }
+    } else if (filter_type == "Subtype") {
+        for (const auto& subtype : beer_subtypes) {
+            if (!subtype.isEmpty()) {
+                ui->filterTextInput->addItem(subtype);
+            }
         }
     } else if (filter_type == "Brewery") {
         for (const auto& brewery : breweries) {
@@ -605,7 +621,7 @@ void MainWindow::reset_table_sort() {
      * Reset table sort to default, by datetime descending.
      */
 
-    ui->drinkLogTable->sortItems(8, Qt::DescendingOrder);
+    ui->drinkLogTable->sortItems(9, Qt::DescendingOrder);
 }
 
 double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>& beers_this_week) {
