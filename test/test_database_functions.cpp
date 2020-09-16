@@ -41,9 +41,9 @@ TEST_CASE("DB IO", "[DB IO]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
@@ -77,9 +77,9 @@ TEST_CASE("Truncate DB", "[Truncate DB]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
@@ -109,9 +109,9 @@ TEST_CASE("Delete Row", "[Delete Row]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
@@ -148,9 +148,9 @@ TEST_CASE("Read Row", "[Read Row]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
@@ -180,9 +180,9 @@ TEST_CASE("Update Row", "[Update Row]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
@@ -192,7 +192,7 @@ TEST_CASE("Update Row", "[Update Row]") {
     Beer etrwo_read = Database::read_row(1, storage_1);
     REQUIRE(etrwo_read.notes == "Very good hazy IPA.");
 
-    Beer etrwo_update{1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo_update{1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
                       "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA. Will buy again!"};
     Database::update(storage_1, etrwo_update);
     Database::write_db_to_disk(storage_1);
@@ -212,11 +212,11 @@ TEST_CASE("Filter DB", "[Filter DB]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
                "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
@@ -245,11 +245,11 @@ TEST_CASE("Get Beer By Name", "[DB Filter]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
                 "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
@@ -276,11 +276,11 @@ TEST_CASE("Get Beers By Type", "[DB Filter]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 11, "Old Rasputin", "Russian Imperial Stout",
+    Beer etrwo2{-1, 2020, 9, 11, "Old Rasputin", "Russian Imperial Stout", "",
                 "North Coast Brewing Co.", 9.0, 75.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
@@ -307,11 +307,11 @@ TEST_CASE("Get Beers By Brewery", "[DB Filter]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 11, "Old Rasputin", "Russian Imperial Stout",
+    Beer etrwo2{-1, 2020, 9, 11, "Old Rasputin", "Russian Imperial Stout", "",
                 "North Coast Brewing Co.", 9.0, 75.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
