@@ -77,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->filterCategoryInput->setCurrentText("None");
     ui->filterCategoryInput->addItem("Name");
     ui->filterCategoryInput->addItem("Type");
+    ui->filterCategoryInput->addItem("Subtype");
     ui->filterCategoryInput->addItem("Brewery");
     ui->filterCategoryInput->addItem("Rating");
 
@@ -178,10 +179,10 @@ void MainWindow::submit_button_clicked() {
         if (select->hasSelection()) {
             // Get the selected row
             int selection = select->selectedRows().at(0).row();
-            int row_to_update = ui->drinkLogTable->item(selection, 8)->text().toUtf8().toInt();
+            int row_to_update = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
 
             // Get the existing timestamp
-            std::string timestamp = ui->drinkLogTable->item(selection, 9)->text().toStdString();
+            std::string timestamp = ui->drinkLogTable->item(selection, 10)->text().toStdString();
             std::cout << "Updating row " << row_to_update << "Timestamp: " << timestamp << std::endl;
 
             // Update the variables in the beer struct
@@ -220,7 +221,7 @@ void MainWindow::update_table() {
      */
 
     // Temporarily sort by database ID to fix issues with blank rows
-    ui->drinkLogTable->sortItems(8, Qt::AscendingOrder);
+    ui->drinkLogTable->sortItems(9, Qt::AscendingOrder);
 
     std::string filter_category = ui->filterCategoryInput->currentText().toStdString();
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
@@ -287,12 +288,13 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
     int selection = ui->drinkLogTable->selectionModel()->currentIndex().row();
     if (selection >= 0) {
         std::cout << "Getting row " << selection << " from table." << std::endl;
-        int row_to_get = ui->drinkLogTable->item(selection, 8)->text().toUtf8().toInt();
+        int row_to_get = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
         std::cout << "Getting row " << row_to_get << " from database." << std::endl;
         if (select->isRowSelected(selection))
             ui->deleteRowButton->setEnabled(true);
         else
             ui->deleteRowButton->setDisabled(true);
+
         Beer beer = Database::read_row(row_to_get, storage);
 
         std::ostringstream month_padded;
@@ -615,7 +617,7 @@ void MainWindow::reset_table_sort() {
      * Reset table sort to default, by datetime descending.
      */
 
-    ui->drinkLogTable->sortItems(8, Qt::DescendingOrder);
+    ui->drinkLogTable->sortItems(9, Qt::DescendingOrder);
 }
 
 double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>& beers_this_week) {
