@@ -37,7 +37,7 @@ void Database::write_db_to_disk(Storage storage) {
      * Flush in-memory database data to disk.
      */
     std::cout << "Writing data to disk" << std::endl;
-    storage.sync_schema(false);
+    storage.sync_schema(true);
 }
 
 Storage Database::write(Beer beer, Storage storage) {
@@ -166,6 +166,7 @@ int Database::increment_version(Storage storage, int current_version) {
 
     if (get_version(storage) == 0) {  // Never use 0
         storage.pragma.user_version(storage.pragma.user_version() + 1);
+        storage.sync_schema(true);
         std::cout << "Migrated DB from version 0 to version " << storage.pragma.user_version() << std::endl;
     }
     return storage.pragma.user_version();
