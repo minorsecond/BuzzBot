@@ -421,6 +421,9 @@ QCalendarWidget QToolButton#qt_calendar_nextmonth
          <property name="text">
           <string>Subtype</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
         </widget>
        </item>
       </layout>
