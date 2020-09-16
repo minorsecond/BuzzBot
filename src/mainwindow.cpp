@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
      */
 
     ui->setupUi(this);
+
+
     //this->setFixedSize(1392, 665);
 
     // Read options
@@ -30,10 +32,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->drinkDateInput->setProperty("sizeHint", QVariant(QSizeF(241, 22)));
 
     // Add menubar items
-    auto * editAction = new QAction("User Settings");
-
-    QMenu * menu = menuBar()->addMenu("Edit");
-    menu->addAction(editAction);
+    auto * preferences_action = new QAction("Preferences");
+    QMenu * app_menu = menuBar()->addMenu("App Menu");
+    preferences_action->setMenuRole(QAction::PreferencesRole);
+    app_menu->addAction(preferences_action);
 
 
     // Fixed row height in table
@@ -115,7 +117,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->submitRowButton, SIGNAL(clicked()), this, SLOT(submit_button_clicked()));
     connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(reset_fields()));
     connect(ui->deleteRowButton, SIGNAL(clicked()), this, SLOT(delete_row()));
-    connect(editAction, SIGNAL(triggered()), this, SLOT(open_user_settings()));
+    connect(preferences_action, SIGNAL(triggered()), this, SLOT(open_user_settings()));
     connect(ui->nameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
     connect(ui->typeInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(type_input_changed(const QString&)));
     connect(ui->breweryInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(brewery_input_changed(const QString&)));
