@@ -10,7 +10,7 @@ About::About(QWidget *parent) {
      */
 
     ui.setupUi(this);
-    this->setFixedSize(230, 252);
+    this->setFixedSize(237, 272);
 
     // Version text
     std::string version = "0.8.0";
