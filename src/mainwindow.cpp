@@ -377,7 +377,9 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
         }
     } else if (filter_type == "Subtype") {
         for (const auto& subtype : beer_subtypes) {
-            ui->filterTextInput->addItem(subtype);
+            if (!subtype.isEmpty()) {
+                ui->filterTextInput->addItem(subtype);
+            }
         }
     } else if (filter_type == "Brewery") {
         for (const auto& brewery : breweries) {
