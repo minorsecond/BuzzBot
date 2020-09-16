@@ -23,13 +23,13 @@ script:
   - macdeployqt Beertabs.app -always-overwrite -appstore-compliant
   - zip -r Beertabs.zip Beertabs.app
 
-deploy:
-  provider: releases
-  file: "Beertabs.zip"
-  skip_cleanup: true
-  api_key: $GITHUB_TOKEN
-  on:
-    tags: true
+#deploy:
+#  provider: releases
+#  file: "Beertabs.zip"
+#  skip_cleanup: true
+#  api_key: $GITHUB_TOKEN
+#  on:
+#    tags: true
 
 notifications:
   email:
