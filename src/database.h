@@ -12,6 +12,7 @@ struct Beer {
     int drink_day;
     std::string name;
     std::string type;
+    std::string subtype;
     std::string brewery;
     double abv;
     double ibu;
@@ -31,6 +32,7 @@ inline auto initStorage(const std::string& file_name) {
                                                           sqlite_orm::make_column("drink_day", &Beer::drink_day),
                                                           sqlite_orm::make_column("drink_name", &Beer::name),
                                                           sqlite_orm::make_column("drink_type", &Beer::type),
+                                                          sqlite_orm::make_column("drink_subtype", &Beer::subtype, sqlite_orm::default_value("")),
                                                           sqlite_orm::make_column("brewery", &Beer::brewery),
                                                           sqlite_orm::make_column("abv", &Beer::abv),
                                                           sqlite_orm::make_column("ibu", &Beer::ibu),
