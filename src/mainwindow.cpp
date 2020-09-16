@@ -444,9 +444,9 @@ void MainWindow::update_beer_fields() {
 }
 
 void MainWindow::open_about_dialog() {
-    About about_dialog = About(this);
-    about_dialog.setModal(false);
-    about_dialog.exec();
+    auto *about_dialog = new About(this);
+    about_dialog->setModal(false);
+    about_dialog->show();
 }
 
 void MainWindow::open_user_settings() {
