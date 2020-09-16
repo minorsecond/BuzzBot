@@ -19,9 +19,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->setupUi(this);
 
-
-    //this->setFixedSize(1392, 665);
-
     // Read options
     program_options(false);
 

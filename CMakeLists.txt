@@ -28,6 +28,10 @@ file(COPY ${ICON_PATH} DESTINATION "Beertabs.app/Contents/Resources")
 add_executable(Beertabs MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp src/mainwindow.h src/database.h src/usersettings.cpp src/usersettings.h src/calculate.cpp src/calculate.h)
 add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp test/test_database_functions.cpp test/test_calculations.cpp)
 
+# Copy resources to build dir
+add_custom_command(TARGET Beertabs POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/previous.png ${CMAKE_CURRENT_BINARY_DIR}/Beertabs.app/Contents/Resources/previous.png)
+add_custom_command(TARGET Beertabs POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/next.png ${CMAKE_CURRENT_BINARY_DIR}/Beertabs.app/Contents/Resources/next.png)
+
 set_target_properties(Beertabs PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
 target_link_libraries(Beertabs Qt5::Core Qt5::Widgets SQLite3 Boost::filesystem)
 target_link_libraries(functions_test SQLite3 Boost::filesystem Catch2::Catch2 Qt5::Core)
