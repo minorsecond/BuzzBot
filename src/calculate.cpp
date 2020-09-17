@@ -62,6 +62,13 @@ double Calculate::round_to_two_decimal_points(double val) {
 }
 
 double Calculate::oz_alcohol_remaining(const std::string& sex, double oz_consumed) {
+    /*
+     * Calculate the amount of alcohol the user has remaining based on their sex.
+     * @return: The amount of oz remaining for user.
+     */
+
+    // TODO: Allow using different standards and custom amounts
+
     double oz_alcohol_remaining;
     if (sex == "male") {
         oz_alcohol_remaining = (0.6 * 14) - oz_consumed;
@@ -145,6 +152,12 @@ std::string Calculate::favorite_beer(Storage storage) {
 }
 
 double Calculate::mean_abv(Storage storage) {
+    /*
+     * Calculate the mean ABV for all drinks.
+     * @param storage: A storage instance.
+     * @return: The average ABV at two decimal points.
+     */
+
     double abv_sum = 0.0;
     unsigned beer_count = 0;
     std::vector<Beer> all_beers = storage.get_all<Beer>();
@@ -158,6 +171,12 @@ double Calculate::mean_abv(Storage storage) {
 }
 
 double Calculate::mean_ibu(Storage storage) {
+    /*
+     * Calculate the mean IBU of all beers in the database.
+     * @param storage: A storage instance.
+     * @return: The average IBU per beer.
+     */
+
     double ibu_sum = 0.0;
     unsigned beer_count = 0;
     std::vector<Beer> all_beers = storage.get_all<Beer>();
