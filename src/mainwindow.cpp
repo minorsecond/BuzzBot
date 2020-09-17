@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     Database::increment_version(storage, 2);
 
     // Set size hints
-    ui->drinkDateInput->setProperty("sizeHint", QVariant(QSizeF(241, 22)));
+    ui->beerDateInput->setProperty("sizeHint", QVariant(QSizeF(241, 22)));
 
     // Add menubar items
     auto * preferences_action = new QAction("Preferences");
