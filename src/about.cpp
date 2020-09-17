@@ -5,7 +5,6 @@
 #include "about.h"
 #include <QDir>
 #include <CoreFoundation/CFBundle.h>
-#include "iostream"
 
 About::About(QWidget *parent) {
     /*
