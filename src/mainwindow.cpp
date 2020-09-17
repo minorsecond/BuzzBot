@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     // Read options and create if the file doesn't exist
+    // TODO: Create the settings file within program_options()
     program_options(false);
     program_options(true);
 
