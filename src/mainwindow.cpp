@@ -39,7 +39,6 @@ MainWindow::MainWindow(QWidget *parent)
     app_menu->addAction(preferences_action);
     app_menu->addAction(about_action);
 
-
     // Fixed row height in table
     QHeaderView *verticalHeader = ui->drinkLogTable->verticalHeader();
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);

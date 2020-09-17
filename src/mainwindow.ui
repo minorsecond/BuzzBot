@@ -414,6 +414,9 @@ QCalendarWidget QToolButton#qt_calendar_nextmonth
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="focusPolicy">
+          <enum>Qt::ClickFocus</enum>
+         </property>
         </widget>
        </item>
        <item row="5" column="1">
@@ -683,6 +686,9 @@ QCalendarWidget QToolButton#qt_calendar_nextmonth
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::ClickFocus</enum>
       </property>
       <row>
        <property name="text">
