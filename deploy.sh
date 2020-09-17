@@ -1,9 +1,14 @@
 #!/bin/zsh
 
-macdeployqt cmake-build-release/Beertabs.app -appstore-compliant
+echo "Copying Beertabs.app to desktop."
+cp -R cmake-build-release/Beertabs.app ~/Desktop/Beertabs.app
 
-echo "USING CERTIFICATE " $1
+echo "Running macdeployqt."
+macdeployqt ~/Desktop/Beertabs.app -appstore-compliant
 
-find cmake-build-release/Beertabs.app -name "*.dylib" | xargs -I $ codesign --verify --verbose --sign $1 $
-find cmake-build-release/Beertabs.app -name "*.framework" | xargs -I $ codesign --verify --verbose --sign $1 $
-codesign --sign $1 --verbose --entitlements Beertabs-Entitlements.plist cmake-build-release/Beertabs.app
+echo "Codesigning."
+find ~/Desktop/Beertabs.app -name "*.dylib" | xargs -I $ codesign --verify --verbose --sign $1 $
+find ~/Desktop/Beertabs.app -name "*.framework" | xargs -I $ codesign --verify --verbose --sign $1 $
+codesign --sign $1 --verbose --entitlements Beertabs-Entitlements.plist ~/Desktop/Beertabs.app
+
+echo "Deployed to ~/Desktop/Beertabs.app"
