@@ -19,8 +19,6 @@ public:
     explicit UserSettings(QWidget *parent, const Options &options);
     std::string get_sex();
     std::string get_weekday_start();
-
-    static std::string test(const Options &options);
 };
 
 #endif //BEERTABS_USERSETTINGS_H
