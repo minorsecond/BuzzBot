@@ -3,6 +3,7 @@ project(Beertabs)
 
 set(CMAKE_CXX_STANDARD 20)
 set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libproc.h")
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
 
 add_compile_options(-Wall -gdwarf-2)
 set(CMAKE_C_FLAGS -gdwarf-2)
@@ -38,6 +39,18 @@ add_custom_command(TARGET Beertabs POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $
 set_target_properties(Beertabs PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
 target_link_libraries(Beertabs Qt5::Core Qt5::Widgets SQLite3 Boost::filesystem)
 target_link_libraries(functions_test SQLite3 Boost::filesystem Catch2::Catch2 Qt5::Core)
+
+set_target_properties(Beertabs PROPERTIES
+        MACOSX_BUNDLE_BUNDLE_NAME "Beertabs"
+        MACOSX_BUNDLE TRUE
+        MACOSX_BUNDLE_ICON_FILE "Resources/icon.icns"
+        MACOSX_BUNDLE_LONG_VERSION_STRING 0.8.0
+        MACOSX_BUNDLE_SHORT_VERSION_STRING 0.8.0
+        MACOSX_BUNDLE_COPYRIGHT "Ross Wardrup 2020"
+        MACOSX_BUNDLE_GUI_IDENTIFIER com.rwardrup.beertabs
+        XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
+        XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
+        XCODE_ATTRIBUTE_EXECUTABLE_NAME "beertabs")
 
 include(CTest)
 include(Catch)
