@@ -9,6 +9,7 @@
 #include <boost/filesystem.hpp>
 #include <iostream>
 #include <QMessageBox>
+#include <QStandardPaths>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -485,14 +486,7 @@ std::string MainWindow::settings_path() {
      */
     // Find path to application support directory
 
-    std::string username = getenv("USER");
-    std::string directory = "/Users/" + username + "/Library/Application Support/Beertabs";
-
-    // Remove spaces from path
-    directory.erase(std::remove_if(
-            begin(directory), end(directory),
-            [l = std::locale{}](auto ch) {return std::isspace(ch, l);}),
-                    end(directory));
+    std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
 
     std::string settings_path = directory + "/beertabs_settings.conf";
 
