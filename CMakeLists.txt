@@ -43,7 +43,7 @@ target_link_libraries(functions_test SQLite3 Boost::filesystem Catch2::Catch2 Qt
 set_target_properties(Beertabs PROPERTIES
         MACOSX_BUNDLE_BUNDLE_NAME "Beertabs"
         MACOSX_BUNDLE TRUE
-        MACOSX_BUNDLE_ICON_FILE "Resources/icon.icns"
+        MACOSX_BUNDLE_ICON_FILE icon.icns
         MACOSX_BUNDLE_LONG_VERSION_STRING 0.8.0
         MACOSX_BUNDLE_SHORT_VERSION_STRING 0.8.0
         MACOSX_BUNDLE_COPYRIGHT "Ross Wardrup 2020"
