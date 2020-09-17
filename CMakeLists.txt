@@ -5,11 +5,10 @@ set(CMAKE_CXX_STANDARD 20)
 set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libproc.h")
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
 
-if (CMAKE_BUILD_TYPE MATCHES RELEASE)
+if (CMAKE_BUILD_TYPE MATCHES Release)
+    message(STATUS "Building release")
     add_compile_options(-Wall -gdwarf-2)
 endif ()
-
-set(CMAKE_C_FLAGS -gdwarf-2)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
