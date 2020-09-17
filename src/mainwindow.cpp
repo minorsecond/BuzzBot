@@ -299,6 +299,18 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
             ui->deleteRowButton->setDisabled(true);
 
         Beer beer = Database::read_row(row_to_get, storage);
+        std::vector<Beer> beers_by_name = Database::filter("Name", beer.name, storage);
+
+        unsigned temp_id = 0;
+        std::string notes;
+        for (const auto& beer_for_notes : beers_by_name) {
+            if (beer_for_notes.id > temp_id) {
+                temp_id = beer_for_notes.id;
+                if (!beer_for_notes.notes.empty()) {
+                    notes = beer_for_notes.notes;
+                }
+            }
+        }
 
         std::ostringstream month_padded;
         std::ostringstream day_padded;
@@ -317,7 +329,7 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
         ui->ibuInput->setValue(beer.ibu);
         ui->sizeInput->setValue(beer.size);
         ui->ratingInput->setValue(beer.rating);
-        ui->notesInput->setText(beer.notes.c_str());
+        ui->notesInput->setText(notes.c_str());
     } else {
         std::cout << "Empty table." << std::endl;
     }
