@@ -37,7 +37,7 @@ add_custom_command(TARGET Beertabs POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $
 add_custom_command(TARGET Beertabs POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/mini-icon.png ${CMAKE_CURRENT_BINARY_DIR}/Beertabs.app/Contents/Resources/mini-icon.png)
 
 set_target_properties(Beertabs PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
-target_link_libraries(Beertabs Qt5::Core Qt5::Widgets SQLite3 Boost::filesystem)
+target_link_libraries(Beertabs Qt5::Core Qt5::Widgets SQLite3 Boost::filesystem "-framework CoreFoundation")
 target_link_libraries(functions_test SQLite3 Boost::filesystem Catch2::Catch2 Qt5::Core)
 
 set_target_properties(Beertabs PROPERTIES

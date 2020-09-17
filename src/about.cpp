@@ -3,6 +3,9 @@
 //
 
 #include "about.h"
+#include <QDir>
+#include <CoreFoundation/CFBundle.h>
+#include "iostream"
 
 About::About(QWidget *parent) {
     /*
@@ -16,7 +19,14 @@ About::About(QWidget *parent) {
     std::string version = "0.8.0";
     ui.versionLabel->setText(QString::fromStdString("Version " + version));
 
-    QPixmap pixmap("../Resources/mini-icon.png");
+    CFURLRef app_url_ref = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    CFStringRef mac_path = CFURLCopyFileSystemPath(app_url_ref, kCFURLPOSIXPathStyle);
+    QString icon_path_qstring = CFStringGetCStringPtr(mac_path, CFStringGetSystemEncoding());
+    std::string icon_path = icon_path_qstring.toStdString() + "/Contents/Resources/icon.icns";
+    CFRelease(app_url_ref);
+    CFRelease(mac_path);
+    std::cout << "Icon path" << icon_path << std::endl;
+    QPixmap pixmap(QString::fromStdString(icon_path));
     ui.miniIcon->setPixmap(pixmap);
     ui.miniIcon->repaint();
 }
