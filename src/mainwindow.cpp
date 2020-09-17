@@ -105,7 +105,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     update_beer_fields();
 
-    // Set up corner button
+    // Disconnect corner button so that we can use it for our own method
     auto *corner_button = ui->drinkLogTable->findChild<QAbstractButton*>();
     if (corner_button) {
         corner_button->disconnect();
@@ -476,12 +476,20 @@ void MainWindow::update_beer_fields() {
 }
 
 void MainWindow::open_about_dialog() {
+    /*
+     * Open the about dialog which contains author and license information.
+     */
+
     auto *about_dialog = new About(this);
     about_dialog->setModal(false);
     about_dialog->show();
 }
 
 void MainWindow::open_user_settings() {
+    /*
+     * Open the user settings dialog box, where users can enter their sex and the day which the week should begin on.
+     */
+
     std::cout << "Opening user settings." << std::endl;
     UserSettings user_settings = UserSettings(nullptr, options);
     user_settings.setModal(true);
@@ -621,6 +629,10 @@ void MainWindow::update_stat_panel() {
 }
 
 void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consumed) {
+    /*
+     * Update the std. drinks left this week to the amount of std. drinks left this week.
+     */
+
     double std_drinks_left = Calculate::standard_drinks_remaining(options.sex, std_drinks_consumed);
     ui->drinksLeftOutput->setText(QString::fromStdString(double_to_string(std_drinks_left)));
 }
@@ -634,6 +646,10 @@ void MainWindow::reset_table_sort() {
 }
 
 double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>& beers_this_week) {
+    /*
+     * Update the Oz. alcohol consumed output label to the total amount alcohol consumed this week.
+     */
+
     double oz_consumed = 0;
 
     for (const auto& beer : beers_this_week) {
@@ -651,21 +667,37 @@ double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>&
 }
 
 void MainWindow::update_oz_alcohol_remaining(double oz_alcohol_consumed) {
+    /*
+     * Update the OZ. alcohol remaining label text to the amount of alcohol remaining.
+     */
+
     double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(options.sex, oz_alcohol_consumed);
     ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(double_to_string(oz_alcohol_remaining)));
 }
 
 void MainWindow::update_favorite_brewery() {
+    /*
+     * Update the favorite brewery text label to the most common beer in the database.
+     */
+
     std::string fave_brewery = Calculate::favorite_brewery(storage);
     ui->favoriteBreweryOutput->setText(QString::fromStdString(fave_brewery));
 }
 
 void MainWindow::update_favorite_beer() {
+    /*
+     * Update the favorite beer text label to the most common beer in the database.
+     */
+
     std::string fave_beer = Calculate::favorite_beer(storage);
     ui->favoriteBeerOutput->setText(QString::fromStdString(fave_beer));
 }
 
 void MainWindow::update_mean_abv() {
+    /*
+     * Update the mean ABV text label to the mean ABV of all beers in the database.
+     */
+
     std::string mean_abv = double_to_string(Calculate::mean_abv(storage));
     if (mean_abv == "nan") {
         mean_abv = " ";
@@ -674,6 +706,10 @@ void MainWindow::update_mean_abv() {
 }
 
 void MainWindow::update_mean_ibu() {
+    /*
+     * Set the mean IBU text label to the mean IBU of all beers in the database.
+     */
+
     std::string mean_ibu = double_to_string(Calculate::mean_ibu(storage));
     if (mean_ibu == "nan") {
         mean_ibu = " ";
@@ -796,6 +832,10 @@ void MainWindow::update_fields_on_beer_name() {
 }
 
 void MainWindow::update_favorite_type() {
+    /*
+     * Set the favoriteTypeOutput to the most common beer found in the database.
+     */
+
     std::string fave_type = Calculate::favorite_type(storage);
     ui->favoriteTypeOutput->setText(QString::fromStdString(fave_type));
 }
