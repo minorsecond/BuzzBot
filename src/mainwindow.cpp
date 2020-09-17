@@ -299,8 +299,9 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
             ui->deleteRowButton->setDisabled(true);
 
         Beer beer = Database::read_row(row_to_get, storage);
-        std::vector<Beer> beers_by_name = Database::filter("Name", beer.name, storage);
 
+        // Get latest notes entered for the selected beer
+        std::vector<Beer> beers_by_name = Database::filter("Name", beer.name, storage);
         unsigned temp_id = 0;
         std::string notes;
         for (const auto& beer_for_notes : beers_by_name) {
