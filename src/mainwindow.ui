@@ -227,7 +227,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Size</string>
+            <string>Size (oz)</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
