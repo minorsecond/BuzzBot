@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 3.17)
 project(Beertabs)
 
 set(CMAKE_CXX_STANDARD 20)
-
 set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libproc.h")
+
+add_compile_options(-Wall -gdwarf-2)
+set(CMAKE_C_FLAGS -gdwarf-2)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
