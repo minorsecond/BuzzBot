@@ -414,6 +414,9 @@ QCalendarWidget QToolButton#qt_calendar_nextmonth
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="focusPolicy">
+          <enum>Qt::ClickFocus</enum>
+         </property>
         </widget>
        </item>
        <item row="5" column="1">
@@ -684,6 +687,9 @@ QCalendarWidget QToolButton#qt_calendar_nextmonth
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="focusPolicy">
+       <enum>Qt::ClickFocus</enum>
+      </property>
       <row>
        <property name="text">
         <string>1</string>
@@ -890,7 +896,22 @@ QCalendarWidget QToolButton#qt_calendar_nextmonth
   </widget>
  </widget>
  <tabstops>
+  <tabstop>drinkDateInput</tabstop>
+  <tabstop>nameInput</tabstop>
+  <tabstop>breweryInput</tabstop>
+  <tabstop>typeInput</tabstop>
+  <tabstop>subtypeInput</tabstop>
+  <tabstop>abvInput</tabstop>
+  <tabstop>ibuInput</tabstop>
+  <tabstop>ratingInput</tabstop>
+  <tabstop>sizeInput</tabstop>
+  <tabstop>filterCategoryInput</tabstop>
+  <tabstop>filterTextInput</tabstop>
+  <tabstop>deleteRowButton</tabstop>
+  <tabstop>clearFieldsButton</tabstop>
+  <tabstop>submitRowButton</tabstop>
   <tabstop>drinkLogTable</tabstop>
+  <tabstop>notesInput</tabstop>
  </tabstops>
  <resources>
   <include location="../res/resources.qrc"/>
