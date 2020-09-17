@@ -48,7 +48,3 @@ std::string UserSettings::get_weekday_start() {
      */
     return ui.weekdayStartInput->currentText().toStdString();
 }
-
-std::string UserSettings::test(const Options& options) {
-    return std::string();
-}
