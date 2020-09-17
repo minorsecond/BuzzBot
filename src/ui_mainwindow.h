@@ -142,7 +142,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(1022, 692);
+        MainWindow->resize(1006, 692);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -150,7 +150,7 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(centralwidget->sizePolicy().hasHeightForWidth());
         centralwidget->setSizePolicy(sizePolicy);
-        centralwidget->setMinimumSize(QSize(0, 670));
+        centralwidget->setMinimumSize(QSize(1006, 670));
         gridLayout_4 = new QGridLayout(centralwidget);
         gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
         frame_2 = new QFrame(centralwidget);
@@ -916,7 +916,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1022, 22));
+        menubar->setGeometry(QRect(0, 0, 1006, 22));
         MainWindow->setMenuBar(menubar);
         QWidget::setTabOrder(beerAbvInput, beerIbuInput);
         QWidget::setTabOrder(beerIbuInput, beerRatingInput);
