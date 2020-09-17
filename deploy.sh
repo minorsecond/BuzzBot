@@ -13,3 +13,7 @@ find ~/Desktop/Beertabs.app -name "*.framework" | xargs -I $ codesign --verify -
 codesign --sign $1 --options runtime --verbose --entitlements Beertabs-Entitlements.plist ~/Desktop/Beertabs.app
 
 echo "Deployed to ~/Desktop/Beertabs.app"
+
+echo "Notarizing app"
+zip ~/Desktop/Beertabs.zip -r ~/Desktop/Beertabs.app/
+xcrun altool --notarize-app --primary-bundle-id "com.rwardrup.beertabs.zip" --username "rwardrup" --password "@keychain:AC_PASSWORD" --file ~/Desktop/Beertabs.zip
