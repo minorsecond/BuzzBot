@@ -20,16 +20,6 @@ script:
   - cmake --build . --target Beertabs -- -j$core_count
   - cmake --build . --target functions_test -- -j$core_count
   - ctest functions_test
-  - macdeployqt Beertabs.app -always-overwrite -appstore-compliant
-  - zip -r Beertabs.zip Beertabs.app
-
-deploy:
-  provider: releases
-  file: "Beertabs.zip"
-  skip_cleanup: true
-  api_key: $GITHUB_TOKEN
-  on:
-    tags: true
 
 notifications:
   email:

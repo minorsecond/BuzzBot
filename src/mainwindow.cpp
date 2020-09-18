@@ -2,12 +2,15 @@
 #include "ui_mainwindow.h"
 #include "database.h"
 #include "usersettings.h"
+#include "about.h"
 #include "calculate.h"
 #include "../include/date.h"
 #include <iomanip>
 #include <boost/filesystem.hpp>
 #include <iostream>
 #include <QMessageBox>
+#include <QStandardPaths>
+#include <CoreFoundation/CFBundle.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -18,22 +21,63 @@ MainWindow::MainWindow(QWidget *parent)
      */
 
     ui->setupUi(this);
-    this->setFixedSize(1392, 665);
+
+    // Read options and create if the file doesn't exist
+    // TODO: Create the settings file within program_options()
+    program_options(false);
+    program_options(true);
+
+    // Upgrade DB version
+    Database::increment_version(storage, 2);
+
+    // Set size hints
+    ui->drinkDateInput->setProperty("sizeHint", QVariant(QSizeF(241, 22)));
 
     // Add menubar items
-    auto * editAction = new QAction("User Settings");
-
-    QMenu * menu = menuBar()->addMenu("Edit");
-    menu->addAction(editAction);
-
+    auto * preferences_action = new QAction("Preferences");
+    auto * about_action = new QAction("About");
+    QMenu * app_menu = menuBar()->addMenu("App Menu");
+    preferences_action->setMenuRole(QAction::PreferencesRole);
+    about_action->setMenuRole(QAction::AboutRole);
+    app_menu->addAction(preferences_action);
+    app_menu->addAction(about_action);
 
     // Fixed row height in table
     QHeaderView *verticalHeader = ui->drinkLogTable->verticalHeader();
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
     ui->drinkLogTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
+    // Fix up calendar widget
+    // First, get path of .app file
+    CFURLRef app_url_ref = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    CFStringRef mac_path = CFURLCopyFileSystemPath(app_url_ref, kCFURLPOSIXPathStyle);
+    QString icon_path_qstring = CFStringGetCStringPtr(mac_path, CFStringGetSystemEncoding());
 
-    //std::string database_path = Database::path();
+    // Set path to icons
+    std::string previous_month_arrow = icon_path_qstring.toStdString() + "/Contents/Resources/previous.png";
+    std::string next_month_arrow = icon_path_qstring.toStdString() + "/Contents/Resources/next.png";
+    std::string stylesheet_text = "QCalendarWidget QWidget#qt_calendar_navigationbar\n"
+                                  "{\n"
+                                  "\tcolor: transparent;\n"
+                                  "\tbackground-color: transparent;\n"
+                                  "}\n"
+                                  "QCalendarWidget QToolButton {\n"
+                                  "  \tbackground-color: rgba(128, 128, 128, 0);\n"
+                                  "}\n"
+                                  " /* header row */\n"
+                                  "QCalendarWidget QWidget { alternate-background-color: rgba(128, 128, 128, 0); }\n"
+                                  "QCalendarWidget QToolButton#qt_calendar_prevmonth \n"
+                                  "{\n"
+                                  "\tqproperty-icon: url(" + previous_month_arrow + ");\n"
+                                  "}\n"
+                                  "\n"
+                                  "QCalendarWidget QToolButton#qt_calendar_nextmonth \n"
+                                  "{\n"
+                                  "\tqproperty-icon: url(" + next_month_arrow + ");\n"
+                                  "}";
+
+    ui->drinkDateInput->setStyleSheet(QString::fromStdString(stylesheet_text));
+
     Database::write_db_to_disk(storage);
 
     update_stat_panel();
@@ -67,27 +111,33 @@ MainWindow::MainWindow(QWidget *parent)
     ui->filterCategoryInput->setCurrentText("None");
     ui->filterCategoryInput->addItem("Name");
     ui->filterCategoryInput->addItem("Type");
+    ui->filterCategoryInput->addItem("Subtype");
     ui->filterCategoryInput->addItem("Brewery");
     ui->filterCategoryInput->addItem("Rating");
 
     ui->filterTextInput->setDisabled(true);
 
     // Set column widths
-    ui->drinkLogTable->setColumnWidth(0, 100);
+    ui->drinkLogTable->setColumnWidth(0, 75);
     ui->drinkLogTable->setColumnWidth(1, 428);
     ui->drinkLogTable->setColumnWidth(2, 200);
-    ui->drinkLogTable->setColumnWidth(3, 428);
-    ui->drinkLogTable->setColumnWidth(4, 50);
+    ui->drinkLogTable->setColumnWidth(3, 200);
+    ui->drinkLogTable->setColumnWidth(4, 428);
     ui->drinkLogTable->setColumnWidth(5, 50);
     ui->drinkLogTable->setColumnWidth(6, 50);
-    ui->drinkLogTable->setColumnHidden(8, true);  // Hide ID column
-    ui->drinkLogTable->setColumnHidden(9, true);  // Hide Timestamp column
+    ui->drinkLogTable->setColumnWidth(7, 50);
+    ui->drinkLogTable->setColumnWidth(8, 55);
+    ui->drinkLogTable->setColumnHidden(9, true);  // Hide ID column
+    ui->drinkLogTable->setColumnHidden(10, true);  // Hide Timestamp column
     QHeaderView* drink_log_header = ui->drinkLogTable->horizontalHeader();
-    drink_log_header->setSectionResizeMode(7, QHeaderView::Stretch);
+    drink_log_header->setSectionResizeMode(1, QHeaderView::Stretch);
+    drink_log_header->setSectionResizeMode(2, QHeaderView::Stretch);
+    drink_log_header->setSectionResizeMode(3, QHeaderView::Stretch);
+    drink_log_header->setSectionResizeMode(4, QHeaderView::Stretch);
 
     update_beer_fields();
 
-    // Set up corner button
+    // Disconnect corner button so that we can use it for our own method
     auto *corner_button = ui->drinkLogTable->findChild<QAbstractButton*>();
     if (corner_button) {
         corner_button->disconnect();
@@ -101,9 +151,16 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->filterCategoryInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(enable_filter_text(const QString&)));
     connect(ui->filterTextInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(changed_filter_text(const QString&)));
     connect(ui->submitRowButton, SIGNAL(clicked()), this, SLOT(submit_button_clicked()));
-    connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(clear_fields()));
+    connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(reset_fields()));
     connect(ui->deleteRowButton, SIGNAL(clicked()), this, SLOT(delete_row()));
-    connect(editAction, SIGNAL(triggered()), this, SLOT(open_user_settings()));
+    connect(preferences_action, SIGNAL(triggered()), this, SLOT(open_user_settings()));
+    connect(about_action, SIGNAL(triggered()), this, SLOT(open_about_dialog()));
+    connect(ui->nameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
+    connect(ui->typeInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(type_input_changed(const QString&)));
+    connect(ui->breweryInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(brewery_input_changed(const QString&)));
+
+    // Update fields to match beer that comes first alphabetically
+    update_fields_on_beer_name();
 }
 
 MainWindow::~MainWindow()
@@ -124,6 +181,7 @@ void MainWindow::submit_button_clicked() {
     int drink_day = ui->drinkDateInput->date().day();
     std::string beer_name = ui->nameInput->currentText().toStdString();
     std::string beer_type = ui->typeInput->currentText().toStdString();
+    std::string beer_subtype = ui->subtypeInput->currentText().toStdString();
     std::string brewery_name = ui->breweryInput->currentText().toStdString();
     double beer_ibu = ui->ibuInput->value();
     double beer_abv = ui->abvInput->value();
@@ -135,75 +193,62 @@ void MainWindow::submit_button_clicked() {
     if (beer_name.empty() || beer_abv == 0.0) {
         QMessageBox::critical(nullptr, "Error", "Please enter beer name and ABV.");
     } else {
+        Beer beer{
+            -1,
+            drink_year,
+            drink_month,
+            drink_day,
+            beer_name,
+            beer_type,
+            beer_subtype,
+            brewery_name,
+            beer_abv,
+            beer_ibu,
+            beer_size,
+            rating,
+            notes,
+            "placeholder"
+        };
+
         // Handle updating existing rows
         QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
         if (select->hasSelection()) {
+            // Get the selected row
             int selection = select->selectedRows().at(0).row();
-            int row_to_update = ui->drinkLogTable->item(selection, 8)->text().toUtf8().toInt();
-            std::string timestamp = ui->drinkLogTable->item(selection, 9)->text().toStdString();
+            int row_to_update = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
+
+            // Get the existing timestamp
+            std::string timestamp = ui->drinkLogTable->item(selection, 10)->text().toStdString();
             std::cout << "Updating row " << row_to_update << "Timestamp: " << timestamp << std::endl;
 
-            Beer beer{
-                row_to_update,
-                drink_year,
-                drink_month,
-                drink_day,
-                beer_name,
-                beer_type,
-                brewery_name,
-                beer_abv,
-                beer_ibu,
-                beer_size,
-                rating,
-                notes,
-                timestamp
-            };
-
+            // Update the variables in the beer struct
+            beer.id = row_to_update;
+            beer.timestamp = timestamp;
             Database::update(storage, beer);
         } else {
-            Beer beer{
-                    -1,
-                    drink_year,
-                    drink_month,
-                    drink_day,
-                    beer_name,
-                    beer_type,
-                    brewery_name,
-                    beer_abv,
-                    beer_ibu,
-                    beer_size,
-                    rating,
-                    notes,
-                    storage.select(sqlite_orm::datetime("now")).front()
-            };
+            // Get a new timestamp
+            std::string timestamp = storage.select(sqlite_orm::datetime("now")).front();
+            beer.timestamp = timestamp;
             Database::write(beer, storage);
         }
         update_table();
         if (selected_rows.empty()) {
-            clear_fields();
+            reset_fields();
         }
         update_beer_fields();
         update_stat_panel();
     }
 }
 
-void MainWindow::clear_fields() {
+void MainWindow::reset_fields() {
     /*
-     * Clear user entry fields for entering a new beer.
+     * Clear user entry fields and table selection for entering a new beer.
      */
 
     std::cout << "clearing fields" << std::endl;
-
-    QDate todays_date = QDate::currentDate();
-    ui->drinkDateInput->setDate(todays_date);
-    ui->breweryInput->setCurrentIndex(0);
-    ui->typeInput->setCurrentIndex(0);
-    ui->nameInput->setCurrentIndex(0);
-    ui->notesInput->clear();
-    ui->abvInput->setValue(0.0);
-    ui->ibuInput->setValue(0.0);
-    ui->sizeInput->setValue(0.0);
-    ui->ratingInput->setValue(0);
+    ui->drinkLogTable->clearSelection();
+    update_beer_fields();
+    update_fields_on_beer_name();
 }
 
 void MainWindow::update_table() {
@@ -212,7 +257,7 @@ void MainWindow::update_table() {
      */
 
     // Temporarily sort by database ID to fix issues with blank rows
-    ui->drinkLogTable->sortItems(8, Qt::AscendingOrder);
+    ui->drinkLogTable->sortItems(9, Qt::AscendingOrder);
 
     std::string filter_category = ui->filterCategoryInput->currentText().toStdString();
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
@@ -223,10 +268,11 @@ void MainWindow::update_table() {
     for (const auto& beer : beers) {
         int table_row_num = ui->drinkLogTable->rowCount();
         ui->drinkLogTable->insertRow(table_row_num);
-        auto *date = new QTableWidgetItem((std::to_string(beer.drink_year) + "/" +
-                std::to_string(beer.drink_month) + "/" + std::to_string(beer.drink_day)).c_str());
+        QDate date = QDate(beer.drink_year, beer.drink_month, beer.drink_day);
+        auto *date_qtw = new QTableWidgetItem;
         auto *name = new QTableWidgetItem(beer.name.c_str());
         auto *type = new QTableWidgetItem(beer.type.c_str());
+        auto *subtype = new QTableWidgetItem(beer.subtype.c_str());
         auto *brewery = new QTableWidgetItem(beer.brewery.c_str());
         auto *abv = new QTableWidgetItem(double_to_string(beer.abv).c_str());
         auto *ibu = new QTableWidgetItem(double_to_string(beer.ibu).c_str());
@@ -237,19 +283,21 @@ void MainWindow::update_table() {
 
         // Sort ID numerically
         id->setData(Qt::DisplayRole, beer.id);
+        date_qtw->setData(Qt::DisplayRole, date);
 
         std::string notes = beer.notes;
 
-        ui->drinkLogTable->setItem(table_row_num, 0, date);
+        ui->drinkLogTable->setItem(table_row_num, 0, date_qtw);
         ui->drinkLogTable->setItem(table_row_num, 1, name);
         ui->drinkLogTable->setItem(table_row_num, 2, type);
-        ui->drinkLogTable->setItem(table_row_num, 3, brewery);
-        ui->drinkLogTable->setItem(table_row_num, 4, abv);
-        ui->drinkLogTable->setItem(table_row_num, 5, ibu);
-        ui->drinkLogTable->setItem(table_row_num, 6, size);
-        ui->drinkLogTable->setItem(table_row_num, 7, rating);
-        ui->drinkLogTable->setItem(table_row_num, 8, id);
-        ui->drinkLogTable->setItem(table_row_num, 9, timestamp);
+        ui->drinkLogTable->setItem(table_row_num, 3, subtype);
+        ui->drinkLogTable->setItem(table_row_num, 4, brewery);
+        ui->drinkLogTable->setItem(table_row_num, 5, abv);
+        ui->drinkLogTable->setItem(table_row_num, 6, ibu);
+        ui->drinkLogTable->setItem(table_row_num, 7, size);
+        ui->drinkLogTable->setItem(table_row_num, 8, rating);
+        ui->drinkLogTable->setItem(table_row_num, 9, id);
+        ui->drinkLogTable->setItem(table_row_num, 10, timestamp);
     }
     reset_table_sort();
 }
@@ -260,7 +308,7 @@ std::string MainWindow::double_to_string(double input_double) {
      * @param input_double: Double value that should be converted.
      */
 
-    double purchase_price = std::ceil(input_double * 10.0) / 10.0;
+    double purchase_price = std::ceil(input_double * 100.0) / 100.0;
     std::ostringstream price_stream;
     price_stream << purchase_price;
 
@@ -276,13 +324,27 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
     int selection = ui->drinkLogTable->selectionModel()->currentIndex().row();
     if (selection >= 0) {
         std::cout << "Getting row " << selection << " from table." << std::endl;
-        int row_to_get = ui->drinkLogTable->item(selection, 8)->text().toUtf8().toInt();
+        int row_to_get = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
         std::cout << "Getting row " << row_to_get << " from database." << std::endl;
         if (select->isRowSelected(selection))
             ui->deleteRowButton->setEnabled(true);
         else
             ui->deleteRowButton->setDisabled(true);
+
         Beer beer = Database::read_row(row_to_get, storage);
+
+        // Get latest notes entered for the selected beer
+        std::vector<Beer> beers_by_name = Database::filter("Name", beer.name, storage);
+        unsigned temp_id = 0;
+        std::string notes;
+        for (const auto& beer_for_notes : beers_by_name) {
+            if (beer_for_notes.id > temp_id) {
+                temp_id = beer_for_notes.id;
+                if (!beer_for_notes.notes.empty()) {
+                    notes = beer_for_notes.notes;
+                }
+            }
+        }
 
         std::ostringstream month_padded;
         std::ostringstream day_padded;
@@ -295,11 +357,13 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
         ui->drinkDateInput->setDate(date);
         ui->nameInput->setCurrentText(beer.name.c_str());
         ui->typeInput->setCurrentText(beer.type.c_str());
+        ui->subtypeInput->setCurrentText(beer.subtype.c_str());
         ui->breweryInput->setCurrentText(beer.brewery.c_str());
         ui->abvInput->setValue(beer.abv);
         ui->ibuInput->setValue(beer.ibu);
         ui->sizeInput->setValue(beer.size);
         ui->ratingInput->setValue(beer.rating);
+        ui->notesInput->setText(notes.c_str());
     } else {
         std::cout << "Empty table." << std::endl;
     }
@@ -311,7 +375,8 @@ void MainWindow::delete_row() {
      */
 
     int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
-    int row_to_delete = (ui->drinkLogTable->item(select, 8)->text().toUtf8().toInt());
+    int row_to_delete = (ui->drinkLogTable->item(select, 9)->text().toUtf8().toInt());
+    std::cout << "Deleting row " << row_to_delete << std::endl;
     Database::delete_row(storage, row_to_delete);
     update_table();
     update_stat_panel();
@@ -326,6 +391,7 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
 
     std::set<QString> beer_names;
     std::set<QString> beer_types;
+    std::set<QString> beer_subtypes;
     std::set<QString> breweries;
     std::set<QString> ratings;
 
@@ -340,11 +406,13 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
     for (const auto& beer : all_beers) {
         QString beer_name = QString::fromStdString(beer.name);
         QString beer_type = QString::fromStdString(beer.type);
+        QString beer_subtype = QString::fromStdString(beer.subtype);
         QString brewery = QString::fromStdString(beer.brewery);
         QString rating = QString::fromStdString(std::to_string(beer.rating));
 
         beer_names.insert(beer_name);
         beer_types.insert(beer_type);
+        beer_subtypes.insert(beer_subtype);
         breweries.insert(brewery);
         ratings.insert(rating);
     }
@@ -356,6 +424,12 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
     } else if (filter_type == "Type") {
         for (const auto& type : beer_types) {
             ui->filterTextInput->addItem(type);
+        }
+    } else if (filter_type == "Subtype") {
+        for (const auto& subtype : beer_subtypes) {
+            if (!subtype.isEmpty()) {
+                ui->filterTextInput->addItem(subtype);
+            }
         }
     } else if (filter_type == "Brewery") {
         for (const auto& brewery : breweries) {
@@ -433,16 +507,31 @@ void MainWindow::update_beer_fields() {
     }
 }
 
+void MainWindow::open_about_dialog() {
+    /*
+     * Open the about dialog which contains author and license information.
+     */
+
+    auto *about_dialog = new About(this);
+    about_dialog->setModal(false);
+    about_dialog->show();
+}
+
 void MainWindow::open_user_settings() {
+    /*
+     * Open the user settings dialog box, where users can enter their sex and the day which the week should begin on.
+     */
 
     std::cout << "Opening user settings." << std::endl;
-    UserSettings user_settings = UserSettings(nullptr, sex);
+    UserSettings user_settings = UserSettings(nullptr, options);
     user_settings.setModal(true);
     if (user_settings.exec() == QDialog::Accepted) {
-        sex = user_settings.get_sex();
-        std::cout << "Sex: " << sex << std::endl;
+        options.sex = user_settings.get_sex();
+        options.weekday_start = user_settings.get_weekday_start();
+        update_stat_panel();
+        std::cout << "Sex: " << options.sex << ", Weekday starts on " << options.weekday_start << std::endl;
     }
-    program_options(sex, true);
+    program_options(true);
 }
 
 std::string MainWindow::settings_path() {
@@ -452,14 +541,7 @@ std::string MainWindow::settings_path() {
      */
     // Find path to application support directory
 
-    std::string username = getenv("USER");
-    std::string directory = "/Users/" + username + "/Library/Application Support/Beertabs";
-
-    // Remove spaces from path
-    directory.erase(std::remove_if(
-            begin(directory), end(directory),
-            [l = std::locale{}](auto ch) {return std::isspace(ch, l);}),
-                    end(directory));
+    std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
 
     std::string settings_path = directory + "/beertabs_settings.conf";
 
@@ -468,7 +550,7 @@ std::string MainWindow::settings_path() {
     return settings_path;
 }
 
-std::string MainWindow::program_options(const std::string &sex, bool write) {
+void MainWindow::program_options(bool write) {
     /*
      * Read or write to/from the settings file.
      * @param sex: Sex of user.
@@ -480,7 +562,8 @@ std::string MainWindow::program_options(const std::string &sex, bool write) {
     std::string read_sex;
 
     if (write) {
-        std::string sex_setting = "sex:" + sex;
+        std::string sex_setting = "sex:" + options.sex;
+        std::string start_day = "start_day:" + options.weekday_start;
         std::ofstream out_data;
 
         if (!out_data) {
@@ -489,7 +572,8 @@ std::string MainWindow::program_options(const std::string &sex, bool write) {
         }
 
         out_data.open(path);
-        out_data << sex_setting;
+        out_data << sex_setting + '\n';
+        out_data << start_day + '\n';
         out_data.close();
     } else {
         std::cout << "Reading user settings from " << path << std::endl;
@@ -500,13 +584,14 @@ std::string MainWindow::program_options(const std::string &sex, bool write) {
         if (options_file.is_open()) {
             while (std::getline(options_file, line)) {
                 if (line_counter == 0) {  // First line should be sex
-                    read_sex = line.substr(line.find(':') + 1);
+                    options.sex = line.substr(line.find(':') + 1);
+                } else if (line_counter == 1) { // Second line should be week start day
+                    options.weekday_start = line.substr(line.find(':') + 1);
                 }
                 line_counter += 1;
             }
         }
     }
-    return read_sex;
 }
 
 void MainWindow::update_stat_panel() {
@@ -515,15 +600,35 @@ void MainWindow::update_stat_panel() {
      */
 
     double standard_drinks = 0;
+    date::weekday filter_day{};
 
+    std::cout << "Stats filter day: " << options.weekday_start << std::endl;
+
+    // Get date to filter on
+    if (options.weekday_start == "Monday") {
+        filter_day = date::Monday;
+    } else if (options.weekday_start == "Tuesday") {
+        filter_day = date::Tuesday;
+    } else if (options.weekday_start == "Wednesday") {
+        filter_day = date::Wednesday;
+    } else if (options.weekday_start == "Thursday") {
+        filter_day = date::Thursday;
+    } else if (options.weekday_start == "Friday") {
+        filter_day = date::Friday;
+    } else {
+        filter_day = date::Sunday;
+    }
     // This returns yyyy-mm-dd
     auto todays_date = date::floor<date::days>(std::chrono::system_clock::now());
-    date::year_month_day last_sunday = todays_date - (date::weekday{todays_date} - date::Sunday);
+
+    // Get date of last filter_day
+    date::year_month_day start_date = todays_date - (date::weekday{todays_date} - filter_day);
+    std::cout << "Last filter day: " << start_date << std::endl;
 
     // Create the date for the SQL query
-    std::string year = date::format("%Y", last_sunday.year());
-    std::string month = date::format("%m", last_sunday.month());
-    std::string day = date::format("%d", last_sunday.day());
+    std::string year = date::format("%Y", start_date.year());
+    std::string month = date::format("%m", start_date.month());
+    std::string day = date::format("%d", start_date.day());
     std::string query_date = day + "/" + month + "/" + year;
 
     std::vector<Beer> beers_this_week = Database::filter("After Date", query_date, storage);
@@ -532,10 +637,17 @@ void MainWindow::update_stat_panel() {
         standard_drinks += Calculate::standard_drinks(beer.abv, beer.size);
     }
     if (standard_drinks == 0.0) {
-        ui->drinksThisWeekOutput->clear();
+        ui->drinksThisWeekOutput->setText("0.0");
+        ui->ozAlcoholConsumedOutput->setText("0.0");
     } else {
         ui->drinksThisWeekOutput->setText(QString::fromStdString(double_to_string(standard_drinks)));
     }
+
+    // Update text
+    std::string drinksThisWeekLabelText = "Std. drinks since " + options.weekday_start + ":";
+    std::string ozThisWeekLabelText = "Oz. alcohol since " + options.weekday_start + ":";
+    ui->drinksThisWeekLabel->setText(QString::fromStdString(drinksThisWeekLabelText));
+    ui->ozAlcoholConsumedLabel->setText(QString::fromStdString(ozThisWeekLabelText));
 
     // TODO: refactor this
     update_standard_drinks_left_this_week(standard_drinks);
@@ -543,13 +655,25 @@ void MainWindow::update_stat_panel() {
     update_oz_alcohol_remaining(oz_alc_consumed);
     update_favorite_brewery();
     update_favorite_beer();
+    update_favorite_type();
     update_mean_abv();
     update_mean_ibu();
 }
 
 void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consumed) {
-    double std_drinks_left = Calculate::standard_drinks_remaining(sex, std_drinks_consumed);
+    /*
+     * Update the std. drinks left this week to the amount of std. drinks left this week.
+     */
+
+    double std_drinks_left = Calculate::standard_drinks_remaining(options.sex, std_drinks_consumed);
     ui->drinksLeftOutput->setText(QString::fromStdString(double_to_string(std_drinks_left)));
+
+    // Set standard drinks remaining text to red if negative
+    if (std_drinks_left < 0) {
+        ui->drinksLeftOutput->setStyleSheet("QLabel {color : red;}");
+    } else {
+        ui->drinksLeftOutput->setStyleSheet("");
+    }
 }
 
 void MainWindow::reset_table_sort() {
@@ -557,10 +681,14 @@ void MainWindow::reset_table_sort() {
      * Reset table sort to default, by datetime descending.
      */
 
-    ui->drinkLogTable->sortItems(8, Qt::DescendingOrder);
+    ui->drinkLogTable->sortItems(9, Qt::DescendingOrder);
 }
 
 double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>& beers_this_week) {
+    /*
+     * Update the Oz. alcohol consumed output label to the total amount alcohol consumed this week.
+     */
+
     double oz_consumed = 0;
 
     for (const auto& beer : beers_this_week) {
@@ -569,7 +697,7 @@ double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>&
     }
 
     if (oz_consumed == 0.0) {
-        ui->ozAlcoholConsumedOutput->clear();
+        ui->ozAlcoholConsumedOutput->setText("0.0");
     } else {
         ui->ozAlcoholConsumedOutput->setText(QString::fromStdString(double_to_string(oz_consumed)));
     }
@@ -578,21 +706,44 @@ double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>&
 }
 
 void MainWindow::update_oz_alcohol_remaining(double oz_alcohol_consumed) {
-    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(sex, oz_alcohol_consumed);
+    /*
+     * Update the OZ. alcohol remaining label text to the amount of alcohol remaining.
+     */
+
+    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(options.sex, oz_alcohol_consumed);
     ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(double_to_string(oz_alcohol_remaining)));
+
+    // Set oz alcohol remaining text to red if negative
+    if (oz_alcohol_remaining < 0) {
+        ui->ozAlcoholRemainingOutput->setStyleSheet("QLabel {color : red;}");
+    } else {
+        ui->ozAlcoholRemainingOutput->setStyleSheet("");
+    }
 }
 
 void MainWindow::update_favorite_brewery() {
+    /*
+     * Update the favorite brewery text label to the most common beer in the database.
+     */
+
     std::string fave_brewery = Calculate::favorite_brewery(storage);
     ui->favoriteBreweryOutput->setText(QString::fromStdString(fave_brewery));
 }
 
 void MainWindow::update_favorite_beer() {
+    /*
+     * Update the favorite beer text label to the most common beer in the database.
+     */
+
     std::string fave_beer = Calculate::favorite_beer(storage);
     ui->favoriteBeerOutput->setText(QString::fromStdString(fave_beer));
 }
 
 void MainWindow::update_mean_abv() {
+    /*
+     * Update the mean ABV text label to the mean ABV of all beers in the database.
+     */
+
     std::string mean_abv = double_to_string(Calculate::mean_abv(storage));
     if (mean_abv == "nan") {
         mean_abv = " ";
@@ -601,9 +752,136 @@ void MainWindow::update_mean_abv() {
 }
 
 void MainWindow::update_mean_ibu() {
+    /*
+     * Set the mean IBU text label to the mean IBU of all beers in the database.
+     */
+
     std::string mean_ibu = double_to_string(Calculate::mean_ibu(storage));
     if (mean_ibu == "nan") {
         mean_ibu = " ";
     }
     ui->avgIbuDrinkOutput->setText(QString::fromStdString(mean_ibu));
+}
+
+void MainWindow::name_input_changed(const QString&) {
+    /*
+     * Change the beer attributes based on the beer selected in the nameInput field.
+     */
+    update_fields_on_beer_name();
+}
+
+void MainWindow::type_input_changed(const QString &) {
+    /*
+     * Change the beer attributes based on the type of beer selected in the typeInput field.
+     */
+
+    std::string input_type = ui->typeInput->currentText().toStdString();
+    std::cout << input_type << std::endl;
+    std::vector<Beer> selected_beers = Database::get_beers_by_type(storage, input_type);
+    std::set<QString> beer_names;
+    std::set<QString> brewery_names;
+
+    // This fixes crashes when changing with rows selected.
+    QSignalBlocker name_input_signal_blocker(ui->nameInput);
+    QSignalBlocker brewery_input_signal_blocker(ui->breweryInput);
+
+    ui->abvInput->setValue(0.0);
+    ui->ibuInput->setValue(0.0);
+    ui->sizeInput->setValue(0);
+    ui->ratingInput->setValue(0);
+    ui->nameInput->clear();
+    ui->breweryInput->clear();
+
+    for (const auto& selected_beer : selected_beers) {
+        beer_names.insert(QString::fromStdString(selected_beer.name));
+        brewery_names.insert(QString::fromStdString(selected_beer.brewery));
+    }
+
+    for (const auto& brewery : brewery_names) {
+        ui->breweryInput->addItem(brewery);
+    }
+
+    for (const auto& beer : beer_names) {
+        ui->nameInput->addItem(beer);
+    }
+
+    // Update fields based on newly selected beer
+    update_fields_on_beer_name();
+}
+
+void MainWindow::brewery_input_changed(const QString&) {
+    /*
+     *  Change the beer attributes based on the brewery selected in the breweryInput field.
+     */
+
+    std::string input_brewery = ui->breweryInput->currentText().toStdString();
+    std::vector<Beer> selected_beers = Database::get_beers_by_brewery(storage, input_brewery);
+    std::set<QString> beer_names;
+    std::set<QString> types;
+
+    // This fixes crashes when changing with rows selected.
+    QSignalBlocker name_input_signal_blocker(ui->nameInput);
+    QSignalBlocker type_input_signal_blocker(ui->typeInput);
+
+    ui->abvInput->setValue(0.0);
+    ui->ibuInput->setValue(0.0);
+    ui->sizeInput->setValue(0);
+    ui->ratingInput->setValue(0);
+    ui->nameInput->clear();
+    ui->typeInput->clear();
+
+    for (const auto& selected_beer : selected_beers) {
+        beer_names.insert(QString::fromStdString(selected_beer.name));
+        types.insert(QString::fromStdString(selected_beer.type));
+    }
+
+    for (const auto& name : beer_names) {
+        ui->nameInput->addItem(name);
+    }
+
+    for (const auto& beer_type : types) {
+        ui->typeInput->addItem(beer_type);
+    }
+
+    // Update fields based on newly selected beer
+    update_fields_on_beer_name();
+}
+
+void MainWindow::update_fields_on_beer_name() {
+    /*
+     * Update fields when a beer name is chosen.
+     */
+
+    std::string beer_name = ui->nameInput->currentText().toStdString();
+
+    if (!beer_name.empty()) {
+        // This fixes crashes when changing with rows selected.
+        QSignalBlocker type_input_signal_blocker(ui->typeInput);
+        QSignalBlocker brewery_input_signal_blocker(ui->breweryInput);
+
+        std::string input_beer = ui->nameInput->currentText().toStdString();
+        Beer selected_beer = Database::get_beer_by_name(storage, input_beer);
+        std::string beer_type = selected_beer.type;
+        std::string brewery = selected_beer.brewery;
+        double abv = selected_beer.abv;
+        double ibu = selected_beer.ibu;
+        int size = selected_beer.size;
+        int rating = selected_beer.rating;
+
+        ui->typeInput->setCurrentText(QString::fromStdString(beer_type));
+        ui->breweryInput->setCurrentText(QString::fromStdString(brewery));
+        ui->abvInput->setValue(abv);
+        ui->ibuInput->setValue(ibu);
+        ui->sizeInput->setValue(size);
+        ui->ratingInput->setValue(rating);
+    }
+}
+
+void MainWindow::update_favorite_type() {
+    /*
+     * Set the favoriteTypeOutput to the most common beer found in the database.
+     */
+
+    std::string fave_type = Calculate::favorite_type(storage);
+    ui->favoriteTypeOutput->setText(QString::fromStdString(fave_type));
 }

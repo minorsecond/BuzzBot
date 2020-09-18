@@ -3,7 +3,7 @@
 //
 
 #include "calculate.h"
-#include <math.h>
+#include <cmath>
 
 double Calculate::standard_drinks(double abv, int amount) {
     /*
@@ -13,7 +13,7 @@ double Calculate::standard_drinks(double abv, int amount) {
      */
 
     double alcohol_amt = oz_alcohol(abv, amount);
-    return round_to_one_decimal_point(alcohol_amt/.6);
+    return round_to_two_decimal_points(alcohol_amt / .6);
 }
 
 double Calculate::oz_alcohol(double abv, int amount) {
@@ -45,36 +45,34 @@ double Calculate::standard_drinks_remaining(const std::string& sex, double stand
         weekly_drinks_remaining = 7-standard_drinks_consumed;
     }
 
-    if (weekly_drinks_remaining < 0) {
-        weekly_drinks_remaining = 0;
-    }
-
     return weekly_drinks_remaining;
 }
 
-double Calculate::round_to_one_decimal_point(double val) {
+double Calculate::round_to_two_decimal_points(double val) {
     /*
-     * Round a double to one decimal point.
+     * Round a double to two decimal points.
      * @param val: The value that should be rounded.
      */
 
-    double value = floor((val * 10) + .5);
-    return value / 10;
+    return floor((val * 100) + .5)/100;
 }
 
 double Calculate::oz_alcohol_remaining(const std::string& sex, double oz_consumed) {
-    double oz_alcohol_remaining = 0;
+    /*
+     * Calculate the amount of alcohol the user has remaining based on their sex.
+     * @return: The amount of oz remaining for user.
+     */
+
+    // TODO: Allow using different standards and custom amounts
+
+    double oz_alcohol_remaining;
     if (sex == "male") {
         oz_alcohol_remaining = (0.6 * 14) - oz_consumed;
     } else {
         oz_alcohol_remaining = (0.6 * 7) - oz_consumed;
     }
 
-    if (oz_alcohol_remaining < 0) {
-        oz_alcohol_remaining = 0;
-    }
-
-    return round_to_one_decimal_point(oz_alcohol_remaining);
+    return round_to_two_decimal_points(oz_alcohol_remaining);
 }
 
 std::string Calculate::favorite_brewery(Storage storage) {
@@ -146,29 +144,76 @@ std::string Calculate::favorite_beer(Storage storage) {
 }
 
 double Calculate::mean_abv(Storage storage) {
-    double mean_abv = 0.0;
+    /*
+     * Calculate the mean ABV for all drinks.
+     * @param storage: A storage instance.
+     * @return: The average ABV at two decimal points.
+     */
+
     double abv_sum = 0.0;
     unsigned beer_count = 0;
     std::vector<Beer> all_beers = storage.get_all<Beer>();
 
-    for (auto beer : all_beers) {
+    for (const auto& beer : all_beers) {
         beer_count += 1;
         abv_sum += beer.abv;
     }
 
-    return round_to_one_decimal_point(abv_sum / beer_count);
+    return round_to_two_decimal_points(abv_sum / beer_count);
 }
 
 double Calculate::mean_ibu(Storage storage) {
-    double mean_ibu = 0.0;
+    /*
+     * Calculate the mean IBU of all beers in the database.
+     * @param storage: A storage instance.
+     * @return: The average IBU per beer.
+     */
+
     double ibu_sum = 0.0;
     unsigned beer_count = 0;
     std::vector<Beer> all_beers = storage.get_all<Beer>();
 
-    for (auto beer : all_beers) {
-        beer_count += 1;
+    for (const auto& beer : all_beers) {
+        // Ignore empty IBU values
+        if (beer.ibu > 0) {
+            beer_count += 1;
+        }
         ibu_sum += beer.ibu;
     }
 
     return ibu_sum / beer_count;
+}
+
+std::string Calculate::favorite_type(Storage storage) {
+    /*
+     * Calculates favorite beer type based on most common type in database
+     * @param Storage: a Storage instance
+     * @return favorite_type: The most common type in the database.
+     */
+
+    std::map<std::string, unsigned> type_counts;
+    std::vector<std::string> types;
+    std::string favorite_type;
+
+    std::vector<Beer> all_beers = storage.get_all<Beer>();
+
+    types.reserve(all_beers.size());
+    for (const auto& beer: all_beers) {
+        types.push_back(beer.type);
+    }
+    for (const auto& type : types) {
+        int brewery_count = std::count(types.begin(), types.end(), type);
+        type_counts[type] = brewery_count;
+    }
+
+    unsigned current_max = 0;
+
+    for (const auto & type_count : type_counts) {
+        if (type_count.second > current_max) {
+            favorite_type = type_count.first;
+            current_max = type_count.second;
+        }
+    }
+
+    return favorite_type;
 }
