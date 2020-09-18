@@ -242,11 +242,11 @@ void MainWindow::submit_button_clicked() {
 
 void MainWindow::reset_fields() {
     /*
-     * Clear user entry fields for entering a new beer.
+     * Clear user entry fields and table selection for entering a new beer.
      */
 
     std::cout << "clearing fields" << std::endl;
-
+    ui->drinkLogTable->clearSelection();
     update_beer_fields();
     update_fields_on_beer_name();
 }
