@@ -140,9 +140,17 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
     return filtered_drinks;
 }
 
-Drink Database::get_beer_by_name(Storage storage, std::string beer_name) {
-    Drink beer_by_name = storage.get_all<Drink>(where(c(&Drink::name) == std::move(beer_name))).at(0);
-    return beer_by_name;
+Drink Database::get_drink_by_name(Storage storage, std::string beer_name) {
+    /*
+     * Get a drink by its name.
+     * @param storage: A Storage instance
+     * @param drink_name: Name of drink to query
+     * @return drink_by_name: A Drink matching the name.
+     */
+
+    // TODO: Filter by alcohol_type that should be passed in by selected tabwidget tab
+    Drink drink_by_name = storage.get_all<Drink>(where(c(&Drink::name) == std::move(beer_name))).at(0);
+    return drink_by_name;
 }
 
 std::vector<Drink> Database::get_beers_by_type(Storage storage, std::string beer_type) {

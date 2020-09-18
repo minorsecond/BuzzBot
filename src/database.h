@@ -58,7 +58,7 @@ public:
     static void update(Storage storage, const Drink& beer);
     static std::vector<Drink> filter(const std::string& filter_type, const std::string& filter_text, Storage storage);
     static void write_db_to_disk(Storage storage);
-    static Drink get_beer_by_name(Storage storage, std::string beer_name);
+    static Drink get_drink_by_name(Storage storage, std::string beer_name);
     static std::vector<Drink> get_beers_by_type(Storage storage, std::string beer_type);
     static std::vector<Drink> get_beers_by_brewery(Storage storage, std::string brewery);
     static int get_version(Storage storage);
