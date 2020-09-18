@@ -113,7 +113,7 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
         filtered_beers = storage.get_all<Drink>(where(c(&Drink::type) == filter_text));
     } else if (filter_type == "Subtype") {
         filtered_beers = storage.get_all<Drink>(where(c(&Drink::subtype) == filter_text));
-    } else if (filter_type == "Brewery") {
+    } else if (filter_type == "Maker") {
         filtered_beers = storage.get_all<Drink>(where(c(&Drink::brewery) == filter_text));
     } else if (filter_type == "Date") {
         int year = stoi(filter_text.substr(6, 8));
@@ -167,6 +167,25 @@ int Database::increment_version(Storage storage, int current_version) {
         storage.pragma.user_version(storage.pragma.user_version() + 1);
         storage.sync_schema(true);
         std::cout << "Migrated DB from version 0 to version " << storage.pragma.user_version() << std::endl;
+    } else if (get_version(storage) < 2 && current_version == 2) {
+        storage.pragma.user_version(2);
+        storage.sync_schema(true);
+        std::cout << "Migrated DB from version " << get_version(storage) << " to "
+        << storage.pragma.user_version() << std::endl;
     }
     return storage.pragma.user_version();
+}
+
+void Database::populate_maker_column() {
+    /*
+     * Copy brewery column to the new maker column. The brewery column will be deleted later.
+     */
+    Storage storage = initStorage(path());
+    if (get_version(storage) == 2) {  // Old db version
+        std::vector<Drink> all_drinks = storage.get_all<Drink>();
+        for (auto drink : all_drinks) {
+            drink.maker = drink.brewery;
+            update(storage, drink);
+        }
+    }
 }
