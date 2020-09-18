@@ -160,7 +160,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->breweryInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(brewery_input_changed(const QString&)));
 
     // Update fields to match beer that comes first alphabetically
-    update_fields_on_beer_name();
+    reset_fields();
 }
 
 MainWindow::~MainWindow()
@@ -245,10 +245,20 @@ void MainWindow::reset_fields() {
      * Clear user entry fields and table selection for entering a new beer.
      */
 
+    std::string notes;
+
     std::cout << "clearing fields" << std::endl;
     ui->drinkLogTable->clearSelection();
     update_beer_fields();
     update_fields_on_beer_name();
+
+    // Set notes to the notes for beer in the name input
+    notes = get_latest_notes_for_beer(ui->nameInput->currentText().toStdString());
+    ui->notesInput->setText(QString::fromStdString(notes));
+
+    // Set datepicker to today's date
+    QDate todays_date = QDate::currentDate();
+    ui->drinkDateInput->setDate(todays_date);
 }
 
 void MainWindow::update_table() {
@@ -333,18 +343,7 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
 
         Beer beer = Database::read_row(row_to_get, storage);
 
-        // Get latest notes entered for the selected beer
-        std::vector<Beer> beers_by_name = Database::filter("Name", beer.name, storage);
-        unsigned temp_id = 0;
-        std::string notes;
-        for (const auto& beer_for_notes : beers_by_name) {
-            if (beer_for_notes.id > temp_id) {
-                temp_id = beer_for_notes.id;
-                if (!beer_for_notes.notes.empty()) {
-                    notes = beer_for_notes.notes;
-                }
-            }
-        }
+        std::string notes = get_latest_notes_for_beer(beer.name);
 
         std::ostringstream month_padded;
         std::ostringstream day_padded;
@@ -890,4 +889,28 @@ void MainWindow::update_favorite_type() {
 
     std::string fave_type = Calculate::favorite_type(storage);
     ui->favoriteTypeOutput->setText(QString::fromStdString(fave_type));
+}
+
+std::string MainWindow::get_latest_notes_for_beer(const std::string& name) {
+    /*
+     * Get the latest entered notes for a specific beer.
+     * @param name: The name to retrieve the notes for.
+     * @return notes: String containing beer notes.
+     */
+
+    std::string notes;
+
+    // Get latest notes entered for the selected beer
+    std::vector<Beer> beers_by_name = Database::filter("Name", name, storage);
+    unsigned temp_id = 0;
+    for (const auto& beer_for_notes : beers_by_name) {
+        if (beer_for_notes.id > temp_id) {
+            temp_id = beer_for_notes.id;
+            if (!beer_for_notes.notes.empty()) {
+                notes = beer_for_notes.notes;
+            }
+        }
+    }
+
+    return notes;
 }
