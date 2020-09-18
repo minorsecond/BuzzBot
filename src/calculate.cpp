@@ -45,10 +45,6 @@ double Calculate::standard_drinks_remaining(const std::string& sex, double stand
         weekly_drinks_remaining = 7-standard_drinks_consumed;
     }
 
-    if (weekly_drinks_remaining < 0) {
-        weekly_drinks_remaining = 0;
-    }
-
     return weekly_drinks_remaining;
 }
 
@@ -74,10 +70,6 @@ double Calculate::oz_alcohol_remaining(const std::string& sex, double oz_consume
         oz_alcohol_remaining = (0.6 * 14) - oz_consumed;
     } else {
         oz_alcohol_remaining = (0.6 * 7) - oz_consumed;
-    }
-
-    if (oz_alcohol_remaining < 0) {
-        oz_alcohol_remaining = 0;
     }
 
     return round_to_two_decimal_points(oz_alcohol_remaining);
@@ -182,7 +174,10 @@ double Calculate::mean_ibu(Storage storage) {
     std::vector<Beer> all_beers = storage.get_all<Beer>();
 
     for (const auto& beer : all_beers) {
-        beer_count += 1;
+        // Ignore empty IBU values
+        if (beer.ibu > 0) {
+            beer_count += 1;
+        }
         ibu_sum += beer.ibu;
     }
 
