@@ -7,6 +7,7 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment ve
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     message("Building debug")
+    add_compile_options(-Wall)
 elseif(CMAKE_BUILD_TYPE MATCHES Release)
     message(STATUS "Building release")
     add_compile_options(-Wall -gdwarf-2)
