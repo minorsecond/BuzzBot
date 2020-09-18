@@ -30,7 +30,7 @@ private:
     void update_stat_panel();
     void update_drinks_this_week(double standard_drinks);
     void update_standard_drinks_left_this_week(double std_drinks_consumed);
-    double update_oz_alcohol_consumed_this_week(const std::vector<Beer>& beers_this_week);
+    double update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week);
     void update_oz_alcohol_remaining(double oz_alcohol_consumed);
     void update_favorite_brewery();
     void update_favorite_beer();
@@ -38,7 +38,7 @@ private:
     void update_mean_abv();
     void update_mean_ibu();
     void update_fields_on_beer_name();
-    std::string get_latest_notes_for_beer(const std::string& name);
+    std::string get_latest_notes(const std::string& name);
 
 private slots:
     void submit_button_clicked();

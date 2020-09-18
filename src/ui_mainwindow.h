@@ -1018,7 +1018,7 @@ public:
         beerSizeLabel->setText(QCoreApplication::translate("MainWindow", "Size (oz)", nullptr));
         beerRatingLabel->setText(QCoreApplication::translate("MainWindow", "Rating", nullptr));
         beerAbvLabel->setText(QCoreApplication::translate("MainWindow", "ABV", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(beerTab), QCoreApplication::translate("MainWindow", "Beer", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(beerTab), QCoreApplication::translate("MainWindow", "Drink", nullptr));
         liquorRatingLabel->setText(QCoreApplication::translate("MainWindow", "Rating", nullptr));
         liquorSizeLabel->setText(QCoreApplication::translate("MainWindow", "Size (oz)", nullptr));
         liquorAbvLabel->setText(QCoreApplication::translate("MainWindow", "ABV", nullptr));
