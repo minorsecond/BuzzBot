@@ -176,6 +176,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->beerBreweryInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(brewery_input_changed(const QString&)));
     connect(ui->liquorNameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
     connect(ui->liquorTypeInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(type_input_changed(const QString&)));
+    connect(ui->liquorDistillerInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(brewery_input_changed(const QString&)));
 
     // Update fields to match beer that comes first alphabetically
     reset_fields();
@@ -236,6 +237,10 @@ void MainWindow::submit_button_clicked() {
         drink_size = ui->liquorSizeInput->value();
         rating = ui->liquorRatingInput->value();
         notes = ui->liquorNotesInput->toPlainText().toStdString();
+    } else if (alcohol_type == "Wine") {
+        //TODO: Finish this
+    } else {
+        std::cout << "Somehow got illegal alcohol type." << std::endl;
     }
 
     // Prevent blank submissions
@@ -427,10 +432,9 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
         else
             ui->deleteRowButton->setDisabled(true);
 
-        std::string alcohol_type = get_current_tab();
+        std::string notes;
 
         Drink drink_at_row = Database::read_row(row_to_get, storage);
-        std::string notes = get_latest_notes(drink_at_row.name, alcohol_type);
 
         std::ostringstream month_padded;
         std::ostringstream day_padded;
@@ -440,8 +444,9 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
         std::string date_from_db = day_padded.str() + "/" + month_padded.str() + "/" + std::to_string(drink_at_row.drink_year);
         QDate date = QDate::fromString(QString::fromUtf8(date_from_db.c_str()), "dd/MM/yyyy");
 
-        if (drink_at_row.alcohol_type == "Beer" && alcohol_type == "Beer") {
+        if (drink_at_row.alcohol_type == "Beer") {
             // Only update the beer fields if the user is currently on the beer tab
+            notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
             ui->beerDateInput->setDate(date);
             ui->beerNameInput->setCurrentText(drink_at_row.name.c_str());
             ui->beerTypeInput->setCurrentText(drink_at_row.type.c_str());
@@ -452,7 +457,11 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
             ui->beerSizeInput->setValue(drink_at_row.size);
             ui->beerRatingInput->setValue(drink_at_row.rating);
             ui->beerNotesInput->setText(notes.c_str());
-        } else if (drink_at_row.alcohol_type == "Liquor" && alcohol_type == "Liquor") {
+
+            // Switch to the beer tab
+            ui->tabWidget->setCurrentIndex(0);
+        } else if (drink_at_row.alcohol_type == "Liquor") {
+            notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
             ui->liquorDateInput->setDate(date);
             ui->liquorNameInput->setCurrentText(drink_at_row.name.c_str());
             ui->liquorTypeInput->setCurrentText(drink_at_row.type.c_str());
@@ -462,8 +471,11 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
             ui->liquorSizeInput->setValue(drink_at_row.size);
             ui->liquorRatingInput->setValue(drink_at_row.rating);
             ui->liquorNotesInput->setText(notes.c_str());
+
+            // Switch to the liquor tab
+            ui->tabWidget->setCurrentIndex(1);
         } else {
-            std::cout << "Alcohol type: " << alcohol_type << std::endl;
+            std::cout << "Not updating fields because not in correct tab." << std::endl;
         }
     } else {
         std::cout << "Empty table." << std::endl;
@@ -957,33 +969,65 @@ void MainWindow::brewery_input_changed(const QString&) {
      *  Change the beer attributes based on the brewery selected in the breweryInput field.
      */
 
-    std::string input_brewery = ui->beerBreweryInput->currentText().toStdString();
-    std::vector<Drink> selected_beers = Database::get_beers_by_brewery(storage, input_brewery);
-    std::set<QString> beer_names;
-    std::set<QString> types;
+    std::string alcohol_type = get_current_tab();
 
-    // This fixes crashes when changing with rows selected.
-    QSignalBlocker name_input_signal_blocker(ui->beerNameInput);
-    QSignalBlocker type_input_signal_blocker(ui->beerTypeInput);
+    if (alcohol_type == "Beer") {
+        std::string input_brewery = ui->beerBreweryInput->currentText().toStdString();
+        std::vector<Drink> selected_beers = Database::get_beers_by_brewery(storage, input_brewery);
+        std::set<QString> beer_names;
+        std::set<QString> types;
 
-    ui->beerAbvInput->setValue(0.0);
-    ui->beerIbuInput->setValue(0.0);
-    ui->beerSizeInput->setValue(0);
-    ui->beerRatingInput->setValue(0);
-    ui->beerNameInput->clear();
-    ui->beerTypeInput->clear();
+        // This fixes crashes when changing with rows selected.
+        QSignalBlocker name_input_signal_blocker(ui->beerNameInput);
+        QSignalBlocker type_input_signal_blocker(ui->beerTypeInput);
 
-    for (const auto& selected_beer : selected_beers) {
-        beer_names.insert(QString::fromStdString(selected_beer.name));
-        types.insert(QString::fromStdString(selected_beer.type));
-    }
+        ui->beerAbvInput->setValue(0.0);
+        ui->beerIbuInput->setValue(0.0);
+        ui->beerSizeInput->setValue(0);
+        ui->beerRatingInput->setValue(0);
+        ui->beerNameInput->clear();
+        ui->beerTypeInput->clear();
 
-    for (const auto& name : beer_names) {
-        ui->beerNameInput->addItem(name);
-    }
+        for (const auto& selected_beer : selected_beers) {
+            beer_names.insert(QString::fromStdString(selected_beer.name));
+            types.insert(QString::fromStdString(selected_beer.type));
+        }
 
-    for (const auto& beer_type : types) {
-        ui->beerTypeInput->addItem(beer_type);
+        for (const auto& name : beer_names) {
+            ui->beerNameInput->addItem(name);
+        }
+
+        for (const auto& beer_type : types) {
+            ui->beerTypeInput->addItem(beer_type);
+        }
+    } else if (alcohol_type == "Liquor") {
+        std::string input_distillery = ui->liquorDistillerInput->currentText().toStdString();
+        std::vector<Drink> selected_drinks = Database::get_beers_by_brewery(storage, input_distillery);
+        std::set<QString> liquor_names;
+        std::set<QString> types;
+
+        // This fixes crashes when changing with rows selected.
+        QSignalBlocker name_input_signal_blocker(ui->liquorNameInput);
+        QSignalBlocker type_input_signal_blocker(ui->liquorTypeInput);
+
+        ui->liquorAbvInput->setValue(0.0);
+        ui->liquorSizeInput->setValue(0);
+        ui->liquorRatingInput->setValue(0);
+        ui->liquorNameInput->clear();
+        ui->liquorTypeInput->clear();
+
+        for (const auto& selected_drink : selected_drinks) {
+            liquor_names.insert(QString::fromStdString(selected_drink.name));
+            types.insert(QString::fromStdString(selected_drink.type));
+        }
+
+        for (const auto& name : liquor_names) {
+            ui->liquorNameInput->addItem(name);
+        }
+
+        for (const auto& liquor_type : types) {
+            ui->liquorTypeInput->addItem(liquor_type);
+        }
     }
 
     // Update fields based on newly selected beer
