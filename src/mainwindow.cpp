@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     program_options(true);
 
     // Upgrade DB version
+    // TODO: Remove the brewery column from database at DB version 3
     Database::increment_version(storage, 2);
     Database::populate_maker_column();  // Copy brewery column to maker if database version is 2
 
@@ -243,7 +244,7 @@ void MainWindow::submit_button_clicked() {
 
     // Prevent blank submissions
     if (drink_name.empty() || abv == 0.0) {
-        QMessageBox::critical(nullptr, "Error", "Please enter beer name and ABV.");
+        QMessageBox::critical(nullptr, "Error", "Please enter drink name and ABV.");
     } else {
         Drink beer{
             -1,
@@ -696,7 +697,6 @@ void MainWindow::update_stat_panel() {
         standard_drinks += Calculate::standard_drinks(beer.abv, beer.size);
     }
 
-    // TODO: refactor this
     update_drinks_this_week(standard_drinks);
     update_standard_drinks_left_this_week(standard_drinks);
     double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week);
