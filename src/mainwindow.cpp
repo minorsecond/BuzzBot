@@ -176,21 +176,47 @@ void MainWindow::submit_button_clicked() {
     QItemSelectionModel *selection_model = ui->drinkLogTable->selectionModel();
     QModelIndexList selected_rows = selection_model->selectedRows();
 
-    int drink_year = ui->beerDateInput->date().year();
-    int drink_month = ui->beerDateInput->date().month();
-    int drink_day = ui->beerDateInput->date().day();
-    std::string beer_name = ui->beerNameInput->currentText().toStdString();
-    std::string beer_type = ui->beerTypeInput->currentText().toStdString();
-    std::string beer_subtype = ui->beerSubtypeInput->currentText().toStdString();
-    std::string brewery_name = ui->beerBreweryInput->currentText().toStdString();
-    double beer_ibu = ui->beerIbuInput->value();
-    double beer_abv = ui->beerAbvInput->value();
-    int beer_size = ui->beerSizeInput->value();
-    int rating = ui->beerRatingInput->value();
-    std::string notes = ui->beerNotesInput->toPlainText().toStdString();
+    int drink_year;
+    int drink_month;
+    int drink_day;
+    std::string drink_name;
+    std::string beer_type;
+    std::string beer_subtype;
+    std::string brewery_name;
+    double abv;
+    double beer_ibu;
+    int drink_size;
+    int rating;
+    std::string notes;
+
+    // Get current tab selected
+    std::string alcohol_type;
+    int selected_tab_index = ui->tabWidget->currentIndex();
+    if (selected_tab_index == 0) {
+        alcohol_type = "Beer";
+    } else if (selected_tab_index == 1) {
+        alcohol_type = "Liquor";
+    } else if (selected_tab_index == 2) {
+        alcohol_type = "Wine";
+    }
+
+    if (alcohol_type == "Beer") {
+        drink_year = ui->beerDateInput->date().year();
+        drink_month = ui->beerDateInput->date().month();
+        drink_day = ui->beerDateInput->date().day();
+        drink_name = ui->beerNameInput->currentText().toStdString();
+        beer_type = ui->beerTypeInput->currentText().toStdString();
+        beer_subtype = ui->beerSubtypeInput->currentText().toStdString();
+        brewery_name = ui->beerBreweryInput->currentText().toStdString();
+        beer_ibu = ui->beerIbuInput->value();
+        abv = ui->beerAbvInput->value();
+        drink_size = ui->beerSizeInput->value();
+        rating = ui->beerRatingInput->value();
+        notes = ui->beerNotesInput->toPlainText().toStdString();
+    }
 
     // Prevent blank submissions
-    if (beer_name.empty() || beer_abv == 0.0) {
+    if (drink_name.empty() || abv == 0.0) {
         QMessageBox::critical(nullptr, "Error", "Please enter beer name and ABV.");
     } else {
         Beer beer{
@@ -198,16 +224,16 @@ void MainWindow::submit_button_clicked() {
             drink_year,
             drink_month,
             drink_day,
-            beer_name,
+            drink_name,
             beer_type,
             beer_subtype,
             brewery_name,
-            beer_abv,
+            abv,
             beer_ibu,
-            beer_size,
+            drink_size,
             rating,
             notes,
-            "placeholder"
+            alcohol_type
         };
 
         // Handle updating existing rows
@@ -226,14 +252,14 @@ void MainWindow::submit_button_clicked() {
             beer.timestamp = timestamp;
             Database::update(storage, beer);
         } else {
-            // Get a new timestamp
+            // New row. Get a new timestamp
             std::string timestamp = storage.select(sqlite_orm::datetime("now")).front();
             beer.timestamp = timestamp;
             Database::write(beer, storage);
         }
         update_table();
         if (selected_rows.empty()) {
-            reset_fields();
+            reset_fields();  // Reset fields if not updating a row
         }
         update_beer_fields();
         update_stat_panel();
@@ -885,8 +911,8 @@ void MainWindow::update_fields_on_beer_name() {
 
     // Set notes to the notes for beer in the name input
     std::string notes;
-    notes = get_latest_notes_for_beer(ui->nameInput->currentText().toStdString());
-    ui->notesInput->setText(QString::fromStdString(notes));
+    notes = get_latest_notes_for_beer(ui->beerNameInput->currentText().toStdString());
+    ui->beerNotesInput->setText(QString::fromStdString(notes));
 }
 
 void MainWindow::update_favorite_type() {
