@@ -45,10 +45,6 @@ double Calculate::standard_drinks_remaining(const std::string& sex, double stand
         weekly_drinks_remaining = 7-standard_drinks_consumed;
     }
 
-    if (weekly_drinks_remaining < 0) {
-        weekly_drinks_remaining = 0;
-    }
-
     return weekly_drinks_remaining;
 }
 
@@ -74,10 +70,6 @@ double Calculate::oz_alcohol_remaining(const std::string& sex, double oz_consume
         oz_alcohol_remaining = (0.6 * 14) - oz_consumed;
     } else {
         oz_alcohol_remaining = (0.6 * 7) - oz_consumed;
-    }
-
-    if (oz_alcohol_remaining < 0) {
-        oz_alcohol_remaining = 0;
     }
 
     return round_to_two_decimal_points(oz_alcohol_remaining);

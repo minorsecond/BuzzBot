@@ -667,6 +667,13 @@ void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consume
 
     double std_drinks_left = Calculate::standard_drinks_remaining(options.sex, std_drinks_consumed);
     ui->drinksLeftOutput->setText(QString::fromStdString(double_to_string(std_drinks_left)));
+
+    // Set standard drinks remaining text to red if negative
+    if (std_drinks_left < 0) {
+        ui->drinksLeftOutput->setStyleSheet("QLabel {color : red;}");
+    } else {
+        ui->drinksLeftOutput->setStyleSheet("");
+    }
 }
 
 void MainWindow::reset_table_sort() {
@@ -705,6 +712,13 @@ void MainWindow::update_oz_alcohol_remaining(double oz_alcohol_consumed) {
 
     double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(options.sex, oz_alcohol_consumed);
     ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(double_to_string(oz_alcohol_remaining)));
+
+    // Set oz alcohol remaining text to red if negative
+    if (oz_alcohol_remaining < 0) {
+        ui->ozAlcoholRemainingOutput->setStyleSheet("QLabel {color : red;}");
+    } else {
+        ui->ozAlcoholRemainingOutput->setStyleSheet("");
+    }
 }
 
 void MainWindow::update_favorite_brewery() {
