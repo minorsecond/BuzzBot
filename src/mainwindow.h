@@ -25,6 +25,7 @@ private:
     static std::string double_to_string(double input_double);
     void populate_filter_menus(const std::string& filter_type);
     void update_beer_fields();
+    void update_liquor_fields();
     static std::string settings_path();
     void program_options(bool write);
     void update_stat_panel();
