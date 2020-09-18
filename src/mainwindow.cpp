@@ -515,7 +515,8 @@ void MainWindow::update_beer_fields() {
     std::set<QString> breweries;
     std::set<QString> types;
     std::set<QString> names;
-    std::vector<Drink> all_beers = Database::read(Database::path(), storage);
+    //std::vector<Drink> all_beers = Database::read(Database::path(), storage);
+    std::vector<Drink> all_beers = Database::filter("Alcohol Type", "Beer", storage);
 
     // Block signals to avoid crashing
     QSignalBlocker brewery_signal_blocker(ui->beerBreweryInput);
