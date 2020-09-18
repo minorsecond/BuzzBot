@@ -86,7 +86,7 @@ std::string Calculate::favorite_brewery(Storage storage) {
     std::vector<std::string> breweries;
     std::string favorite_brewery;
 
-    std::vector<Beer> all_beers = storage.get_all<Beer>();
+    std::vector<Drink> all_beers = storage.get_all<Drink>();
 
     breweries.reserve(all_beers.size());
     for (const auto& beer: all_beers) {
@@ -120,7 +120,7 @@ std::string Calculate::favorite_beer(Storage storage) {
     std::vector<std::string> beers;
     std::string favorite_beer;
 
-    std::vector<Beer> all_beers = storage.get_all<Beer>();
+    std::vector<Drink> all_beers = storage.get_all<Drink>();
 
     beers.reserve(all_beers.size());
     for (const auto& beer: all_beers) {
@@ -152,7 +152,7 @@ double Calculate::mean_abv(Storage storage) {
 
     double abv_sum = 0.0;
     unsigned beer_count = 0;
-    std::vector<Beer> all_beers = storage.get_all<Beer>();
+    std::vector<Drink> all_beers = storage.get_all<Drink>();
 
     for (const auto& beer : all_beers) {
         beer_count += 1;
@@ -171,7 +171,7 @@ double Calculate::mean_ibu(Storage storage) {
 
     double ibu_sum = 0.0;
     unsigned beer_count = 0;
-    std::vector<Beer> all_beers = storage.get_all<Beer>();
+    std::vector<Drink> all_beers = storage.get_all<Drink>();
 
     for (const auto& beer : all_beers) {
         // Ignore empty IBU values
@@ -195,7 +195,7 @@ std::string Calculate::favorite_type(Storage storage) {
     std::vector<std::string> types;
     std::string favorite_type;
 
-    std::vector<Beer> all_beers = storage.get_all<Beer>();
+    std::vector<Drink> all_beers = storage.get_all<Drink>();
 
     types.reserve(all_beers.size());
     for (const auto& beer: all_beers) {

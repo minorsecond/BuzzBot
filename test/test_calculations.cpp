@@ -54,12 +54,12 @@ TEST_CASE("Mean ABV", "[Drink Calculations]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
-                "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
+    Drink mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
+    Drink etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
+                 "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
     storage_1.insert(mosaic);
@@ -82,12 +82,12 @@ TEST_CASE("Mean IBU", "[Drink Calculations]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
-                "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
+    Drink mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
+    Drink etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
+                 "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
     storage_1.insert(mosaic);
@@ -110,12 +110,12 @@ TEST_CASE("Favorite Brewery", "[Favorite Calculations]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
-                "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
+    Drink mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
+    Drink etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
+                 "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
     storage_1.insert(mosaic);
@@ -126,7 +126,7 @@ TEST_CASE("Favorite Brewery", "[Favorite Calculations]") {
     REQUIRE(favorite_brewery == "Roughtail Brewing");
 }
 
-TEST_CASE("Favorite Beer", "[Favorite Calculations]") {
+TEST_CASE("Favorite Drink", "[Favorite Calculations]") {
     std::string current_path = std::filesystem::current_path();
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
@@ -138,12 +138,12 @@ TEST_CASE("Favorite Beer", "[Favorite Calculations]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
-                "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
+    Drink mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
+    Drink etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
+                 "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
     storage_1.insert(mosaic);
@@ -166,12 +166,12 @@ TEST_CASE("Favorite Type", "[Favorite Calculations]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
-                "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 10, "Old Rasputin", "Russian Imperial Stout", "",
-                "North Coast Brewing", 9.0, 75.0, 12, 8, ""};
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
+    Drink mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
+    Drink etrwo2{-1, 2020, 9, 10, "Old Rasputin", "Russian Imperial Stout", "",
+                 "North Coast Brewing", 9.0, 75.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
     storage_1.insert(mosaic);

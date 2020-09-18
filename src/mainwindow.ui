@@ -567,7 +567,7 @@
       </property>
       <widget class="QWidget" name="beerTab">
        <attribute name="title">
-        <string>Beer</string>
+        <string>Drink</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_7">
         <item row="0" column="0">

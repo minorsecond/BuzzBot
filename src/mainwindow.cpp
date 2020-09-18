@@ -33,6 +33,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Set size hints
     ui->beerDateInput->setProperty("sizeHint", QVariant(QSizeF(241, 22)));
 
+    // Set current tab to Beer tab
+    ui->tabWidget->setCurrentIndex(0);
+
     // Add menubar items
     auto * preferences_action = new QAction("Preferences");
     auto * about_action = new QAction("About");
@@ -77,6 +80,8 @@ MainWindow::MainWindow(QWidget *parent)
                                   "}";
 
     ui->beerDateInput->setStyleSheet(QString::fromStdString(stylesheet_text));
+    ui->liquorDateInput->setStyleSheet(QString::fromStdString(stylesheet_text));
+    ui->wineDateInput->setStyleSheet(QString::fromStdString(stylesheet_text));
 
     Database::write_db_to_disk(storage);
 
@@ -85,12 +90,20 @@ MainWindow::MainWindow(QWidget *parent)
     // Set up button and input states
     ui->deleteRowButton->setDisabled(true);
     ui->beerNameInput->setDuplicatesEnabled(false);
+    ui->liquorNameInput->setDuplicatesEnabled(false);
+    ui->wineNameInput->setDuplicatesEnabled(false);
     ui->beerTypeInput->setDuplicatesEnabled(false);
+    ui->liquorTypeInput->setDuplicatesEnabled(false);
+    ui->wineTypeInput->setDuplicatesEnabled(false);
     ui->beerBreweryInput->setDuplicatesEnabled(false);
+    ui->liquorDistillerInput->setDuplicatesEnabled(false);
+    ui->wineryInput->setDuplicatesEnabled(false);
 
     // Set datepicker to today's date
     QDate todays_date = QDate::currentDate();
     ui->beerDateInput->setDate(todays_date);
+    ui->liquorDateInput->setDate(todays_date);
+    ui->wineDateInput->setDate(todays_date);
 
     // Enable this on release
     ui->drinkLogTable->setRowCount(0);
@@ -193,14 +206,14 @@ void MainWindow::submit_button_clicked() {
     std::string alcohol_type;
     int selected_tab_index = ui->tabWidget->currentIndex();
     if (selected_tab_index == 0) {
-        alcohol_type = "Beer";
+        alcohol_type = "Drink";
     } else if (selected_tab_index == 1) {
         alcohol_type = "Liquor";
     } else if (selected_tab_index == 2) {
         alcohol_type = "Wine";
     }
 
-    if (alcohol_type == "Beer") {
+    if (alcohol_type == "Drink") {
         drink_year = ui->beerDateInput->date().year();
         drink_month = ui->beerDateInput->date().month();
         drink_day = ui->beerDateInput->date().day();
@@ -219,7 +232,7 @@ void MainWindow::submit_button_clicked() {
     if (drink_name.empty() || abv == 0.0) {
         QMessageBox::critical(nullptr, "Error", "Please enter beer name and ABV.");
     } else {
-        Beer beer{
+        Drink beer{
             -1,
             drink_year,
             drink_month,
@@ -281,7 +294,7 @@ void MainWindow::reset_fields() {
     update_fields_on_beer_name();
 
     // Set notes to the notes for beer in the name input
-    beer_notes = get_latest_notes_for_beer(ui->beerNameInput->currentText().toStdString());
+    beer_notes = get_latest_notes(ui->beerNameInput->currentText().toStdString());
     ui->beerNotesInput->setText(QString::fromStdString(beer_notes));
 
     // Set datepicker to today's date
@@ -300,7 +313,7 @@ void MainWindow::update_table() {
     std::string filter_category = ui->filterCategoryInput->currentText().toStdString();
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
 
-    std::vector<Beer> beers = Database::filter(filter_category, filter_text, storage);
+    std::vector<Drink> beers = Database::filter(filter_category, filter_text, storage);
 
     ui->drinkLogTable->setRowCount(0);
     for (const auto& beer : beers) {
@@ -369,9 +382,9 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
         else
             ui->deleteRowButton->setDisabled(true);
 
-        Beer beer = Database::read_row(row_to_get, storage);
+        Drink beer = Database::read_row(row_to_get, storage);
 
-        std::string notes = get_latest_notes_for_beer(beer.name);
+        std::string notes = get_latest_notes(beer.name);
 
         std::ostringstream month_padded;
         std::ostringstream day_padded;
@@ -425,7 +438,7 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
     // This fixes crashes when changing filters with rows selected.
     QSignalBlocker filterTextInputSignalBlocker(ui->filterTextInput);
 
-    std::vector<Beer> all_beers = Database::read(Database::path(), storage);
+    std::vector<Drink> all_beers = Database::read(Database::path(), storage);
 
     ui->filterTextInput->clear();
 
@@ -500,7 +513,7 @@ void MainWindow::update_beer_fields() {
     std::set<QString> breweries;
     std::set<QString> types;
     std::set<QString> names;
-    std::vector<Beer> all_beers = Database::read(Database::path(), storage);
+    std::vector<Drink> all_beers = Database::read(Database::path(), storage);
 
     // Block signals to avoid crashing
     QSignalBlocker brewery_signal_blocker(ui->beerBreweryInput);
@@ -658,7 +671,7 @@ void MainWindow::update_stat_panel() {
     std::string day = date::format("%d", start_date.day());
     std::string query_date = day + "/" + month + "/" + year;
 
-    std::vector<Beer> beers_this_week = Database::filter("After Date", query_date, storage);
+    std::vector<Drink> beers_this_week = Database::filter("After Date", query_date, storage);
 
     for (const auto& beer : beers_this_week) {
         standard_drinks += Calculate::standard_drinks(beer.abv, beer.size);
@@ -714,7 +727,7 @@ void MainWindow::reset_table_sort() {
     ui->drinkLogTable->sortItems(0, Qt::DescendingOrder);
 }
 
-double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>& beers_this_week) {
+double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week) {
     /*
      * Update the Oz. alcohol consumed output label to the total amount alcohol consumed this week.
      */
@@ -810,7 +823,7 @@ void MainWindow::type_input_changed(const QString &) {
 
     std::string input_type = ui->beerTypeInput->currentText().toStdString();
     std::cout << input_type << std::endl;
-    std::vector<Beer> selected_beers = Database::get_beers_by_type(storage, input_type);
+    std::vector<Drink> selected_beers = Database::get_beers_by_type(storage, input_type);
     std::set<QString> beer_names;
     std::set<QString> brewery_names;
 
@@ -848,7 +861,7 @@ void MainWindow::brewery_input_changed(const QString&) {
      */
 
     std::string input_brewery = ui->beerBreweryInput->currentText().toStdString();
-    std::vector<Beer> selected_beers = Database::get_beers_by_brewery(storage, input_brewery);
+    std::vector<Drink> selected_beers = Database::get_beers_by_brewery(storage, input_brewery);
     std::set<QString> beer_names;
     std::set<QString> types;
 
@@ -893,7 +906,7 @@ void MainWindow::update_fields_on_beer_name() {
         QSignalBlocker brewery_input_signal_blocker(ui->beerBreweryInput);
 
         std::string input_beer = ui->beerNameInput->currentText().toStdString();
-        Beer selected_beer = Database::get_beer_by_name(storage, input_beer);
+        Drink selected_beer = Database::get_beer_by_name(storage, input_beer);
         std::string beer_type = selected_beer.type;
         std::string brewery = selected_beer.brewery;
         double abv = selected_beer.abv;
@@ -911,7 +924,7 @@ void MainWindow::update_fields_on_beer_name() {
 
     // Set notes to the notes for beer in the name input
     std::string notes;
-    notes = get_latest_notes_for_beer(ui->beerNameInput->currentText().toStdString());
+    notes = get_latest_notes(ui->beerNameInput->currentText().toStdString());
     ui->beerNotesInput->setText(QString::fromStdString(notes));
 }
 
@@ -924,7 +937,7 @@ void MainWindow::update_favorite_type() {
     ui->favoriteTypeOutput->setText(QString::fromStdString(fave_type));
 }
 
-std::string MainWindow::get_latest_notes_for_beer(const std::string& name) {
+std::string MainWindow::get_latest_notes(const std::string& name) {
     /*
      * Get the latest entered notes for a specific beer.
      * @param name: The name to retrieve the notes for.
@@ -933,14 +946,35 @@ std::string MainWindow::get_latest_notes_for_beer(const std::string& name) {
 
     std::string notes;
 
-    // Get latest notes entered for the selected beer
-    std::vector<Beer> beers_by_name = Database::filter("Name", name, storage);
+    // Get latest notes entered for the selected drink
+    // TODO: Refactor the filter code. This whole function could be reduced by allowing filtering on name and alc type.
+    std::vector<Drink> drinks_by_name = Database::filter("Name", name, storage);
     unsigned temp_id = 0;
-    for (const auto& beer_for_notes : beers_by_name) {
-        if (beer_for_notes.id > temp_id) {
-            temp_id = beer_for_notes.id;
-            if (!beer_for_notes.notes.empty()) {
-                notes = beer_for_notes.notes;
+    if (ui->tabWidget->currentIndex() == 0) {  // Update beer notes
+        for (const auto& beer_for_notes : drinks_by_name) {
+            if (beer_for_notes.id > temp_id) {
+                temp_id = beer_for_notes.id;
+                if (!beer_for_notes.notes.empty()) {
+                    notes = beer_for_notes.notes;
+                }
+            }
+        }
+    } else if (ui->tabWidget->currentIndex() == 1) {  // Update liquor notes
+        for (const auto& liquor_for_notes : drinks_by_name) {
+            if (liquor_for_notes.id > temp_id) {
+                temp_id = liquor_for_notes.id;
+                if (!liquor_for_notes.notes.empty()) {
+                    notes = liquor_for_notes.notes;
+                }
+            }
+        }
+    } else if (ui->tabWidget->currentIndex() == 2) {  // Update wine notes
+        for (const auto& wine_for_notes : drinks_by_name) {
+            if (wine_for_notes.id > temp_id) {
+                temp_id = wine_for_notes.id;
+                if (!wine_for_notes.notes.empty()) {
+                    notes = wine_for_notes.notes;
+                }
             }
         }
     }
