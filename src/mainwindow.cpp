@@ -196,75 +196,14 @@ void MainWindow::submit_button_clicked() {
     QItemSelectionModel *selection_model = ui->drinkLogTable->selectionModel();
     QModelIndexList selected_rows = selection_model->selectedRows();
 
-    int drink_year;
-    int drink_month;
-    int drink_day;
-    std::string drink_name;
-    std::string drink_type;
-    std::string drink_subtype;
-    std::string producer;
-    double abv;
-    double beer_ibu;
-    int drink_size;
-    int rating;
-    std::string notes;
-
     // Get current tab selected
     std::string alcohol_type = get_current_tab();
-
-    if (alcohol_type == "Beer") {
-        drink_year = ui->beerDateInput->date().year();
-        drink_month = ui->beerDateInput->date().month();
-        drink_day = ui->beerDateInput->date().day();
-        drink_name = ui->beerNameInput->currentText().toStdString();
-        drink_type = ui->beerTypeInput->currentText().toStdString();
-        drink_subtype = ui->beerSubtypeInput->currentText().toStdString();
-        producer = ui->beerBreweryInput->currentText().toStdString();
-        beer_ibu = ui->beerIbuInput->value();
-        abv = ui->beerAbvInput->value();
-        drink_size = ui->beerSizeInput->value();
-        rating = ui->beerRatingInput->value();
-        notes = ui->beerNotesInput->toPlainText().toStdString();
-    } else if (alcohol_type == "Liquor") {
-        drink_year = ui->liquorDateInput->date().year();
-        drink_month = ui->liquorDateInput->date().month();
-        drink_day = ui->liquorDateInput->date().day();
-        drink_name = ui->liquorNameInput->currentText().toStdString();
-        drink_type = ui->liquorTypeInput->currentText().toStdString();
-        drink_subtype = ui->liquorSubtypeInput->currentText().toStdString();
-        producer = ui->liquorDistillerInput->currentText().toStdString();
-        abv = ui->liquorAbvInput->value();
-        beer_ibu = -1.0;  // -1 denotes no IBU value
-        drink_size = ui->liquorSizeInput->value();
-        rating = ui->liquorRatingInput->value();
-        notes = ui->liquorNotesInput->toPlainText().toStdString();
-    } else if (alcohol_type == "Wine") {
-        //TODO: Finish this
-    } else {
-        std::cout << "Somehow got illegal alcohol type." << std::endl;
-    }
+    Drink entered_drink = get_drink_attributes_from_fields();
 
     // Prevent blank submissions
-    if (drink_name.empty() || abv == 0.0) {
+    if (entered_drink.name.empty() || entered_drink.abv == 0.0) {
         QMessageBox::critical(nullptr, "Error", "Please enter drink name and ABV.");
     } else {
-        Drink beer{
-                -1,
-                drink_year,
-                drink_month,
-                drink_day,
-                drink_name,
-                drink_type,
-                drink_subtype,
-                "deprecated",
-                producer,
-                abv,
-                beer_ibu,
-                drink_size,
-                rating,
-                notes,
-                alcohol_type
-        };
 
         // Handle updating existing rows
         QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
@@ -278,14 +217,14 @@ void MainWindow::submit_button_clicked() {
             std::cout << "Updating row " << row_to_update << "Timestamp: " << timestamp << std::endl;
 
             // Update the variables in the beer struct
-            beer.id = row_to_update;
-            beer.timestamp = timestamp;
-            Database::update(storage, beer);
+            entered_drink.id = row_to_update;
+            entered_drink.timestamp = timestamp;
+            Database::update(storage, entered_drink);
         } else {
             // New row. Get a new timestamp
             std::string timestamp = storage.select(sqlite_orm::datetime("now")).front();
-            beer.timestamp = timestamp;
-            Database::write(beer, storage);
+            entered_drink.timestamp = timestamp;
+            Database::write(entered_drink, storage);
         }
         update_table();
         if (selected_rows.empty()) {
@@ -1230,4 +1169,47 @@ void MainWindow::tab_changed() {
         std::string wine_notes_text = get_latest_notes(ui->wineNameInput->currentText().toStdString(), alcohol_type);
         ui->wineNotesInput->setText(QString::fromStdString(wine_notes_text));
     }
+}
+
+Drink MainWindow::get_drink_attributes_from_fields() {
+    /*
+     * Get user inputs and put them into the Drink struct
+     */
+
+    std::string alcohol_type = get_current_tab();
+    Drink drink;
+
+    if (alcohol_type == "Beer") {
+        drink.drink_year = ui->beerDateInput->date().year();
+        drink.drink_month = ui->beerDateInput->date().month();
+        drink.drink_day = ui->beerDateInput->date().day();
+        drink.name = ui->beerNameInput->currentText().toStdString();
+        drink.type = ui->beerTypeInput->currentText().toStdString();
+        drink.subtype = ui->beerSubtypeInput->currentText().toStdString();
+        drink.producer = ui->beerBreweryInput->currentText().toStdString();
+        drink.ibu = ui->beerIbuInput->value();
+        drink.abv = ui->beerAbvInput->value();
+        drink.size = ui->beerSizeInput->value();
+        drink.rating = ui->beerRatingInput->value();
+        drink.notes = ui->beerNotesInput->toPlainText().toStdString();
+    } else if (alcohol_type == "Liquor") {
+        drink.drink_year = ui->liquorDateInput->date().year();
+        drink.drink_month = ui->liquorDateInput->date().month();
+        drink.drink_day = ui->liquorDateInput->date().day();
+        drink.name = ui->liquorNameInput->currentText().toStdString();
+        drink.type = ui->liquorTypeInput->currentText().toStdString();
+        drink.subtype = ui->liquorSubtypeInput->currentText().toStdString();
+        drink.producer = ui->liquorDistillerInput->currentText().toStdString();
+        drink.abv = ui->liquorAbvInput->value();
+        drink.ibu = -1.0;  // -1 denotes no IBU value
+        drink.size = ui->liquorSizeInput->value();
+        drink.rating = ui->liquorRatingInput->value();
+        drink.notes = ui->liquorNotesInput->toPlainText().toStdString();
+    } else if (alcohol_type == "Wine") {
+        //TODO: Finish this
+    } else {
+        std::cout << "Somehow got illegal alcohol type." << std::endl;
+    }
+
+    return drink;
 }
