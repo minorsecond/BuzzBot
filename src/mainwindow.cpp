@@ -681,7 +681,7 @@ void MainWindow::reset_table_sort() {
      * Reset table sort to default, by datetime descending.
      */
 
-    ui->drinkLogTable->sortItems(9, Qt::DescendingOrder);
+    ui->drinkLogTable->sortItems(0, Qt::DescendingOrder);
 }
 
 double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>& beers_this_week) {
