@@ -437,9 +437,9 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
 
         Drink drink_at_row = Database::read_row(row_to_get, storage);
 
+        // Set up the date string
         std::ostringstream month_padded;
         std::ostringstream day_padded;
-
         month_padded << std::setw(2) << std::setfill('0') << drink_at_row.drink_month;
         day_padded << std::setw(2) << std::setfill('0') << drink_at_row.drink_day;
         std::string date_from_db = day_padded.str() + "/" + month_padded.str() + "/" + std::to_string(drink_at_row.drink_year);
@@ -591,7 +591,6 @@ void MainWindow::update_beer_fields() {
     std::set<QString> breweries;
     std::set<QString> types;
     std::set<QString> names;
-    //std::vector<Drink> all_beers = Database::read(Database::path(), storage);
     std::vector<Drink> all_beers = Database::filter("Alcohol Type", "Beer", storage);
 
     // Block signals to avoid crashing
@@ -1080,7 +1079,6 @@ void MainWindow::update_fields_on_drink_name_selected() {
             std::string liquor_subtype = selected_liquor.subtype;
             std::string producer = selected_liquor.producer;
             double abv = selected_liquor.abv;
-            double ibu = selected_liquor.ibu;
             int size = selected_liquor.size;
             int rating = selected_liquor.rating;
 
