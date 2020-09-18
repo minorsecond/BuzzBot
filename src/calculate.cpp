@@ -182,7 +182,10 @@ double Calculate::mean_ibu(Storage storage) {
     std::vector<Beer> all_beers = storage.get_all<Beer>();
 
     for (const auto& beer : all_beers) {
-        beer_count += 1;
+        // Ignore empty IBU values
+        if (beer.ibu > 0) {
+            beer_count += 1;
+        }
         ibu_sum += beer.ibu;
     }
 
