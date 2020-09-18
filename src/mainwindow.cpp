@@ -207,7 +207,7 @@ void MainWindow::submit_button_clicked() {
 
         // Handle updating existing rows
         QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
-        if (select->hasSelection()) {
+        if (select->hasSelection()) { // TODO: Refactor this
             // Get the selected row
             int selection = select->selectedRows().at(0).row();
             int row_to_update = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
@@ -220,7 +220,7 @@ void MainWindow::submit_button_clicked() {
             entered_drink.id = row_to_update;
             entered_drink.timestamp = timestamp;
             Database::update(storage, entered_drink);
-        } else {
+        } else {  // TODO: Refactor this
             // New row. Get a new timestamp
             std::string timestamp = storage.select(sqlite_orm::datetime("now")).front();
             entered_drink.timestamp = timestamp;
@@ -249,7 +249,7 @@ void MainWindow::reset_fields() {
     std::cout << "clearing fields" << std::endl;
     ui->drinkLogTable->clearSelection();
 
-    if (alcohol_type == "Beer") {
+    if (alcohol_type == "Beer") {  // TODO: Refactor this
         update_beer_fields();
         update_fields_on_drink_name_selected();
 
@@ -260,7 +260,7 @@ void MainWindow::reset_fields() {
         // Set datepicker to today's date
         QDate todays_date = QDate::currentDate();
         ui->beerDateInput->setDate(todays_date);
-    } else if (alcohol_type == "Liquor") {
+    } else if (alcohol_type == "Liquor") {  // TODO: Refactor this
         update_liquor_fields();
         update_fields_on_drink_name_selected();
 
@@ -271,7 +271,7 @@ void MainWindow::reset_fields() {
         // Set datepicker to today's date
         QDate todays_date = QDate::currentDate();
         ui->liquorDateInput->setDate(todays_date);
-    } else if (alcohol_type == "Wine") {
+    } else if (alcohol_type == "Wine") {  // TODO: Refactor this
         update_beer_fields();  // TODO: Change this to wine update_wine_fields
         update_fields_on_drink_name_selected();
 
@@ -377,6 +377,7 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
         Drink drink_at_row = Database::read_row(row_to_get, storage);
 
         // Set up the date string
+        // TODO: Refactor this
         std::ostringstream month_padded;
         std::ostringstream day_padded;
         month_padded << std::setw(2) << std::setfill('0') << drink_at_row.drink_month;
@@ -384,7 +385,7 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
         std::string date_from_db = day_padded.str() + "/" + month_padded.str() + "/" + std::to_string(drink_at_row.drink_year);
         QDate date = QDate::fromString(QString::fromUtf8(date_from_db.c_str()), "dd/MM/yyyy");
 
-        if (drink_at_row.alcohol_type == "Beer") {
+        if (drink_at_row.alcohol_type == "Beer") {  // TODO: Refactor this
             // Only update the beer fields if the user is currently on the beer tab
             notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
             ui->beerDateInput->setDate(date);
@@ -400,7 +401,7 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
 
             // Switch to the beer tab
             ui->tabWidget->setCurrentIndex(0);
-        } else if (drink_at_row.alcohol_type == "Liquor") {
+        } else if (drink_at_row.alcohol_type == "Liquor") {  // TODO: Refactor this
             notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
             ui->liquorDateInput->setDate(date);
             ui->liquorNameInput->setCurrentText(drink_at_row.name.c_str());
@@ -452,14 +453,14 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
     std::set<QString> breweries;
     std::set<QString> ratings;
 
+    ui->filterTextInput->clear();
+
     // This fixes crashes when changing filters with rows selected.
     QSignalBlocker filterTextInputSignalBlocker(ui->filterTextInput);
 
-    std::vector<Drink> all_beers = Database::read(Database::path(), storage);
-
-    ui->filterTextInput->clear();
-
     // Add items to the sets
+    // TODO: Refactor this
+    std::vector<Drink> all_beers = Database::read(Database::path(), storage);
     for (const auto& beer : all_beers) {
         QString beer_name = QString::fromStdString(beer.name);
         QString beer_type = QString::fromStdString(beer.type);
