@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Upgrade DB version
     Database::increment_version(storage, 2);
+    Database::populate_maker_column();  // Copy brewery column to maker if database version is 2
 
     // Set size hints
     ui->beerDateInput->setProperty("sizeHint", QVariant(QSizeF(241, 22)));
@@ -125,7 +126,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->filterCategoryInput->addItem("Name");
     ui->filterCategoryInput->addItem("Type");
     ui->filterCategoryInput->addItem("Subtype");
-    ui->filterCategoryInput->addItem("Brewery");
+    ui->filterCategoryInput->addItem("Maker");
     ui->filterCategoryInput->addItem("Rating");
 
     ui->filterTextInput->setDisabled(true);
@@ -195,7 +196,7 @@ void MainWindow::submit_button_clicked() {
     std::string drink_name;
     std::string beer_type;
     std::string beer_subtype;
-    std::string brewery_name;
+    std::string maker;
     double abv;
     double beer_ibu;
     int drink_size;
@@ -220,7 +221,7 @@ void MainWindow::submit_button_clicked() {
         drink_name = ui->beerNameInput->currentText().toStdString();
         beer_type = ui->beerTypeInput->currentText().toStdString();
         beer_subtype = ui->beerSubtypeInput->currentText().toStdString();
-        brewery_name = ui->beerBreweryInput->currentText().toStdString();
+        maker = ui->beerBreweryInput->currentText().toStdString();
         beer_ibu = ui->beerIbuInput->value();
         abv = ui->beerAbvInput->value();
         drink_size = ui->beerSizeInput->value();
@@ -240,7 +241,8 @@ void MainWindow::submit_button_clicked() {
             drink_name,
             beer_type,
             beer_subtype,
-            brewery_name,
+            "deprecated",
+            maker,
             abv,
             beer_ibu,
             drink_size,
