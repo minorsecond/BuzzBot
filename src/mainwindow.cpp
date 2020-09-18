@@ -196,9 +196,9 @@ void MainWindow::submit_button_clicked() {
     int drink_month;
     int drink_day;
     std::string drink_name;
-    std::string beer_type;
+    std::string drink_type;
     std::string beer_subtype;
-    std::string maker;
+    std::string producer;
     double abv;
     double beer_ibu;
     int drink_size;
@@ -221,9 +221,9 @@ void MainWindow::submit_button_clicked() {
         drink_month = ui->beerDateInput->date().month();
         drink_day = ui->beerDateInput->date().day();
         drink_name = ui->beerNameInput->currentText().toStdString();
-        beer_type = ui->beerTypeInput->currentText().toStdString();
+        drink_type = ui->beerTypeInput->currentText().toStdString();
         beer_subtype = ui->beerSubtypeInput->currentText().toStdString();
-        maker = ui->beerBreweryInput->currentText().toStdString();
+        producer = ui->beerBreweryInput->currentText().toStdString();
         beer_ibu = ui->beerIbuInput->value();
         abv = ui->beerAbvInput->value();
         drink_size = ui->beerSizeInput->value();
@@ -234,10 +234,10 @@ void MainWindow::submit_button_clicked() {
         drink_month = ui->liquorDateInput->date().month();
         drink_day = ui->liquorDateInput->date().day();
         drink_name = ui->liquorNameInput->currentText().toStdString();
-        beer_type = ui->liquorTypeInput->currentText().toStdString();
-        maker = ui->liquorDistillerInput->currentText().toStdString();
+        drink_type = ui->liquorTypeInput->currentText().toStdString();
+        producer = ui->liquorDistillerInput->currentText().toStdString();
         abv = ui->liquorAbvInput->value();
-        beer_ibu = 0.0;
+        beer_ibu = -1.0;  // -1 denotes no IBU value
         drink_size = ui->liquorSizeInput->value();
         rating = ui->liquorRatingInput->value();
         notes = ui->liquorNotesInput->toPlainText().toStdString();
@@ -248,21 +248,21 @@ void MainWindow::submit_button_clicked() {
         QMessageBox::critical(nullptr, "Error", "Please enter drink name and ABV.");
     } else {
         Drink beer{
-            -1,
-            drink_year,
-            drink_month,
-            drink_day,
-            drink_name,
-            beer_type,
-            beer_subtype,
-            "deprecated",
-            maker,
-            abv,
-            beer_ibu,
-            drink_size,
-            rating,
-            notes,
-            alcohol_type
+                -1,
+                drink_year,
+                drink_month,
+                drink_day,
+                drink_name,
+                drink_type,
+                beer_subtype,
+                "deprecated",
+                producer,
+                abv,
+                beer_ibu,
+                drink_size,
+                rating,
+                notes,
+                alcohol_type
         };
 
         // Handle updating existing rows
@@ -340,7 +340,7 @@ void MainWindow::update_table() {
         auto *name = new QTableWidgetItem(beer.name.c_str());
         auto *type = new QTableWidgetItem(beer.type.c_str());
         auto *subtype = new QTableWidgetItem(beer.subtype.c_str());
-        auto *brewery = new QTableWidgetItem(beer.producer.c_str());
+        auto *producer = new QTableWidgetItem(beer.producer.c_str());
         auto *abv = new QTableWidgetItem(double_to_string(beer.abv).c_str());
         auto *size = new QTableWidgetItem(double_to_string(beer.size).c_str());
         auto *rating = new QTableWidgetItem(std::to_string(beer.rating).c_str());
@@ -355,7 +355,7 @@ void MainWindow::update_table() {
 
         // Handle blank IBU
         auto *ibu = new QTableWidgetItem;
-        if (beer.ibu == 0.0) {
+        if (beer.ibu == -1.0) {  // -1 denotes no IBU value
             *ibu = QTableWidgetItem("");
         } else {
             *ibu = QTableWidgetItem(double_to_string(beer.ibu).c_str());
@@ -365,7 +365,7 @@ void MainWindow::update_table() {
         ui->drinkLogTable->setItem(table_row_num, 1, name);
         ui->drinkLogTable->setItem(table_row_num, 2, type);
         ui->drinkLogTable->setItem(table_row_num, 3, subtype);
-        ui->drinkLogTable->setItem(table_row_num, 4, brewery);
+        ui->drinkLogTable->setItem(table_row_num, 4, producer);
         ui->drinkLogTable->setItem(table_row_num, 5, abv);
         ui->drinkLogTable->setItem(table_row_num, 6, ibu);
         ui->drinkLogTable->setItem(table_row_num, 7, size);
