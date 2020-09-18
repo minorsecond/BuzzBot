@@ -435,6 +435,10 @@ void MainWindow::delete_row() {
     update_table();
     update_stat_panel();
     ui->deleteRowButton->setDisabled(true);
+
+    // Update the fields to reflect deleted row
+    update_beer_fields();
+    update_liquor_fields();
 }
 
 void MainWindow::populate_filter_menus(const std::string& filter_type) {
@@ -1014,8 +1018,11 @@ void MainWindow::update_liquor_fields() {
     QSignalBlocker name_signal_blocker(ui->liquorNameInput);
 
     ui->liquorDistillerInput->clear();
+    ui->liquorDistillerInput->setCurrentText("");
     ui->liquorTypeInput->clear();
+    ui->liquorTypeInput->setCurrentText("");
     ui->liquorNameInput->clear();
+    ui->liquorNameInput->setCurrentText("");
 
     for (const auto& liquor : all_liquor) {
         QString distiller_name = QString::fromStdString(liquor.producer);
