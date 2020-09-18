@@ -37,6 +37,7 @@ private:
     void update_mean_abv();
     void update_mean_ibu();
     void update_fields_on_beer_name();
+    std::string get_latest_notes_for_beer(const std::string& name);
 
 private slots:
     void submit_button_clicked();
