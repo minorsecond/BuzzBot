@@ -950,7 +950,7 @@ public:
         QTableWidgetItem *___qtablewidgetitem3 = drinkLogTable->horizontalHeaderItem(3);
         ___qtablewidgetitem3->setText(QCoreApplication::translate("MainWindow", "Subtype", nullptr));
         QTableWidgetItem *___qtablewidgetitem4 = drinkLogTable->horizontalHeaderItem(4);
-        ___qtablewidgetitem4->setText(QCoreApplication::translate("MainWindow", "Brewery", nullptr));
+        ___qtablewidgetitem4->setText(QCoreApplication::translate("MainWindow", "Maker", nullptr));
         QTableWidgetItem *___qtablewidgetitem5 = drinkLogTable->horizontalHeaderItem(5);
         ___qtablewidgetitem5->setText(QCoreApplication::translate("MainWindow", "ABV", nullptr));
         QTableWidgetItem *___qtablewidgetitem6 = drinkLogTable->horizontalHeaderItem(6);
@@ -1018,7 +1018,7 @@ public:
         beerSizeLabel->setText(QCoreApplication::translate("MainWindow", "Size (oz)", nullptr));
         beerRatingLabel->setText(QCoreApplication::translate("MainWindow", "Rating", nullptr));
         beerAbvLabel->setText(QCoreApplication::translate("MainWindow", "ABV", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(beerTab), QCoreApplication::translate("MainWindow", "Drink", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(beerTab), QCoreApplication::translate("MainWindow", "Beer", nullptr));
         liquorRatingLabel->setText(QCoreApplication::translate("MainWindow", "Rating", nullptr));
         liquorSizeLabel->setText(QCoreApplication::translate("MainWindow", "Size (oz)", nullptr));
         liquorAbvLabel->setText(QCoreApplication::translate("MainWindow", "ABV", nullptr));
