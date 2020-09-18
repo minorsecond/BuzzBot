@@ -38,8 +38,9 @@ private:
     void update_favorite_type();
     void update_mean_abv();
     void update_mean_ibu();
-    void update_fields_on_beer_name();
-    std::string get_latest_notes(const std::string& name);
+    void update_fields_on_drink_name_selected();
+    std::string get_latest_notes(const std::string& name, const std::string& alcohol_type);
+    std::string get_current_tab();
 
 private slots:
     void submit_button_clicked();

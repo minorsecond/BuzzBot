@@ -98,24 +98,25 @@ public:
     QSpacerItem *verticalSpacer_2;
     QWidget *liquorTab;
     QGridLayout *gridLayout_8;
-    QTextEdit *liquorNotesInput;
-    QComboBox *liquorTypeInput;
+    QLabel *liquorTypeLabel;
+    QLabel *liquorDistillerLabel;
+    QLabel *liquorDateInputLabel;
+    QLabel *liquorSubtypeLabel;
     QGridLayout *gridLayout_6;
-    QLabel *liquorRatingLabel;
-    QDoubleSpinBox *liquorAbvInput;
-    QSpacerItem *verticalSpacer_3;
     QLabel *liquorSizeLabel;
+    QDoubleSpinBox *liquorAbvInput;
     QLabel *liquorAbvLabel;
+    QLabel *liquorRatingLabel;
     QSpinBox *liquorRatingInput;
     QSpinBox *liquorSizeInput;
-    QLabel *liquorNameInputLabel;
-    QComboBox *liquorNameInput;
-    QLabel *liquorTypeLabel;
-    QLabel *liquorDateInputLabel;
     QComboBox *liquorDistillerInput;
-    QDateEdit *liquorDateInput;
-    QLabel *liquorDistillerLabel;
     QLabel *liquorNotesLabel;
+    QComboBox *liquorNameInput;
+    QDateEdit *liquorDateInput;
+    QComboBox *liquorTypeInput;
+    QLabel *liquorNameInputLabel;
+    QComboBox *liquorSubtypeInput;
+    QTextEdit *liquorNotesInput;
     QWidget *wineTab;
     QGridLayout *gridLayout_10;
     QLabel *wineNameLabel;
@@ -621,50 +622,52 @@ public:
         liquorTab->setObjectName(QString::fromUtf8("liquorTab"));
         gridLayout_8 = new QGridLayout(liquorTab);
         gridLayout_8->setObjectName(QString::fromUtf8("gridLayout_8"));
-        liquorNotesInput = new QTextEdit(liquorTab);
-        liquorNotesInput->setObjectName(QString::fromUtf8("liquorNotesInput"));
-        sizePolicy.setHeightForWidth(liquorNotesInput->sizePolicy().hasHeightForWidth());
-        liquorNotesInput->setSizePolicy(sizePolicy);
-        liquorNotesInput->setFocusPolicy(Qt::ClickFocus);
+        liquorTypeLabel = new QLabel(liquorTab);
+        liquorTypeLabel->setObjectName(QString::fromUtf8("liquorTypeLabel"));
+        sizePolicy.setHeightForWidth(liquorTypeLabel->sizePolicy().hasHeightForWidth());
+        liquorTypeLabel->setSizePolicy(sizePolicy);
+        liquorTypeLabel->setAlignment(Qt::AlignCenter);
 
-        gridLayout_8->addWidget(liquorNotesInput, 5, 0, 1, 2);
+        gridLayout_8->addWidget(liquorTypeLabel, 2, 2, 1, 1);
 
-        liquorTypeInput = new QComboBox(liquorTab);
-        liquorTypeInput->setObjectName(QString::fromUtf8("liquorTypeInput"));
-        sizePolicy1.setHeightForWidth(liquorTypeInput->sizePolicy().hasHeightForWidth());
-        liquorTypeInput->setSizePolicy(sizePolicy1);
-        liquorTypeInput->setEditable(true);
+        liquorDistillerLabel = new QLabel(liquorTab);
+        liquorDistillerLabel->setObjectName(QString::fromUtf8("liquorDistillerLabel"));
+        sizePolicy.setHeightForWidth(liquorDistillerLabel->sizePolicy().hasHeightForWidth());
+        liquorDistillerLabel->setSizePolicy(sizePolicy);
+        liquorDistillerLabel->setAlignment(Qt::AlignCenter);
 
-        gridLayout_8->addWidget(liquorTypeInput, 3, 2, 1, 1);
+        gridLayout_8->addWidget(liquorDistillerLabel, 2, 0, 1, 2);
+
+        liquorDateInputLabel = new QLabel(liquorTab);
+        liquorDateInputLabel->setObjectName(QString::fromUtf8("liquorDateInputLabel"));
+        sizePolicy.setHeightForWidth(liquorDateInputLabel->sizePolicy().hasHeightForWidth());
+        liquorDateInputLabel->setSizePolicy(sizePolicy);
+        liquorDateInputLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_8->addWidget(liquorDateInputLabel, 0, 0, 1, 2);
+
+        liquorSubtypeLabel = new QLabel(liquorTab);
+        liquorSubtypeLabel->setObjectName(QString::fromUtf8("liquorSubtypeLabel"));
+        liquorSubtypeLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_8->addWidget(liquorSubtypeLabel, 4, 2, 1, 1);
 
         gridLayout_6 = new QGridLayout();
         gridLayout_6->setObjectName(QString::fromUtf8("gridLayout_6"));
-        liquorRatingLabel = new QLabel(liquorTab);
-        liquorRatingLabel->setObjectName(QString::fromUtf8("liquorRatingLabel"));
-        sizePolicy.setHeightForWidth(liquorRatingLabel->sizePolicy().hasHeightForWidth());
-        liquorRatingLabel->setSizePolicy(sizePolicy);
-        liquorRatingLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_6->addWidget(liquorRatingLabel, 1, 1, 1, 1);
-
-        liquorAbvInput = new QDoubleSpinBox(liquorTab);
-        liquorAbvInput->setObjectName(QString::fromUtf8("liquorAbvInput"));
-        sizePolicy1.setHeightForWidth(liquorAbvInput->sizePolicy().hasHeightForWidth());
-        liquorAbvInput->setSizePolicy(sizePolicy1);
-
-        gridLayout_6->addWidget(liquorAbvInput, 2, 0, 1, 1);
-
-        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout_6->addItem(verticalSpacer_3, 0, 1, 1, 1);
-
         liquorSizeLabel = new QLabel(liquorTab);
         liquorSizeLabel->setObjectName(QString::fromUtf8("liquorSizeLabel"));
         sizePolicy.setHeightForWidth(liquorSizeLabel->sizePolicy().hasHeightForWidth());
         liquorSizeLabel->setSizePolicy(sizePolicy);
         liquorSizeLabel->setAlignment(Qt::AlignCenter);
 
-        gridLayout_6->addWidget(liquorSizeLabel, 1, 2, 1, 1);
+        gridLayout_6->addWidget(liquorSizeLabel, 0, 2, 1, 1);
+
+        liquorAbvInput = new QDoubleSpinBox(liquorTab);
+        liquorAbvInput->setObjectName(QString::fromUtf8("liquorAbvInput"));
+        sizePolicy1.setHeightForWidth(liquorAbvInput->sizePolicy().hasHeightForWidth());
+        liquorAbvInput->setSizePolicy(sizePolicy1);
+
+        gridLayout_6->addWidget(liquorAbvInput, 1, 0, 1, 1);
 
         liquorAbvLabel = new QLabel(liquorTab);
         liquorAbvLabel->setObjectName(QString::fromUtf8("liquorAbvLabel"));
@@ -672,7 +675,15 @@ public:
         liquorAbvLabel->setSizePolicy(sizePolicy);
         liquorAbvLabel->setAlignment(Qt::AlignCenter);
 
-        gridLayout_6->addWidget(liquorAbvLabel, 1, 0, 1, 1);
+        gridLayout_6->addWidget(liquorAbvLabel, 0, 0, 1, 1);
+
+        liquorRatingLabel = new QLabel(liquorTab);
+        liquorRatingLabel->setObjectName(QString::fromUtf8("liquorRatingLabel"));
+        sizePolicy.setHeightForWidth(liquorRatingLabel->sizePolicy().hasHeightForWidth());
+        liquorRatingLabel->setSizePolicy(sizePolicy);
+        liquorRatingLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_6->addWidget(liquorRatingLabel, 0, 1, 1, 1);
 
         liquorRatingInput = new QSpinBox(liquorTab);
         liquorRatingInput->setObjectName(QString::fromUtf8("liquorRatingInput"));
@@ -680,25 +691,33 @@ public:
         liquorRatingInput->setSizePolicy(sizePolicy1);
         liquorRatingInput->setMaximum(10);
 
-        gridLayout_6->addWidget(liquorRatingInput, 2, 1, 1, 1);
+        gridLayout_6->addWidget(liquorRatingInput, 1, 1, 1, 1);
 
         liquorSizeInput = new QSpinBox(liquorTab);
         liquorSizeInput->setObjectName(QString::fromUtf8("liquorSizeInput"));
         sizePolicy1.setHeightForWidth(liquorSizeInput->sizePolicy().hasHeightForWidth());
         liquorSizeInput->setSizePolicy(sizePolicy1);
 
-        gridLayout_6->addWidget(liquorSizeInput, 2, 2, 1, 1);
+        gridLayout_6->addWidget(liquorSizeInput, 1, 2, 1, 1);
 
 
-        gridLayout_8->addLayout(gridLayout_6, 5, 2, 1, 1);
+        gridLayout_8->addLayout(gridLayout_6, 6, 2, 1, 1);
 
-        liquorNameInputLabel = new QLabel(liquorTab);
-        liquorNameInputLabel->setObjectName(QString::fromUtf8("liquorNameInputLabel"));
-        sizePolicy.setHeightForWidth(liquorNameInputLabel->sizePolicy().hasHeightForWidth());
-        liquorNameInputLabel->setSizePolicy(sizePolicy);
-        liquorNameInputLabel->setAlignment(Qt::AlignCenter);
+        liquorDistillerInput = new QComboBox(liquorTab);
+        liquorDistillerInput->setObjectName(QString::fromUtf8("liquorDistillerInput"));
+        sizePolicy1.setHeightForWidth(liquorDistillerInput->sizePolicy().hasHeightForWidth());
+        liquorDistillerInput->setSizePolicy(sizePolicy1);
+        liquorDistillerInput->setEditable(true);
 
-        gridLayout_8->addWidget(liquorNameInputLabel, 0, 2, 1, 1);
+        gridLayout_8->addWidget(liquorDistillerInput, 3, 0, 1, 2);
+
+        liquorNotesLabel = new QLabel(liquorTab);
+        liquorNotesLabel->setObjectName(QString::fromUtf8("liquorNotesLabel"));
+        sizePolicy.setHeightForWidth(liquorNotesLabel->sizePolicy().hasHeightForWidth());
+        liquorNotesLabel->setSizePolicy(sizePolicy);
+        liquorNotesLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_8->addWidget(liquorNotesLabel, 4, 0, 1, 2);
 
         liquorNameInput = new QComboBox(liquorTab);
         liquorNameInput->setObjectName(QString::fromUtf8("liquorNameInput"));
@@ -710,30 +729,6 @@ public:
         liquorNameInput->setEditable(true);
 
         gridLayout_8->addWidget(liquorNameInput, 1, 2, 1, 1);
-
-        liquorTypeLabel = new QLabel(liquorTab);
-        liquorTypeLabel->setObjectName(QString::fromUtf8("liquorTypeLabel"));
-        sizePolicy.setHeightForWidth(liquorTypeLabel->sizePolicy().hasHeightForWidth());
-        liquorTypeLabel->setSizePolicy(sizePolicy);
-        liquorTypeLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_8->addWidget(liquorTypeLabel, 2, 2, 1, 1);
-
-        liquorDateInputLabel = new QLabel(liquorTab);
-        liquorDateInputLabel->setObjectName(QString::fromUtf8("liquorDateInputLabel"));
-        sizePolicy.setHeightForWidth(liquorDateInputLabel->sizePolicy().hasHeightForWidth());
-        liquorDateInputLabel->setSizePolicy(sizePolicy);
-        liquorDateInputLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_8->addWidget(liquorDateInputLabel, 0, 0, 1, 2);
-
-        liquorDistillerInput = new QComboBox(liquorTab);
-        liquorDistillerInput->setObjectName(QString::fromUtf8("liquorDistillerInput"));
-        sizePolicy1.setHeightForWidth(liquorDistillerInput->sizePolicy().hasHeightForWidth());
-        liquorDistillerInput->setSizePolicy(sizePolicy1);
-        liquorDistillerInput->setEditable(true);
-
-        gridLayout_8->addWidget(liquorDistillerInput, 3, 0, 1, 2);
 
         liquorDateInput = new QDateEdit(liquorTab);
         liquorDateInput->setObjectName(QString::fromUtf8("liquorDateInput"));
@@ -747,21 +742,35 @@ public:
 
         gridLayout_8->addWidget(liquorDateInput, 1, 0, 1, 2);
 
-        liquorDistillerLabel = new QLabel(liquorTab);
-        liquorDistillerLabel->setObjectName(QString::fromUtf8("liquorDistillerLabel"));
-        sizePolicy.setHeightForWidth(liquorDistillerLabel->sizePolicy().hasHeightForWidth());
-        liquorDistillerLabel->setSizePolicy(sizePolicy);
-        liquorDistillerLabel->setAlignment(Qt::AlignCenter);
+        liquorTypeInput = new QComboBox(liquorTab);
+        liquorTypeInput->setObjectName(QString::fromUtf8("liquorTypeInput"));
+        sizePolicy1.setHeightForWidth(liquorTypeInput->sizePolicy().hasHeightForWidth());
+        liquorTypeInput->setSizePolicy(sizePolicy1);
+        liquorTypeInput->setEditable(true);
 
-        gridLayout_8->addWidget(liquorDistillerLabel, 2, 0, 1, 2);
+        gridLayout_8->addWidget(liquorTypeInput, 3, 2, 1, 1);
 
-        liquorNotesLabel = new QLabel(liquorTab);
-        liquorNotesLabel->setObjectName(QString::fromUtf8("liquorNotesLabel"));
-        sizePolicy.setHeightForWidth(liquorNotesLabel->sizePolicy().hasHeightForWidth());
-        liquorNotesLabel->setSizePolicy(sizePolicy);
-        liquorNotesLabel->setAlignment(Qt::AlignCenter);
+        liquorNameInputLabel = new QLabel(liquorTab);
+        liquorNameInputLabel->setObjectName(QString::fromUtf8("liquorNameInputLabel"));
+        sizePolicy.setHeightForWidth(liquorNameInputLabel->sizePolicy().hasHeightForWidth());
+        liquorNameInputLabel->setSizePolicy(sizePolicy);
+        liquorNameInputLabel->setAlignment(Qt::AlignCenter);
 
-        gridLayout_8->addWidget(liquorNotesLabel, 4, 0, 1, 2);
+        gridLayout_8->addWidget(liquorNameInputLabel, 0, 2, 1, 1);
+
+        liquorSubtypeInput = new QComboBox(liquorTab);
+        liquorSubtypeInput->setObjectName(QString::fromUtf8("liquorSubtypeInput"));
+        liquorSubtypeInput->setEditable(true);
+
+        gridLayout_8->addWidget(liquorSubtypeInput, 5, 2, 1, 1);
+
+        liquorNotesInput = new QTextEdit(liquorTab);
+        liquorNotesInput->setObjectName(QString::fromUtf8("liquorNotesInput"));
+        sizePolicy.setHeightForWidth(liquorNotesInput->sizePolicy().hasHeightForWidth());
+        liquorNotesInput->setSizePolicy(sizePolicy);
+        liquorNotesInput->setFocusPolicy(Qt::ClickFocus);
+
+        gridLayout_8->addWidget(liquorNotesInput, 5, 0, 2, 2);
 
         tabWidget->addTab(liquorTab, QString());
         wineTab = new QWidget();
@@ -930,7 +939,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -992,13 +1001,13 @@ public:
         ozAlcoholConsumedLabel->setText(QCoreApplication::translate("MainWindow", "Oz. alcohol consumed:", nullptr));
         favoriteBreweryOutput->setText(QCoreApplication::translate("MainWindow", "Roughtail Brewing Co.", nullptr));
         avgAbvDrinkOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
-        favoriteBreweryLabel->setText(QCoreApplication::translate("MainWindow", "Favorite brewery:", nullptr));
+        favoriteBreweryLabel->setText(QCoreApplication::translate("MainWindow", "Favorite producer:", nullptr));
         avgIbuDrinkOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
         favoriteTypeOutput->setText(QCoreApplication::translate("MainWindow", "IPA", nullptr));
         avgAbvDrinkLabel->setText(QCoreApplication::translate("MainWindow", "Average ABV per drink:", nullptr));
         ozAlcoholRemainingOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
-        favoriteBeerLabel->setText(QCoreApplication::translate("MainWindow", "Favorite beer:", nullptr));
-        averageIbuDrinkLabel->setText(QCoreApplication::translate("MainWindow", "Average IBU per drink:", nullptr));
+        favoriteBeerLabel->setText(QCoreApplication::translate("MainWindow", "Favorite drink:", nullptr));
+        averageIbuDrinkLabel->setText(QCoreApplication::translate("MainWindow", "Average IBU per beer:", nullptr));
         drinksThisWeekOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
         drinksThisWeekLabel->setText(QCoreApplication::translate("MainWindow", "Std. drinks this week:", nullptr));
         drinksLeftLabel->setText(QCoreApplication::translate("MainWindow", "Std. drinks remaining:", nullptr));
@@ -1019,15 +1028,16 @@ public:
         beerRatingLabel->setText(QCoreApplication::translate("MainWindow", "Rating", nullptr));
         beerAbvLabel->setText(QCoreApplication::translate("MainWindow", "ABV", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(beerTab), QCoreApplication::translate("MainWindow", "Beer", nullptr));
-        liquorRatingLabel->setText(QCoreApplication::translate("MainWindow", "Rating", nullptr));
+        liquorTypeLabel->setText(QCoreApplication::translate("MainWindow", "Type", nullptr));
+        liquorDistillerLabel->setText(QCoreApplication::translate("MainWindow", "Distiller", nullptr));
+        liquorDateInputLabel->setText(QCoreApplication::translate("MainWindow", "Date", nullptr));
+        liquorSubtypeLabel->setText(QCoreApplication::translate("MainWindow", "Subtype", nullptr));
         liquorSizeLabel->setText(QCoreApplication::translate("MainWindow", "Size (oz)", nullptr));
         liquorAbvLabel->setText(QCoreApplication::translate("MainWindow", "ABV", nullptr));
-        liquorNameInputLabel->setText(QCoreApplication::translate("MainWindow", "Name", nullptr));
-        liquorTypeLabel->setText(QCoreApplication::translate("MainWindow", "Type", nullptr));
-        liquorDateInputLabel->setText(QCoreApplication::translate("MainWindow", "Date", nullptr));
-        liquorDateInput->setDisplayFormat(QCoreApplication::translate("MainWindow", "MMM/dd/yyyy", nullptr));
-        liquorDistillerLabel->setText(QCoreApplication::translate("MainWindow", "Distiller", nullptr));
+        liquorRatingLabel->setText(QCoreApplication::translate("MainWindow", "Rating", nullptr));
         liquorNotesLabel->setText(QCoreApplication::translate("MainWindow", "Notes", nullptr));
+        liquorDateInput->setDisplayFormat(QCoreApplication::translate("MainWindow", "MMM/dd/yyyy", nullptr));
+        liquorNameInputLabel->setText(QCoreApplication::translate("MainWindow", "Name", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(liquorTab), QCoreApplication::translate("MainWindow", "Liquor", nullptr));
         wineNameLabel->setText(QCoreApplication::translate("MainWindow", "Name", nullptr));
         liquorRatingLabel_2->setText(QCoreApplication::translate("MainWindow", "Rating", nullptr));
