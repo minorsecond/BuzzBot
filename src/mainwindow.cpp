@@ -237,6 +237,7 @@ void MainWindow::submit_button_clicked() {
         beer_type = ui->liquorTypeInput->currentText().toStdString();
         maker = ui->liquorDistillerInput->currentText().toStdString();
         abv = ui->liquorAbvInput->value();
+        beer_ibu = 0.0;
         drink_size = ui->liquorSizeInput->value();
         rating = ui->liquorRatingInput->value();
         notes = ui->liquorNotesInput->toPlainText().toStdString();
@@ -341,7 +342,6 @@ void MainWindow::update_table() {
         auto *subtype = new QTableWidgetItem(beer.subtype.c_str());
         auto *brewery = new QTableWidgetItem(beer.producer.c_str());
         auto *abv = new QTableWidgetItem(double_to_string(beer.abv).c_str());
-        auto *ibu = new QTableWidgetItem(double_to_string(beer.ibu).c_str());
         auto *size = new QTableWidgetItem(double_to_string(beer.size).c_str());
         auto *rating = new QTableWidgetItem(std::to_string(beer.rating).c_str());
         auto *id = new QTableWidgetItem;
@@ -352,6 +352,14 @@ void MainWindow::update_table() {
         date_qtw->setData(Qt::DisplayRole, date);
 
         std::string notes = beer.notes;
+
+        // Handle blank IBU
+        auto *ibu = new QTableWidgetItem;
+        if (beer.ibu == 0.0) {
+            *ibu = QTableWidgetItem("");
+        } else {
+            *ibu = QTableWidgetItem(double_to_string(beer.ibu).c_str());
+        }
 
         ui->drinkLogTable->setItem(table_row_num, 0, date_qtw);
         ui->drinkLogTable->setItem(table_row_num, 1, name);
