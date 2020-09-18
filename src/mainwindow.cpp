@@ -636,20 +636,9 @@ void MainWindow::update_stat_panel() {
     for (const auto& beer : beers_this_week) {
         standard_drinks += Calculate::standard_drinks(beer.abv, beer.size);
     }
-    if (standard_drinks == 0.0) {
-        ui->drinksThisWeekOutput->setText("0.0");
-        ui->ozAlcoholConsumedOutput->setText("0.0");
-    } else {
-        ui->drinksThisWeekOutput->setText(QString::fromStdString(double_to_string(standard_drinks)));
-    }
-
-    // Update text
-    std::string drinksThisWeekLabelText = "Std. drinks since " + options.weekday_start + ":";
-    std::string ozThisWeekLabelText = "Oz. alcohol since " + options.weekday_start + ":";
-    ui->drinksThisWeekLabel->setText(QString::fromStdString(drinksThisWeekLabelText));
-    ui->ozAlcoholConsumedLabel->setText(QString::fromStdString(ozThisWeekLabelText));
 
     // TODO: refactor this
+    update_drinks_this_week(standard_drinks);
     update_standard_drinks_left_this_week(standard_drinks);
     double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week);
     update_oz_alcohol_remaining(oz_alc_consumed);
@@ -658,6 +647,20 @@ void MainWindow::update_stat_panel() {
     update_favorite_type();
     update_mean_abv();
     update_mean_ibu();
+}
+
+void MainWindow::update_drinks_this_week(double standard_drinks) {
+    /*
+     * Update the standard drinks this week output label.
+     */
+
+    std::string drinksThisWeekLabelText = "Std. drinks since " + options.weekday_start + ":";
+    ui->drinksThisWeekLabel->setText(QString::fromStdString(drinksThisWeekLabelText));
+    if (standard_drinks == 0.0) {
+        ui->drinksThisWeekOutput->setText("0.0");
+    } else {
+        ui->drinksThisWeekOutput->setText(QString::fromStdString(double_to_string(standard_drinks)));
+    }
 }
 
 void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consumed) {
@@ -690,6 +693,9 @@ double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Beer>&
      */
 
     double oz_consumed = 0;
+
+    std::string ozThisWeekLabelText = "Oz. alcohol since " + options.weekday_start + ":";
+    ui->ozAlcoholConsumedLabel->setText(QString::fromStdString(ozThisWeekLabelText));
 
     for (const auto& beer : beers_this_week) {
         double beer_oz_alcohol = (beer.abv/100) * beer.size;
