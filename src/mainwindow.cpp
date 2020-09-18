@@ -177,6 +177,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->liquorNameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
     connect(ui->liquorTypeInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(type_input_changed(const QString&)));
     connect(ui->liquorDistillerInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(brewery_input_changed(const QString&)));
+    connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tab_changed()));
 
     // Update fields to match beer that comes first alphabetically
     reset_fields();
@@ -325,8 +326,8 @@ void MainWindow::reset_fields() {
         update_fields_on_drink_name_selected();
 
         // Set notes to the notes for beer in the name input
-        liquor_notes = get_latest_notes(ui->beerNameInput->currentText().toStdString(), alcohol_type);
-        ui->beerNotesInput->setText(QString::fromStdString(liquor_notes));
+        liquor_notes = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), alcohol_type);
+        ui->liquorNotesInput->setText(QString::fromStdString(liquor_notes));
 
         // Set datepicker to today's date
         QDate todays_date = QDate::currentDate();
@@ -336,7 +337,7 @@ void MainWindow::reset_fields() {
         update_fields_on_drink_name_selected();
 
         // Set notes to the notes for beer in the name input
-        wine_notes = get_latest_notes(ui->beerNameInput->currentText().toStdString(), alcohol_type);
+        wine_notes = get_latest_notes(ui->wineNameInput->currentText().toStdString(), alcohol_type);
         ui->wineNotesInput->setText(QString::fromStdString(wine_notes));
 
         // Set datepicker to today's date
@@ -1039,6 +1040,7 @@ void MainWindow::update_fields_on_drink_name_selected() {
      * Update fields when a beer name is chosen.
      */
 
+    std::string notes;
     std::string drink_name = ui->beerNameInput->currentText().toStdString();
     std::string alcohol_type = get_current_tab();
 
@@ -1063,6 +1065,10 @@ void MainWindow::update_fields_on_drink_name_selected() {
             ui->beerIbuInput->setValue(ibu);
             ui->beerSizeInput->setValue(size);
             ui->beerRatingInput->setValue(rating);
+
+            // Set notes to the notes for beer in the name input
+            notes = get_latest_notes(ui->beerNameInput->currentText().toStdString(), get_current_tab());
+            ui->beerNotesInput->setText(QString::fromStdString(notes));
         } else if(alcohol_type == "Liquor") {
             // This fixes crashes when changing with rows selected.
             QSignalBlocker type_input_signal_blocker(ui->liquorTypeInput);
@@ -1084,13 +1090,12 @@ void MainWindow::update_fields_on_drink_name_selected() {
             ui->liquorAbvInput->setValue(abv);
             ui->liquorSizeInput->setValue(size);
             ui->liquorRatingInput->setValue(rating);
+
+            // Set notes to the notes for liquor in the name input
+            notes = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), get_current_tab());
+            ui->liquorNotesInput->setText(QString::fromStdString(notes));
         }
     }
-
-    // Set notes to the notes for beer in the name input
-    std::string notes;
-    notes = get_latest_notes(ui->beerNameInput->currentText().toStdString(), get_current_tab());
-    ui->beerNotesInput->setText(QString::fromStdString(notes));
 }
 
 void MainWindow::update_favorite_type() {
@@ -1209,4 +1214,22 @@ std::string MainWindow::get_current_tab() {
     }
 
     return alcohol_type;
+}
+
+void MainWindow::tab_changed() {
+    /*
+     * Update notes when tab is changed.
+     */
+
+    std::string alcohol_type = get_current_tab();
+    if (alcohol_type == "Beer") {
+        std::string beer_notes_text = get_latest_notes(ui->beerNameInput->currentText().toStdString(), alcohol_type);
+        ui->beerNotesInput->setText(QString::fromStdString(beer_notes_text));
+    } else if (alcohol_type == "Liquor") {
+        std::string liquor_notes_text = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), alcohol_type);
+        ui->liquorNotesInput->setText(QString::fromStdString(liquor_notes_text));
+    } else if(alcohol_type == "Wine") {
+        std::string wine_notes_text = get_latest_notes(ui->wineNameInput->currentText().toStdString(), alcohol_type);
+        ui->wineNotesInput->setText(QString::fromStdString(wine_notes_text));
+    }
 }

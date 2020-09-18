@@ -56,5 +56,6 @@ private slots:
     void name_input_changed(const QString&);
     void type_input_changed(const QString&);
     void brewery_input_changed(const QString&);
+    void tab_changed();
 };
 #endif // MAINWINDOW_H
