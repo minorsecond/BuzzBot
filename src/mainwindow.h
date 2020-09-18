@@ -41,6 +41,7 @@ private:
     void update_fields_on_drink_name_selected();
     std::string get_latest_notes(const std::string& name, const std::string& alcohol_type);
     std::string get_current_tab();
+    Drink get_drink_attributes_from_fields();
 
 private slots:
     void submit_button_clicked();
