@@ -14,7 +14,7 @@ before_script:
   - export PATH=/usr/local/opt/qt5/bin:$PATH
   - mkdir build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=Release ..
+  - cmake -DCMAKE_BUILD_TYPE=Debug ..
 
 script:
   - cmake --build . --target Beertabs -- -j$core_count
