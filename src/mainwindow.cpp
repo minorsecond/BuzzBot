@@ -909,7 +909,7 @@ void MainWindow::update_fields_on_beer_name() {
         QSignalBlocker brewery_input_signal_blocker(ui->beerBreweryInput);
 
         std::string input_beer = ui->beerNameInput->currentText().toStdString();
-        Drink selected_beer = Database::get_beer_by_name(storage, input_beer);
+        Drink selected_beer = Database::get_drink_by_name(storage, input_beer);
         std::string beer_type = selected_beer.type;
         std::string brewery = selected_beer.producer;
         double abv = selected_beer.abv;

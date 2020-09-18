@@ -257,7 +257,7 @@ TEST_CASE("Get Drink By Name", "[DB Filter]") {
     storage_1.insert(etrwo2);
     Database::write_db_to_disk(storage_1);
 
-    Drink selected_beer = Database::get_beer_by_name(storage_1, "Everything Rhymes with Orange");
+    Drink selected_beer = Database::get_drink_by_name(storage_1, "Everything Rhymes with Orange");
 
     REQUIRE(selected_beer.id == 1);
     REQUIRE(selected_beer.name == "Everything Rhymes with Orange");
