@@ -1174,6 +1174,7 @@ void MainWindow::tab_changed() {
 Drink MainWindow::get_drink_attributes_from_fields() {
     /*
      * Get user inputs and put them into the Drink struct
+     * @return drink: A Drink instance containing user-input data.
      */
 
     std::string alcohol_type = get_current_tab();
