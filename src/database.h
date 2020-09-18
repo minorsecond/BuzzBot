@@ -36,13 +36,13 @@ inline auto initStorage(const std::string& file_name) {
                                                           sqlite_orm::make_column("drink_type", &Drink::type),
                                                           sqlite_orm::make_column("drink_subtype", &Drink::subtype, sqlite_orm::default_value("")),
                                                           sqlite_orm::make_column("brewery", &Drink::brewery),
-                                                          sqlite_orm::make_column("maker", &Drink::producer, sqlite_orm::default_value("")),
+                                                          sqlite_orm::make_column("producer", &Drink::producer, sqlite_orm::default_value("")),
                                                           sqlite_orm::make_column("abv", &Drink::abv),
                                                           sqlite_orm::make_column("ibu", &Drink::ibu),
                                                           sqlite_orm::make_column("size", &Drink::size),
                                                           sqlite_orm::make_column("rating", &Drink::rating),
                                                           sqlite_orm::make_column("notes", &Drink::notes),
-                                                          sqlite_orm::make_column("alcohol_type", &Drink::alcohol_type, sqlite_orm::default_value("Drink")),
+                                                          sqlite_orm::make_column("alcohol_type", &Drink::alcohol_type, sqlite_orm::default_value("Beer")),
                                                           sqlite_orm::make_column("timestamp", &Drink::timestamp, sqlite_orm::default_value(sqlite_orm::datetime("now", "localtime")))));
 }
 using Storage = decltype (initStorage(""));

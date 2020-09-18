@@ -101,41 +101,43 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
      * @param filter_type: Column on which to filter.
      * @param filter_text: Text to search columns for.
      * @param storage: A storage instance.
-     * @return filtered_beers: The results of the database query.
+     * @return filtered_drinks: The results of the database query.
      */
 
-    std::vector<Drink> filtered_beers;
+    std::vector<Drink> filtered_drinks;
 
     // Filter by name
     if (filter_type == "Name") {
-        filtered_beers = storage.get_all<Drink>(where(c(&Drink::name) == filter_text));
+        filtered_drinks = storage.get_all<Drink>(where(c(&Drink::name) == filter_text));
     } else if (filter_type == "Type") {
-        filtered_beers = storage.get_all<Drink>(where(c(&Drink::type) == filter_text));
+        filtered_drinks = storage.get_all<Drink>(where(c(&Drink::type) == filter_text));
     } else if (filter_type == "Subtype") {
-        filtered_beers = storage.get_all<Drink>(where(c(&Drink::subtype) == filter_text));
+        filtered_drinks = storage.get_all<Drink>(where(c(&Drink::subtype) == filter_text));
     } else if (filter_type == "Maker") {
-        filtered_beers = storage.get_all<Drink>(where(c(&Drink::producer) == filter_text));
+        filtered_drinks = storage.get_all<Drink>(where(c(&Drink::producer) == filter_text));
+    } else if (filter_type == "Alcohol Type") {
+        filtered_drinks = storage.get_all<Drink>(where(c(&Drink::alcohol_type) == filter_text));
     } else if (filter_type == "Date") {
         int year = stoi(filter_text.substr(6, 8));
         int month = stoi(filter_text.substr(3, 2));
         int day = stoi(filter_text.substr(0, 2));
-        filtered_beers = storage.get_all<Drink>(where(c(&Drink::drink_year) == year && c(&Drink::drink_month) == month &&
+        filtered_drinks = storage.get_all<Drink>(where(c(&Drink::drink_year) == year && c(&Drink::drink_month) == month &&
                                                       c(&Drink::drink_day) == day));
     } else if (filter_type == "After Date") {
         int year = stoi(filter_text.substr(6, 8));
         int month = stoi(filter_text.substr(3, 2));
         int day = stoi(filter_text.substr(0, 2));
 
-        filtered_beers = storage.get_all<Drink>(where(c(&Drink::drink_year) == year && c(&Drink::drink_month) == month &&
+        filtered_drinks = storage.get_all<Drink>(where(c(&Drink::drink_year) == year && c(&Drink::drink_month) == month &&
                                                       c(&Drink::drink_day) >= day));
 
     } else if (filter_type == "Rating") {
-        filtered_beers = storage.get_all<Drink>(where(c(&Drink::rating) == filter_text));
+        filtered_drinks = storage.get_all<Drink>(where(c(&Drink::rating) == filter_text));
     } else {
-        filtered_beers = storage.get_all<Drink>();
+        filtered_drinks = storage.get_all<Drink>();
     }
 
-    return filtered_beers;
+    return filtered_drinks;
 }
 
 Drink Database::get_beer_by_name(Storage storage, std::string beer_name) {
