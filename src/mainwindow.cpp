@@ -245,7 +245,9 @@ void MainWindow::reset_fields() {
      * Clear user entry fields and table selection for entering a new beer.
      */
 
-    std::string notes;
+    std::string beer_notes;
+    std::string liquor_notes;
+    std::string wine_notes;
 
     std::cout << "clearing fields" << std::endl;
     ui->drinkLogTable->clearSelection();
@@ -253,12 +255,12 @@ void MainWindow::reset_fields() {
     update_fields_on_beer_name();
 
     // Set notes to the notes for beer in the name input
-    notes = get_latest_notes_for_beer(ui->nameInput->currentText().toStdString());
-    ui->notesInput->setText(QString::fromStdString(notes));
+    beer_notes = get_latest_notes_for_beer(ui->beerNameInput->currentText().toStdString());
+    ui->beerNotesInput->setText(QString::fromStdString(beer_notes));
 
     // Set datepicker to today's date
     QDate todays_date = QDate::currentDate();
-    ui->drinkDateInput->setDate(todays_date);
+    ui->beerDateInput->setDate(todays_date);
 }
 
 void MainWindow::update_table() {
