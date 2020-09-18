@@ -191,7 +191,7 @@ void Database::populate_maker_column() {
      * Copy brewery column to the new maker column. The brewery column will be deleted later.
      */
     Storage storage = initStorage(path());
-    if (get_version(storage) == 2) {  // Old db version
+    if (get_version(storage) < 2) {  // Old db version
         std::vector<Drink> all_drinks = storage.get_all<Drink>();
         for (auto drink : all_drinks) {
             drink.producer = drink.brewery;
