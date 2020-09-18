@@ -326,7 +326,7 @@ void MainWindow::update_table() {
         auto *name = new QTableWidgetItem(beer.name.c_str());
         auto *type = new QTableWidgetItem(beer.type.c_str());
         auto *subtype = new QTableWidgetItem(beer.subtype.c_str());
-        auto *brewery = new QTableWidgetItem(beer.maker.c_str());
+        auto *brewery = new QTableWidgetItem(beer.producer.c_str());
         auto *abv = new QTableWidgetItem(double_to_string(beer.abv).c_str());
         auto *ibu = new QTableWidgetItem(double_to_string(beer.ibu).c_str());
         auto *size = new QTableWidgetItem(double_to_string(beer.size).c_str());
@@ -400,7 +400,7 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
         ui->beerNameInput->setCurrentText(beer.name.c_str());
         ui->beerTypeInput->setCurrentText(beer.type.c_str());
         ui->beerSubtypeInput->setCurrentText(beer.subtype.c_str());
-        ui->beerBreweryInput->setCurrentText(beer.maker.c_str());
+        ui->beerBreweryInput->setCurrentText(beer.producer.c_str());
         ui->beerAbvInput->setValue(beer.abv);
         ui->beerIbuInput->setValue(beer.ibu);
         ui->beerSizeInput->setValue(beer.size);
@@ -449,7 +449,7 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
         QString beer_name = QString::fromStdString(beer.name);
         QString beer_type = QString::fromStdString(beer.type);
         QString beer_subtype = QString::fromStdString(beer.subtype);
-        QString brewery = QString::fromStdString(beer.maker);
+        QString brewery = QString::fromStdString(beer.producer);
         QString rating = QString::fromStdString(std::to_string(beer.rating));
 
         beer_names.insert(beer_name);
@@ -527,7 +527,7 @@ void MainWindow::update_beer_fields() {
     ui->beerNameInput->clear();
 
     for (const auto& beer : all_beers) {
-        QString brewery_name = QString::fromStdString(beer.maker);
+        QString brewery_name = QString::fromStdString(beer.producer);
         QString beer_type = QString::fromStdString(beer.type);
         QString beer_name = QString::fromStdString(beer.name);
 
@@ -842,7 +842,7 @@ void MainWindow::type_input_changed(const QString &) {
 
     for (const auto& selected_beer : selected_beers) {
         beer_names.insert(QString::fromStdString(selected_beer.name));
-        brewery_names.insert(QString::fromStdString(selected_beer.maker));
+        brewery_names.insert(QString::fromStdString(selected_beer.producer));
     }
 
     for (const auto& brewery : brewery_names) {
@@ -910,7 +910,7 @@ void MainWindow::update_fields_on_beer_name() {
         std::string input_beer = ui->beerNameInput->currentText().toStdString();
         Drink selected_beer = Database::get_beer_by_name(storage, input_beer);
         std::string beer_type = selected_beer.type;
-        std::string brewery = selected_beer.maker;
+        std::string brewery = selected_beer.producer;
         double abv = selected_beer.abv;
         double ibu = selected_beer.ibu;
         int size = selected_beer.size;

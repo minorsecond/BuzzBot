@@ -337,7 +337,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Favorite brewery:</string>
+          <string>Favorite producer:</string>
          </property>
         </widget>
        </item>
@@ -396,7 +396,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Favorite beer:</string>
+          <string>Favorite drink:</string>
          </property>
         </widget>
        </item>
@@ -409,7 +409,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Average IBU per drink:</string>
+          <string>Average IBU per beer:</string>
          </property>
         </widget>
        </item>

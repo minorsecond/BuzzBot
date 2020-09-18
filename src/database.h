@@ -14,7 +14,7 @@ struct Drink {  // TODO: Remove brewery in DB version 3/Beertabs v1.0.0
     std::string type;
     std::string subtype;
     std::string brewery;
-    std::string maker;
+    std::string producer;
     double abv;
     double ibu;
     int size;
@@ -36,7 +36,7 @@ inline auto initStorage(const std::string& file_name) {
                                                           sqlite_orm::make_column("drink_type", &Drink::type),
                                                           sqlite_orm::make_column("drink_subtype", &Drink::subtype, sqlite_orm::default_value("")),
                                                           sqlite_orm::make_column("brewery", &Drink::brewery),
-                                                          sqlite_orm::make_column("maker", &Drink::maker, sqlite_orm::default_value("")),
+                                                          sqlite_orm::make_column("maker", &Drink::producer, sqlite_orm::default_value("")),
                                                           sqlite_orm::make_column("abv", &Drink::abv),
                                                           sqlite_orm::make_column("ibu", &Drink::ibu),
                                                           sqlite_orm::make_column("size", &Drink::size),

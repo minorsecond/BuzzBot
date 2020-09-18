@@ -114,7 +114,7 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
     } else if (filter_type == "Subtype") {
         filtered_beers = storage.get_all<Drink>(where(c(&Drink::subtype) == filter_text));
     } else if (filter_type == "Maker") {
-        filtered_beers = storage.get_all<Drink>(where(c(&Drink::brewery) == filter_text));
+        filtered_beers = storage.get_all<Drink>(where(c(&Drink::producer) == filter_text));
     } else if (filter_type == "Date") {
         int year = stoi(filter_text.substr(6, 8));
         int month = stoi(filter_text.substr(3, 2));
@@ -148,8 +148,8 @@ std::vector<Drink> Database::get_beers_by_type(Storage storage, std::string beer
     return beers_by_type;
 }
 
-std::vector<Drink> Database::get_beers_by_brewery(Storage storage, std::string brewery) {
-    std::vector<Drink> beers_by_brewery = storage.get_all<Drink>(where(c(&Drink::brewery) == std::move(brewery)));
+std::vector<Drink> Database::get_beers_by_brewery(Storage storage, std::string producer) {
+    std::vector<Drink> beers_by_brewery = storage.get_all<Drink>(where(c(&Drink::producer) == std::move(producer)));
     return beers_by_brewery;
 }
 
@@ -184,7 +184,7 @@ void Database::populate_maker_column() {
     if (get_version(storage) == 2) {  // Old db version
         std::vector<Drink> all_drinks = storage.get_all<Drink>();
         for (auto drink : all_drinks) {
-            drink.maker = drink.brewery;
+            drink.producer = drink.brewery;
             update(storage, drink);
         }
     }
