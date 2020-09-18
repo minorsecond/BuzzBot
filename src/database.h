@@ -12,6 +12,7 @@ struct Beer {
     int drink_day;
     std::string name;
     std::string type;
+    std::string subtype;
     std::string brewery;
     double abv;
     double ibu;
@@ -31,6 +32,7 @@ inline auto initStorage(const std::string& file_name) {
                                                           sqlite_orm::make_column("drink_day", &Beer::drink_day),
                                                           sqlite_orm::make_column("drink_name", &Beer::name),
                                                           sqlite_orm::make_column("drink_type", &Beer::type),
+                                                          sqlite_orm::make_column("drink_subtype", &Beer::subtype, sqlite_orm::default_value("")),
                                                           sqlite_orm::make_column("brewery", &Beer::brewery),
                                                           sqlite_orm::make_column("abv", &Beer::abv),
                                                           sqlite_orm::make_column("ibu", &Beer::ibu),
@@ -43,7 +45,6 @@ using Storage = decltype (initStorage(""));
 
 class Database
 {
-
 public:
     static std::vector<Beer> read(const std::string& database_path, Storage storage);
     static Storage write(Beer beer, Storage storage);
@@ -53,6 +54,11 @@ public:
     static void update(Storage storage, const Beer& beer);
     static std::vector<Beer> filter(const std::string& filter_type, const std::string& filter_text, Storage storage);
     static void write_db_to_disk(Storage storage);
+    static Beer get_beer_by_name(Storage storage, std::string beer_name);
+    static std::vector<Beer> get_beers_by_type(Storage storage, std::string beer_type);
+    static std::vector<Beer> get_beers_by_brewery(Storage storage, std::string brewery);
+    static int get_version(Storage storage);
+    static int increment_version(Storage storage, int current_version);
 
 public:
     static std::string path();

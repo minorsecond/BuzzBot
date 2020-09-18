@@ -7,14 +7,13 @@
 #include "boost/filesystem.hpp"
 
 TEST_CASE("Standard Drinks", "[Drink Calculations]") {
-
     double mosaic_standard_drinks = Calculate::standard_drinks(8.6, 12);
     double etrwo_standard_drinks = Calculate::standard_drinks(6.5, 12);
     double old_rasputin_standard_drinks = Calculate::standard_drinks(9, 12);
 
-    REQUIRE(mosaic_standard_drinks == 1.7);
-    REQUIRE(etrwo_standard_drinks == 1.3);
-    REQUIRE(old_rasputin_standard_drinks == 1.8);
+    REQUIRE(mosaic_standard_drinks == 1.72);
+    REQUIRE(etrwo_standard_drinks == 1.30);
+    REQUIRE(old_rasputin_standard_drinks == 1.80);
 }
 
 TEST_CASE("Oz Alcohol", "[Drink Calculations]") {
@@ -32,7 +31,7 @@ TEST_CASE("Std Drinks Remaining", "[Drink Calculations]") {
     double female_drinks_remaining = Calculate::standard_drinks_remaining("female", 8);
 
     REQUIRE(male_drinks_remaining == 9.4);
-    REQUIRE(female_drinks_remaining == 0);
+    REQUIRE(female_drinks_remaining == -1.0);
 }
 
 TEST_CASE("Oz Alcohol Remaining", "[Drink Calculations]") {
@@ -40,7 +39,7 @@ TEST_CASE("Oz Alcohol Remaining", "[Drink Calculations]") {
     double female_oz_remaining = Calculate::oz_alcohol_remaining("female", 5.5);
 
     REQUIRE(male_oz_remaining == 4.1);
-    REQUIRE(female_oz_remaining == 0);
+    REQUIRE(female_oz_remaining == -1.3);
 }
 
 TEST_CASE("Mean ABV", "[Drink Calculations]") {
@@ -55,11 +54,11 @@ TEST_CASE("Mean ABV", "[Drink Calculations]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
                 "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
@@ -68,7 +67,7 @@ TEST_CASE("Mean ABV", "[Drink Calculations]") {
     Database::write_db_to_disk(storage_1);
     double mean_abv = Calculate::mean_abv(storage_1);
 
-    REQUIRE(mean_abv == 8.1);
+    REQUIRE(mean_abv == 8.13);
 }
 
 TEST_CASE("Mean IBU", "[Drink Calculations]") {
@@ -83,11 +82,11 @@ TEST_CASE("Mean IBU", "[Drink Calculations]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
                 "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
@@ -111,11 +110,11 @@ TEST_CASE("Favorite Brewery", "[Favorite Calculations]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
                 "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
@@ -139,11 +138,11 @@ TEST_CASE("Favorite Beer", "[Favorite Calculations]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA",
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
                 "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA",
+    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
                 "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
 
     storage_1.insert(etrwo);
@@ -153,4 +152,32 @@ TEST_CASE("Favorite Beer", "[Favorite Calculations]") {
 
     std::string favorite_beer = Calculate::favorite_beer(storage_1);
     REQUIRE(favorite_beer == "Everything Rhymes with Orange");
+}
+
+TEST_CASE("Favorite Type", "[Favorite Calculations]") {
+    std::string current_path = std::filesystem::current_path();
+    const char *file_name = "testdb.db";
+    std::string db_path = current_path + "/" + file_name;
+
+    if (remove(db_path.c_str())) {
+        std::cout << "Removed existing testdb.sqlite file" << std::endl;
+    }
+
+    Storage storage_1 = initStorage(db_path);
+    Database::write_db_to_disk(storage_1);
+
+    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
+               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
+    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
+                "Community Brewing", 8.4, 75.0, 12, 8, ""};
+    Beer etrwo2{-1, 2020, 9, 10, "Old Rasputin", "Russian Imperial Stout", "",
+                "North Coast Brewing", 9.0, 75.0, 12, 8, ""};
+
+    storage_1.insert(etrwo);
+    storage_1.insert(mosaic);
+    storage_1.insert(etrwo2);
+    Database::write_db_to_disk(storage_1);
+
+    std::string favorite_type = Calculate::favorite_type(storage_1);
+    REQUIRE(favorite_type == "IPA");
 }
