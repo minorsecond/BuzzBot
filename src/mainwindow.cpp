@@ -849,7 +849,7 @@ void MainWindow::update_favorite_brewery() {
      * Update the favorite brewery text label to the most common beer in the database.
      */
 
-    std::string fave_brewery = Calculate::favorite_brewery(storage);
+    std::string fave_brewery = Calculate::favorite_producer(storage);
     ui->favoriteBreweryOutput->setText(QString::fromStdString(fave_brewery));
 }
 

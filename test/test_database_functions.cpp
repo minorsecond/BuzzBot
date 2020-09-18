@@ -60,7 +60,7 @@ TEST_CASE("DB IO", "[DB IO]") {
     REQUIRE(etrwo_read.ibu == 60.0);
     REQUIRE(etrwo_read.name == "Everything Rhymes with Orange");
     REQUIRE(etrwo_read.notes == "Very good hazy IPA.");
-    REQUIRE(mosaic_read.brewery == "Community Brewing");
+    REQUIRE(mosaic_read.producer == "Community Brewing");
     REQUIRE(mosaic_read.drink_day == 8);
     REQUIRE(mosaic_read.type == "IPA");
 }
