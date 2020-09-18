@@ -880,6 +880,11 @@ void MainWindow::update_fields_on_beer_name() {
         ui->sizeInput->setValue(size);
         ui->ratingInput->setValue(rating);
     }
+
+    // Set notes to the notes for beer in the name input
+    std::string notes;
+    notes = get_latest_notes_for_beer(ui->nameInput->currentText().toStdString());
+    ui->notesInput->setText(QString::fromStdString(notes));
 }
 
 void MainWindow::update_favorite_type() {
