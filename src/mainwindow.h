@@ -50,6 +50,9 @@ private:
     void populate_beer_fields(const Drink& drink_at_row);
     void populate_liquor_fields(const Drink& drink_at_row);
     void populate_wine_fields(const Drink& drink_at_row);
+    void update_beer_names_producers();
+    void update_liquor_names_producers();
+    void update_wine_names_producers();
 
 private slots:
     void submit_button_clicked();
