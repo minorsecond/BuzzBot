@@ -42,6 +42,8 @@ private:
     std::string get_latest_notes(const std::string& name, const std::string& alcohol_type);
     std::string get_current_tab();
     Drink get_drink_attributes_from_fields();
+    void update_selected_row(QItemSelectionModel* select, Drink entered_drink);
+    void add_new_row(Drink entered_drink);
 
 private slots:
     void submit_button_clicked();
