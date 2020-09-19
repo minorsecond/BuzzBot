@@ -142,7 +142,7 @@
       </column>
       <column>
        <property name="text">
-        <string>Maker</string>
+        <string>Producer</string>
        </property>
       </column>
       <column>
