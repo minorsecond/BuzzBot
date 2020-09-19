@@ -1168,7 +1168,7 @@
         <item row="6" column="2">
          <layout class="QGridLayout" name="gridLayout_9">
           <item row="0" column="2">
-           <widget class="QLabel" name="liquorSizeLabel_2">
+           <widget class="QLabel" name="wineSizeLabel">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1184,7 +1184,7 @@
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QSpinBox" name="liquorSizeInput_2">
+           <widget class="QSpinBox" name="wineSizeInput">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -1194,7 +1194,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLabel" name="liquorRatingLabel_2">
+           <widget class="QLabel" name="wineRatingLabel">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1210,7 +1210,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QSpinBox" name="liquorRatingInput_2">
+           <widget class="QSpinBox" name="wineRatingInput">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -1223,7 +1223,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QDoubleSpinBox" name="liquorAbvInput_2">
+           <widget class="QDoubleSpinBox" name="wineAbvInput">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -1233,7 +1233,7 @@
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="liquorAbvLabel_2">
+           <widget class="QLabel" name="wineAbvLabel">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
