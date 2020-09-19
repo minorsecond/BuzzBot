@@ -1,6 +1,4 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "database.h"
 #include "usersettings.h"
 #include "about.h"
 #include "calculate.h"
@@ -30,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Upgrade DB version
     // TODO: Remove the brewery column from database at DB version 3
     Database::increment_version(storage, 2);
-    Database::populate_maker_column();  // Copy brewery column to maker if database version is 2
+    Database::populate_producer_column();  // Copy brewery column to maker if database version is 2
 
     add_menubar_items();
 
@@ -417,71 +415,6 @@ std::string MainWindow::double_to_string(double input_double) {
     price_stream << purchase_price;
 
     return price_stream.str();
-}
-
-void MainWindow::populate_beer_fields(const Drink& drink_at_row) {
-    /*
-     * Populate the beer entry fields if user is on the beer entry tab.
-     */
-
-    QDate date = format_date_for_input(drink_at_row);
-    // Only update the beer fields if the user is currently on the beer tab
-    std::string notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
-    ui->beerDateInput->setDate(date);
-    ui->beerNameInput->setCurrentText(drink_at_row.name.c_str());
-    ui->beerTypeInput->setCurrentText(drink_at_row.type.c_str());
-    ui->beerSubtypeInput->setCurrentText(drink_at_row.subtype.c_str());
-    ui->beerBreweryInput->setCurrentText(drink_at_row.producer.c_str());
-    ui->beerAbvInput->setValue(drink_at_row.abv);
-    ui->beerIbuInput->setValue(drink_at_row.ibu);
-    ui->beerSizeInput->setValue(drink_at_row.size);
-    ui->beerRatingInput->setValue(drink_at_row.rating);
-    ui->beerNotesInput->setText(notes.c_str());
-
-    // Switch to the beer tab
-    ui->tabWidget->setCurrentIndex(0);
-}
-
-void MainWindow::populate_liquor_fields(const Drink& drink_at_row) {
-    /*
-     * Populate the liquor entry fields if user is on the liquor entry tab.
-     */
-    QDate date = format_date_for_input(drink_at_row);
-    std::string notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
-    ui->liquorDateInput->setDate(date);
-    ui->liquorNameInput->setCurrentText(drink_at_row.name.c_str());
-    ui->liquorTypeInput->setCurrentText(drink_at_row.type.c_str());
-    ui->liquorSubtypeInput->setCurrentText(drink_at_row.subtype.c_str());
-    ui->liquorDistillerInput->setCurrentText(drink_at_row.producer.c_str());
-    ui->liquorAbvInput->setValue(drink_at_row.abv);
-    ui->liquorSizeInput->setValue(drink_at_row.size);
-    ui->liquorRatingInput->setValue(drink_at_row.rating);
-    ui->liquorNotesInput->setText(notes.c_str());
-
-    // Switch to the liquor tab
-    ui->tabWidget->setCurrentIndex(1);
-}
-
-void MainWindow::populate_wine_fields(const Drink& drink_at_row) {
-    /*
-     * Populate the wine entry fields if user is on the wine entry tab.
-     */
-
-    QDate date = format_date_for_input(drink_at_row);
-    std::string notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
-    ui->wineDateInput->setDate(date);
-    ui->wineNameInput->setCurrentText(drink_at_row.name.c_str());
-    ui->wineTypeInput->setCurrentText(drink_at_row.type.c_str());
-    ui->wineSubtypeInput->setCurrentText(drink_at_row.subtype.c_str());
-    ui->wineryInput->setCurrentText(drink_at_row.producer.c_str());
-    ui->wineVintage->setValue(drink_at_row.vintage);
-    ui->wineAbvInput->setValue(drink_at_row.abv);
-    ui->wineSizeInput->setValue(drink_at_row.size);
-    ui->wineRatingInput->setValue(drink_at_row.rating);
-    ui->wineNotesInput->setText(notes.c_str());
-
-    // Switch to the liquor tab
-    ui->tabWidget->setCurrentIndex(2);
 }
 
 void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &) {

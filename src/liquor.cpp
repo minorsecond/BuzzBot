@@ -3,7 +3,6 @@
 //
 
 #include <utility>
-
 #include "mainwindow.h"
 
 void MainWindow::update_liquor_fields() {
@@ -50,6 +49,26 @@ void MainWindow::update_liquor_fields() {
     for (const auto& name : names) {
         ui->liquorNameInput->addItem(name);
     }
+}
+
+void MainWindow::populate_liquor_fields(const Drink& drink_at_row) {
+    /*
+     * Populate the liquor entry fields if user is on the liquor entry tab.
+     */
+    QDate date = format_date_for_input(drink_at_row);
+    std::string notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
+    ui->liquorDateInput->setDate(date);
+    ui->liquorNameInput->setCurrentText(drink_at_row.name.c_str());
+    ui->liquorTypeInput->setCurrentText(drink_at_row.type.c_str());
+    ui->liquorSubtypeInput->setCurrentText(drink_at_row.subtype.c_str());
+    ui->liquorDistillerInput->setCurrentText(drink_at_row.producer.c_str());
+    ui->liquorAbvInput->setValue(drink_at_row.abv);
+    ui->liquorSizeInput->setValue(drink_at_row.size);
+    ui->liquorRatingInput->setValue(drink_at_row.rating);
+    ui->liquorNotesInput->setText(notes.c_str());
+
+    // Switch to the liquor tab
+    ui->tabWidget->setCurrentIndex(1);
 }
 
 void MainWindow::update_liquor_names_producers() {
