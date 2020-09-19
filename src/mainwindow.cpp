@@ -115,6 +115,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     update_table();
 
+    ui->wineVintage->setMaximum(QDate::currentDate().year());
+    ui->wineVintage->setMinimum(0);
+
     // Sort table by date column, by default
     reset_table_sort();
 
@@ -435,6 +438,7 @@ void MainWindow::populate_wine_fields(const Drink& drink_at_row) {
     ui->wineTypeInput->setCurrentText(drink_at_row.type.c_str());
     ui->wineSubtypeInput->setCurrentText(drink_at_row.subtype.c_str());
     ui->wineryInput->setCurrentText(drink_at_row.producer.c_str());
+    ui->wineVintage->setValue(drink_at_row.vintage);
     ui->wineAbvInput->setValue(drink_at_row.abv);
     ui->wineSizeInput->setValue(drink_at_row.size);
     ui->wineRatingInput->setValue(drink_at_row.rating);
@@ -1412,6 +1416,7 @@ Drink MainWindow::get_drink_attributes_from_fields() {
         drink.type = ui->wineTypeInput->currentText().toStdString();
         drink.subtype = ui->wineSubtypeInput->currentText().toStdString();
         drink.producer = ui->wineryInput->currentText().toStdString();
+        drink.vintage = ui->wineVintage->value();
         drink.abv = ui->wineAbvInput->value();
         drink.ibu = -1.0;  // -1 denotes no IBU value
         drink.size = ui->wineSizeInput->value();
