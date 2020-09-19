@@ -21,6 +21,7 @@ public:
     static std::string favorite_type(Storage storage);
     static double mean_abv(Storage storage);  // TODO write test
     static double mean_ibu(Storage storage);  // TODO write test
+    static bool compare_date(const Drink &a, const Drink &b);
 };
 
 

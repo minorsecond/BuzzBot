@@ -206,8 +206,8 @@ public:
         gridLayout_4->addWidget(frame_2, 4, 1, 2, 3);
 
         drinkLogTable = new QTableWidget(centralwidget);
-        if (drinkLogTable->columnCount() < 11)
-            drinkLogTable->setColumnCount(11);
+        if (drinkLogTable->columnCount() < 12)
+            drinkLogTable->setColumnCount(12);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         drinkLogTable->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
@@ -230,24 +230,26 @@ public:
         drinkLogTable->setHorizontalHeaderItem(9, __qtablewidgetitem9);
         QTableWidgetItem *__qtablewidgetitem10 = new QTableWidgetItem();
         drinkLogTable->setHorizontalHeaderItem(10, __qtablewidgetitem10);
+        QTableWidgetItem *__qtablewidgetitem11 = new QTableWidgetItem();
+        drinkLogTable->setHorizontalHeaderItem(11, __qtablewidgetitem11);
         if (drinkLogTable->rowCount() < 1)
             drinkLogTable->setRowCount(1);
-        QTableWidgetItem *__qtablewidgetitem11 = new QTableWidgetItem();
-        drinkLogTable->setVerticalHeaderItem(0, __qtablewidgetitem11);
         QTableWidgetItem *__qtablewidgetitem12 = new QTableWidgetItem();
-        drinkLogTable->setItem(0, 0, __qtablewidgetitem12);
+        drinkLogTable->setVerticalHeaderItem(0, __qtablewidgetitem12);
         QTableWidgetItem *__qtablewidgetitem13 = new QTableWidgetItem();
-        drinkLogTable->setItem(0, 1, __qtablewidgetitem13);
+        drinkLogTable->setItem(0, 0, __qtablewidgetitem13);
         QTableWidgetItem *__qtablewidgetitem14 = new QTableWidgetItem();
-        drinkLogTable->setItem(0, 2, __qtablewidgetitem14);
+        drinkLogTable->setItem(0, 1, __qtablewidgetitem14);
         QTableWidgetItem *__qtablewidgetitem15 = new QTableWidgetItem();
-        drinkLogTable->setItem(0, 4, __qtablewidgetitem15);
+        drinkLogTable->setItem(0, 2, __qtablewidgetitem15);
         QTableWidgetItem *__qtablewidgetitem16 = new QTableWidgetItem();
-        drinkLogTable->setItem(0, 5, __qtablewidgetitem16);
+        drinkLogTable->setItem(0, 4, __qtablewidgetitem16);
         QTableWidgetItem *__qtablewidgetitem17 = new QTableWidgetItem();
-        drinkLogTable->setItem(0, 6, __qtablewidgetitem17);
+        drinkLogTable->setItem(0, 5, __qtablewidgetitem17);
         QTableWidgetItem *__qtablewidgetitem18 = new QTableWidgetItem();
-        drinkLogTable->setItem(0, 7, __qtablewidgetitem18);
+        drinkLogTable->setItem(0, 6, __qtablewidgetitem18);
+        QTableWidgetItem *__qtablewidgetitem19 = new QTableWidgetItem();
+        drinkLogTable->setItem(0, 7, __qtablewidgetitem19);
         drinkLogTable->setObjectName(QString::fromUtf8("drinkLogTable"));
         QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
         sizePolicy2.setHorizontalStretch(0);
@@ -1028,25 +1030,27 @@ public:
         ___qtablewidgetitem9->setText(QCoreApplication::translate("MainWindow", "ID", nullptr));
         QTableWidgetItem *___qtablewidgetitem10 = drinkLogTable->horizontalHeaderItem(10);
         ___qtablewidgetitem10->setText(QCoreApplication::translate("MainWindow", "Timestamp", nullptr));
-        QTableWidgetItem *___qtablewidgetitem11 = drinkLogTable->verticalHeaderItem(0);
-        ___qtablewidgetitem11->setText(QCoreApplication::translate("MainWindow", "1", nullptr));
+        QTableWidgetItem *___qtablewidgetitem11 = drinkLogTable->horizontalHeaderItem(11);
+        ___qtablewidgetitem11->setText(QCoreApplication::translate("MainWindow", "Sort", nullptr));
+        QTableWidgetItem *___qtablewidgetitem12 = drinkLogTable->verticalHeaderItem(0);
+        ___qtablewidgetitem12->setText(QCoreApplication::translate("MainWindow", "1", nullptr));
 
         const bool __sortingEnabled = drinkLogTable->isSortingEnabled();
         drinkLogTable->setSortingEnabled(false);
-        QTableWidgetItem *___qtablewidgetitem12 = drinkLogTable->item(0, 0);
-        ___qtablewidgetitem12->setText(QCoreApplication::translate("MainWindow", "09/07/2020", nullptr));
-        QTableWidgetItem *___qtablewidgetitem13 = drinkLogTable->item(0, 1);
-        ___qtablewidgetitem13->setText(QCoreApplication::translate("MainWindow", "Everything Rhymes with Orange", nullptr));
-        QTableWidgetItem *___qtablewidgetitem14 = drinkLogTable->item(0, 2);
-        ___qtablewidgetitem14->setText(QCoreApplication::translate("MainWindow", "IPA", nullptr));
-        QTableWidgetItem *___qtablewidgetitem15 = drinkLogTable->item(0, 4);
-        ___qtablewidgetitem15->setText(QCoreApplication::translate("MainWindow", "Roughtail Brewing", nullptr));
-        QTableWidgetItem *___qtablewidgetitem16 = drinkLogTable->item(0, 5);
-        ___qtablewidgetitem16->setText(QCoreApplication::translate("MainWindow", "8.0", nullptr));
-        QTableWidgetItem *___qtablewidgetitem17 = drinkLogTable->item(0, 6);
-        ___qtablewidgetitem17->setText(QCoreApplication::translate("MainWindow", "65", nullptr));
-        QTableWidgetItem *___qtablewidgetitem18 = drinkLogTable->item(0, 7);
-        ___qtablewidgetitem18->setText(QCoreApplication::translate("MainWindow", "12", nullptr));
+        QTableWidgetItem *___qtablewidgetitem13 = drinkLogTable->item(0, 0);
+        ___qtablewidgetitem13->setText(QCoreApplication::translate("MainWindow", "09/07/2020", nullptr));
+        QTableWidgetItem *___qtablewidgetitem14 = drinkLogTable->item(0, 1);
+        ___qtablewidgetitem14->setText(QCoreApplication::translate("MainWindow", "Everything Rhymes with Orange", nullptr));
+        QTableWidgetItem *___qtablewidgetitem15 = drinkLogTable->item(0, 2);
+        ___qtablewidgetitem15->setText(QCoreApplication::translate("MainWindow", "IPA", nullptr));
+        QTableWidgetItem *___qtablewidgetitem16 = drinkLogTable->item(0, 4);
+        ___qtablewidgetitem16->setText(QCoreApplication::translate("MainWindow", "Roughtail Brewing", nullptr));
+        QTableWidgetItem *___qtablewidgetitem17 = drinkLogTable->item(0, 5);
+        ___qtablewidgetitem17->setText(QCoreApplication::translate("MainWindow", "8.0", nullptr));
+        QTableWidgetItem *___qtablewidgetitem18 = drinkLogTable->item(0, 6);
+        ___qtablewidgetitem18->setText(QCoreApplication::translate("MainWindow", "65", nullptr));
+        QTableWidgetItem *___qtablewidgetitem19 = drinkLogTable->item(0, 7);
+        ___qtablewidgetitem19->setText(QCoreApplication::translate("MainWindow", "12", nullptr));
         drinkLogTable->setSortingEnabled(__sortingEnabled);
 
         statsLabel->setText(QCoreApplication::translate("MainWindow", "Stats", nullptr));

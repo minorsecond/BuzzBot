@@ -59,6 +59,9 @@ private:
     void update_beer_types_producers();
     void update_liquor_types_producers();
     void update_wine_types_producers();
+    Drink get_beer_attrs_from_fields(std::string alcohol_type);
+    Drink get_liquor_attrs_from_fields(std::string alcohol_type);
+    Drink get_wine_attrs_from_fields(std::string alcohol_type);
 
 private slots:
     void submit_button_clicked();

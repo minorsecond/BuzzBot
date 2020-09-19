@@ -1,4 +1,5 @@
 #include "database.h"
+#include "calculate.h"
 #include <boost/filesystem.hpp>
 #include <utility>
 #include <QStandardPaths>
@@ -198,4 +199,22 @@ void Database::populate_maker_column() {
             update(storage, drink);
         }
     }
+}
+
+std::vector<Drink> Database::sort_by_date_id(std::vector<Drink> drinks) {
+    /*
+     * Adds a sort column integer to database.
+     */
+
+    // First sort by entered date
+    std::sort(drinks.begin(), drinks.end(), Calculate::compare_date);
+
+    // Now add sort order value
+    int sort_order = 1;
+    for (int i = 0; i < drinks.size(); ++i) {
+        drinks[i].sort_order = sort_order;
+        sort_order++;
+    }
+
+    return drinks;
 }
