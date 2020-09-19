@@ -23,6 +23,7 @@ struct Drink {  // TODO: Remove brewery in DB version 3/Beertabs v1.0.0
     int vintage;
     std::string alcohol_type;
     std::string timestamp;
+    int sort_order;
 };
 
 inline auto initStorage(const std::string& file_name) {
@@ -44,6 +45,7 @@ inline auto initStorage(const std::string& file_name) {
                                                           sqlite_orm::make_column("rating", &Drink::rating),
                                                           sqlite_orm::make_column("notes", &Drink::notes),
                                                           sqlite_orm::make_column("vintage", &Drink::vintage, sqlite_orm::default_value(-999)),
+                                                          sqlite_orm::make_column("sort_order", &Drink::sort_order, sqlite_orm::default_value(-1)),
                                                           sqlite_orm::make_column("alcohol_type", &Drink::alcohol_type, sqlite_orm::default_value("Beer")),
                                                           sqlite_orm::make_column("timestamp", &Drink::timestamp, sqlite_orm::default_value(sqlite_orm::datetime("now", "localtime")))));
 }
@@ -66,6 +68,7 @@ public:
     static int get_version(Storage storage);
     static int increment_version(Storage storage, int current_version);
     static void populate_maker_column();
+    static std::vector<Drink> sort_by_date_id(std::vector<Drink> drinks);
 
 public:
     static std::string path();

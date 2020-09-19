@@ -33,7 +33,7 @@ set(beertabs_ICON ${ICON_PATH})
 set_source_files_properties(${beertabs_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 file(COPY ${ICON_PATH} DESTINATION "Beertabs.app/Contents/Resources")
 
-add_executable(Beertabs MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp src/mainwindow.h src/database.h src/usersettings.cpp src/usersettings.h src/calculate.cpp src/calculate.h)
+add_executable(Beertabs MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp src/mainwindow.h src/database.h src/usersettings.cpp src/usersettings.h src/calculate.cpp src/calculate.h src/beer.cpp src/liquor.cpp src/wine.cpp src/filters.cpp)
 add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp test/test_database_functions.cpp test/test_calculations.cpp)
 
 # Copy resources to build dir
