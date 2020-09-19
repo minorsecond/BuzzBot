@@ -32,13 +32,50 @@ MainWindow::MainWindow(QWidget *parent)
     Database::increment_version(storage, 2);
     Database::populate_maker_column();  // Copy brewery column to maker if database version is 2
 
+    add_menubar_items();
+
     // Set size hints
     ui->beerDateInput->setProperty("sizeHint", QVariant(QSizeF(241, 22)));
 
     // Set current tab to Beer tab
     ui->tabWidget->setCurrentIndex(0);
 
-    // Add menubar items
+    configure_calendar();
+    Database::write_db_to_disk(storage);
+    update_stat_panel();
+
+    // Set up button and input states
+    set_input_states();
+
+    // Enable this on release
+    ui->drinkLogTable->setRowCount(0);
+
+    // Disable cell editing
+    ui->drinkLogTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    update_table();
+
+    ui->wineVintage->setMaximum(QDate::currentDate().year());
+    ui->wineVintage->setMinimum(0);
+
+    // Sort table by date column, by default
+    reset_table_sort();
+    configure_table();
+    update_beer_fields();
+    update_liquor_fields();
+    update_wine_fields();
+    add_slot_connections();
+
+    // Update fields to match beer that comes first alphabetically
+    reset_fields();
+}
+
+void MainWindow::add_menubar_items() {
+    /*
+     * Add items to the system menubar.
+     */
+
+
     auto * preferences_action = new QAction("Preferences");
     auto * about_action = new QAction("About");
     QMenu * app_menu = menuBar()->addMenu("App Menu");
@@ -47,12 +84,15 @@ MainWindow::MainWindow(QWidget *parent)
     app_menu->addAction(preferences_action);
     app_menu->addAction(about_action);
 
-    // Fixed row height in table
-    QHeaderView *verticalHeader = ui->drinkLogTable->verticalHeader();
-    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-    ui->drinkLogTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    connect(preferences_action, SIGNAL(triggered()), this, SLOT(open_user_settings()));
+    connect(about_action, SIGNAL(triggered()), this, SLOT(open_about_dialog()));
+}
 
-    // Fix up calendar widget
+void MainWindow::configure_calendar() {
+    /*
+     * Set up the calendar widget with nicer settings.
+     */
+
     // First, get path of .app file
     CFURLRef app_url_ref = CFBundleCopyBundleURL(CFBundleGetMainBundle());
     CFStringRef mac_path = CFURLCopyFileSystemPath(app_url_ref, kCFURLPOSIXPathStyle);
@@ -73,53 +113,27 @@ MainWindow::MainWindow(QWidget *parent)
                                   "QCalendarWidget QWidget { alternate-background-color: rgba(128, 128, 128, 0); }\n"
                                   "QCalendarWidget QToolButton#qt_calendar_prevmonth \n"
                                   "{\n"
-                                  "\tqproperty-icon: url(" + previous_month_arrow + ");\n"
+                                  "\tqproperty-icon: url(" + previous_month_arrow +
+                                  ");\n"
                                   "}\n"
                                   "\n"
                                   "QCalendarWidget QToolButton#qt_calendar_nextmonth \n"
                                   "{\n"
-                                  "\tqproperty-icon: url(" + next_month_arrow + ");\n"
-                                  "}";
-
+                                  "\tqproperty-icon: url(" + next_month_arrow + ");\n""}";
     ui->beerDateInput->setStyleSheet(QString::fromStdString(stylesheet_text));
     ui->liquorDateInput->setStyleSheet(QString::fromStdString(stylesheet_text));
     ui->wineDateInput->setStyleSheet(QString::fromStdString(stylesheet_text));
+}
 
-    Database::write_db_to_disk(storage);
+void MainWindow::configure_table() {
+    /*
+     * Set table settings
+     */
 
-    update_stat_panel();
-
-    // Set up button and input states
-    ui->deleteRowButton->setDisabled(true);
-    ui->beerNameInput->setDuplicatesEnabled(false);
-    ui->liquorNameInput->setDuplicatesEnabled(false);
-    ui->wineNameInput->setDuplicatesEnabled(false);
-    ui->beerTypeInput->setDuplicatesEnabled(false);
-    ui->liquorTypeInput->setDuplicatesEnabled(false);
-    ui->wineTypeInput->setDuplicatesEnabled(false);
-    ui->beerBreweryInput->setDuplicatesEnabled(false);
-    ui->liquorDistillerInput->setDuplicatesEnabled(false);
-    ui->wineryInput->setDuplicatesEnabled(false);
-
-    // Set datepicker to today's date
-    QDate todays_date = QDate::currentDate();
-    ui->beerDateInput->setDate(todays_date);
-    ui->liquorDateInput->setDate(todays_date);
-    ui->wineDateInput->setDate(todays_date);
-
-    // Enable this on release
-    ui->drinkLogTable->setRowCount(0);
-
-    // Disable cell editing
-    ui->drinkLogTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-    update_table();
-
-    ui->wineVintage->setMaximum(QDate::currentDate().year());
-    ui->wineVintage->setMinimum(0);
-
-    // Sort table by date column, by default
-    reset_table_sort();
+    // Fixed row height in table
+    QHeaderView *verticalHeader = ui->drinkLogTable->verticalHeader();
+    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+    ui->drinkLogTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
     // Enable table sorting by columns
     ui->drinkLogTable->setSortingEnabled(true);
@@ -132,7 +146,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->filterCategoryInput->addItem("Subtype");
     ui->filterCategoryInput->addItem("Producer");
     ui->filterCategoryInput->addItem("Rating");
-
     ui->filterTextInput->setDisabled(true);
 
     // Set column widths
@@ -153,10 +166,12 @@ MainWindow::MainWindow(QWidget *parent)
     drink_log_header->setSectionResizeMode(2, QHeaderView::Stretch);
     drink_log_header->setSectionResizeMode(3, QHeaderView::Stretch);
     drink_log_header->setSectionResizeMode(4, QHeaderView::Stretch);
+}
 
-    update_beer_fields();
-    update_liquor_fields();
-    update_wine_fields();
+void MainWindow::add_slot_connections() {
+    /*
+     * Connect buttons to slots
+     */
 
     // Disconnect corner button so that we can use it for our own method
     auto *corner_button = ui->drinkLogTable->findChild<QAbstractButton*>();
@@ -174,8 +189,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->submitRowButton, SIGNAL(clicked()), this, SLOT(submit_button_clicked()));
     connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(reset_fields()));
     connect(ui->deleteRowButton, SIGNAL(clicked()), this, SLOT(delete_row()));
-    connect(preferences_action, SIGNAL(triggered()), this, SLOT(open_user_settings()));
-    connect(about_action, SIGNAL(triggered()), this, SLOT(open_about_dialog()));
     connect(ui->beerNameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
     connect(ui->beerTypeInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(type_input_changed(const QString&)));
     connect(ui->beerBreweryInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(producer_input_changed(const QString&)));
@@ -186,9 +199,29 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->wineTypeInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(type_input_changed(const QString&)));
     connect(ui->wineryInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(producer_input_changed(const QString&)));
     connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tab_changed()));
+}
 
-    // Update fields to match beer that comes first alphabetically
-    reset_fields();
+void MainWindow::set_input_states() {
+    /*
+     * Set up the default input states.
+     */
+
+    ui->deleteRowButton->setDisabled(true);
+    ui->beerNameInput->setDuplicatesEnabled(false);
+    ui->liquorNameInput->setDuplicatesEnabled(false);
+    ui->wineNameInput->setDuplicatesEnabled(false);
+    ui->beerTypeInput->setDuplicatesEnabled(false);
+    ui->liquorTypeInput->setDuplicatesEnabled(false);
+    ui->wineTypeInput->setDuplicatesEnabled(false);
+    ui->beerBreweryInput->setDuplicatesEnabled(false);
+    ui->liquorDistillerInput->setDuplicatesEnabled(false);
+    ui->wineryInput->setDuplicatesEnabled(false);
+
+    // Set datepicker to today's date
+    QDate todays_date = QDate::currentDate();
+    ui->beerDateInput->setDate(todays_date);
+    ui->liquorDateInput->setDate(todays_date);
+    ui->wineDateInput->setDate(todays_date);
 }
 
 MainWindow::~MainWindow()
@@ -878,6 +911,7 @@ void MainWindow::tab_changed() {
      */
 
     std::string alcohol_type = get_current_tab();
+    reset_fields();
     if (alcohol_type == "Beer") {
         std::string beer_notes_text = get_latest_notes(ui->beerNameInput->currentText().toStdString(), alcohol_type);
         ui->beerNotesInput->setText(QString::fromStdString(beer_notes_text));
