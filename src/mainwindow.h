@@ -44,6 +44,7 @@ private:
     Drink get_drink_attributes_from_fields();
     void update_selected_row(QItemSelectionModel* select, Drink entered_drink);
     void add_new_row(Drink entered_drink);
+    std::vector<std::set<QString>> generate_filter_item_sets();
 
 private slots:
     void submit_button_clicked();

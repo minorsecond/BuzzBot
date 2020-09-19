@@ -113,7 +113,7 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::type) == filter_text));
     } else if (filter_type == "Subtype") {
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::subtype) == filter_text));
-    } else if (filter_type == "Maker") {
+    } else if (filter_type == "Producer") {
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::producer) == filter_text));
     } else if (filter_type == "Alcohol Type") {
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::alcohol_type) == filter_text));
