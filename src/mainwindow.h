@@ -62,6 +62,11 @@ private:
     Drink get_beer_attrs_from_fields(std::string alcohol_type);
     Drink get_liquor_attrs_from_fields(std::string alcohol_type);
     Drink get_wine_attrs_from_fields(std::string alcohol_type);
+    void add_menubar_items();
+    void configure_calendar();
+    void configure_table();
+    void add_slot_connections();
+    void set_input_states();
 
 private slots:
     void submit_button_clicked();
