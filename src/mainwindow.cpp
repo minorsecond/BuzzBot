@@ -127,7 +127,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->filterCategoryInput->addItem("Name");
     ui->filterCategoryInput->addItem("Type");
     ui->filterCategoryInput->addItem("Subtype");
-    ui->filterCategoryInput->addItem("Maker");
+    ui->filterCategoryInput->addItem("Producer");
     ui->filterCategoryInput->addItem("Rating");
 
     ui->filterTextInput->setDisabled(true);
@@ -461,16 +461,18 @@ void MainWindow::delete_row() {
     update_liquor_fields();
 }
 
-void MainWindow::populate_filter_menus(const std::string& filter_type) {
+std::vector<std::set<QString>> MainWindow::generate_filter_item_sets() {
     /*
-     * Populate the filter menus depending on user selection.
-     * @param filter type: Type of filter to use. Options in beer name (name), beer type (type) and brewery.
+     * Generate sets containing unique filter values.
+     * @return filter_values: A vector of sets containing unique values to pass to the filter dropdown.
      */
 
-    std::set<QString> beer_names;
-    std::set<QString> beer_types;
-    std::set<QString> beer_subtypes;
-    std::set<QString> breweries;
+    std::vector<std::set<QString>> filter_values;
+
+    std::set<QString> drink_names;
+    std::set<QString> drink_types;
+    std::set<QString> drink_subtypes;
+    std::set<QString> producers;
     std::set<QString> ratings;
 
     ui->filterTextInput->clear();
@@ -479,42 +481,57 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
     QSignalBlocker filterTextInputSignalBlocker(ui->filterTextInput);
 
     // Add items to the sets
-    // TODO: Refactor this
     std::vector<Drink> all_beers = Database::read(Database::path(), storage);
     for (const auto& beer : all_beers) {
-        QString beer_name = QString::fromStdString(beer.name);
-        QString beer_type = QString::fromStdString(beer.type);
-        QString beer_subtype = QString::fromStdString(beer.subtype);
-        QString brewery = QString::fromStdString(beer.producer);
+        QString drink_name = QString::fromStdString(beer.name);
+        QString drink_type = QString::fromStdString(beer.type);
+        QString drink_subtype = QString::fromStdString(beer.subtype);
+        QString producer = QString::fromStdString(beer.producer);
         QString rating = QString::fromStdString(std::to_string(beer.rating));
 
-        beer_names.insert(beer_name);
-        beer_types.insert(beer_type);
-        beer_subtypes.insert(beer_subtype);
-        breweries.insert(brewery);
+        drink_names.insert(drink_name);
+        drink_types.insert(drink_type);
+        drink_subtypes.insert(drink_subtype);
+        producers.insert(producer);
         ratings.insert(rating);
     }
+    filter_values.push_back(drink_names);
+    filter_values.push_back(drink_types);
+    filter_values.push_back(drink_subtypes);
+    filter_values.push_back(producers);
+    filter_values.push_back(ratings);
+
+    return filter_values;
+}
+
+void MainWindow::populate_filter_menus(const std::string& filter_type) {
+    /*
+     * Populate the filter menus depending on user selection.
+     * @param filter type: Type of filter to use. Options in beer name (name), beer type (type) and brewery.
+     */
+
+    std::vector<std::set<QString>> filter_values = generate_filter_item_sets();
 
     if (filter_type == "Name") {
-        for (const auto& name : beer_names) {
+        for (const auto& name : filter_values.at(0)) {
             ui->filterTextInput->addItem(name);
         }
     } else if (filter_type == "Type") {
-        for (const auto& type : beer_types) {
+        for (const auto& type : filter_values.at(1)) {
             ui->filterTextInput->addItem(type);
         }
     } else if (filter_type == "Subtype") {
-        for (const auto& subtype : beer_subtypes) {
+        for (const auto& subtype : filter_values.at(2)) {
             if (!subtype.isEmpty()) {
                 ui->filterTextInput->addItem(subtype);
             }
         }
-    } else if (filter_type == "Brewery") {
-        for (const auto& brewery : breweries) {
+    } else if (filter_type == "Producer") {
+        for (const auto& brewery : filter_values.at(3)) {
             ui->filterTextInput->addItem(brewery);
         }
     } else if (filter_type == "Rating") {
-        for (const auto& rating : ratings) {
+        for (const auto& rating : filter_values.at(4)) {
             ui->filterTextInput->addItem(rating);
         }
     }
