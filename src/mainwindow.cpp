@@ -454,21 +454,16 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
         else
             ui->deleteRowButton->setDisabled(true);
 
-        std::string notes;
-
         Drink drink_at_row = Database::read_row(row_to_get, storage);
-
-        // Set up the date string
-        QDate date = format_date_for_input(drink_at_row);
 
         if (drink_at_row.alcohol_type == "Beer") {
             populate_beer_fields(drink_at_row);
-        } else if (drink_at_row.alcohol_type == "Liquor") {  // TODO: Refactor this
+        } else if (drink_at_row.alcohol_type == "Liquor") {
             populate_liquor_fields(drink_at_row);
+        } else if (drink_at_row.alcohol_type == "Wine") {
+            populate_wine_fields(drink_at_row);
         } else {
             std::cout << "Not updating fields because not in correct tab." << std::endl;
-            std::cout << "On tab " << get_current_tab() << std::endl;
-            std::cout << "Alcohol type: " << drink_at_row.alcohol_type << std::endl;
         }
     } else {
         std::cout << "Empty table." << std::endl;
@@ -1279,7 +1274,19 @@ Drink MainWindow::get_drink_attributes_from_fields() {
         drink.notes = ui->liquorNotesInput->toPlainText().toStdString();
         drink.alcohol_type = alcohol_type;
     } else if (alcohol_type == "Wine") {
-        //TODO: Finish this
+        drink.drink_year = ui->wineDateInput->date().year();
+        drink.drink_month = ui->wineDateInput->date().month();
+        drink.drink_day = ui->wineDateInput->date().day();
+        drink.name = ui->wineNameInput->currentText().toStdString();
+        drink.type = ui->wineTypeInput->currentText().toStdString();
+        drink.subtype = ui->wineSubtypeInput->currentText().toStdString();
+        drink.producer = ui->wineryInput->currentText().toStdString();
+        drink.abv = ui->wineAbvInput->value();
+        drink.ibu = -1.0;  // -1 denotes no IBU value
+        drink.size = ui->wineSizeInput->value();
+        drink.rating = ui->wineRatingInput->value();
+        drink.notes = ui->wineNotesInput->toPlainText().toStdString();
+        drink.alcohol_type = alcohol_type;
     } else {
         std::cout << "Somehow got illegal alcohol type." << std::endl;
     }
