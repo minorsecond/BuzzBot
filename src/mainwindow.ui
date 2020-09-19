@@ -1491,16 +1491,38 @@
   </widget>
  </widget>
  <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>beerDateInput</tabstop>
+  <tabstop>beerNameInput</tabstop>
+  <tabstop>beerBreweryInput</tabstop>
+  <tabstop>beerTypeInput</tabstop>
+  <tabstop>beerSubtypeInput</tabstop>
   <tabstop>beerAbvInput</tabstop>
   <tabstop>beerIbuInput</tabstop>
   <tabstop>beerRatingInput</tabstop>
   <tabstop>beerSizeInput</tabstop>
+  <tabstop>liquorDateInput</tabstop>
+  <tabstop>liquorNameInput</tabstop>
+  <tabstop>liquorDistillerInput</tabstop>
+  <tabstop>liquorTypeInput</tabstop>
+  <tabstop>liquorSubtypeInput</tabstop>
+  <tabstop>liquorAbvInput</tabstop>
+  <tabstop>liquorRatingInput</tabstop>
+  <tabstop>liquorSizeInput</tabstop>
+  <tabstop>wineDateInput</tabstop>
+  <tabstop>wineNameInput</tabstop>
+  <tabstop>wineryInput</tabstop>
+  <tabstop>wineTypeInput</tabstop>
+  <tabstop>wineSubtypeInput</tabstop>
+  <tabstop>wineVintage</tabstop>
+  <tabstop>wineAbvInput</tabstop>
+  <tabstop>wineRatingInput</tabstop>
+  <tabstop>wineSizeInput</tabstop>
   <tabstop>filterCategoryInput</tabstop>
   <tabstop>filterTextInput</tabstop>
   <tabstop>deleteRowButton</tabstop>
   <tabstop>clearFieldsButton</tabstop>
   <tabstop>submitRowButton</tabstop>
-  <tabstop>drinkLogTable</tabstop>
  </tabstops>
  <resources>
   <include location="../res/resources.qrc"/>
