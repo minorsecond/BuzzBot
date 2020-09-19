@@ -96,6 +96,31 @@ void Database::update(Storage storage, const Drink& beer) {
     storage.update(beer);
 }
 
+std::string Database::get_latest_notes(Storage storage, const std::string& name, const std::string& alcohol_type) {
+    /*
+     * Get the last notes entered for a drink.
+     * @param storage: A Storage instance.
+     * @param name: Name of alcohol to retrieve notes for.
+     * @param alcohol_type: Type of alcohol that Name is.
+     * @return notes: A string containing notes entered for the name and alcohol type.
+     */
+
+    std::vector<Drink> drinks = storage.get_all<Drink>(where(c(&Drink::name) == name && c(&Drink::alcohol_type) == alcohol_type));
+    std::string notes;
+    unsigned temp_id = 0;
+    for (const auto& drink_for_notes : drinks) {
+            if (drink_for_notes.id > temp_id && drink_for_notes.alcohol_type == alcohol_type) {
+                temp_id = drink_for_notes.id;
+                if (!drink_for_notes.notes.empty()) {
+                    notes = drink_for_notes.notes;
+                }
+            }
+        }
+
+    return notes;
+}
+
+
 std::vector<Drink> Database::filter(const std::string& filter_type, const std::string& filter_text, Storage storage) {
     /*
      * Retrieve DB rows based on filter column and text.
