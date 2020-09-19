@@ -178,6 +178,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->liquorNameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
     connect(ui->liquorTypeInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(type_input_changed(const QString&)));
     connect(ui->liquorDistillerInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(producer_input_changed(const QString&)));
+    connect(ui->wineNameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
+    connect(ui->wineTypeInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(type_input_changed(const QString&)));
     connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tab_changed()));
 
     // Update fields to match beer that comes first alphabetically
@@ -1057,6 +1059,32 @@ void MainWindow::type_input_changed(const QString &) {
 
         for (const auto& drink_name : drink_names) {
             ui->liquorNameInput->addItem(drink_name);
+        }
+    } else if (alcohol_type == "Wine") {
+        std::string input_type = ui->wineTypeInput->currentText().toStdString();
+        std::vector<Drink> selected_drinks = Database::get_beers_by_type(storage, input_type);
+
+        // This fixes crashes when changing with rows selected.
+        QSignalBlocker name_input_signal_blocker(ui->wineNameInput);
+        QSignalBlocker winery_input_signal_blocker(ui->wineryInput);
+
+        ui->wineAbvInput->setValue(0.0);
+        ui->wineSizeInput->setValue(0);
+        ui->wineRatingInput->setValue(0);
+        ui->wineNameInput->clear();
+        ui->wineryInput->clear();
+
+        for (const auto& selected_drink : selected_drinks) {
+            drink_names.insert(QString::fromStdString(selected_drink.name));
+            producer_names.insert(QString::fromStdString(selected_drink.producer));
+        }
+
+        for (const auto& winery : producer_names) {
+            ui->wineryInput->addItem(winery);
+        }
+
+        for (const auto& drink_name : drink_names) {
+            ui->wineNameInput->addItem(drink_name);
         }
     }
 
