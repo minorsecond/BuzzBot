@@ -293,7 +293,7 @@ void MainWindow::reset_fields() {
         QDate todays_date = QDate::currentDate();
         ui->liquorDateInput->setDate(todays_date);
     } else if (alcohol_type == "Wine") {
-        update_wine_fields();  // TODO: Change this to wine update_wine_fields
+        update_wine_fields();
         update_fields_on_drink_name_selected();
 
         // Set notes to the notes for beer in the name input
@@ -1192,6 +1192,30 @@ void MainWindow::update_fields_on_drink_name_selected() {
             // Set notes to the notes for liquor in the name input
             notes = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), get_current_tab());
             ui->liquorNotesInput->setText(QString::fromStdString(notes));
+        } else if (alcohol_type == "Wine") {
+            // This fixes crashes when changing with rows selected.
+            QSignalBlocker type_input_signal_blocker(ui->wineTypeInput);
+            QSignalBlocker brewery_input_signal_blocker(ui->wineryInput);
+
+            std::string input_wine = ui->wineNameInput->currentText().toStdString();
+            Drink selected_wine = Database::get_drink_by_name(storage, input_wine);
+            std::string wine_type = selected_wine.type;
+            std::string wine_subtype = selected_wine.subtype;
+            std::string producer = selected_wine.producer;
+            double abv = selected_wine.abv;
+            int size = selected_wine.size;
+            int rating = selected_wine.rating;
+
+            ui->wineTypeInput->setCurrentText(QString::fromStdString(wine_type));
+            ui->wineSubtypeInput->setCurrentText(QString::fromStdString(wine_subtype));
+            ui->wineryInput->setCurrentText(QString::fromStdString(producer));
+            ui->wineAbvInput->setValue(abv);
+            ui->wineSizeInput->setValue(size);
+            ui->wineRatingInput->setValue(rating);
+
+            // Set notes to the notes for liquor in the name input
+            notes = get_latest_notes(ui->wineNameInput->currentText().toStdString(), get_current_tab());
+            ui->wineNotesInput->setText(QString::fromStdString(notes));
         }
     }
 }
