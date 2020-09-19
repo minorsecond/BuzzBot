@@ -45,6 +45,10 @@ private:
     void update_selected_row(QItemSelectionModel* select, Drink entered_drink);
     void add_new_row(Drink entered_drink);
     std::vector<std::set<QString>> generate_filter_item_sets();
+    static QDate format_date_for_input(const Drink& drink);
+    void populate_beer_fields(const Drink& drink_at_row);
+    void populate_liquor_fields(const Drink& drink_at_row);
+    void populate_wine_fields(const Drink& drink_at_row);
 
 private slots:
     void submit_button_clicked();
