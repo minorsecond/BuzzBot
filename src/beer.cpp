@@ -46,6 +46,29 @@ void MainWindow::update_beer_fields() {
     }
 }
 
+void MainWindow::populate_beer_fields(const Drink& drink_at_row) {
+    /*
+     * Populate the beer entry fields if user is on the beer entry tab.
+     */
+
+    QDate date = format_date_for_input(drink_at_row);
+    // Only update the beer fields if the user is currently on the beer tab
+    std::string notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
+    ui->beerDateInput->setDate(date);
+    ui->beerNameInput->setCurrentText(drink_at_row.name.c_str());
+    ui->beerTypeInput->setCurrentText(drink_at_row.type.c_str());
+    ui->beerSubtypeInput->setCurrentText(drink_at_row.subtype.c_str());
+    ui->beerBreweryInput->setCurrentText(drink_at_row.producer.c_str());
+    ui->beerAbvInput->setValue(drink_at_row.abv);
+    ui->beerIbuInput->setValue(drink_at_row.ibu);
+    ui->beerSizeInput->setValue(drink_at_row.size);
+    ui->beerRatingInput->setValue(drink_at_row.rating);
+    ui->beerNotesInput->setText(notes.c_str());
+
+    // Switch to the beer tab
+    ui->tabWidget->setCurrentIndex(0);
+}
+
 void MainWindow::update_beer_names_producers() {
     /*
      * Update the names and breweries fields of the beer tab.
@@ -54,7 +77,6 @@ void MainWindow::update_beer_names_producers() {
     std::set<QString> drink_names;
     std::set<QString> producer_names;
     std::string input_type = ui->beerTypeInput->currentText().toStdString();
-    std::cout << input_type << std::endl;
     std::vector<Drink> selected_beers = Database::get_beers_by_type(storage, input_type);
 
     // This fixes crashes when changing with rows selected.

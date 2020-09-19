@@ -52,6 +52,28 @@ void MainWindow::update_wine_fields() {
     }
 }
 
+void MainWindow::populate_wine_fields(const Drink& drink_at_row) {
+    /*
+     * Populate the wine entry fields if user is on the wine entry tab.
+     */
+
+    QDate date = format_date_for_input(drink_at_row);
+    std::string notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
+    ui->wineDateInput->setDate(date);
+    ui->wineNameInput->setCurrentText(drink_at_row.name.c_str());
+    ui->wineTypeInput->setCurrentText(drink_at_row.type.c_str());
+    ui->wineSubtypeInput->setCurrentText(drink_at_row.subtype.c_str());
+    ui->wineryInput->setCurrentText(drink_at_row.producer.c_str());
+    ui->wineVintage->setValue(drink_at_row.vintage);
+    ui->wineAbvInput->setValue(drink_at_row.abv);
+    ui->wineSizeInput->setValue(drink_at_row.size);
+    ui->wineRatingInput->setValue(drink_at_row.rating);
+    ui->wineNotesInput->setText(notes.c_str());
+
+    // Switch to the liquor tab
+    ui->tabWidget->setCurrentIndex(2);
+}
+
 void MainWindow::update_wine_names_producers() {
     /*
      * Update the names and winery fields of the wine tab.

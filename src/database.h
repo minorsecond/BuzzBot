@@ -2,7 +2,6 @@
 #define DATABASE_H
 
 #include "../include/sqlite_orm.h"
-#include "iostream"
 #include <vector>
 
 struct Drink {  // TODO: Remove brewery in DB version 3/Beertabs v1.0.0
@@ -27,7 +26,6 @@ struct Drink {  // TODO: Remove brewery in DB version 3/Beertabs v1.0.0
 };
 
 inline auto initStorage(const std::string& file_name) {
-    std::cout << "Opening or creating DB at " << file_name << std::endl;
     return sqlite_orm::make_storage(file_name,
                                     sqlite_orm::make_table("beers",
                                                           sqlite_orm::make_column("id", &Drink::id, sqlite_orm::autoincrement(), sqlite_orm::primary_key()),
@@ -67,9 +65,12 @@ public:
     static std::vector<Drink> get_beers_by_brewery(Storage storage, std::string brewery);
     static int get_version(Storage storage);
     static int increment_version(Storage storage, int current_version);
-    static void populate_maker_column();
+    static void populate_producer_column();
     static std::vector<Drink> sort_by_date_id(std::vector<Drink> drinks);
     static std::string get_latest_notes(Storage storage, const std::string& name, const std::string& alcohol_type);
+
+private:
+    static bool compare_date(const Drink &a, const Drink &b);
 
 public:
     static std::string path();

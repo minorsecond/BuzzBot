@@ -1,9 +1,7 @@
 #include "database.h"
-#include "calculate.h"
 #include <boost/filesystem.hpp>
 #include <utility>
 #include <QStandardPaths>
-#include <QDebug>
 
 using namespace sqlite_orm;
 std::string Database::path() {
@@ -11,8 +9,8 @@ std::string Database::path() {
      * Find database path and create it if it doesn't exist.
      * @return full_path Path where database file should be stored.
      */
-    // Find path to application support directory
 
+    // Find path to application support directory
     std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
     std::string full_path = directory + "/beertabs.db";
     boost::filesystem::create_directory(directory);
@@ -35,7 +33,7 @@ void Database::write_db_to_disk(Storage storage) {
     /*
      * Flush in-memory database data to disk.
      */
-    std::cout << "Writing data to disk" << std::endl;
+
     storage.sync_schema(true);
 }
 
@@ -190,7 +188,6 @@ std::vector<Drink> Database::get_beers_by_brewery(Storage storage, std::string p
 }
 
 int Database::get_version(Storage storage) {
-    std::cout << "Current DB version: " << storage.pragma.user_version() << std::endl;
     return storage.pragma.user_version();
 }
 
@@ -202,17 +199,14 @@ int Database::increment_version(Storage storage, int current_version) {
     if (get_version(storage) == 0) {  // Never use 0
         storage.pragma.user_version(storage.pragma.user_version() + 1);
         storage.sync_schema(true);
-        std::cout << "Migrated DB from version 0 to version " << storage.pragma.user_version() << std::endl;
     } else if (get_version(storage) < 2 && current_version == 2) {
         storage.pragma.user_version(2);
         storage.sync_schema(true);
-        std::cout << "Migrated DB from version " << get_version(storage) << " to "
-        << storage.pragma.user_version() << std::endl;
     }
     return storage.pragma.user_version();
 }
 
-void Database::populate_maker_column() {
+void Database::populate_producer_column() {
     /*
      * Copy brewery column to the new maker column. The brewery column will be deleted later.
      */
@@ -226,13 +220,30 @@ void Database::populate_maker_column() {
     }
 }
 
+bool Database::compare_date(const Drink &a, const Drink &b) {
+    /*
+     * Determine if second date is greater than the first date.
+     * @return: True if second date is more recent than the first date. Else, false.
+     */
+
+    if (a.drink_year < b.drink_year) {
+        return true;
+    } else if (a.drink_year == b.drink_year && a.drink_month < b.drink_month) {
+        return true;
+    } else if (a.drink_year == b.drink_year && a.drink_month == b.drink_month && a.drink_day < b.drink_day) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 std::vector<Drink> Database::sort_by_date_id(std::vector<Drink> drinks) {
     /*
      * Adds a sort column integer to database.
      */
 
     // First sort by entered date
-    std::sort(drinks.begin(), drinks.end(), Calculate::compare_date);
+    std::sort(drinks.begin(), drinks.end(), compare_date);
 
     // Now add sort order value
     int sort_order = 1;
