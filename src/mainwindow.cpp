@@ -1388,6 +1388,7 @@ Drink MainWindow::get_drink_attributes_from_fields() {
         drink.type = ui->beerTypeInput->currentText().toStdString();
         drink.subtype = ui->beerSubtypeInput->currentText().toStdString();
         drink.producer = ui->beerBreweryInput->currentText().toStdString();
+        drink.vintage = -999;
         drink.ibu = ui->beerIbuInput->value();
         drink.abv = ui->beerAbvInput->value();
         drink.size = ui->beerSizeInput->value();
@@ -1402,6 +1403,7 @@ Drink MainWindow::get_drink_attributes_from_fields() {
         drink.type = ui->liquorTypeInput->currentText().toStdString();
         drink.subtype = ui->liquorSubtypeInput->currentText().toStdString();
         drink.producer = ui->liquorDistillerInput->currentText().toStdString();
+        drink.vintage = -999;
         drink.abv = ui->liquorAbvInput->value();
         drink.ibu = -1.0;  // -1 denotes no IBU value
         drink.size = ui->liquorSizeInput->value();
