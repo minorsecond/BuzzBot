@@ -180,6 +180,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->liquorDistillerInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(producer_input_changed(const QString&)));
     connect(ui->wineNameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
     connect(ui->wineTypeInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(type_input_changed(const QString&)));
+    connect(ui->wineryInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(producer_input_changed(const QString&)));
     connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tab_changed()));
 
     // Update fields to match beer that comes first alphabetically
