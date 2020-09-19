@@ -273,7 +273,6 @@ void MainWindow::reset_fields() {
 
     std::string alcohol_type = get_current_tab();
 
-    std::cout << "clearing fields" << std::endl;
     ui->drinkLogTable->clearSelection();
 
     if (alcohol_type == "Beer") {
@@ -518,14 +517,12 @@ void MainWindow::open_user_settings() {
      * Open the user settings dialog box, where users can enter their sex and the day which the week should begin on.
      */
 
-    std::cout << "Opening user settings." << std::endl;
     UserSettings user_settings = UserSettings(nullptr, options);
     user_settings.setModal(true);
     if (user_settings.exec() == QDialog::Accepted) {
         options.sex = user_settings.get_sex();
         options.weekday_start = user_settings.get_weekday_start();
         update_stat_panel();
-        std::cout << "Sex: " << options.sex << ", Weekday starts on " << options.weekday_start << std::endl;
     }
     program_options(true);
 }
@@ -598,8 +595,6 @@ void MainWindow::update_stat_panel() {
     double standard_drinks = 0;
     date::weekday filter_day{};
 
-    std::cout << "Stats filter day: " << options.weekday_start << std::endl;
-
     // Get date to filter on
     if (options.weekday_start == "Monday") {
         filter_day = date::Monday;
@@ -619,7 +614,6 @@ void MainWindow::update_stat_panel() {
 
     // Get date of last filter_day
     date::year_month_day start_date = todays_date - (date::weekday{todays_date} - filter_day);
-    std::cout << "Last filter day: " << start_date << std::endl;
 
     // Create the date for the SQL query
     std::string year = date::format("%Y", start_date.year());
@@ -849,36 +843,12 @@ std::string MainWindow::get_latest_notes(const std::string& name, const std::str
     std::string notes;
 
     // Get latest notes entered for the selected drink
-    // TODO: Refactor the filter code. This whole function could be reduced by allowing filtering on name and alc type.
-    std::vector<Drink> drinks_by_name = Database::filter("Name", name, storage);
-    unsigned temp_id = 0;
     if (ui->tabWidget->currentIndex() == 0) {  // Update beer notes
-        for (const auto& drink_for_notes : drinks_by_name) {
-            if (drink_for_notes.id > temp_id && drink_for_notes.alcohol_type == alcohol_type) {
-                temp_id = drink_for_notes.id;
-                if (!drink_for_notes.notes.empty()) {
-                    notes = drink_for_notes.notes;
-                }
-            }
-        }
+        notes = Database::get_latest_notes(storage, name, "Beer");
     } else if (ui->tabWidget->currentIndex() == 1) {  // Update liquor notes
-        for (const auto& liquor_for_notes : drinks_by_name) {
-            if (liquor_for_notes.id > temp_id) {
-                temp_id = liquor_for_notes.id;
-                if (!liquor_for_notes.notes.empty()) {
-                    notes = liquor_for_notes.notes;
-                }
-            }
-        }
+        notes = Database::get_latest_notes(storage, name, "Liquor");
     } else if (ui->tabWidget->currentIndex() == 2) {  // Update wine notes
-        for (const auto& wine_for_notes : drinks_by_name) {
-            if (wine_for_notes.id > temp_id) {
-                temp_id = wine_for_notes.id;
-                if (!wine_for_notes.notes.empty()) {
-                    notes = wine_for_notes.notes;
-                }
-            }
-        }
+        notes = Database::get_latest_notes(storage, name, "Wine");
     }
 
     return notes;
