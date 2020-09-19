@@ -207,24 +207,10 @@ void MainWindow::submit_button_clicked() {
 
         // Handle updating existing rows
         QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
-        if (select->hasSelection()) { // TODO: Refactor this
-            // Get the selected row
-            int selection = select->selectedRows().at(0).row();
-            int row_to_update = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
-
-            // Get the existing timestamp
-            std::string timestamp = ui->drinkLogTable->item(selection, 10)->text().toStdString();
-            std::cout << "Updating row " << row_to_update << "Timestamp: " << timestamp << std::endl;
-
-            // Update the variables in the beer struct
-            entered_drink.id = row_to_update;
-            entered_drink.timestamp = timestamp;
-            Database::update(storage, entered_drink);
-        } else {  // TODO: Refactor this
-            // New row. Get a new timestamp
-            std::string timestamp = storage.select(sqlite_orm::datetime("now")).front();
-            entered_drink.timestamp = timestamp;
-            Database::write(entered_drink, storage);
+        if (select->hasSelection()) {
+            update_selected_row(select, entered_drink);
+        } else {
+            add_new_row(entered_drink);
         }
         update_table();
         if (selected_rows.empty()) {
@@ -233,6 +219,38 @@ void MainWindow::submit_button_clicked() {
         update_beer_fields();
         update_stat_panel();
     }
+}
+
+void MainWindow::update_selected_row(QItemSelectionModel* select, Drink entered_drink) {
+    /*
+     * Update a row that already exists in the database.
+     * @param select: A selection model.
+     * @param entered_drink: A Drink containing data from the database.
+     */
+    // Get the selected row
+    int selection = select->selectedRows().at(0).row();
+    int row_to_update = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
+
+    // Get the existing timestamp
+    std::string timestamp = ui->drinkLogTable->item(selection, 10)->text().toStdString();
+    std::cout << "Updating row " << row_to_update << " Timestamp: " << timestamp << std::endl;
+
+    // Update the variables in the beer struct
+    entered_drink.id = row_to_update;
+    entered_drink.timestamp = timestamp;
+    Database::update(storage, entered_drink);
+}
+
+void MainWindow::add_new_row(Drink entered_drink) {
+    /*
+     * Add a new drink to the database.
+     * @param entered_drink: A Drink containing data entered by the user.
+     */
+
+    // New row. Get a new timestamp
+    std::string timestamp = storage.select(sqlite_orm::datetime("now")).front();
+    entered_drink.timestamp = timestamp;
+    Database::write(entered_drink, storage);
 }
 
 void MainWindow::reset_fields() {
@@ -417,6 +435,8 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
             ui->tabWidget->setCurrentIndex(1);
         } else {
             std::cout << "Not updating fields because not in correct tab." << std::endl;
+            std::cout << "On tab " << get_current_tab() << std::endl;
+            std::cout << "Alcohol type: " << drink_at_row.alcohol_type << std::endl;
         }
     } else {
         std::cout << "Empty table." << std::endl;
@@ -1194,6 +1214,7 @@ Drink MainWindow::get_drink_attributes_from_fields() {
         drink.size = ui->beerSizeInput->value();
         drink.rating = ui->beerRatingInput->value();
         drink.notes = ui->beerNotesInput->toPlainText().toStdString();
+        drink.alcohol_type = alcohol_type;
     } else if (alcohol_type == "Liquor") {
         drink.drink_year = ui->liquorDateInput->date().year();
         drink.drink_month = ui->liquorDateInput->date().month();
@@ -1207,6 +1228,7 @@ Drink MainWindow::get_drink_attributes_from_fields() {
         drink.size = ui->liquorSizeInput->value();
         drink.rating = ui->liquorRatingInput->value();
         drink.notes = ui->liquorNotesInput->toPlainText().toStdString();
+        drink.alcohol_type = alcohol_type;
     } else if (alcohol_type == "Wine") {
         //TODO: Finish this
     } else {
