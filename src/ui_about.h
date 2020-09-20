@@ -105,7 +105,7 @@ public:
         copyrightLabel->setText(QCoreApplication::translate("aboutDialog", "Ross Wardrup, 2020", nullptr));
         versionLabel->setText(QCoreApplication::translate("aboutDialog", "Version 0.8.0", nullptr));
         miniIcon->setText(QString());
-        appNameLabel->setText(QCoreApplication::translate("aboutDialog", "Beertabs", nullptr));
+        appNameLabel->setText(QCoreApplication::translate("aboutDialog", "BuzzBot", nullptr));
     } // retranslateUi
 
 };

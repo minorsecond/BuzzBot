@@ -89,7 +89,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Beertabs</string>
+      <string>BuzzBot</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignHCenter|Qt::AlignTop</set>
