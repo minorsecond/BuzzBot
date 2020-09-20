@@ -50,7 +50,7 @@ void MainWindow::update_liquor_fields() {
         ui->liquorNameInput->addItem(name);
     }
 
-    std::string liquor_notes_text = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), "Wine");
+    std::string liquor_notes_text = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), "Liquor");
     ui->liquorNotesInput->setText(QString::fromStdString(liquor_notes_text));
 }
 
@@ -155,23 +155,28 @@ void MainWindow::update_liquor_types_producers() {
 
     std::string input_liquor = ui->liquorNameInput->currentText().toStdString();
     Drink selected_liquor = Database::get_drink_by_name(storage, input_liquor);
-    std::string liquor_type = selected_liquor.type;
-    std::string liquor_subtype = selected_liquor.subtype;
-    std::string producer = selected_liquor.producer;
-    double abv = selected_liquor.abv;
-    int size = selected_liquor.size;
-    int rating = selected_liquor.rating;
 
-    ui->liquorTypeInput->setCurrentText(QString::fromStdString(liquor_type));
-    ui->liquorSubtypeInput->setCurrentText(QString::fromStdString(liquor_subtype));
-    ui->liquorDistillerInput->setCurrentText(QString::fromStdString(producer));
-    ui->liquorAbvInput->setValue(abv);
-    ui->liquorSizeInput->setValue(size);
-    ui->liquorRatingInput->setValue(rating);
+    if (!selected_liquor.id) {
+        clear_fields("Liquor");
+    } else {
+        std::string liquor_type = selected_liquor.type;
+        std::string liquor_subtype = selected_liquor.subtype;
+        std::string producer = selected_liquor.producer;
+        double abv = selected_liquor.abv;
+        int size = selected_liquor.size;
+        int rating = selected_liquor.rating;
 
-    // Set notes to the notes for liquor in the name input
-    std::string notes = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), get_current_tab());
-    ui->liquorNotesInput->setText(QString::fromStdString(notes));
+        ui->liquorTypeInput->setCurrentText(QString::fromStdString(liquor_type));
+        ui->liquorSubtypeInput->setCurrentText(QString::fromStdString(liquor_subtype));
+        ui->liquorDistillerInput->setCurrentText(QString::fromStdString(producer));
+        ui->liquorAbvInput->setValue(abv);
+        ui->liquorSizeInput->setValue(size);
+        ui->liquorRatingInput->setValue(rating);
+
+        // Set notes to the notes for liquor in the name input
+        std::string notes = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), get_current_tab());
+        ui->liquorNotesInput->setText(QString::fromStdString(notes));
+    }
 }
 
 Drink MainWindow::get_liquor_attrs_from_fields(std::string alcohol_type) {

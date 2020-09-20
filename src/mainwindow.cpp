@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <boost/filesystem.hpp>
 #include <iostream>
+#include <QComboBox>
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <CoreFoundation/CFBundle.h>
@@ -184,12 +185,15 @@ void MainWindow::add_slot_connections() {
     connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(clicked_clear_button()));
     connect(ui->deleteRowButton, SIGNAL(clicked()), this, SLOT(delete_row()));
     connect(ui->beerNameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
+    connect(ui->beerNameInput, &QComboBox::editTextChanged, this, &MainWindow::name_input_changed);  // TODO: Rest of connections new style
     connect(ui->beerTypeInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(type_input_changed(const QString&)));
     connect(ui->beerBreweryInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(producer_input_changed(const QString&)));
     connect(ui->liquorNameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
+    connect(ui->liquorNameInput, &QComboBox::editTextChanged, this, &MainWindow::name_input_changed);
     connect(ui->liquorTypeInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(type_input_changed(const QString&)));
     connect(ui->liquorDistillerInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(producer_input_changed(const QString&)));
     connect(ui->wineNameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
+    connect(ui->wineNameInput, &QComboBox::editTextChanged, this, &MainWindow::name_input_changed);
     connect(ui->wineTypeInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(type_input_changed(const QString&)));
     connect(ui->wineryInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(producer_input_changed(const QString&)));
     connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tab_changed()));
@@ -301,6 +305,7 @@ void MainWindow::reset_fields() {
     std::string alcohol_type = get_current_tab();
 
     if (alcohol_type == "Beer") {
+        std::cout << "Updating beer fields on name change" << std::endl;
         update_beer_fields();
         update_types_producers_on_name_change();
 
@@ -759,6 +764,7 @@ void MainWindow::name_input_changed(const QString&) {
      * Update fields when a beer name is chosen.
      */
 
+    std::cout << "Name input changed" << std::endl;
     update_types_producers_on_name_change();
 }
 
@@ -933,4 +939,39 @@ Drink MainWindow::get_drink_at_selected_row() {
         selected_drink = Database::read_row(row_to_get, storage);
     }
     return selected_drink;
+}
+
+void MainWindow::clear_fields(const std::string& alcohol_type) {
+    /*
+     * Blank the fields for selected alcohol type.
+     */
+
+    // Do not clear names!
+
+    if (alcohol_type == "Beer") {
+        ui->beerBreweryInput->clear();
+        ui->beerTypeInput->clear();
+        ui->beerSubtypeInput->clear();
+        ui->beerAbvInput->clear();
+        ui->beerIbuInput->clear();
+        ui->beerSizeInput->clear();
+        ui->beerRatingInput->clear();
+        ui->beerNotesInput->clear();
+    } else if (alcohol_type == "Liquor") {
+        ui->liquorDistillerInput->clear();
+        ui->liquorTypeInput->clear();
+        ui->liquorSubtypeInput->clear();
+        ui->liquorAbvInput->clear();
+        ui->liquorSizeInput->clear();
+        ui->liquorRatingInput->clear();
+        ui->liquorNotesInput->clear();
+    } else if (alcohol_type == "Wine") {
+        ui->wineryInput->clear();
+        ui->wineTypeInput->clear();
+        ui->wineSubtypeInput->clear();
+        ui->wineVintage->clear();
+        ui->wineAbvInput->clear();
+        ui->wineSizeInput->clear();
+        ui->wineNotesInput->clear();
+    }
 }
