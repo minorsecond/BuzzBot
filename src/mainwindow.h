@@ -83,5 +83,6 @@ private slots:
     void type_input_changed(const QString&);
     void producer_input_changed(const QString&);
     void tab_changed();
+    void clicked_clear_button();
 };
 #endif // MAINWINDOW_H

@@ -185,7 +185,7 @@ void MainWindow::add_slot_connections() {
     connect(ui->filterCategoryInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(enable_filter_text(const QString&)));
     connect(ui->filterTextInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(changed_filter_text(const QString&)));
     connect(ui->submitRowButton, SIGNAL(clicked()), this, SLOT(submit_button_clicked()));
-    connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(reset_fields()));
+    connect(ui->clearFieldsButton, SIGNAL(clicked()), this, SLOT(clicked_clear_button()));
     connect(ui->deleteRowButton, SIGNAL(clicked()), this, SLOT(delete_row()));
     connect(ui->beerNameInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(name_input_changed(const QString&)));
     connect(ui->beerTypeInput, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(type_input_changed(const QString&)));
@@ -303,8 +303,6 @@ void MainWindow::reset_fields() {
     std::string wine_notes;
 
     std::string alcohol_type = get_current_tab();
-
-    ui->drinkLogTable->clearSelection();
 
     if (alcohol_type == "Beer") {
         update_beer_fields();
@@ -898,4 +896,13 @@ QDate MainWindow::format_date_for_input(const Drink& drink) {
     std::string date_from_db = day_padded.str() + "/" + month_padded.str() + "/" + std::to_string(drink.drink_year);
 
     return QDate::fromString(QString::fromUtf8(date_from_db.c_str()), "dd/MM/yyyy");
+}
+
+void MainWindow::clicked_clear_button() {
+    /*
+     * When user clicks clear button, reset fields and clear table selection.
+     */
+
+    ui->drinkLogTable->clearSelection();
+    reset_fields();
 }
