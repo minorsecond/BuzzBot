@@ -155,7 +155,7 @@ void MainWindow::update_wine_types_producers() {
     QSignalBlocker brewery_input_signal_blocker(ui->wineryInput);
 
     std::string input_wine = ui->wineNameInput->currentText().toStdString();
-    Drink selected_wine = Database::get_drink_by_name(storage, input_wine);
+    Drink selected_wine = Database::get_drink_by_name(storage, "Wine",input_wine);
 
     if (!selected_wine.id) {
         clear_fields("Wine");
