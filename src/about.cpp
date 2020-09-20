@@ -15,7 +15,7 @@ About::About(QWidget *parent) {
     this->setFixedSize(237, 272);
 
     // Version text
-    std::string version = "0.8.2";
+    std::string version = "0.8.4";
     ui.versionLabel->setText(QString::fromStdString("Version " + version));
 
     // Get path of .app file
