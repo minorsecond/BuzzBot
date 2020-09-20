@@ -294,7 +294,7 @@ void MainWindow::add_new_row(Drink entered_drink) {
 
 void MainWindow::reset_fields() {
     /*
-     * Clear user entry fields and table selection for entering a new beer.
+     * Clear user entry fields and table selection for entering a new drink.
      */
 
     std::string beer_notes;
@@ -307,10 +307,6 @@ void MainWindow::reset_fields() {
         update_beer_fields();
         update_types_producers_on_name_change();
 
-        // Set notes to the notes for beer in the name input
-        beer_notes = get_latest_notes(ui->beerNameInput->currentText().toStdString(), alcohol_type);
-        ui->beerNotesInput->setText(QString::fromStdString(beer_notes));
-
         // Set datepicker to today's date
         QDate todays_date = QDate::currentDate();
         ui->beerDateInput->setDate(todays_date);
@@ -318,20 +314,12 @@ void MainWindow::reset_fields() {
         update_liquor_fields();
         update_types_producers_on_name_change();
 
-        // Set notes to the notes for beer in the name input
-        liquor_notes = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), alcohol_type);
-        ui->liquorNotesInput->setText(QString::fromStdString(liquor_notes));
-
         // Set datepicker to today's date
         QDate todays_date = QDate::currentDate();
         ui->liquorDateInput->setDate(todays_date);
     } else if (alcohol_type == "Wine") {
         update_wine_fields();
         update_types_producers_on_name_change();
-
-        // Set notes to the notes for beer in the name input
-        wine_notes = get_latest_notes(ui->wineNameInput->currentText().toStdString(), alcohol_type);
-        ui->wineNotesInput->setText(QString::fromStdString(wine_notes));
 
         // Set datepicker to today's date
         QDate todays_date = QDate::currentDate();
@@ -419,33 +407,19 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
      * Populate user entry fields when user clicks on a row in the table.
      */
 
-    QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
-    int selection = ui->drinkLogTable->selectionModel()->currentIndex().row();
-    if (selection >= 0) {
-        std::cout << "Getting row " << selection << " from table." << std::endl;
-        int row_to_get = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
-        std::cout << "Getting row " << row_to_get << " from database." << std::endl;
-        if (select->isRowSelected(selection))
-            ui->deleteRowButton->setEnabled(true);
-        else
-            ui->deleteRowButton->setDisabled(true);
+    Drink drink_at_row = get_drink_at_selected_row();
 
-        Drink drink_at_row = Database::read_row(row_to_get, storage);
-
-        if (drink_at_row.alcohol_type == "Beer") {
-            populate_beer_fields(drink_at_row);
-            ui->tabWidget->setCurrentIndex(0);
-        } else if (drink_at_row.alcohol_type == "Liquor") {
-            populate_liquor_fields(drink_at_row);
-            ui->tabWidget->setCurrentIndex(1);
-        } else if (drink_at_row.alcohol_type == "Wine") {
-            populate_wine_fields(drink_at_row);
-            ui->tabWidget->setCurrentIndex(2);
-        } else {
-            std::cout << "Not updating fields because not in correct tab." << std::endl;
-        }
+    if (drink_at_row.alcohol_type == "Beer") {
+        populate_beer_fields(drink_at_row);
+        ui->tabWidget->setCurrentIndex(0);
+    } else if (drink_at_row.alcohol_type == "Liquor") {
+        populate_liquor_fields(drink_at_row);
+        ui->tabWidget->setCurrentIndex(1);
+    } else if (drink_at_row.alcohol_type == "Wine") {
+        populate_wine_fields(drink_at_row);
+        ui->tabWidget->setCurrentIndex(2);
     } else {
-        std::cout << "Empty table." << std::endl;
+        std::cout << "Not updating fields because not in correct tab." << std::endl;
     }
 }
 
@@ -809,6 +783,8 @@ std::string MainWindow::get_latest_notes(const std::string& name, const std::str
 
     std::string notes;
 
+    std::cout << "Name in get_latest_notes: " << name <<std::endl;
+
     // Get latest notes entered for the selected drink
     if (ui->tabWidget->currentIndex() == 0) {  // Update beer notes
         notes = Database::get_latest_notes(storage, name, "Beer");
@@ -844,16 +820,18 @@ void MainWindow::tab_changed() {
      * Update notes when tab is changed.
      */
 
+    std::string name = get_drink_at_selected_row().name;
+
     std::string alcohol_type = get_current_tab();
     reset_fields();
     if (alcohol_type == "Beer") {
-        std::string beer_notes_text = get_latest_notes(ui->beerNameInput->currentText().toStdString(), alcohol_type);
+        std::string beer_notes_text = get_latest_notes(name, alcohol_type);
         ui->beerNotesInput->setText(QString::fromStdString(beer_notes_text));
     } else if (alcohol_type == "Liquor") {
-        std::string liquor_notes_text = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), alcohol_type);
+        std::string liquor_notes_text = get_latest_notes(name, alcohol_type);
         ui->liquorNotesInput->setText(QString::fromStdString(liquor_notes_text));
     } else if(alcohol_type == "Wine") {
-        std::string wine_notes_text = get_latest_notes(ui->wineNameInput->currentText().toStdString(), alcohol_type);
+        std::string wine_notes_text = get_latest_notes(name, alcohol_type);
         ui->wineNotesInput->setText(QString::fromStdString(wine_notes_text));
     }
 }
@@ -903,4 +881,28 @@ void MainWindow::clicked_clear_button() {
 
     ui->drinkLogTable->clearSelection();
     reset_fields();
+}
+
+Drink MainWindow::get_drink_at_selected_row() {
+    /*
+     * Get drink at currently-selected row.
+     * @return selected_drink: A Drink object.
+     */
+
+    Drink selected_drink;
+    QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
+    int selection = ui->drinkLogTable->selectionModel()->currentIndex().row();
+
+    if (selection >= 0) {
+        std::cout << "Getting row " << selection << " from table." << std::endl;
+        int row_to_get = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
+        std::cout << "Getting row " << row_to_get << " from database." << std::endl;
+        if (select->isRowSelected(selection))
+            ui->deleteRowButton->setEnabled(true);
+        else
+            ui->deleteRowButton->setDisabled(true);
+
+        selected_drink = Database::read_row(row_to_get, storage);
+    }
+    return selected_drink;
 }
