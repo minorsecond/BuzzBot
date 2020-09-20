@@ -46,6 +46,7 @@ void MainWindow::update_beer_fields() {
         ui->beerNameInput->addItem(name);
     }
 
+    std::cout << "Updating beer" << std::endl;
     std::string beer_notes_text = get_latest_notes(ui->beerNameInput->currentText().toStdString(), "Beer");
     ui->beerNotesInput->setText(QString::fromStdString(beer_notes_text));
 }

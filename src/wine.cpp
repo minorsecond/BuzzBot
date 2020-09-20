@@ -3,7 +3,6 @@
 //
 
 #include <utility>
-
 #include "mainwindow.h"
 
 void MainWindow::update_wine_fields() {

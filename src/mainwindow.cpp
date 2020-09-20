@@ -58,9 +58,6 @@ MainWindow::MainWindow(QWidget *parent)
     // Sort table by date column, by default
     reset_table_sort();
     configure_table();
-    update_beer_fields();
-    update_liquor_fields();
-    update_wine_fields();
     add_slot_connections();
 
     // Update fields to match beer that comes first alphabetically
@@ -782,6 +779,8 @@ std::string MainWindow::get_latest_notes(const std::string& name, const std::str
      */
 
     std::string notes;
+
+    std::cout << "*** GET LATEST NOTES CALLED WITH NAME " << name << " ALC TYPE " << alcohol_type << std::endl;
 
     // Get latest notes entered for the selected drink
     if (ui->tabWidget->currentIndex() == 0) {  // Update beer notes
