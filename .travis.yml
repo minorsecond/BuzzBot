@@ -17,7 +17,7 @@ before_script:
   - cmake -DCMAKE_BUILD_TYPE=Debug ..
 
 script:
-  - cmake --build . --target Beertabs -- -j$core_count
+  - cmake --build . --target BuzzBot -- -j$core_count
   - cmake --build . --target functions_test -- -j$core_count
   - ctest functions_test
 
