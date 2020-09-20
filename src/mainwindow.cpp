@@ -542,7 +542,7 @@ std::string MainWindow::settings_path() {
 
     std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
 
-    std::string settings_path = directory + "/beertabs_settings.conf";
+    std::string settings_path = directory + "/buzzbot_settings.conf";
 
     boost::filesystem::create_directory(directory);
 
