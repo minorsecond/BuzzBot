@@ -154,7 +154,7 @@ void MainWindow::update_liquor_types_producers() {
     QSignalBlocker brewery_input_signal_blocker(ui->liquorDistillerInput);
 
     std::string input_liquor = ui->liquorNameInput->currentText().toStdString();
-    Drink selected_liquor = Database::get_drink_by_name(storage, input_liquor);
+    Drink selected_liquor = Database::get_drink_by_name(storage, "Liquor",input_liquor);
 
     if (!selected_liquor.id) {
         clear_fields("Liquor");

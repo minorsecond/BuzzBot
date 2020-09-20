@@ -165,7 +165,7 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
     return filtered_drinks;
 }
 
-Drink Database::get_drink_by_name(Storage storage, std::string beer_name) {
+Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std::string beer_name) {
     /*
      * Get a drink by its name.
      * @param storage: A Storage instance
@@ -174,7 +174,7 @@ Drink Database::get_drink_by_name(Storage storage, std::string beer_name) {
      */
 
     // TODO: Filter by alcohol_type that should be passed in by selected tabwidget tab
-    std::vector<Drink> drink_by_name_result = storage.get_all<Drink>(where(c(&Drink::name) == std::move(beer_name)));
+    std::vector<Drink> drink_by_name_result = storage.get_all<Drink>(where(c(&Drink::name) == std::move(beer_name) && c(&Drink::alcohol_type) == std::move(alcohol_type)));
     Drink drink_by_name;
 
     if (!drink_by_name_result.empty()) {

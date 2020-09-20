@@ -154,7 +154,7 @@ void MainWindow::update_beer_types_producers() {
     QSignalBlocker brewery_input_signal_blocker(ui->beerBreweryInput);
 
     std::string input_beer = ui->beerNameInput->currentText().toStdString();
-    Drink selected_beer = Database::get_drink_by_name(storage, input_beer);
+    Drink selected_beer = Database::get_drink_by_name(storage, "Beer", input_beer);
 
     if (!selected_beer.id) {  // Clear fields if new name
         clear_fields("Beer");
