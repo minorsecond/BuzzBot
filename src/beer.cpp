@@ -45,14 +45,15 @@ void MainWindow::update_beer_fields() {
     for (const auto& name : names) {
         ui->beerNameInput->addItem(name);
     }
+
+    std::string beer_notes_text = get_latest_notes(ui->beerNameInput->currentText().toStdString(), "Beer");
+    ui->beerNotesInput->setText(QString::fromStdString(beer_notes_text));
 }
 
 void MainWindow::populate_beer_fields(const Drink& drink_at_row) {
     /*
      * Populate the beer entry fields if user is on the beer entry tab.
      */
-
-    std::cout << "Name in populate_beer_fields: " << drink_at_row.name <<std::endl;
 
     QDate date = format_date_for_input(drink_at_row);
     // Only update the beer fields if the user is currently on the beer tab

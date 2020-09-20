@@ -783,8 +783,6 @@ std::string MainWindow::get_latest_notes(const std::string& name, const std::str
 
     std::string notes;
 
-    std::cout << "Name in get_latest_notes: " << name <<std::endl;
-
     // Get latest notes entered for the selected drink
     if (ui->tabWidget->currentIndex() == 0) {  // Update beer notes
         notes = Database::get_latest_notes(storage, name, "Beer");
@@ -820,19 +818,50 @@ void MainWindow::tab_changed() {
      * Update notes when tab is changed.
      */
 
-    std::string name = get_drink_at_selected_row().name;
+    Drink selected_drink = get_drink_at_selected_row();
+    std::string name = selected_drink.name;
+    std::string selected_drink_alc_type = selected_drink.alcohol_type;
+    std::string new_tab = get_current_tab();
 
-    std::string alcohol_type = get_current_tab();
     reset_fields();
-    if (alcohol_type == "Beer") {
-        std::string beer_notes_text = get_latest_notes(name, alcohol_type);
-        ui->beerNotesInput->setText(QString::fromStdString(beer_notes_text));
-    } else if (alcohol_type == "Liquor") {
-        std::string liquor_notes_text = get_latest_notes(name, alcohol_type);
-        ui->liquorNotesInput->setText(QString::fromStdString(liquor_notes_text));
-    } else if(alcohol_type == "Wine") {
-        std::string wine_notes_text = get_latest_notes(name, alcohol_type);
-        ui->wineNotesInput->setText(QString::fromStdString(wine_notes_text));
+    if (new_tab == "Beer") {
+        if (!name.empty()) {  // If a current row is selected, update the beer name to that row and get notes
+            ui->beerNameInput->setCurrentText(QString::fromStdString(name));
+            // When user clicks on beer tab with a liquor or wine selected in the table, clear the selection
+            // and go to the beer tab.
+            if (new_tab != selected_drink_alc_type) {  // If new tab is different type than selected drink
+                ui->drinkLogTable->clearSelection();  // Clear the selection
+                ui->tabWidget->setCurrentIndex(0);  // Go to the beer tab
+                reset_fields();  // Reset fields to the first beer name, alphabetically
+            } else {  // If new tab is the same as the selected drink (E.G. If browsing among beers in table).
+                std::string beer_notes_text = get_latest_notes(name, new_tab);
+                ui->beerNotesInput->setText(QString::fromStdString(beer_notes_text));
+            }
+        }
+    } else if (new_tab == "Liquor") {
+        if (!name.empty()) {
+            ui->liquorNameInput->setCurrentText(QString::fromStdString(name));
+            if (new_tab != selected_drink_alc_type) {
+                ui->drinkLogTable->clearSelection();
+                ui->tabWidget->setCurrentIndex(1);
+                reset_fields();
+            } else {
+                std::string liquor_notes_text = get_latest_notes(name, new_tab);
+                ui->liquorNotesInput->setText(QString::fromStdString(liquor_notes_text));
+            }
+        }
+    } else if(new_tab == "Wine") {
+        if (!name.empty()) {
+            ui->wineNameInput->setCurrentText(QString::fromStdString(name));
+            if (new_tab != selected_drink_alc_type) {
+                ui->drinkLogTable->clearSelection();
+                ui->tabWidget->setCurrentIndex(2);
+                reset_fields();
+            } else {
+                std::string wine_notes_text = get_latest_notes(name, new_tab);
+                ui->wineNotesInput->setText(QString::fromStdString(wine_notes_text));
+            }
+        }
     }
 }
 
