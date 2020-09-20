@@ -1,6 +1,7 @@
 #include "database.h"
 #include <boost/filesystem.hpp>
 #include <utility>
+#include <iostream>
 #include <QStandardPaths>
 
 using namespace sqlite_orm;

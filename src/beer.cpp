@@ -3,6 +3,7 @@
 //
 
 #include "mainwindow.h"
+#include <iostream>
 
 void MainWindow::update_beer_fields() {
     /*
@@ -50,6 +51,8 @@ void MainWindow::populate_beer_fields(const Drink& drink_at_row) {
     /*
      * Populate the beer entry fields if user is on the beer entry tab.
      */
+
+    std::cout << "Name in populate_beer_fields: " << drink_at_row.name <<std::endl;
 
     QDate date = format_date_for_input(drink_at_row);
     // Only update the beer fields if the user is currently on the beer tab

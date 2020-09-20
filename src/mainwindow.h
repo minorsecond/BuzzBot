@@ -67,6 +67,7 @@ private:
     void configure_table();
     void add_slot_connections();
     void set_input_states();
+    Drink get_drink_at_selected_row();
 
 private slots:
     void submit_button_clicked();
