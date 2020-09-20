@@ -199,7 +199,8 @@ int Database::increment_version(Storage storage, int current_version) {
     if (get_version(storage) == 0) {  // Never use 0
         storage.pragma.user_version(storage.pragma.user_version() + 1);
         storage.sync_schema(true);
-    } else if (get_version(storage) < 2 && current_version == 2) {
+    } else if (get_version(storage) == 1 && current_version == 2) {
+        populate_producer_column();
         storage.pragma.user_version(2);
         storage.sync_schema(true);
     }
@@ -211,7 +212,7 @@ void Database::populate_producer_column() {
      * Copy brewery column to the new maker column. The brewery column will be deleted later.
      */
     Storage storage = initStorage(path());
-    if (get_version(storage) < 2) {  // Old db version
+    if (get_version(storage) == 1) {  // Old db version
         std::vector<Drink> all_drinks = storage.get_all<Drink>();
         for (auto drink : all_drinks) {
             drink.producer = drink.brewery;

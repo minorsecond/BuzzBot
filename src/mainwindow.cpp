@@ -28,7 +28,6 @@ MainWindow::MainWindow(QWidget *parent)
     // Upgrade DB version
     // TODO: Remove the brewery column from database at DB version 3
     Database::increment_version(storage, 2);
-    Database::populate_producer_column();  // Copy brewery column to maker if database version is 2
 
     add_menubar_items();
 
