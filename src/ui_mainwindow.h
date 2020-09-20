@@ -598,7 +598,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "Beertabs", nullptr));
+        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "BuzzBot", nullptr));
         filterLabel->setText(QCoreApplication::translate("MainWindow", "Filter", nullptr));
         filterCategoryLabel->setText(QCoreApplication::translate("MainWindow", "Filter Category", nullptr));
         drinkDateInput->setDisplayFormat(QCoreApplication::translate("MainWindow", "MMM/dd/yyyy", nullptr));

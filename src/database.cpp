@@ -13,7 +13,7 @@ std::string Database::path() {
     // Find path to application support directory
 
     std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
-    std::string full_path = directory + "/beertabs.db";
+    std::string full_path = directory + "/buzzbot.db";
     boost::filesystem::create_directory(directory);
 
     return full_path;
