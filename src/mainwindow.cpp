@@ -437,10 +437,14 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
 
         if (drink_at_row.alcohol_type == "Beer") {
             populate_beer_fields(drink_at_row);
+            ui->tabWidget->setCurrentIndex(0);
         } else if (drink_at_row.alcohol_type == "Liquor") {
             populate_liquor_fields(drink_at_row);
+            ui->tabWidget->setCurrentIndex(1);
         } else if (drink_at_row.alcohol_type == "Wine") {
             populate_wine_fields(drink_at_row);
+            std::cout << "WINE" << std::endl;
+            ui->tabWidget->setCurrentIndex(2);
         } else {
             std::cout << "Not updating fields because not in correct tab." << std::endl;
         }

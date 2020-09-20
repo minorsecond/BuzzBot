@@ -43,7 +43,6 @@ inline auto initStorage(const std::string& file_name) {
                                                           sqlite_orm::make_column("rating", &Drink::rating),
                                                           sqlite_orm::make_column("notes", &Drink::notes),
                                                           sqlite_orm::make_column("vintage", &Drink::vintage, sqlite_orm::default_value(-999)),
-                                                          sqlite_orm::make_column("sort_order", &Drink::sort_order, sqlite_orm::default_value(-1)),
                                                           sqlite_orm::make_column("alcohol_type", &Drink::alcohol_type, sqlite_orm::default_value("Beer")),
                                                           sqlite_orm::make_column("timestamp", &Drink::timestamp, sqlite_orm::default_value(sqlite_orm::datetime("now", "localtime")))));
 }
