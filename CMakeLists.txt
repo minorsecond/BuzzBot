@@ -6,10 +6,11 @@ set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
-    message("Building debug")
+    message("Building debug -o0")
+    add_compile_options(-Wall -o0)
 elseif(CMAKE_BUILD_TYPE MATCHES Release)
     message(STATUS "Building release")
-    add_compile_options(-Wall -gdwarf-2)
+    add_compile_options(-Wall -gdwarf-2 -o3)
 endif ()
 
 set(CMAKE_AUTOMOC ON)
@@ -32,7 +33,7 @@ set(buzzbot_ICON ${ICON_PATH})
 set_source_files_properties(${buzzbot_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 file(COPY ${ICON_PATH} DESTINATION "BuzzBot.app/Contents/Resources")
 
-add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp src/mainwindow.h src/database.h src/usersettings.cpp src/usersettings.h src/calculate.cpp src/calculate.h)
+add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp src/mainwindow.h src/database.h src/usersettings.cpp src/usersettings.h src/calculate.cpp src/calculate.h src/beer.cpp src/liquor.cpp src/wine.cpp src/filters.cpp)
 add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp test/test_database_functions.cpp test/test_calculations.cpp)
 
 # Copy resources to build dir
