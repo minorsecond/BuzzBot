@@ -50,6 +50,9 @@ void MainWindow::update_wine_fields() {
     for (const auto& name : names) {
         ui->wineNameInput->addItem(name);
     }
+
+    std::string wine_notes_text = get_latest_notes(ui->wineNameInput->currentText().toStdString(), "Wine");
+    ui->wineNotesInput->setText(QString::fromStdString(wine_notes_text));
 }
 
 void MainWindow::populate_wine_fields(const Drink& drink_at_row) {

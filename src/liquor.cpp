@@ -49,6 +49,9 @@ void MainWindow::update_liquor_fields() {
     for (const auto& name : names) {
         ui->liquorNameInput->addItem(name);
     }
+
+    std::string liquor_notes_text = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), "Wine");
+    ui->liquorNotesInput->setText(QString::fromStdString(liquor_notes_text));
 }
 
 void MainWindow::populate_liquor_fields(const Drink& drink_at_row) {
