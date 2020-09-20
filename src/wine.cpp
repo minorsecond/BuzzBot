@@ -156,23 +156,28 @@ void MainWindow::update_wine_types_producers() {
 
     std::string input_wine = ui->wineNameInput->currentText().toStdString();
     Drink selected_wine = Database::get_drink_by_name(storage, input_wine);
-    std::string wine_type = selected_wine.type;
-    std::string wine_subtype = selected_wine.subtype;
-    std::string producer = selected_wine.producer;
-    double abv = selected_wine.abv;
-    int size = selected_wine.size;
-    int rating = selected_wine.rating;
 
-    ui->wineTypeInput->setCurrentText(QString::fromStdString(wine_type));
-    ui->wineSubtypeInput->setCurrentText(QString::fromStdString(wine_subtype));
-    ui->wineryInput->setCurrentText(QString::fromStdString(producer));
-    ui->wineAbvInput->setValue(abv);
-    ui->wineSizeInput->setValue(size);
-    ui->wineRatingInput->setValue(rating);
+    if (!selected_wine.id) {
+        clear_fields("Wine");
+    } else {
+        std::string wine_type = selected_wine.type;
+        std::string wine_subtype = selected_wine.subtype;
+        std::string producer = selected_wine.producer;
+        double abv = selected_wine.abv;
+        int size = selected_wine.size;
+        int rating = selected_wine.rating;
 
-    // Set notes to the notes for liquor in the name input
-    std::string notes = get_latest_notes(ui->wineNameInput->currentText().toStdString(), get_current_tab());
-    ui->wineNotesInput->setText(QString::fromStdString(notes));
+        ui->wineTypeInput->setCurrentText(QString::fromStdString(wine_type));
+        ui->wineSubtypeInput->setCurrentText(QString::fromStdString(wine_subtype));
+        ui->wineryInput->setCurrentText(QString::fromStdString(producer));
+        ui->wineAbvInput->setValue(abv);
+        ui->wineSizeInput->setValue(size);
+        ui->wineRatingInput->setValue(rating);
+
+        // Set notes to the notes for liquor in the name input
+        std::string notes = get_latest_notes(ui->wineNameInput->currentText().toStdString(), get_current_tab());
+        ui->wineNotesInput->setText(QString::fromStdString(notes));
+    }
 }
 
 Drink MainWindow::get_wine_attrs_from_fields(std::string alcohol_type) {

@@ -174,7 +174,13 @@ Drink Database::get_drink_by_name(Storage storage, std::string beer_name) {
      */
 
     // TODO: Filter by alcohol_type that should be passed in by selected tabwidget tab
-    Drink drink_by_name = storage.get_all<Drink>(where(c(&Drink::name) == std::move(beer_name))).at(0);
+    std::vector<Drink> drink_by_name_result = storage.get_all<Drink>(where(c(&Drink::name) == std::move(beer_name)));
+    Drink drink_by_name;
+
+    if (!drink_by_name_result.empty()) {
+        drink_by_name = drink_by_name_result.at(0);
+    }
+
     return drink_by_name;
 }
 

@@ -68,6 +68,7 @@ private:
     void add_slot_connections();
     void set_input_states();
     Drink get_drink_at_selected_row();
+    void clear_fields(const std::string& alcohol_type);
 
 private slots:
     void submit_button_clicked();

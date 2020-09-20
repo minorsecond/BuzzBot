@@ -155,23 +155,27 @@ void MainWindow::update_beer_types_producers() {
 
     std::string input_beer = ui->beerNameInput->currentText().toStdString();
     Drink selected_beer = Database::get_drink_by_name(storage, input_beer);
-    std::string beer_type = selected_beer.type;
-    std::string brewery = selected_beer.producer;
-    double abv = selected_beer.abv;
-    double ibu = selected_beer.ibu;
-    int size = selected_beer.size;
-    int rating = selected_beer.rating;
 
-    ui->beerTypeInput->setCurrentText(QString::fromStdString(beer_type));
-    ui->beerBreweryInput->setCurrentText(QString::fromStdString(brewery));
-    ui->beerAbvInput->setValue(abv);
-    ui->beerIbuInput->setValue(ibu);
-    ui->beerSizeInput->setValue(size);
-    ui->beerRatingInput->setValue(rating);
+    if (!selected_beer.id) {  // Clear fields if new name
+        clear_fields("Beer");
+    } else {
+        std::string beer_type = selected_beer.type;
+        std::string brewery = selected_beer.producer;
+        double abv = selected_beer.abv;
+        double ibu = selected_beer.ibu;
+        int size = selected_beer.size;
+        int rating = selected_beer.rating;
+        ui->beerTypeInput->setCurrentText(QString::fromStdString(beer_type));
+        ui->beerBreweryInput->setCurrentText(QString::fromStdString(brewery));
+        ui->beerAbvInput->setValue(abv);
+        ui->beerIbuInput->setValue(ibu);
+        ui->beerSizeInput->setValue(size);
+        ui->beerRatingInput->setValue(rating);
 
-    // Set notes to the notes for beer in the name input
-    std::string notes = get_latest_notes(ui->beerNameInput->currentText().toStdString(), get_current_tab());
-    ui->beerNotesInput->setText(QString::fromStdString(notes));
+        // Set notes to the notes for beer in the name input
+        std::string notes = get_latest_notes(ui->beerNameInput->currentText().toStdString(), get_current_tab());
+        ui->beerNotesInput->setText(QString::fromStdString(notes));
+    }
 }
 
 Drink MainWindow::get_beer_attrs_from_fields(std::string alcohol_type) {
