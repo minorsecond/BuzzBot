@@ -308,7 +308,7 @@ void MainWindow::reset_fields() {
 
     if (alcohol_type == "Beer") {
         update_beer_fields();
-        name_input_changed();
+        update_types_producers_on_name_change();
 
         // Set notes to the notes for beer in the name input
         beer_notes = get_latest_notes(ui->beerNameInput->currentText().toStdString(), alcohol_type);
@@ -319,7 +319,7 @@ void MainWindow::reset_fields() {
         ui->beerDateInput->setDate(todays_date);
     } else if (alcohol_type == "Liquor") {
         update_liquor_fields();
-        name_input_changed();
+        update_types_producers_on_name_change();
 
         // Set notes to the notes for beer in the name input
         liquor_notes = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), alcohol_type);
@@ -330,7 +330,7 @@ void MainWindow::reset_fields() {
         ui->liquorDateInput->setDate(todays_date);
     } else if (alcohol_type == "Wine") {
         update_wine_fields();
-        name_input_changed();
+        update_types_producers_on_name_change();
 
         // Set notes to the notes for beer in the name input
         wine_notes = get_latest_notes(ui->wineNameInput->currentText().toStdString(), alcohol_type);
@@ -724,13 +724,25 @@ void MainWindow::update_mean_ibu() {
     ui->avgIbuDrinkOutput->setText(QString::fromStdString(mean_ibu));
 }
 
-void MainWindow::name_input_changed(const QString&) {
+void MainWindow::update_types_producers_on_name_change() {
     /*
      * Change the drink attributes based on the drink selected in the nameInput field.
      */
 
-    //TODO: directly connect the button to the update_fields method.
-    name_input_changed();
+    std::string alcohol_type = get_current_tab();
+    if (alcohol_type == "Beer") {
+        if (!ui->beerNameInput->currentText().toStdString().empty()) {
+            update_beer_types_producers();
+        }
+    } else if(alcohol_type == "Liquor") {
+        if (!ui->liquorNameInput->currentText().toStdString().empty()) {
+            update_liquor_types_producers();
+        }
+    } else if (alcohol_type == "Wine") {
+        if (!ui->wineNameInput->currentText().toStdString().empty()) {
+            update_wine_types_producers();
+        }
+    }
 }
 
 void MainWindow::type_input_changed(const QString &) {
@@ -748,8 +760,8 @@ void MainWindow::type_input_changed(const QString &) {
         update_wine_names_producers();
     }
 
-    // Update fields based on newly selected beer
-    name_input_changed();
+    // Update fields based on newly selected drink
+    update_types_producers_on_name_change();
 }
 
 void MainWindow::producer_input_changed(const QString&) {
@@ -768,26 +780,15 @@ void MainWindow::producer_input_changed(const QString&) {
     }
 
     // Update fields based on newly selected beer
-    name_input_changed();
+    update_types_producers_on_name_change();
 }
 
-void MainWindow::name_input_changed() {
+void MainWindow::name_input_changed(const QString&) {
     /*
      * Update fields when a beer name is chosen.
      */
 
-    std::string drink_name = ui->beerNameInput->currentText().toStdString();
-    std::string alcohol_type = get_current_tab();
-
-    if (!drink_name.empty()) {
-        if (alcohol_type == "Beer") {
-            update_beer_types_producers();
-        } else if(alcohol_type == "Liquor") {
-            update_liquor_types_producers();
-        } else if (alcohol_type == "Wine") {
-            update_wine_types_producers();
-        }
-    }
+    update_types_producers_on_name_change();
 }
 
 void MainWindow::update_favorite_type() {
