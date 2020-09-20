@@ -1,8 +1,8 @@
 #include "database.h"
 #include <boost/filesystem.hpp>
 #include <utility>
+#include <iostream>
 #include <QStandardPaths>
-#include <QDebug>
 
 using namespace sqlite_orm;
 std::string Database::path() {
@@ -10,8 +10,8 @@ std::string Database::path() {
      * Find database path and create it if it doesn't exist.
      * @return full_path Path where database file should be stored.
      */
-    // Find path to application support directory
 
+    // Find path to application support directory
     std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
     std::string full_path = directory + "/beertabs.db";
     boost::filesystem::create_directory(directory);
@@ -34,7 +34,7 @@ void Database::write_db_to_disk(Storage storage) {
     /*
      * Flush in-memory database data to disk.
      */
-    std::cout << "Writing data to disk" << std::endl;
+
     storage.sync_schema(true);
 }
 
@@ -95,6 +95,31 @@ void Database::update(Storage storage, const Drink& beer) {
     storage.update(beer);
 }
 
+std::string Database::get_latest_notes(Storage storage, const std::string& name, const std::string& alcohol_type) {
+    /*
+     * Get the last notes entered for a drink.
+     * @param storage: A Storage instance.
+     * @param name: Name of alcohol to retrieve notes for.
+     * @param alcohol_type: Type of alcohol that Name is.
+     * @return notes: A string containing notes entered for the name and alcohol type.
+     */
+
+    std::vector<Drink> drinks = storage.get_all<Drink>(where(c(&Drink::name) == name && c(&Drink::alcohol_type) == alcohol_type));
+    std::string notes;
+    unsigned temp_id = 0;
+    for (const auto& drink_for_notes : drinks) {
+            if (drink_for_notes.id > temp_id && drink_for_notes.alcohol_type == alcohol_type) {
+                temp_id = drink_for_notes.id;
+                if (!drink_for_notes.notes.empty()) {
+                    notes = drink_for_notes.notes;
+                }
+            }
+        }
+
+    return notes;
+}
+
+
 std::vector<Drink> Database::filter(const std::string& filter_type, const std::string& filter_text, Storage storage) {
     /*
      * Retrieve DB rows based on filter column and text.
@@ -140,7 +165,7 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
     return filtered_drinks;
 }
 
-Drink Database::get_drink_by_name(Storage storage, std::string beer_name) {
+Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std::string beer_name) {
     /*
      * Get a drink by its name.
      * @param storage: A Storage instance
@@ -149,7 +174,13 @@ Drink Database::get_drink_by_name(Storage storage, std::string beer_name) {
      */
 
     // TODO: Filter by alcohol_type that should be passed in by selected tabwidget tab
-    Drink drink_by_name = storage.get_all<Drink>(where(c(&Drink::name) == std::move(beer_name))).at(0);
+    std::vector<Drink> drink_by_name_result = storage.get_all<Drink>(where(c(&Drink::name) == std::move(beer_name) && c(&Drink::alcohol_type) == std::move(alcohol_type)));
+    Drink drink_by_name;
+
+    if (!drink_by_name_result.empty()) {
+        drink_by_name = drink_by_name_result.at(0);
+    }
+
     return drink_by_name;
 }
 
@@ -164,7 +195,6 @@ std::vector<Drink> Database::get_beers_by_brewery(Storage storage, std::string p
 }
 
 int Database::get_version(Storage storage) {
-    std::cout << "Current DB version: " << storage.pragma.user_version() << std::endl;
     return storage.pragma.user_version();
 }
 
@@ -176,26 +206,59 @@ int Database::increment_version(Storage storage, int current_version) {
     if (get_version(storage) == 0) {  // Never use 0
         storage.pragma.user_version(storage.pragma.user_version() + 1);
         storage.sync_schema(true);
-        std::cout << "Migrated DB from version 0 to version " << storage.pragma.user_version() << std::endl;
-    } else if (get_version(storage) < 2 && current_version == 2) {
+    } else if (get_version(storage) == 1 && current_version == 2) {
+        populate_producer_column();
         storage.pragma.user_version(2);
         storage.sync_schema(true);
-        std::cout << "Migrated DB from version " << get_version(storage) << " to "
-        << storage.pragma.user_version() << std::endl;
     }
     return storage.pragma.user_version();
 }
 
-void Database::populate_maker_column() {
+void Database::populate_producer_column() {
     /*
      * Copy brewery column to the new maker column. The brewery column will be deleted later.
      */
     Storage storage = initStorage(path());
-    if (get_version(storage) < 2) {  // Old db version
+    if (get_version(storage) == 1) {  // Old db version
         std::vector<Drink> all_drinks = storage.get_all<Drink>();
         for (auto drink : all_drinks) {
             drink.producer = drink.brewery;
             update(storage, drink);
         }
     }
+}
+
+bool Database::compare_date(const Drink &a, const Drink &b) {
+    /*
+     * Determine if second date is greater than the first date.
+     * @return: True if second date is more recent than the first date. Else, false.
+     */
+
+    if (a.drink_year < b.drink_year) {
+        return true;
+    } else if (a.drink_year == b.drink_year && a.drink_month < b.drink_month) {
+        return true;
+    } else if (a.drink_year == b.drink_year && a.drink_month == b.drink_month && a.drink_day < b.drink_day) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+std::vector<Drink> Database::sort_by_date_id(std::vector<Drink> drinks) {
+    /*
+     * Adds a sort column integer to database.
+     */
+
+    // First sort by entered date
+    std::sort(drinks.begin(), drinks.end(), compare_date);
+
+    // Now add sort order value
+    int sort_order = 1;
+    for (int i = 0; i < drinks.size(); ++i) {
+        drinks[i].sort_order = sort_order;
+        sort_order++;
+    }
+
+    return drinks;
 }
