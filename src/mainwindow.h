@@ -39,7 +39,7 @@ private:
     void update_favorite_type();
     void update_mean_abv();
     void update_mean_ibu();
-    void name_input_changed();
+    void update_types_producers_on_name_change();
     std::string get_latest_notes(const std::string& name, const std::string& alcohol_type);
     std::string get_current_tab();
     Drink get_drink_attributes_from_fields();
@@ -59,6 +59,16 @@ private:
     void update_beer_types_producers();
     void update_liquor_types_producers();
     void update_wine_types_producers();
+    Drink get_beer_attrs_from_fields(std::string alcohol_type);
+    Drink get_liquor_attrs_from_fields(std::string alcohol_type);
+    Drink get_wine_attrs_from_fields(std::string alcohol_type);
+    void add_menubar_items();
+    void configure_calendar();
+    void configure_table();
+    void add_slot_connections();
+    void set_input_states();
+    Drink get_drink_at_selected_row();
+    void clear_fields(const std::string& alcohol_type);
 
 private slots:
     void submit_button_clicked();
@@ -75,5 +85,6 @@ private slots:
     void type_input_changed(const QString&);
     void producer_input_changed(const QString&);
     void tab_changed();
+    void clicked_clear_button();
 };
 #endif // MAINWINDOW_H

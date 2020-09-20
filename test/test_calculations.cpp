@@ -5,6 +5,7 @@
 #include "../include/Catch2.hpp"
 #include "../src/calculate.h"
 #include "boost/filesystem.hpp"
+#include <iostream>
 
 TEST_CASE("Standard Drinks", "[Drink Calculations]") {
     double mosaic_standard_drinks = Calculate::standard_drinks(8.6, 12);

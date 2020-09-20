@@ -4,6 +4,7 @@
 
 #include "calculate.h"
 #include <cmath>
+#include <iostream>
 
 double Calculate::standard_drinks(double abv, int amount) {
     /*
@@ -82,31 +83,30 @@ std::string Calculate::favorite_producer(Storage storage) {
      * @return favorite_producer: The brewery that appears most often.
      */
 
-    std::map<std::string, unsigned> brewery_counts;
+    std::map<std::string, unsigned> producer_counts;
     std::vector<std::string> producers;
-    std::string favorite_brewery;
+    std::string favorite_producer;
 
-    std::vector<Drink> all_beers = storage.get_all<Drink>();
+    std::vector<Drink> all_drinks = storage.get_all<Drink>();
 
-    producers.reserve(all_beers.size());
-    for (const auto& beer: all_beers) {
-        producers.push_back(beer.producer);
+    producers.reserve(all_drinks.size());
+    for (const auto& drink: all_drinks) {
+        producers.push_back(drink.producer);
     }
-    for (const auto& brewery : producers) {
-        int producer_count = std::count(producers.begin(), producers.end(), brewery);
-        brewery_counts[brewery] = producer_count;
+    for (const auto& producer : producers) {
+        int producer_count = std::count(producers.begin(), producers.end(), producer);
+        producer_counts[producer] = producer_count;
     }
 
     unsigned current_max = 0;
-
-    for (const auto & brewery_count : brewery_counts) {
+    for (const auto & brewery_count : producer_counts) {
         if (brewery_count.second > current_max) {
-            favorite_brewery = brewery_count.first;
+            favorite_producer = brewery_count.first;
             current_max = brewery_count.second;
         }
     }
 
-    return favorite_brewery;
+    return favorite_producer;
 }
 
 std::string Calculate::favorite_beer(Storage storage) {
@@ -216,4 +216,21 @@ std::string Calculate::favorite_type(Storage storage) {
     }
 
     return favorite_type;
+}
+
+bool Calculate::compare_date(const Drink &a, const Drink &b) {
+    /*
+     * Determine if second date is greater than the first date.
+     * @return: True if second date is more recent than the first date. Else, false.
+     */
+
+    if (a.drink_year < b.drink_year) {
+        return true;
+    } else if (a.drink_year == b.drink_year && a.drink_month < b.drink_month) {
+        return true;
+    } else if (a.drink_year == b.drink_year && a.drink_month == b.drink_month && a.drink_day < b.drink_day) {
+        return true;
+    } else {
+        return false;
+    }
 }
