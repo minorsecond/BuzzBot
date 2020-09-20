@@ -39,7 +39,7 @@ private:
     void update_favorite_type();
     void update_mean_abv();
     void update_mean_ibu();
-    void name_input_changed();
+    void update_types_producers_on_name_change();
     std::string get_latest_notes(const std::string& name, const std::string& alcohol_type);
     std::string get_current_tab();
     Drink get_drink_attributes_from_fields();
