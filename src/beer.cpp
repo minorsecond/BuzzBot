@@ -40,22 +40,32 @@ void MainWindow::update_beer_fields() {
     }
 
     for (const auto& brewery : breweries) {
-        ui->beerBreweryInput->addItem(brewery);
+        if (!brewery.isEmpty()) {
+            ui->beerBreweryInput->addItem(brewery);
+        }
     }
 
     for (const auto& type : types) {
-        ui->beerTypeInput->addItem(type);
+        if (!type.isEmpty()) {
+            ui->beerTypeInput->addItem(type);
+        }
     }
 
     for (const auto& subtype : subtypes) {
-        ui->beerSubtypeInput->addItem(subtype);
+        if (!subtype.isEmpty()) {
+            ui->beerSubtypeInput->addItem(subtype);
+        }
     }
 
     for (const auto& name : names) {
-        ui->beerNameInput->addItem(name);
+        if (!name.isEmpty()) {
+            ui->beerNameInput->addItem(name);
+        }
     }
 
-    std::cout << "Updating beer" << std::endl;
+    // Reset to first name in field
+    ui->beerNameInput->setCurrentIndex(0);
+    update_beer_types_producers();
     std::string beer_notes_text = get_latest_notes(ui->beerNameInput->currentText().toStdString(), "Beer");
     ui->beerNotesInput->setText(QString::fromStdString(beer_notes_text));
 }
