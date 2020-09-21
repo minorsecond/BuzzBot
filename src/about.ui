@@ -17,7 +17,7 @@
    <item row="5" column="0">
     <widget class="QLabel" name="acknowledgementsLabel">
      <property name="text">
-      <string>This application makes use of Qt Open Source and is licensed under the LGPL.</string>
+      <string>This application makes use of Qt Open Source,  &lt;a href=&quot;https://www.qt.io&quot;&gt;available here&lt;/a&gt;.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -35,6 +35,9 @@
     <widget class="QLabel" name="versionLabel">
      <property name="text">
       <string>Version 0.8.0</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
      </property>
      <property name="alignment">
       <set>Qt::AlignHCenter|Qt::AlignTop</set>
