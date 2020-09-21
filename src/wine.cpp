@@ -45,21 +45,32 @@ void MainWindow::update_wine_fields() {
     }
 
     for (const auto& winery : wineries) {
-        ui->wineryInput->addItem(winery);
+        if (!winery.isEmpty()) {
+            ui->wineryInput->addItem(winery);
+        }
     }
 
     for (const auto& type : types) {
-        ui->wineTypeInput->addItem(type);
+        if (!type.isEmpty()) {
+            ui->wineTypeInput->addItem(type);
+        }
     }
 
     for (const auto& name : names) {
-        ui->wineNameInput->addItem(name);
+        if (!name.isEmpty()) {
+            ui->wineNameInput->addItem(name);
+        }
     }
 
     for (const auto& subtype : subtypes) {
-        ui->wineSubtypeInput->addItem(subtype);
+        if (!subtype.isEmpty()) {
+            ui->wineSubtypeInput->addItem(subtype);
+        }
     }
 
+    // Rest to first name in field
+    ui->wineNameInput->setCurrentIndex(0);
+    update_wine_types_producers();
     std::string wine_notes_text = get_latest_notes(ui->wineNameInput->currentText().toStdString(), "Wine");
     ui->wineNotesInput->setText(QString::fromStdString(wine_notes_text));
 }

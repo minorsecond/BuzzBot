@@ -45,21 +45,32 @@ void MainWindow::update_liquor_fields() {
     }
 
     for (const auto& distillery : distilleries) {
-        ui->liquorDistillerInput->addItem(distillery);
+        if (!distillery.isEmpty()) {
+            ui->liquorDistillerInput->addItem(distillery);
+        }
     }
 
     for (const auto& type : types) {
-        ui->liquorTypeInput->addItem(type);
+        if (!type.isEmpty()) {
+            ui->liquorTypeInput->addItem(type);
+        }
     }
 
     for (const auto& subtype : subtypes) {
-        ui->liquorSubtypeInput->addItem(subtype);
+        if (!subtype.isEmpty()) {
+            ui->liquorSubtypeInput->addItem(subtype);
+        }
     }
 
     for (const auto& name : names) {
-        ui->liquorNameInput->addItem(name);
+        if (!name.isEmpty()) {
+            ui->liquorNameInput->addItem(name);
+        }
     }
 
+    // Rest to first name in field
+    ui->liquorNameInput->setCurrentIndex(0);
+    update_liquor_types_producers();
     std::string liquor_notes_text = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), "Liquor");
     ui->liquorNotesInput->setText(QString::fromStdString(liquor_notes_text));
 }
