@@ -3,8 +3,8 @@
 ### Build Status
 | Branch  | Build Status                                                                                                                 | Code Review                                                                                                                                                                      |
 |---------|------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| master  | [![Actions Status](https://github.com/minorsecond/BuzzBot/workflows/Master-CMake-Build/badge.svg)](https://github.com/minorsecond/BuzzBot/actions)  | [![CodeFactor](https://www.codefactor.io/repository/github/minorsecond/buzzbot/badge/master)](https://www.codefactor.io/repository/github/minorsecond/buzzbot/overview/master) |
-| develop  | [![Actions Status](https://github.com/minorsecond/BuzzBot/workflows/Develop-CMake-Build/badge.svg)](https://github.com/minorsecond/BuzzBot/actions)  | [![CodeFactor](https://www.codefactor.io/repository/github/minorsecond/buzzbot/badge/develop)](https://www.codefactor.io/repository/github/minorsecond/buzzbot/overview/develop) |
+| master  | [![Actions Status](https://github.com/minorsecond/BuzzBot/workflows/Master-CMake-Build/badge.svg)](https://github.com/minorsecond/BuzzBot/actions)  | [![CodeFactor](https://www.codefactor.io/repository/github/minorsecond/buzzbot/badge/master?s=7d0189852bedaddcb41bc7579892f35d6cca05b3)](https://www.codefactor.io/repository/github/minorsecond/buzzbot/overview/master) |
+| develop  | [![Actions Status](https://github.com/minorsecond/BuzzBot/workflows/Develop-CMake-Build/badge.svg)](https://github.com/minorsecond/BuzzBot/actions)| [![CodeFactor](https://www.codefactor.io/repository/github/minorsecond/buzzbot/badge/develop?s=7d0189852bedaddcb41bc7579892f35d6cca05b3)](https://www.codefactor.io/repository/github/minorsecond/buzzbot/overview/develop) |
 
 ### Keep track of:
 - Favorite drinks
