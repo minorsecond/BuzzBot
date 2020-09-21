@@ -47,7 +47,7 @@ void MainWindow::update_beer_fields() {
         ui->beerTypeInput->addItem(type);
     }
 
-    for (auto subtype : subtypes) {
+    for (const auto& subtype : subtypes) {
         ui->beerSubtypeInput->addItem(subtype);
     }
 

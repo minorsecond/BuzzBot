@@ -4,7 +4,6 @@
 
 #include <utility>
 #include "mainwindow.h"
-#include <iostream>
 
 void MainWindow::update_liquor_fields() {
     /*
