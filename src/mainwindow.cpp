@@ -335,7 +335,7 @@ void MainWindow::update_table() {
      */
 
     // Temporarily sort by database ID to fix issues with blank rows
-    ui->drinkLogTable->sortItems(9, Qt::AscendingOrder);
+    //ui->drinkLogTable->sortItems(9, Qt::AscendingOrder);
 
     std::string filter_category = ui->filterCategoryInput->currentText().toStdString();
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
@@ -614,8 +614,9 @@ void MainWindow::reset_table_sort() {
     /*
      * Reset table sort to default, by datetime descending.
      */
-
-    ui->drinkLogTable->sortItems(11, Qt::DescendingOrder);
+    int sort_column = 11;
+    std::cout << "Sorting by column: " << ui->drinkLogTable->horizontalHeaderItem(sort_column)->text().toStdString() << std::endl;
+    ui->drinkLogTable->sortItems(sort_column, Qt::DescendingOrder);
 }
 
 double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week) {
