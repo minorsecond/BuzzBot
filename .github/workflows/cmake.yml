@@ -16,7 +16,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        name : C++ Code Check
+      
+      - name : C++ Code Check
         uses: Tlazypanda/cpp-clang-check@0.13
         
       - name: Install packages
