@@ -16,7 +16,6 @@ jobs:
     if: github.ref == 'refs/heads/develop'
     steps:
       - uses: actions/checkout@v2
-
       - name: Install packages
         shell: bash
         run: brew install qt5 cmake boost sqlite3 catch2 && brew link --force qt && sudo ln -s /usr/local/Cellar/qt/5.*/mkspecs /usr/local/mkspecs && sudo ln -s /usr/local/Cellar/qt/5*/plugins /usr/local/plugins
