@@ -11,10 +11,10 @@ dsymutil ~/Desktop/BuzzBot/BuzzBot.app/Contents/MacOS/BuzzBot -o ~/Desktop/BuzzB
 echo "Running macdeployqt."
 macdeployqt ~/Desktop/BuzzBot/BuzzBot.app -appstore-compliant
 
-echo "Codesigning."
-find ~/Desktop/BuzzBot/BuzzBot.app -name "*.dylib" | xargs -I $ codesign --options runtime --verify --verbose --sign $1 $
-find ~/Desktop/BuzzBot/BuzzBot.app -name "*.framework" | xargs -I $ codesign --options runtime --verify --verbose --sign $1 $
-codesign --sign $1 --options runtime --verbose --entitlements BuzzBot-Entitlements.plist ~/Desktop/BuzzBot/BuzzBot.app
+echo "Codesigning with ID " DIST_ID
+find ~/Desktop/BuzzBot/BuzzBot.app -name "*.dylib" | xargs -I $ codesign --options runtime --verify --verbose --sign $DIST_ID $
+find ~/Desktop/BuzzBot/BuzzBot.app -name "*.framework" | xargs -I $ codesign --options runtime --verify --verbose --sign $DIST_ID $
+codesign --sign $DIST_ID --options runtime --verbose --entitlements BuzzBot-Entitlements.plist ~/Desktop/BuzzBot/BuzzBot.app
 
 echo "Deployed to ~/Desktop/BuzzBot.app"
 
