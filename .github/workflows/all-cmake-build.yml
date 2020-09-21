@@ -1,4 +1,4 @@
-name: Develop-CMake-Build
+name: All-CMake-Build
 
 on:
   push:
