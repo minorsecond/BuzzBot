@@ -4,14 +4,16 @@
 
 #include <utility>
 #include "mainwindow.h"
+#include <iostream>
 
 void MainWindow::update_liquor_fields() {
     /*
-     * Read rows in the DB and populate the distiller, type, and name dropdowns with unique values.
+     * Read rows in the DB and populate the distiller, type, subtype, and name dropdowns with unique values.
      */
 
     std::set<QString> distilleries;
     std::set<QString> types;
+    std::set<QString> subtypes;
     std::set<QString> names;
 
     std::vector<Drink> all_liquor = Database::filter("Alcohol Type", "Liquor", storage);
@@ -19,22 +21,27 @@ void MainWindow::update_liquor_fields() {
     // Block signals to avoid crashing
     QSignalBlocker brewery_signal_blocker(ui->liquorDistillerInput);
     QSignalBlocker type_signal_blocker(ui->liquorTypeInput);
+    QSignalBlocker subtype_signal_blocker(ui->liquorSubtypeInput);
     QSignalBlocker name_signal_blocker(ui->liquorNameInput);
 
     ui->liquorDistillerInput->clear();
     ui->liquorDistillerInput->setCurrentText("");
     ui->liquorTypeInput->clear();
     ui->liquorTypeInput->setCurrentText("");
+    ui->liquorTypeInput->clear();
+    ui->liquorSubtypeInput->setCurrentText("");
     ui->liquorNameInput->clear();
     ui->liquorNameInput->setCurrentText("");
 
     for (const auto& liquor : all_liquor) {
         QString distiller_name = QString::fromStdString(liquor.producer);
         QString liquor_type = QString::fromStdString(liquor.type);
+        QString liquor_subtype = QString::fromStdString(liquor.subtype);
         QString liquor_name = QString::fromStdString(liquor.name);
 
         distilleries.insert(distiller_name);
         types.insert(liquor_type);
+        subtypes.insert(liquor_subtype);
         names.insert(liquor_name);
     }
 
@@ -44,6 +51,10 @@ void MainWindow::update_liquor_fields() {
 
     for (const auto& type : types) {
         ui->liquorTypeInput->addItem(type);
+    }
+
+    for (const auto& subtype : subtypes) {
+        ui->liquorSubtypeInput->addItem(subtype);
     }
 
     for (const auto& name : names) {
@@ -58,6 +69,7 @@ void MainWindow::populate_liquor_fields(const Drink& drink_at_row) {
     /*
      * Populate the liquor entry fields if user is on the liquor entry tab.
      */
+
     QDate date = format_date_for_input(drink_at_row);
     std::string notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
     ui->liquorDateInput->setDate(date);
@@ -76,7 +88,7 @@ void MainWindow::populate_liquor_fields(const Drink& drink_at_row) {
 
 void MainWindow::update_liquor_names_producers() {
     /*
-     * Update the names and distillery fields of the liquor tab.
+     * Update the names and distillery fields of the liquor tab when the type changes.
      */
 
     std::string alcohol_type = get_current_tab();
@@ -112,27 +124,31 @@ void MainWindow::update_liquor_names_producers() {
 
 void MainWindow::update_liquor_names_types() {
     /*
-     * Update the name and type on the liquor tab.
+     * Update the name and type on the liquor tab when the distillery changes.
      */
 
     std::string input_distillery = ui->liquorDistillerInput->currentText().toStdString();
     std::vector<Drink> selected_drinks = Database::get_beers_by_brewery(storage, input_distillery);
     std::set<QString> liquor_names;
     std::set<QString> types;
+    std::set<QString> subtypes;
 
     // This fixes crashes when changing with rows selected.
     QSignalBlocker name_input_signal_blocker(ui->liquorNameInput);
     QSignalBlocker type_input_signal_blocker(ui->liquorTypeInput);
+    QSignalBlocker subtype_input_signal_blocker(ui->liquorSubtypeInput);
 
     ui->liquorAbvInput->setValue(0.0);
     ui->liquorSizeInput->setValue(0);
     ui->liquorRatingInput->setValue(0);
     ui->liquorNameInput->clear();
     ui->liquorTypeInput->clear();
+    ui->liquorSubtypeInput->clear();
 
     for (const auto& selected_drink : selected_drinks) {
         liquor_names.insert(QString::fromStdString(selected_drink.name));
         types.insert(QString::fromStdString(selected_drink.type));
+        subtypes.insert(QString::fromStdString(selected_drink.subtype));
     }
 
     for (const auto& name : liquor_names) {
@@ -141,6 +157,10 @@ void MainWindow::update_liquor_names_types() {
 
     for (const auto& liquor_type : types) {
         ui->liquorTypeInput->addItem(liquor_type);
+    }
+
+    for (const auto& subtype : subtypes) {
+        ui->liquorSubtypeInput->addItem(subtype);
     }
 }
 

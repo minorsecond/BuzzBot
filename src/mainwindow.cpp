@@ -786,15 +786,19 @@ std::string MainWindow::get_latest_notes(const std::string& name, const std::str
 
     std::string notes;
 
-    std::cout << "*** GET LATEST NOTES CALLED WITH NAME " << name << " ALC TYPE " << alcohol_type << std::endl;
+    // First, try to get notes at the selected row
+    Drink drink = get_drink_at_selected_row();
+    notes = drink.notes;
 
-    // Get latest notes entered for the selected drink
-    if (ui->tabWidget->currentIndex() == 0) {  // Update beer notes
-        notes = Database::get_latest_notes(storage, name, "Beer");
-    } else if (ui->tabWidget->currentIndex() == 1) {  // Update liquor notes
-        notes = Database::get_latest_notes(storage, name, "Liquor");
-    } else if (ui->tabWidget->currentIndex() == 2) {  // Update wine notes
-        notes = Database::get_latest_notes(storage, name, "Wine");
+    if (notes.empty()) {
+        // Get latest notes entered for the selected drink
+        if (ui->tabWidget->currentIndex() == 0) {  // Update beer notes
+            notes = Database::get_latest_notes(storage, name, "Beer");
+        } else if (ui->tabWidget->currentIndex() == 1) {  // Update liquor notes
+            notes = Database::get_latest_notes(storage, name, "Liquor");
+        } else if (ui->tabWidget->currentIndex() == 2) {  // Update wine notes
+            notes = Database::get_latest_notes(storage, name, "Wine");
+        }
     }
 
     return notes;

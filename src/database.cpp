@@ -108,6 +108,7 @@ std::string Database::get_latest_notes(Storage storage, const std::string& name,
     std::string notes;
     unsigned temp_id = 0;
     for (const auto& drink_for_notes : drinks) {
+        if (drink_for_notes.notes.empty()) {}
             if (drink_for_notes.id > temp_id && drink_for_notes.alcohol_type == alcohol_type) {
                 temp_id = drink_for_notes.id;
                 if (!drink_for_notes.notes.empty()) {
