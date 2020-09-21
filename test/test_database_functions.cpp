@@ -14,7 +14,7 @@ inline bool exists (const std::string& name) {
     return (stat (name.c_str(), &buffer) == 0);
 }
 
-TEST_CASE("Init DB", "[DB Creation]") {
+TEST_CASE("Init DB", "[DB Functions]") {
     std::string current_path = std::filesystem::current_path();
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
@@ -29,7 +29,7 @@ TEST_CASE("Init DB", "[DB Creation]") {
     std::remove(file_name);
 }
 
-TEST_CASE("DB IO", "[DB IO]") {
+TEST_CASE("DB IO", "[DB Functions]") {
     std::string current_path = std::filesystem::current_path();
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
@@ -41,10 +41,10 @@ TEST_CASE("DB IO", "[DB IO]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
-                "Community Brewing", 8.4, 75.0, 12, 8, ""};
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA.", -1};
+    Drink mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, "", -1};
 
     storage_1.insert(etrwo);
     storage_1.insert(mosaic);
@@ -53,19 +53,19 @@ TEST_CASE("DB IO", "[DB IO]") {
 
     Storage storage_2 = initStorage(db_path);
 
-    Beer etrwo_read = storage_2.get<Beer>(1);
-    Beer mosaic_read = storage_2.get<Beer>(2);
+    Drink etrwo_read = storage_2.get<Drink>(1);
+    Drink mosaic_read = storage_2.get<Drink>(2);
 
     REQUIRE(etrwo_read.abv == 8.0);
     REQUIRE(etrwo_read.ibu == 60.0);
     REQUIRE(etrwo_read.name == "Everything Rhymes with Orange");
     REQUIRE(etrwo_read.notes == "Very good hazy IPA.");
-    REQUIRE(mosaic_read.brewery == "Community Brewing");
+    REQUIRE(mosaic_read.producer == "Community Brewing");
     REQUIRE(mosaic_read.drink_day == 8);
     REQUIRE(mosaic_read.type == "IPA");
 }
 
-TEST_CASE("Truncate DB", "[Truncate DB]") {
+TEST_CASE("Truncate DB", "[DB Functions]") {
     std::string current_path = std::filesystem::current_path();
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
@@ -77,24 +77,24 @@ TEST_CASE("Truncate DB", "[Truncate DB]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
-                "Community Brewing", 8.4, 75.0, 12, 8, ""};
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA.", -1, "Beer"};
+    Drink mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, "", -1, "Beer"};
 
     storage_1.insert(etrwo);
     storage_1.insert(mosaic);
 
     Database::write_db_to_disk(storage_1);
 
-    REQUIRE(storage_1.get_all<Beer>().size() == 2);
+    REQUIRE(storage_1.get_all<Drink>().size() == 2);
 
     Database::truncate(storage_1);
 
-    REQUIRE(storage_1.get_all<Beer>().empty() == true);
+    REQUIRE(storage_1.get_all<Drink>().empty() == true);
 }
 
-TEST_CASE("Delete Row", "[Delete Row]") {
+TEST_CASE("Delete Row", "[DB Functions]") {
     std::string current_path = std::filesystem::current_path();
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
@@ -109,20 +109,20 @@ TEST_CASE("Delete Row", "[Delete Row]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
-                "Community Brewing", 8.4, 75.0, 12, 8, ""};
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA.", -1, "Beer"};
+    Drink mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, "", -1, "Beer"};
 
     storage_1.insert(etrwo);
     storage_1.insert(mosaic);
     Database::write_db_to_disk(storage_1);
 
-    REQUIRE(storage_1.get_all<Beer>().size() == 2);
+    REQUIRE(storage_1.get_all<Drink>().size() == 2);
 
     Database::delete_row(storage_1, 1);
     Database::write_db_to_disk(storage_1);
-    std::vector<Beer> beers = Database::read(db_path, storage_1);
+    std::vector<Drink> beers = Database::read(db_path, storage_1);
 
     for(const auto& beer : beers) {
         if (beer.id > max_id)
@@ -136,7 +136,7 @@ TEST_CASE("Delete Row", "[Delete Row]") {
     REQUIRE(max_id == min_id);
 }
 
-TEST_CASE("Read Row", "[Read Row]") {
+TEST_CASE("Read Row", "[DB Functions]") {
     std::string current_path = std::filesystem::current_path();
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
@@ -148,17 +148,17 @@ TEST_CASE("Read Row", "[Read Row]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
-                "Community Brewing", 8.4, 75.0, 12, 8, ""};
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA.", -1, "Beer"};
+    Drink mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, "", -1, "Beer"};
 
     storage_1.insert(etrwo);
     storage_1.insert(mosaic);
     Database::write_db_to_disk(storage_1);
 
-    Beer mosaic_read = Database::read_row(2, storage_1);
-    Beer etrwo_read = Database::read_row(1, storage_1);
+    Drink mosaic_read = Database::read_row(2, storage_1);
+    Drink etrwo_read = Database::read_row(1, storage_1);
 
     REQUIRE(mosaic_read.id == 2);
     REQUIRE(mosaic_read.name == "Mosaic");
@@ -168,7 +168,7 @@ TEST_CASE("Read Row", "[Read Row]") {
     REQUIRE(etrwo_read.notes == "Very good hazy IPA.");
 }
 
-TEST_CASE("Update Row", "[Update Row]") {
+TEST_CASE("Update Row", "[DB Functions]") {
     std::string current_path = std::filesystem::current_path();
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
@@ -180,27 +180,27 @@ TEST_CASE("Update Row", "[Update Row]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
-                "Community Brewing", 8.4, 75.0, 12, 8, ""};
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA.", -1, "Beer"};
+    Drink mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, "", -1, "Beer"};
 
     storage_1.insert(etrwo);
     storage_1.insert(mosaic);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo_read = Database::read_row(1, storage_1);
+    Drink etrwo_read = Database::read_row(1, storage_1);
     REQUIRE(etrwo_read.notes == "Very good hazy IPA.");
 
-    Beer etrwo_update{1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-                      "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA. Will buy again!"};
+    Drink etrwo_update{1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "", "",
+                       "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA. Will buy again!", -1, "Beer"};
     Database::update(storage_1, etrwo_update);
     Database::write_db_to_disk(storage_1);
-    Beer etrwo_read2 = Database::read_row(1, storage_1);
+    Drink etrwo_read2 = Database::read_row(1, storage_1);
     REQUIRE(etrwo_read2.notes == "Very good hazy IPA. Will buy again!");
 }
 
-TEST_CASE("Filter DB", "[Filter DB]") {
+TEST_CASE("Filter DB", "[DB Functions]") {
     std::string current_path = std::filesystem::current_path();
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
@@ -212,28 +212,28 @@ TEST_CASE("Filter DB", "[Filter DB]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
-                "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
-               "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA.", -1, "beer"};
+    Drink mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, "", -1, "Beer"};
+    Drink etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "", "",
+                 "Roughtail Brewing", 8.0, 60.0, 12, 8, "", -1, "Beer"};
 
     storage_1.insert(etrwo);
     storage_1.insert(mosaic);
     storage_1.insert(etrwo2);
     Database::write_db_to_disk(storage_1);
-    std::vector<Beer> filtered_beers = Database::filter("Date", "08/09/2020", storage_1);
+    std::vector<Drink> filtered_beers = Database::filter("Date", "08/09/2020", storage_1);
 
-    Beer etrwo_read = filtered_beers.at(0);
-    Beer mosaic_read = filtered_beers.at(1);
+    Drink etrwo_read = filtered_beers.at(0);
+    Drink mosaic_read = filtered_beers.at(1);
 
     REQUIRE(filtered_beers.empty() == false);
     REQUIRE(filtered_beers.size() == 2);
     REQUIRE(etrwo_read.drink_day == 8);
 }
 
-TEST_CASE("Get Beer By Name", "[DB Filter]") {
+TEST_CASE("Get Drink By Name", "[DB Functions]") {
     std::string current_path = std::filesystem::current_path();
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
@@ -245,26 +245,26 @@ TEST_CASE("Get Beer By Name", "[DB Filter]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
-                "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12, 8, ""};
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA.", -1, "Beer"};
+    Drink mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, "", -1, "Beer"};
+    Drink etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "", "",
+                 "Roughtail Brewing", 8.0, 60.0, 12, 8, "", -1, "Beer"};
 
     storage_1.insert(etrwo);
     storage_1.insert(mosaic);
     storage_1.insert(etrwo2);
     Database::write_db_to_disk(storage_1);
 
-    Beer selected_beer = Database::get_beer_by_name(storage_1, "Everything Rhymes with Orange");
+    Drink selected_beer = Database::get_drink_by_name(storage_1,"Beer", "Everything Rhymes with Orange");
 
     REQUIRE(selected_beer.id == 1);
     REQUIRE(selected_beer.name == "Everything Rhymes with Orange");
     REQUIRE(selected_beer.notes == "Very good hazy IPA.");
 }
 
-TEST_CASE("Get Beers By Type", "[DB Filter]") {
+TEST_CASE("Get Beers By Type", "[DB Functions]") {
     std::string current_path = std::filesystem::current_path();
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
@@ -276,26 +276,26 @@ TEST_CASE("Get Beers By Type", "[DB Filter]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
-                "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 11, "Old Rasputin", "Russian Imperial Stout", "",
-                "North Coast Brewing Co.", 9.0, 75.0, 12, 8, ""};
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA.", -1, "beer"};
+    Drink mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, "", -1, "Beer"};
+    Drink etrwo2{-1, 2020, 9, 11, "Old Rasputin", "Russian Imperial Stout", "", "",
+                 "North Coast Brewing Co.", 9.0, 75.0, 12, 8, "", -1, "Beer"};
 
     storage_1.insert(etrwo);
     storage_1.insert(mosaic);
     storage_1.insert(etrwo2);
     Database::write_db_to_disk(storage_1);
 
-    std::vector<Beer> selected_beers = Database::get_beers_by_type(storage_1, "IPA");
+    std::vector<Drink> selected_beers = Database::get_beers_by_type(storage_1, "IPA");
 
     REQUIRE(selected_beers.size() == 2);
     REQUIRE(selected_beers.at(0).type == "IPA");
     REQUIRE(selected_beers.at(1).name == "Mosaic");
 }
 
-TEST_CASE("Get Beers By Brewery", "[DB Filter]") {
+TEST_CASE("Get Beers By Brewery", "[DB Functions]") {
     std::string current_path = std::filesystem::current_path();
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
@@ -307,19 +307,19 @@ TEST_CASE("Get Beers By Brewery", "[DB Filter]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Beer etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-               "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA."};
-    Beer mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
-                "Community Brewing", 8.4, 75.0, 12, 8, ""};
-    Beer etrwo2{-1, 2020, 9, 11, "Old Rasputin", "Russian Imperial Stout", "",
-                "North Coast Brewing Co.", 9.0, 75.0, 12, 8, ""};
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA.", -1, "Beer"};
+    Drink mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, "", -1, "Beer"};
+    Drink etrwo2{-1, 2020, 9, 11, "Old Rasputin", "Russian Imperial Stout", "", "",
+                 "North Coast Brewing Co.", 9.0, 75.0, 12, 8, "", -1, "Beer"};
 
     storage_1.insert(etrwo);
     storage_1.insert(mosaic);
     storage_1.insert(etrwo2);
     Database::write_db_to_disk(storage_1);
 
-    std::vector<Beer> selected_beers = Database::get_beers_by_brewery(storage_1, "North Coast Brewing Co.");
+    std::vector<Drink> selected_beers = Database::get_beers_by_brewery(storage_1, "North Coast Brewing Co.");
 
     REQUIRE(selected_beers.size() == 1);
     REQUIRE(selected_beers.at(0).type == "Russian Imperial Stout");
