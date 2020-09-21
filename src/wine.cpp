@@ -12,6 +12,7 @@ void MainWindow::update_wine_fields() {
 
     std::set<QString> wineries;
     std::set<QString> types;
+    std::set<QString> subtypes;
     std::set<QString> names;
 
     std::vector<Drink> all_wine = Database::filter("Alcohol Type", "Wine", storage);
@@ -19,22 +20,27 @@ void MainWindow::update_wine_fields() {
     // Block signals to avoid crashing
     QSignalBlocker winery_signal_blocker(ui->wineryInput);
     QSignalBlocker type_signal_blocker(ui->wineTypeInput);
+    QSignalBlocker subtype_signal_blocker(ui->wineSubtypeInput);
     QSignalBlocker name_signal_blocker(ui->wineNameInput);
 
     ui->wineryInput->clear();
     ui->wineryInput->setCurrentText("");
     ui->wineTypeInput->clear();
     ui->wineTypeInput->setCurrentText("");
+    ui->wineSubtypeInput->clear();
+    ui->wineSubtypeInput->setCurrentText("");
     ui->wineNameInput->clear();
     ui->wineNameInput->setCurrentText("");
 
     for (const auto& wine : all_wine) {
         QString winery_name = QString::fromStdString(wine.producer);
         QString wine_type = QString::fromStdString(wine.type);
+        QString wine_subtype = QString::fromStdString(wine.subtype);
         QString wine_name = QString::fromStdString(wine.name);
 
         wineries.insert(winery_name);
         types.insert(wine_type);
+        subtypes.insert(wine_subtype);
         names.insert(wine_name);
     }
 
@@ -48,6 +54,10 @@ void MainWindow::update_wine_fields() {
 
     for (const auto& name : names) {
         ui->wineNameInput->addItem(name);
+    }
+
+    for (const auto& subtype : subtypes) {
+        ui->wineSubtypeInput->addItem(subtype);
     }
 
     std::string wine_notes_text = get_latest_notes(ui->wineNameInput->currentText().toStdString(), "Wine");
@@ -78,7 +88,7 @@ void MainWindow::populate_wine_fields(const Drink& drink_at_row) {
 
 void MainWindow::update_wine_names_producers() {
     /*
-     * Update the names and winery fields of the wine tab.
+     * Update the names and winery fields of the wine tab on type change.
      */
 
     std::set<QString> drink_names;
@@ -113,27 +123,31 @@ void MainWindow::update_wine_names_producers() {
 
 void MainWindow::update_wine_names_types() {
     /*
-     * Update the name and type on the liquor tab.
+     * Update the name and type on the liquor tab on winery change.
      */
 
     std::string input_winery = ui->wineryInput->currentText().toStdString();
     std::vector<Drink> selected_drinks = Database::get_beers_by_brewery(storage, input_winery);
     std::set<QString> wine_names;
     std::set<QString> types;
+    std::set<QString> subtypes;
 
     // This fixes crashes when changing with rows selected.
     QSignalBlocker name_input_signal_blocker(ui->wineNameInput);
     QSignalBlocker type_input_signal_blocker(ui->wineTypeInput);
+    QSignalBlocker subtype_input_signal_blocker(ui->wineSubtypeInput);
 
     ui->wineAbvInput->setValue(0.0);
     ui->wineSizeInput->setValue(0);
     ui->wineRatingInput->setValue(0);
     ui->wineNameInput->clear();
     ui->wineTypeInput->clear();
+    ui->wineSubtypeInput->clear();
 
     for (const auto& selected_drink : selected_drinks) {
         wine_names.insert(QString::fromStdString(selected_drink.name));
         types.insert(QString::fromStdString(selected_drink.type));
+        subtypes.insert(QString::fromStdString(selected_drink.subtype));
     }
 
     for (const auto& name : wine_names) {
@@ -142,6 +156,10 @@ void MainWindow::update_wine_names_types() {
 
     for (const auto& wine_type : types) {
         ui->wineTypeInput->addItem(wine_type);
+    }
+
+    for (const auto& subtype : subtypes) {
+        ui->wineSubtypeInput->addItem(subtype);
     }
 }
 
@@ -152,6 +170,7 @@ void MainWindow::update_wine_types_producers() {
 
     // This fixes crashes when changing with rows selected.
     QSignalBlocker type_input_signal_blocker(ui->wineTypeInput);
+    QSignalBlocker subtype_input_signal_blocker(ui->wineSubtypeInput);
     QSignalBlocker brewery_input_signal_blocker(ui->wineryInput);
 
     std::string input_wine = ui->wineNameInput->currentText().toStdString();
