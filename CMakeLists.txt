@@ -28,12 +28,12 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 set(ICON_NAME "icon.icns")
-set(ICON_PATH ${PROJECT_SOURCE_DIR}/res/${ICON_NAME} src/about.cpp src/about.h)
+set(ICON_PATH ${PROJECT_SOURCE_DIR}/res/${ICON_NAME})
 set(buzzbot_ICON ${ICON_PATH})
 set_source_files_properties(${buzzbot_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 file(COPY ${ICON_PATH} DESTINATION "BuzzBot.app/Contents/Resources")
 
-add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp src/mainwindow.h src/database.h src/usersettings.cpp src/usersettings.h src/calculate.cpp src/calculate.h src/beer.cpp src/liquor.cpp src/wine.cpp src/filters.cpp)
+add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp src/mainwindow.h src/database.h src/usersettings.cpp src/usersettings.h src/calculate.cpp src/calculate.h src/beer.cpp src/liquor.cpp src/wine.cpp src/filters.cpp  src/about.cpp src/about.h)
 add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp test/test_database_functions.cpp test/test_calculations.cpp)
 
 # Copy resources to build dir
@@ -47,11 +47,12 @@ target_link_libraries(functions_test SQLite3 Boost::filesystem Catch2::Catch2 Qt
 
 set_target_properties(BuzzBot PROPERTIES
         MACOSX_BUNDLE_BUNDLE_NAME "BuzzBot"
+        MACOSX_BUNDLE_BUNDLE_VERSION "1.0.0"
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_ICON_FILE icon.icns
-        MACOSX_BUNDLE_LONG_VERSION_STRING "1.0.0-alpha"
-        MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0.0-alpha"
-        MACOSX_BUNDLE_COPYRIGHT "Ross Wardrup 2020"
+        MACOSX_BUNDLE_LONG_VERSION_STRING "1.0.0"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0.0"
+        MACOSX_BUNDLE_COPYRIGHT "2020 Ross Wardrup"
         MACOSX_BUNDLE_GUI_IDENTIFIER com.rwardrup.buzzbot
         XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
         XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
