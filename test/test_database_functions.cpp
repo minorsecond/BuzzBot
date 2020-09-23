@@ -325,6 +325,9 @@ TEST_CASE("Get Beers By Type", "[DB Functions]") {
     REQUIRE(selected_beers.size() == 2);
     REQUIRE(selected_beers.at(0).type == "IPA");
     REQUIRE(selected_beers.at(1).name == "Mosaic");
+
+    std::vector<Drink> blank_selection = Database::get_beers_by_type(storage_1, "Porter");
+    REQUIRE(blank_selection.empty());
 }
 
 TEST_CASE("Get Beers By Brewery", "[DB Functions]") {
@@ -356,4 +359,7 @@ TEST_CASE("Get Beers By Brewery", "[DB Functions]") {
     REQUIRE(selected_beers.size() == 1);
     REQUIRE(selected_beers.at(0).type == "Russian Imperial Stout");
     REQUIRE(selected_beers.at(0).name == "Old Rasputin");
+
+    std::vector<Drink> blank_selection = Database::get_beers_by_brewery(storage_1, "Coors");
+    REQUIRE(blank_selection.empty());
 }
