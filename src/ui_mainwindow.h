@@ -1056,7 +1056,7 @@ public:
         statsLabel->setText(QCoreApplication::translate("MainWindow", "Stats", nullptr));
         drinksLeftOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
         ozAlcoholConsumedOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
-        favoriteTypeLabel->setText(QCoreApplication::translate("MainWindow", "Favorite type:", nullptr));
+        favoriteTypeLabel->setText(QCoreApplication::translate("MainWindow", "Most frequent type:", nullptr));
         favoriteBeerOutput->setText(QCoreApplication::translate("MainWindow", "Everything Rhymes with Orange", nullptr));
         ozAlcoholConsumedLabel->setText(QCoreApplication::translate("MainWindow", "Oz. alcohol consumed:", nullptr));
         favoriteBreweryOutput->setText(QCoreApplication::translate("MainWindow", "Roughtail Brewing Co.", nullptr));
@@ -1066,7 +1066,7 @@ public:
         favoriteTypeOutput->setText(QCoreApplication::translate("MainWindow", "IPA", nullptr));
         avgAbvDrinkLabel->setText(QCoreApplication::translate("MainWindow", "Average ABV per drink:", nullptr));
         ozAlcoholRemainingOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
-        favoriteBeerLabel->setText(QCoreApplication::translate("MainWindow", "Favorite drink:", nullptr));
+        favoriteBeerLabel->setText(QCoreApplication::translate("MainWindow", "Most frequent drink:", nullptr));
         averageIbuDrinkLabel->setText(QCoreApplication::translate("MainWindow", "Average IBU per beer:", nullptr));
         drinksThisWeekOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
         drinksThisWeekLabel->setText(QCoreApplication::translate("MainWindow", "Std. drinks this week:", nullptr));

@@ -335,7 +335,7 @@ void MainWindow::update_table() {
      */
 
     // Temporarily sort by database ID to fix issues with blank rows
-    ui->drinkLogTable->sortItems(9, Qt::AscendingOrder);
+    //ui->drinkLogTable->sortItems(9, Qt::AscendingOrder);
 
     std::string filter_category = ui->filterCategoryInput->currentText().toStdString();
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
@@ -614,8 +614,9 @@ void MainWindow::reset_table_sort() {
     /*
      * Reset table sort to default, by datetime descending.
      */
-
-    ui->drinkLogTable->sortItems(11, Qt::DescendingOrder);
+    int sort_column = 11;
+    std::cout << "Sorting by column: " << ui->drinkLogTable->horizontalHeaderItem(sort_column)->text().toStdString() << std::endl;
+    ui->drinkLogTable->sortItems(sort_column, Qt::DescendingOrder);
 }
 
 double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week) {
@@ -786,15 +787,19 @@ std::string MainWindow::get_latest_notes(const std::string& name, const std::str
 
     std::string notes;
 
-    std::cout << "*** GET LATEST NOTES CALLED WITH NAME " << name << " ALC TYPE " << alcohol_type << std::endl;
+    // First, try to get notes at the selected row
+    Drink drink = get_drink_at_selected_row();
+    notes = drink.notes;
 
-    // Get latest notes entered for the selected drink
-    if (ui->tabWidget->currentIndex() == 0) {  // Update beer notes
-        notes = Database::get_latest_notes(storage, name, "Beer");
-    } else if (ui->tabWidget->currentIndex() == 1) {  // Update liquor notes
-        notes = Database::get_latest_notes(storage, name, "Liquor");
-    } else if (ui->tabWidget->currentIndex() == 2) {  // Update wine notes
-        notes = Database::get_latest_notes(storage, name, "Wine");
+    if (notes.empty()) {
+        // Get latest notes entered for the selected drink
+        if (ui->tabWidget->currentIndex() == 0) {  // Update beer notes
+            notes = Database::get_latest_notes(storage, name, "Beer");
+        } else if (ui->tabWidget->currentIndex() == 1) {  // Update liquor notes
+            notes = Database::get_latest_notes(storage, name, "Liquor");
+        } else if (ui->tabWidget->currentIndex() == 2) {  // Update wine notes
+            notes = Database::get_latest_notes(storage, name, "Wine");
+        }
     }
 
     return notes;
@@ -949,26 +954,35 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
     // Do not clear names!
 
     if (alcohol_type == "Beer") {
-        ui->beerBreweryInput->clear();
-        ui->beerTypeInput->clear();
-        ui->beerSubtypeInput->clear();
+        //ui->beerBreweryInput->clear();
+        ui->beerBreweryInput->setCurrentText("");
+        //ui->beerTypeInput->clear();
+        ui->beerTypeInput->setCurrentText("");
+        //ui->beerSubtypeInput->clear();
+        ui->beerSubtypeInput->setCurrentText("");
         ui->beerAbvInput->clear();
         ui->beerIbuInput->clear();
         ui->beerSizeInput->clear();
         ui->beerRatingInput->clear();
         ui->beerNotesInput->clear();
     } else if (alcohol_type == "Liquor") {
-        ui->liquorDistillerInput->clear();
-        ui->liquorTypeInput->clear();
-        ui->liquorSubtypeInput->clear();
+        //ui->liquorDistillerInput->clear();
+        ui->liquorDistillerInput->setCurrentText("");
+        //ui->liquorTypeInput->clear();
+        ui->liquorTypeInput->setCurrentText("");
+        //ui->liquorSubtypeInput->clear();
+        ui->liquorSubtypeInput->setCurrentText("");
         ui->liquorAbvInput->clear();
         ui->liquorSizeInput->clear();
         ui->liquorRatingInput->clear();
         ui->liquorNotesInput->clear();
     } else if (alcohol_type == "Wine") {
-        ui->wineryInput->clear();
-        ui->wineTypeInput->clear();
-        ui->wineSubtypeInput->clear();
+        //ui->wineryInput->clear();
+        ui->wineryInput->setCurrentText("");
+        //ui->wineTypeInput->clear();
+        ui->wineTypeInput->setCurrentText("");
+        //ui->wineSubtypeInput->clear();
+        ui->wineSubtypeInput->setCurrentText("");
         ui->wineVintage->clear();
         ui->wineAbvInput->clear();
         ui->wineSizeInput->clear();
