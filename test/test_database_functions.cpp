@@ -223,6 +223,25 @@ TEST_CASE("Update Row", "[DB Functions]") {
     REQUIRE(etrwo_read2.notes == "Very good hazy IPA. Will buy again!");
 }
 
+TEST_CASE("Increment Version", "[DB Functions]") {
+    std::string current_path = std::filesystem::current_path();
+    const char *file_name = "testdb.db";
+    std::string db_path = current_path + "/" + file_name;
+
+    if (remove(db_path.c_str())) {
+        std::cout << "Removed existing testdb.sqlite file" << std::endl;
+    }
+
+    Storage storage_1 = initStorage(db_path);
+    Database::write_db_to_disk(storage_1);
+
+    Database::increment_version(storage_1, 1);
+    REQUIRE(Database::get_version(storage_1) == 1);
+
+    Database::increment_version(storage_1, 2);
+    REQUIRE(Database::get_version(storage_1) == 2);
+}
+
 TEST_CASE("Filter DB", "[DB Functions]") {
     std::string current_path = std::filesystem::current_path();
     const char *file_name = "testdb.db";
