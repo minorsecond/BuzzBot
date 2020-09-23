@@ -1,5 +1,10 @@
 #!/bin/zsh
 
+#
+# This script increments the version number to whatever is entered after the ./increment_vers.sh command.
+# The version can never be decremented, and the script will do nothing if the new version is the same as the previous.
+#
+
 PREV_VER=$(tail -n 1 VERS | awk '{print $1;}')
 DATE=$(date +"%Y-%m-%d-%H-%M-%S")
 
