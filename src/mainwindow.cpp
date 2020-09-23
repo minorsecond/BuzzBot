@@ -987,6 +987,7 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
         ui->wineSubtypeInput->setCurrentText("");
         ui->wineVintage->clear();
         ui->wineAbvInput->clear();
+        ui->wineRatingInput->clear();
         ui->wineSizeInput->clear();
         ui->wineNotesInput->clear();
     }
