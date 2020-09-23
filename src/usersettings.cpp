@@ -4,6 +4,7 @@
 
 #include "usersettings.h"
 
+// LCOV_EXCL_START
 UserSettings::UserSettings(QWidget *parent, const Options& options) {
     /*
      * Dialog box for user settings.
@@ -47,3 +48,4 @@ std::string UserSettings::get_weekday_start() {
      */
     return ui.weekdayStartInput->currentText().toStdString();
 }
+// LCOV_EXCL_STOP

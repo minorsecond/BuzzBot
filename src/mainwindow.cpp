@@ -11,12 +11,14 @@
 #include <QStandardPaths>
 #include <CoreFoundation/CFBundle.h>
 
+// LCOV_EXCL_START
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     /*
      * Set up the main window
+     *
      */
 
     ui->setupUi(this);
@@ -989,3 +991,5 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
         ui->wineNotesInput->clear();
     }
 }
+
+// LCOV_EXCL_STOP
