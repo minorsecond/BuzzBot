@@ -235,10 +235,14 @@ TEST_CASE("Increment Version", "[DB Functions]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Database::increment_version(storage_1, 1);
+    int base_version = Database::increment_version(storage_1, 1);
     REQUIRE(Database::get_version(storage_1) == 1);
+    REQUIRE(Database::get_version(storage_1) == base_version);
 
     Database::increment_version(storage_1, 2);
+    REQUIRE(Database::get_version(storage_1) == 2);
+
+    Database::increment_version(storage_1, 1);
     REQUIRE(Database::get_version(storage_1) == 2);
 }
 
@@ -280,6 +284,10 @@ TEST_CASE("Filter DB", "[DB Functions]") {
     REQUIRE(filter_by_subtype.size() == 2);
 
     std::vector<Drink> filter_by_rating = Database::filter("Rating", "8", storage_1);
+    REQUIRE(filter_by_rating.size() == 1);
+    REQUIRE(filter_by_rating.at(0).name == "Mosaic");
+
+    std::vector<Drink> filter_by_producer = Database::filter("Producer", "Community Brewing", storage_1);
     REQUIRE(filter_by_rating.size() == 1);
     REQUIRE(filter_by_rating.at(0).name == "Mosaic");
 }
