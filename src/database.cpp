@@ -108,13 +108,13 @@ std::string Database::get_latest_notes(Storage storage, const std::string& name,
     std::string notes;
     unsigned temp_id = 0;
     for (const auto& drink_for_notes : drinks) {
-            if (drink_for_notes.id > temp_id && drink_for_notes.alcohol_type == alcohol_type) {
-                temp_id = drink_for_notes.id;
-                if (!drink_for_notes.notes.empty()) {
-                    notes = drink_for_notes.notes;
-                }
+        if (drink_for_notes.id > temp_id && drink_for_notes.alcohol_type == alcohol_type) {
+            temp_id = drink_for_notes.id;
+            if (!drink_for_notes.notes.empty()) {
+                notes = drink_for_notes.notes;
             }
         }
+    }
 
     return notes;
 }
@@ -241,6 +241,8 @@ bool Database::compare_date(const Drink &a, const Drink &b) {
         return true;
     } else if (a.drink_year == b.drink_year && a.drink_month == b.drink_month && a.drink_day < b.drink_day) {
         return true;
+    } else if (a.drink_year == b.drink_year && a.drink_month == b.drink_month && a.drink_day == b.drink_day && a.id < b.id) {
+        return true;
     } else {
         return false;
     }
@@ -258,6 +260,8 @@ std::vector<Drink> Database::sort_by_date_id(std::vector<Drink> drinks) {
     int sort_order = 1;
     for (int i = 0; i < drinks.size(); ++i) {
         drinks[i].sort_order = sort_order;
+        std::cout << drinks[i].name << " " << sort_order << std::endl;
+        std::cout << drinks[i].drink_year << "-" << drinks[i].drink_month << "-" << drinks[i].drink_day << std::endl;
         sort_order++;
     }
 
