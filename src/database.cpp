@@ -206,7 +206,9 @@ int Database::increment_version(Storage storage, int current_version) {
     if (get_version(storage) == 0) {  // Never use 0
         storage.pragma.user_version(storage.pragma.user_version() + 1);
         storage.sync_schema(true);
-    } else if (get_version(storage) == 1 && current_version == 2) {
+    }
+
+    if (get_version(storage) == 1 && current_version == 2) {
         // In version 1.0.1, this populated the producer column with data from the now-nonexistent brewery column.
         storage.pragma.user_version(2);
         storage.sync_schema(true);

@@ -5,6 +5,7 @@
 #include "mainwindow.h"
 #include <iostream>
 
+// LCOV_EXCL_START
 void MainWindow::update_beer_fields() {
     /*
      * Read rows in the DB and populate the brewery, type, and name dropdowns with unique values.
@@ -230,3 +231,4 @@ Drink MainWindow::get_beer_attrs_from_fields(std::string alcohol_type) {
 
     return drink;
 }
+// LCOV_EXCL_STOP
