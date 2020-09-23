@@ -5,6 +5,7 @@
 #include <utility>
 #include "mainwindow.h"
 
+// LCOV_EXCL_START
 void MainWindow::update_wine_fields() {
     /*
      * Read rows in the DB and populate the winery, type, and name dropdowns with unique values.
@@ -234,3 +235,4 @@ Drink MainWindow::get_wine_attrs_from_fields(std::string alcohol_type) {
 
     return drink;
 }
+// LCOV_EXCL_STOP
