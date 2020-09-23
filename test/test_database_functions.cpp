@@ -168,6 +168,29 @@ TEST_CASE("Read Row", "[DB Functions]") {
     REQUIRE(etrwo_read.notes == "Very good hazy IPA.");
 }
 
+TEST_CASE("Write Row", "[DB Functions]") {
+    std::string current_path = std::filesystem::current_path();
+    const char *file_name = "testdb.db";
+    std::string db_path = current_path + "/" + file_name;
+
+    if (remove(db_path.c_str())) {
+        std::cout << "Removed existing testdb.sqlite file" << std::endl;
+    }
+
+    Storage storage_1 = initStorage(db_path);
+    Database::write_db_to_disk(storage_1);
+
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA.", -1, "Beer"};
+
+    Database::write(etrwo, storage_1);
+    std::vector<Drink> drinks_in_db = storage_1.get_all<Drink>();
+
+    REQUIRE(drinks_in_db.at(0).id == 1);
+    REQUIRE(drinks_in_db.size() == 1);
+    REQUIRE(drinks_in_db.at(0).alcohol_type == "Beer");
+}
+
 TEST_CASE("Update Row", "[DB Functions]") {
     std::string current_path = std::filesystem::current_path();
     const char *file_name = "testdb.db";
