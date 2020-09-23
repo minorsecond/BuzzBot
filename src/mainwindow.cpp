@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Upgrade DB version
     // TODO: Remove the brewery column from database at DB version 3
-    Database::increment_version(storage, 2);
+    Database::increment_version(storage, 3);
 
     add_menubar_items();
 
