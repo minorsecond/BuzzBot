@@ -179,23 +179,23 @@ void MainWindow::add_slot_connections() {
     // Slot connections
     connect(corner_button, &QAbstractButton::clicked, this, &MainWindow::reset_table_sort);
     connect(ui->drinkLogTable->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::populate_fields);
-    connect(ui->filterCategoryInput, QOverload<const QString &>::of(&QComboBox::activated), this, &MainWindow::enable_filter_text);
-    connect(ui->filterTextInput, QOverload<const QString &>::of(&QComboBox::activated), this, &MainWindow::changed_filter_text);
+    connect(ui->filterCategoryInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::enable_filter_text);
+    connect(ui->filterTextInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::changed_filter_text);
     connect(ui->submitRowButton, &QPushButton::clicked, this, &MainWindow::submit_button_clicked);
     connect(ui->clearFieldsButton, &QPushButton::clicked, this, &MainWindow::clicked_clear_button);
     connect(ui->deleteRowButton, &QPushButton::clicked, this, &MainWindow::delete_row);
-    connect(ui->beerNameInput, QOverload<const QString &>::of(&QComboBox::activated), this, &MainWindow::name_input_changed);
+    connect(ui->beerNameInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::name_input_changed);
     connect(ui->beerNameInput, &QComboBox::editTextChanged, this, &MainWindow::name_input_changed);
-    connect(ui->beerTypeInput, QOverload<const QString &>::of(&QComboBox::activated), this, &MainWindow::type_input_changed);
-    connect(ui->beerBreweryInput, QOverload<const QString &>::of(&QComboBox::activated), this, &MainWindow::producer_input_changed);
-    connect(ui->liquorNameInput, QOverload<const QString &>::of(&QComboBox::activated), this, &MainWindow::name_input_changed);
+    connect(ui->beerTypeInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::type_input_changed);
+    connect(ui->beerBreweryInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::producer_input_changed);
+    connect(ui->liquorNameInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::name_input_changed);
     connect(ui->liquorNameInput, &QComboBox::editTextChanged, this, &MainWindow::name_input_changed);
-    connect(ui->liquorTypeInput, QOverload<const QString &>::of(&QComboBox::activated), this, &MainWindow::type_input_changed);
-    connect(ui->liquorDistillerInput, QOverload<const QString &>::of(&QComboBox::activated), this, &MainWindow::producer_input_changed);
-    connect(ui->wineNameInput, QOverload<const QString &>::of(&QComboBox::activated), this, &MainWindow::name_input_changed);
+    connect(ui->liquorTypeInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::type_input_changed);
+    connect(ui->liquorDistillerInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::producer_input_changed);
+    connect(ui->wineNameInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::name_input_changed);
     connect(ui->wineNameInput, &QComboBox::editTextChanged, this, &MainWindow::name_input_changed);
-    connect(ui->wineTypeInput, QOverload<const QString &>::of(&QComboBox::activated), this, &MainWindow::type_input_changed);
-    connect(ui->wineryInput, QOverload<const QString &>::of(&QComboBox::activated), this, &MainWindow::producer_input_changed);
+    connect(ui->wineTypeInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::type_input_changed);
+    connect(ui->wineryInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::producer_input_changed);
     connect(ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::tab_changed);
 }
 
