@@ -207,26 +207,11 @@ int Database::increment_version(Storage storage, int current_version) {
         storage.pragma.user_version(storage.pragma.user_version() + 1);
         storage.sync_schema(true);
     } else if (get_version(storage) == 1 && current_version == 2) {
-        populate_producer_column();
+        // In version 1.0.1, this populated the producer column with data from the now-nonexistent brewery column.
         storage.pragma.user_version(2);
         storage.sync_schema(true);
     }
     return storage.pragma.user_version();
-}
-
-void Database::populate_producer_column() {
-    /*
-     * Copy brewery column to the new maker column. The brewery column will be deleted later.
-     */
-    Storage storage = initStorage(path());
-    write_db_to_disk(storage); // Write new column to disk
-    if (get_version(storage) == 1) {  // Old db version
-        std::vector<Drink> all_drinks = storage.get_all<Drink>();
-        for (auto drink : all_drinks) {
-            drink.producer = drink.brewery;
-            update(storage, drink);
-        }
-    }
 }
 
 bool Database::compare_date(const Drink &a, const Drink &b) {
