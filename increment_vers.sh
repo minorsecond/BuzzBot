@@ -11,3 +11,5 @@ sed -i '' -e 's/\(MACOSX_BUNDLE_BUNDLE_VERSION \)\(.*\)/\1'\"$1\"'/' CMakeLists.
 sed -i '' -e 's/\(std::string version = \)\(.*\)/\1'\"$1\"\;'/' src/about.cpp
 
 echo "$1" > VERS
+
+echo "Refresh CMake to apply changes to Info.plist"
