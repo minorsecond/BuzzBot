@@ -15,8 +15,12 @@ About::About(QWidget *parent) {
     this->setFixedSize(237, 272);
 
     // Version text
-    std::string version = "0.8.4";
+    std::string version = "1.0.1";
     ui.versionLabel->setText(QString::fromStdString("Version " + version));
+
+    // Make Qt URL clickable
+    ui.acknowledgementsLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    ui.acknowledgementsLabel->setOpenExternalLinks(true);
 
     // Get path of .app file
     CFURLRef app_url_ref = CFBundleCopyBundleURL(CFBundleGetMainBundle());

@@ -51,6 +51,7 @@ public:
 
         versionLabel = new QLabel(aboutDialog);
         versionLabel->setObjectName(QString::fromUtf8("versionLabel"));
+        versionLabel->setTextFormat(Qt::RichText);
         versionLabel->setAlignment(Qt::AlignHCenter|Qt::AlignTop);
 
         gridLayout->addWidget(versionLabel, 2, 0, 1, 1);
@@ -101,7 +102,7 @@ public:
     void retranslateUi(QDialog *aboutDialog)
     {
         aboutDialog->setWindowTitle(QCoreApplication::translate("aboutDialog", "About", nullptr));
-        acknowledgementsLabel->setText(QCoreApplication::translate("aboutDialog", "This application makes use of Qt Open Source and is licensed under the LGPL.", nullptr));
+        acknowledgementsLabel->setText(QCoreApplication::translate("aboutDialog", "This application makes use of Qt Open Source,  <a href=\"https://www.qt.io\">available here</a>.", nullptr));
         copyrightLabel->setText(QCoreApplication::translate("aboutDialog", "Ross Wardrup, 2020", nullptr));
         versionLabel->setText(QCoreApplication::translate("aboutDialog", "Version 0.8.0", nullptr));
         miniIcon->setText(QString());
