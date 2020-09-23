@@ -382,3 +382,36 @@ TEST_CASE("Get Beers By Brewery", "[DB Functions]") {
     std::vector<Drink> blank_selection = Database::get_beers_by_brewery(storage_1, "Coors");
     REQUIRE(blank_selection.empty());
 }
+
+TEST_CASE("DB Sort", "[DB Functions]") {
+    std::string current_path = std::filesystem::current_path();
+    const char *file_name = "testdb.db";
+    std::string db_path = current_path + "/" + file_name;
+
+    if (remove(db_path.c_str())) {
+        std::cout << "Removed existing testdb.sqlite file" << std::endl;
+    }
+
+    Storage storage_1 = initStorage(db_path);
+    Database::write_db_to_disk(storage_1);
+
+    Drink etrwo{-1, 2019, 9, 8, "Everything Rhymes with Orange", "IPA", "",
+                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA.", -1, "Beer"};
+    Drink mosaic1{-1, 2019, 8, 8, "Mosaic", "IPA", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, "", -1, "Beer"};
+    Drink mosaic2{-1, 2020, 8, 8, "Mosaic", "IPA", "",
+                 "Community Brewing", 8.4, 75.0, 12, 8, "", -1, "Beer"};
+    Drink old_rasputin{-1, 2020, 7, 11, "Old Rasputin", "Russian Imperial Stout", "",
+                       "North Coast Brewing Co.", 9.0, 75.0, 12, 8, "", -1, "Beer"};
+
+    storage_1.insert(etrwo);
+    storage_1.insert(mosaic1);
+    storage_1.insert(mosaic2);
+    storage_1.insert(old_rasputin);
+    Database::write_db_to_disk(storage_1);
+    std::vector<Drink> unsorted_drinks = storage_1.get_all<Drink>();
+    std::vector<Drink> sorted_drinks = Database::sort_by_date_id(unsorted_drinks);
+    REQUIRE(sorted_drinks.at(0).name == "Mosaic");
+    REQUIRE(sorted_drinks.at(1).name == "Everything Rhymes with Orange");
+    REQUIRE(sorted_drinks.at(2).name == "Old Rasputin");
+}
