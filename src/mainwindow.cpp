@@ -185,7 +185,7 @@ void MainWindow::add_slot_connections() {
     connect(ui->clearFieldsButton, &QPushButton::clicked, this, &MainWindow::clicked_clear_button);
     connect(ui->deleteRowButton, &QPushButton::clicked, this, &MainWindow::delete_row);
     connect(ui->beerNameInput, QOverload<const QString &>::of(&QComboBox::activated), this, &MainWindow::name_input_changed);
-    connect(ui->beerNameInput, &QComboBox::editTextChanged, this, &MainWindow::name_input_changed);  // TODO: Rest of connections new style
+    connect(ui->beerNameInput, &QComboBox::editTextChanged, this, &MainWindow::name_input_changed);
     connect(ui->beerTypeInput, QOverload<const QString &>::of(&QComboBox::activated), this, &MainWindow::type_input_changed);
     connect(ui->beerBreweryInput, QOverload<const QString &>::of(&QComboBox::activated), this, &MainWindow::producer_input_changed);
     connect(ui->liquorNameInput, QOverload<const QString &>::of(&QComboBox::activated), this, &MainWindow::name_input_changed);
