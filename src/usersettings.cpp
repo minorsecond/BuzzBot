@@ -3,7 +3,6 @@
 //
 
 #include "usersettings.h"
-#include "mainwindow.h"
 
 UserSettings::UserSettings(QWidget *parent, const Options& options) {
     /*

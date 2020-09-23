@@ -4,6 +4,7 @@
 
 #include "calculate.h"
 #include <cmath>
+#include <iostream>
 
 double Calculate::standard_drinks(double abv, int amount) {
     /*
@@ -75,38 +76,37 @@ double Calculate::oz_alcohol_remaining(const std::string& sex, double oz_consume
     return round_to_two_decimal_points(oz_alcohol_remaining);
 }
 
-std::string Calculate::favorite_brewery(Storage storage) {
+std::string Calculate::favorite_producer(Storage storage) {
     /*
      * Get the number of time each brewery appears in the database.
      * @param storage: A Storage instance.
-     * @return favorite_brewery: The brewery that appears most often.
+     * @return favorite_producer: The brewery that appears most often.
      */
 
-    std::map<std::string, unsigned> brewery_counts;
-    std::vector<std::string> breweries;
-    std::string favorite_brewery;
+    std::map<std::string, unsigned> producer_counts;
+    std::vector<std::string> producers;
+    std::string favorite_producer;
 
-    std::vector<Beer> all_beers = storage.get_all<Beer>();
+    std::vector<Drink> all_drinks = storage.get_all<Drink>();
 
-    breweries.reserve(all_beers.size());
-    for (const auto& beer: all_beers) {
-        breweries.push_back(beer.brewery);
+    producers.reserve(all_drinks.size());
+    for (const auto& drink: all_drinks) {
+        producers.push_back(drink.producer);
     }
-    for (const auto& brewery : breweries) {
-        int brewery_count = std::count(breweries.begin(), breweries.end(), brewery);
-        brewery_counts[brewery] = brewery_count;
+    for (const auto& producer : producers) {
+        int producer_count = std::count(producers.begin(), producers.end(), producer);
+        producer_counts[producer] = producer_count;
     }
 
     unsigned current_max = 0;
-
-    for (const auto & brewery_count : brewery_counts) {
+    for (const auto & brewery_count : producer_counts) {
         if (brewery_count.second > current_max) {
-            favorite_brewery = brewery_count.first;
+            favorite_producer = brewery_count.first;
             current_max = brewery_count.second;
         }
     }
 
-    return favorite_brewery;
+    return favorite_producer;
 }
 
 std::string Calculate::favorite_beer(Storage storage) {
@@ -120,7 +120,7 @@ std::string Calculate::favorite_beer(Storage storage) {
     std::vector<std::string> beers;
     std::string favorite_beer;
 
-    std::vector<Beer> all_beers = storage.get_all<Beer>();
+    std::vector<Drink> all_beers = storage.get_all<Drink>();
 
     beers.reserve(all_beers.size());
     for (const auto& beer: all_beers) {
@@ -152,7 +152,7 @@ double Calculate::mean_abv(Storage storage) {
 
     double abv_sum = 0.0;
     unsigned beer_count = 0;
-    std::vector<Beer> all_beers = storage.get_all<Beer>();
+    std::vector<Drink> all_beers = storage.get_all<Drink>();
 
     for (const auto& beer : all_beers) {
         beer_count += 1;
@@ -171,7 +171,7 @@ double Calculate::mean_ibu(Storage storage) {
 
     double ibu_sum = 0.0;
     unsigned beer_count = 0;
-    std::vector<Beer> all_beers = storage.get_all<Beer>();
+    std::vector<Drink> all_beers = storage.get_all<Drink>();
 
     for (const auto& beer : all_beers) {
         // Ignore empty IBU values
@@ -195,7 +195,7 @@ std::string Calculate::favorite_type(Storage storage) {
     std::vector<std::string> types;
     std::string favorite_type;
 
-    std::vector<Beer> all_beers = storage.get_all<Beer>();
+    std::vector<Drink> all_beers = storage.get_all<Drink>();
 
     types.reserve(all_beers.size());
     for (const auto& beer: all_beers) {
@@ -216,4 +216,21 @@ std::string Calculate::favorite_type(Storage storage) {
     }
 
     return favorite_type;
+}
+
+bool Calculate::compare_date(const Drink &a, const Drink &b) {
+    /*
+     * Determine if second date is greater than the first date.
+     * @return: True if second date is more recent than the first date. Else, false.
+     */
+
+    if (a.drink_year < b.drink_year) {
+        return true;
+    } else if (a.drink_year == b.drink_year && a.drink_month < b.drink_month) {
+        return true;
+    } else if (a.drink_year == b.drink_year && a.drink_month == b.drink_month && a.drink_day < b.drink_day) {
+        return true;
+    } else {
+        return false;
+    }
 }
