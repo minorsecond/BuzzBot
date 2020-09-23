@@ -235,12 +235,12 @@ TEST_CASE("Filter DB", "[DB Functions]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12, 8, "Very good hazy IPA.", -1, "beer"};
+    Drink etrwo{-1, 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "Hazy IPA",
+                "Roughtail Brewing", 8.0, 60.0, 12, 7, "Very good hazy IPA.", -1, "beer"};
     Drink mosaic{-1, 2020, 9, 8, "Mosaic", "IPA", "",
                  "Community Brewing", 8.4, 75.0, 12, 8, "", -1, "Beer"};
-    Drink etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
-                 "Roughtail Brewing", 8.0, 60.0, 12, 8, "", -1, "Beer"};
+    Drink etrwo2{-1, 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "Hazy IPA",
+                 "Roughtail Brewing", 8.0, 60.0, 12, 7, "", -1, "Beer"};
 
     storage_1.insert(etrwo);
     storage_1.insert(mosaic);
@@ -254,6 +254,15 @@ TEST_CASE("Filter DB", "[DB Functions]") {
     REQUIRE(filtered_beers.empty() == false);
     REQUIRE(filtered_beers.size() == 2);
     REQUIRE(etrwo_read.drink_day == 8);
+
+    std::vector<Drink> filter_by_subtype = Database::filter("Subtype", "Hazy IPA", storage_1);
+
+    REQUIRE(filter_by_subtype.at(0).name == "Everything Rhymes with Orange");
+    REQUIRE(filter_by_subtype.size() == 2);
+
+    std::vector<Drink> filter_by_rating = Database::filter("Rating", "8", storage_1);
+    REQUIRE(filter_by_rating.size() == 1);
+    REQUIRE(filter_by_rating.at(0).name == "Mosaic");
 }
 
 TEST_CASE("Get Drink By Name", "[DB Functions]") {
