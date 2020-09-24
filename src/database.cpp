@@ -104,6 +104,8 @@ std::string Database::get_latest_notes(Storage storage, const std::string& name,
      * @return notes: A string containing notes entered for the name and alcohol type.
      */
 
+    std::cout << "Getting latest notes for name: " << name << " alcohol type: " << alcohol_type << std::endl;
+
     std::vector<Drink> drinks = storage.get_all<Drink>(where(c(&Drink::name) == name && c(&Drink::alcohol_type) == alcohol_type));
     std::string notes;
     unsigned temp_id = 0;
@@ -179,6 +181,8 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
 
     if (!drink_by_name_result.empty()) {
         drink_by_name = drink_by_name_result.at(0);
+    } else {
+        drink_by_name.id = -1;
     }
 
     return drink_by_name;
