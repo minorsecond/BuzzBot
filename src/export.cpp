@@ -7,6 +7,10 @@
 #include <QStandardPaths>
 
 ExportDialog::ExportDialog(QWidget *parent) {
+    /*
+     * Export data dialog window where users can export data to CSV.
+     */
+
     ui.setupUi(this);
     this->setFixedSize(550, 119);
 

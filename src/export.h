@@ -18,7 +18,7 @@ public:
 
 private:
     void open_browse_dialog();
-    QString get_preferred_path();
+    static QString get_preferred_path();
 };
 
 
