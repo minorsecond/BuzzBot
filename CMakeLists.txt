@@ -6,8 +6,9 @@ set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
-    message("Building debug -o0")
-    add_compile_options(-Wall -o0)
+    message("Building debug")
+    add_compile_options(-Wall -g -o0 --coverage)
+    set(CMAKE_EXE_LINKER_FLAGS --coverage)
 elseif(CMAKE_BUILD_TYPE MATCHES Release)
     message(STATUS "Building release")
     add_compile_options(-Wall -gdwarf-2 -o3)
@@ -40,7 +41,6 @@ add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp 
 add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/previous.png ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/previous.png)
 add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/next.png ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/next.png)
 add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/mini-icon.png ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/mini-icon.png)
-#add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Info.plist ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Info.plist)
 
 set_target_properties(BuzzBot PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
 target_link_libraries(BuzzBot Qt5::Core Qt5::Widgets SQLite3 Boost::filesystem "-framework CoreFoundation")
