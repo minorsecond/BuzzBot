@@ -53,11 +53,3 @@ jobs:
 
       - name: Run Deploy Qt Library
         run: ls -alh ${{runner.workspace}}/build && macdeployqt ${{runner.workspace}}/build/BuzzBot.app -always-overwrite -appstore-compliant
-
-      - name: Compress Artifact
-        run: zip -r ${{runner.workspace}}/build/BuzzBot.zip ${{runner.workspace}}/build/BuzzBot.app
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: BuzzBot
-          path: ${{runner.workspace}}/build/BuzzBot.zip

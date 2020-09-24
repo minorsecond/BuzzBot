@@ -1,4 +1,4 @@
-name: Develop-CMake-Build
+name: Develop
 
 on:
   push:
