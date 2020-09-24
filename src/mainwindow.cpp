@@ -2,6 +2,7 @@
 #include "usersettings.h"
 #include "about.h"
 #include "export.h"
+#include "exporters.h"
 #include "calculate.h"
 #include "../include/date.h"
 #include <iomanip>
@@ -470,8 +471,10 @@ void MainWindow::open_export_dialog() {
     export_dialog->setModal(false);
     export_dialog->show();
 
+    std::string csv_path = export_dialog->get_export_path();
+
     // Get result
-    connect(export_dialog, &ExportDialog::accepted, this, &MainWindow::export_to_csv);
+    connect(export_dialog, &ExportDialog::accepted, this, &MainWindow::export_to_csv(csv_path));
 }
 
 void MainWindow::open_user_settings() {
@@ -1011,8 +1014,15 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
     }
 }
 
-void MainWindow::export_to_csv() {
+void MainWindow::export_to_csv(std::string path) {
+    /*
+     * Export to CSV
+     */
+    exporters exp;
     std::cout << "Exporting to CSV";
+
+    std::vector<Drink> all_drinks = storage.get_all<Drink>();
+    exp.to_csv(all_drinks, path);
 }
 
 // LCOV_EXCL_STOP
