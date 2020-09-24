@@ -4,7 +4,6 @@
 
 #include <utility>
 #include "mainwindow.h"
-#include <iostream>
 
 // LCOV_EXCL_START
 void MainWindow::update_liquor_fields() {
@@ -74,7 +73,6 @@ void MainWindow::update_liquor_fields() {
     ui->liquorNameInput->setCurrentIndex(0);
     update_liquor_types_producers();
     std::string liquor_notes_text = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), "Liquor");
-    std::cout << "Liquor notes: " << liquor_notes_text << std::endl;
     ui->liquorNotesInput->setText(QString::fromStdString(liquor_notes_text));
 }
 
@@ -206,11 +204,9 @@ void MainWindow::update_liquor_types_producers() {
         ui->liquorSizeInput->setValue(size);
         ui->liquorRatingInput->setValue(rating);
 
-        std::cout << "*** The liquor name set is: " << ui->liquorNameInput->currentText().toStdString() << std::endl;
         // Set notes to the notes for liquor in the name input
         std::string notes = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), get_current_tab());
         ui->liquorNotesInput->setText(QString::fromStdString(notes));
-        std::cout << "The liquor notes are: " << notes << std::endl;
     }
 }
 
