@@ -69,6 +69,7 @@ private:
     void set_input_states();
     Drink get_drink_at_selected_row();
     void clear_fields(const std::string& alcohol_type);
+    static void export_to_csv();
 
 private slots:
     void submit_button_clicked();

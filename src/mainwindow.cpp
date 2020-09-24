@@ -469,6 +469,9 @@ void MainWindow::open_export_dialog() {
     auto *export_dialog = new ExportDialog(this);
     export_dialog->setModal(false);
     export_dialog->show();
+
+    // Get result
+    connect(export_dialog, &ExportDialog::accepted, this, &MainWindow::export_to_csv);
 }
 
 void MainWindow::open_user_settings() {
@@ -1006,6 +1009,10 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
         ui->wineSizeInput->clear();
         ui->wineNotesInput->clear();
     }
+}
+
+void MainWindow::export_to_csv() {
+    std::cout << "Exporting to CSV";
 }
 
 // LCOV_EXCL_STOP
