@@ -1,6 +1,8 @@
 # BuzzBot
+
 <img src="https://github.com/minorsecond/BuzzBot/blob/master/res/mini-icon.png" align="right"
      alt="BuzzBot Logo" width="100" height="100">
+     
 ## Track your consumption of your favorite alcoholic drinks
 ### Build Status
 | Branch  | Build Status                                                                                                                 | Code Review                                                                                                                                                                      |
