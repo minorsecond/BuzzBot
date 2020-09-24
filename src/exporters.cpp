@@ -40,7 +40,7 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
         if (drink.ibu == -1) {
             ibu = "";
         } else {
-            ibu = drink.ibu;
+            ibu = std::to_string(drink.ibu);
         }
 
         if (drink.vintage == -999) {
