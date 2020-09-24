@@ -19,6 +19,7 @@ NEW_MAJ=`echo $1 | cut -d. -f1`
 NEW_MINOR=`echo $1 | cut -d. -f2`
 NEW_PATCH=`echo $1 | cut -d. -f3`
 
+# Check if it's possible to increment version
 if [[ $PREV_MAJ -lt $NEW_MAJ || $PREV_MINOR -lt $NEW_MINOR || $PREV_PATCH -lt $NEW_PATCH ]];
 then
   echo "Incrementing to version " \"$@\"
