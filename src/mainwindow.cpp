@@ -456,6 +456,12 @@ void MainWindow::open_about_dialog() {
     about_dialog->show();
 }
 
+void MainWindow::open_export_dialog() {
+    /*
+     * Open the export dialog.
+     */
+}
+
 void MainWindow::open_user_settings() {
     /*
      * Open the user settings dialog box, where users can enter their sex and the day which the week should begin on.
