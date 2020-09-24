@@ -833,8 +833,6 @@ void MainWindow::tab_changed() {
     std::string selected_drink_alc_type = selected_drink.alcohol_type;
     std::string new_tab = get_current_tab();
 
-    std::cout << "*** Selected drink: " << selected_drink.name << std::endl;
-
     reset_fields();
     if (new_tab == "Beer") {
         if (!name.empty()) {  // If a current row is selected, update the beer name to that row and get notes
@@ -935,9 +933,9 @@ Drink MainWindow::get_drink_at_selected_row() {
     int selection = ui->drinkLogTable->selectionModel()->currentIndex().row();
 
     if (selection >= 0) {
-        //std::cout << "Getting row " << selection << " from table." << std::endl;
+        std::cout << "Getting row " << selection << " from table." << std::endl;
         int row_to_get = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
-        //std::cout << "Getting row " << row_to_get << " from database." << std::endl;
+        std::cout << "Getting row " << row_to_get << " from database." << std::endl;
         if (select->isRowSelected(selection))
             ui->deleteRowButton->setEnabled(true);
         else
