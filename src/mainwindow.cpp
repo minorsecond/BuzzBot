@@ -397,12 +397,12 @@ std::string MainWindow::double_to_string(double input_double) {
      * @param input_double: Double value that should be converted.
      */
 
-    double purchase_price;
-    purchase_price = std::floor((input_double * 100.0) + .5) / 100.0;
+    double converted_double;
+    converted_double = std::floor((input_double * 100.0) + .5) / 100.0;
 
-    std::cout << "*** Double: " << input_double << " String: " << purchase_price << std::endl;
+    std::cout << "*** Double: " << input_double << " String: " << converted_double << std::endl;
     std::ostringstream price_stream;
-    price_stream << purchase_price;
+    price_stream << converted_double;
 
     return price_stream.str();
 }
