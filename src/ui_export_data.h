@@ -13,7 +13,6 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -23,9 +22,8 @@ QT_BEGIN_NAMESPACE
 class Ui_exportDialog
 {
 public:
-    QGridLayout *gridLayout;
-    QLabel *exportPathLabel;
     QLineEdit *exportPathInput;
+    QLabel *exportPathLabel;
     QPushButton *exportPathBrowse;
     QDialogButtonBox *exportPathButtonBox;
 
@@ -33,41 +31,31 @@ public:
     {
         if (exportDialog->objectName().isEmpty())
             exportDialog->setObjectName(QString::fromUtf8("exportDialog"));
-        exportDialog->resize(445, 119);
-        gridLayout = new QGridLayout(exportDialog);
-        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        exportPathLabel = new QLabel(exportDialog);
-        exportPathLabel->setObjectName(QString::fromUtf8("exportPathLabel"));
-
-        gridLayout->addWidget(exportPathLabel, 0, 0, 1, 1);
-
+        exportDialog->resize(550, 119);
         exportPathInput = new QLineEdit(exportDialog);
         exportPathInput->setObjectName(QString::fromUtf8("exportPathInput"));
+        exportPathInput->setGeometry(QRect(96, 25, 341, 21));
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(exportPathInput->sizePolicy().hasHeightForWidth());
         exportPathInput->setSizePolicy(sizePolicy);
-
-        gridLayout->addWidget(exportPathInput, 0, 1, 1, 2);
-
+        exportPathLabel = new QLabel(exportDialog);
+        exportPathLabel->setObjectName(QString::fromUtf8("exportPathLabel"));
+        exportPathLabel->setGeometry(QRect(12, 30, 74, 10));
         exportPathBrowse = new QPushButton(exportDialog);
         exportPathBrowse->setObjectName(QString::fromUtf8("exportPathBrowse"));
+        exportPathBrowse->setGeometry(QRect(447, 21, 87, 32));
         QSizePolicy sizePolicy1(QSizePolicy::Maximum, QSizePolicy::Fixed);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(exportPathBrowse->sizePolicy().hasHeightForWidth());
         exportPathBrowse->setSizePolicy(sizePolicy1);
-
-        gridLayout->addWidget(exportPathBrowse, 0, 3, 1, 1);
-
         exportPathButtonBox = new QDialogButtonBox(exportDialog);
         exportPathButtonBox->setObjectName(QString::fromUtf8("exportPathButtonBox"));
+        exportPathButtonBox->setGeometry(QRect(370, 70, 164, 32));
         exportPathButtonBox->setOrientation(Qt::Horizontal);
         exportPathButtonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
-
-        gridLayout->addWidget(exportPathButtonBox, 1, 2, 1, 1);
-
 
         retranslateUi(exportDialog);
         QObject::connect(exportPathButtonBox, SIGNAL(accepted()), exportDialog, SLOT(accept()));
