@@ -467,14 +467,15 @@ void MainWindow::open_export_dialog() {
      * Open the export dialog.
      */
 
-    auto *export_dialog = new ExportDialog(this);
-    export_dialog->setModal(false);
-    export_dialog->show();
+    ExportDialog export_dialog = ExportDialog(nullptr);
+    export_dialog.setModal(false);
 
-    std::string csv_path = export_dialog->get_export_path();
-
-    // Get result
-    connect(export_dialog, &ExportDialog::accepted, this, &MainWindow::export_to_csv(csv_path));
+    if (export_dialog.exec() == QDialog::Accepted) {
+        std::string path = export_dialog.get_export_path();
+        std::cout << "Exporting to CSV";
+        std::vector<Drink> all_drinks = storage.get_all<Drink>();
+        exporters::to_csv(all_drinks, path);
+    }
 }
 
 void MainWindow::open_user_settings() {
@@ -1012,17 +1013,6 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
         ui->wineSizeInput->clear();
         ui->wineNotesInput->clear();
     }
-}
-
-void MainWindow::export_to_csv(std::string path) {
-    /*
-     * Export to CSV
-     */
-    exporters exp;
-    std::cout << "Exporting to CSV";
-
-    std::vector<Drink> all_drinks = storage.get_all<Drink>();
-    exp.to_csv(all_drinks, path);
 }
 
 // LCOV_EXCL_STOP

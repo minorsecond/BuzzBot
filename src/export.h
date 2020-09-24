@@ -16,6 +16,8 @@ public:
     explicit ExportDialog(QWidget *parent = nullptr);
     std::string get_export_path();
 
+private:
+    void open_browse_dialog();
 };
 
 
