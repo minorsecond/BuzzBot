@@ -14,9 +14,6 @@ ExportDialog::ExportDialog(QWidget *parent) {
     ui.setupUi(this);
     this->setFixedSize(550, 119);
 
-    QString preferred_path = get_preferred_path();
-    ui.exportPathInput->setText(preferred_path);
-
     connect(ui.exportPathBrowse, &QPushButton::clicked, this, &ExportDialog::open_browse_dialog);
 }
 
