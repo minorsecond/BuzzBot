@@ -791,7 +791,7 @@ std::string MainWindow::get_latest_notes(const std::string& name, const std::str
     Drink drink = get_drink_at_selected_row();
     notes = drink.notes;
 
-    if (notes.empty()) {
+    if (notes.empty() || drink.alcohol_type != get_current_tab()) {
         // Get latest notes entered for the selected drink
         if (ui->tabWidget->currentIndex() == 0) {  // Update beer notes
             notes = Database::get_latest_notes(storage, name, "Beer");
@@ -832,6 +832,8 @@ void MainWindow::tab_changed() {
     std::string name = selected_drink.name;
     std::string selected_drink_alc_type = selected_drink.alcohol_type;
     std::string new_tab = get_current_tab();
+
+    std::cout << "*** Selected drink: " << selected_drink.name << std::endl;
 
     reset_fields();
     if (new_tab == "Beer") {
@@ -933,9 +935,9 @@ Drink MainWindow::get_drink_at_selected_row() {
     int selection = ui->drinkLogTable->selectionModel()->currentIndex().row();
 
     if (selection >= 0) {
-        std::cout << "Getting row " << selection << " from table." << std::endl;
+        //std::cout << "Getting row " << selection << " from table." << std::endl;
         int row_to_get = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
-        std::cout << "Getting row " << row_to_get << " from database." << std::endl;
+        //std::cout << "Getting row " << row_to_get << " from database." << std::endl;
         if (select->isRowSelected(selection))
             ui->deleteRowButton->setEnabled(true);
         else
@@ -985,6 +987,7 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
         ui->wineSubtypeInput->setCurrentText("");
         ui->wineVintage->clear();
         ui->wineAbvInput->clear();
+        ui->wineRatingInput->clear();
         ui->wineSizeInput->clear();
         ui->wineNotesInput->clear();
     }
