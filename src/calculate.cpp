@@ -55,8 +55,6 @@ double Calculate::round_to_two_decimal_points(double val) {
      * @param val: The value that should be rounded.
      */
 
-    std::cout.precision(2);
-
     return floor((val * 100) + .5)/100;
 }
 

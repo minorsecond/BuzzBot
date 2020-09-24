@@ -400,7 +400,6 @@ std::string MainWindow::double_to_string(double input_double) {
     double converted_double;
     converted_double = std::floor((input_double * 100.0) + .5) / 100.0;
 
-    std::cout << "*** Double: " << input_double << " String: " << converted_double << std::endl;
     std::ostringstream price_stream;
     price_stream << converted_double;
 
@@ -588,8 +587,6 @@ void MainWindow::update_drinks_this_week(double standard_drinks) {
      * Update the standard drinks this week output label.
      */
 
-    std::cout << "*** Drinks this week: " << double_to_string(standard_drinks) << std::endl;
-
     std::string drinksThisWeekLabelText = "Std. drinks since " + options.weekday_start + ":";
     ui->drinksThisWeekLabel->setText(QString::fromStdString(drinksThisWeekLabelText));
     if (standard_drinks == 0.0) {
@@ -605,7 +602,6 @@ void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consume
      */
 
     double std_drinks_left = Calculate::standard_drinks_remaining(options.sex, std_drinks_consumed);
-    std::cout << "*** Standard drinks left: " << double_to_string(std_drinks_left) << std::endl;
     ui->drinksLeftOutput->setText(QString::fromStdString(double_to_string(std_drinks_left)));
 
     // Set standard drinks remaining text to red if negative
