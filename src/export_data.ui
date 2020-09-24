@@ -6,55 +6,77 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>445</width>
+    <width>550</width>
     <height>119</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Export to CSV</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="exportPathLabel">
-     <property name="text">
-      <string>Export Path:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" colspan="2">
-    <widget class="QLineEdit" name="exportPathInput">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <widget class="QPushButton" name="exportPathBrowse">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Browse</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="QDialogButtonBox" name="exportPathButtonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-  </layout>
+  <widget class="QLineEdit" name="exportPathInput">
+   <property name="geometry">
+    <rect>
+     <x>96</x>
+     <y>25</y>
+     <width>341</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+  </widget>
+  <widget class="QLabel" name="exportPathLabel">
+   <property name="geometry">
+    <rect>
+     <x>12</x>
+     <y>30</y>
+     <width>74</width>
+     <height>10</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Export Path:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="exportPathBrowse">
+   <property name="geometry">
+    <rect>
+     <x>447</x>
+     <y>21</y>
+     <width>87</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="text">
+    <string>Browse</string>
+   </property>
+  </widget>
+  <widget class="QDialogButtonBox" name="exportPathButtonBox">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>70</y>
+     <width>164</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>

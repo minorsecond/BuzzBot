@@ -8,7 +8,10 @@
 
 ExportDialog::ExportDialog(QWidget *parent) {
     ui.setupUi(this);
-    this->setFixedSize(445, 119);
+    this->setFixedSize(550, 119);
+
+    QString preferred_path = get_preferred_path();
+    ui.exportPathInput->setText(preferred_path);
 
     connect(ui.exportPathBrowse, &QPushButton::clicked, this, &ExportDialog::open_browse_dialog);
 }
@@ -29,8 +32,7 @@ void ExportDialog::open_browse_dialog() {
      */
 
     QString filter = "CSV Files (*.csv)";
-    QString desktop_path = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0);
-    QString preferred_path = desktop_path + "/buzzbot.csv";
+    QString preferred_path = get_preferred_path();
     QString filepath_qstring = QFileDialog::getSaveFileName(this, "Save File", preferred_path, filter, &filter);
 
     if (filepath_qstring.isEmpty()) {
@@ -44,4 +46,15 @@ void ExportDialog::open_browse_dialog() {
         ui.exportPathInput->setText(filepath_qstring);
     }
 
+}
+
+QString ExportDialog::get_preferred_path() {
+    /*
+     * Generate preferred path to the export CSV file.
+     */
+
+    QString desktop_path = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0);
+    QString preferred_path = desktop_path + "/buzzbot.csv";
+
+    return preferred_path;
 }
