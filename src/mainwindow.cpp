@@ -11,12 +11,14 @@
 #include <QStandardPaths>
 #include <CoreFoundation/CFBundle.h>
 
+// LCOV_EXCL_START
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     /*
      * Set up the main window
+     *
      */
 
     ui->setupUi(this);
@@ -28,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Upgrade DB version
     // TODO: Remove the brewery column from database at DB version 3
-    Database::increment_version(storage, 2);
+    Database::increment_version(storage, 3);
 
     add_menubar_items();
 
@@ -992,3 +994,5 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
         ui->wineNotesInput->clear();
     }
 }
+
+// LCOV_EXCL_STOP
