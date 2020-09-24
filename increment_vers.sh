@@ -5,6 +5,7 @@
 # The version can never be decremented, and the script will do nothing if the new version is the same as the previous.
 #
 
+# Parse date
 PREV_VER=$(tail -n 1 VERS | awk '{print $1;}')
 DATE=$(date +"%Y-%m-%d-%H-%M-%S")
 
