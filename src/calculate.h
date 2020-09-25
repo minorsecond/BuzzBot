@@ -21,6 +21,7 @@ public:
     static double mean_abv(Storage storage);
     static double mean_ibu(Storage storage);
     static bool compare_date(const Drink &a, const Drink &b);
+    static std::string double_to_string(double input_double);
 };
 
 

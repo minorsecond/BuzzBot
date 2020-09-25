@@ -22,7 +22,6 @@ public:
 private:
     Ui::MainWindow *ui;
     Storage storage = initStorage(Database::path());
-    static std::string double_to_string(double input_double);
     void populate_filter_menus(const std::string& filter_type);
     void update_beer_fields();
     void update_liquor_fields();
@@ -81,6 +80,7 @@ private slots:
     void open_user_settings();
     void open_about_dialog();
     void open_export_dialog();
+    void open_std_drink_calculator();
     void reset_table_sort();
     void name_input_changed(const QString&);
     void type_input_changed(const QString&);

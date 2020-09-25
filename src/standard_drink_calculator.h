@@ -2,8 +2,8 @@
 // Created by Ross Wardrup on 9/25/20.
 //
 
-#ifndef BUZZBOT_STANDARD_DRINKS_H
-#define BUZZBOT_STANDARD_DRINKS_H
+#ifndef BUZZBOT_STANDARD_DRINK_CALCULATOR_H
+#define BUZZBOT_STANDARD_DRINK_CALCULATOR_H
 
 #include <QDialog>
 #include "ui_standard_drink_calc.h"
@@ -25,4 +25,4 @@ private slots:
 
 };
 
-#endif //BUZZBOT_STANDARD_DRINKS_H
+#endif //BUZZBOT_STANDARD_DRINK_CALCULATOR_H
