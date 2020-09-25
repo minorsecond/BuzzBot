@@ -5,6 +5,13 @@
 #include "exporters.h"
 #include "fstream"
 
+/*
+ * Keep an eye on this code as it was previously causing crashes (exc_bad_access).
+ * I think the issue was due to using ostringstream to add padding to the month & date
+ * digits in to_csv().
+ *
+*/
+
 void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path) {
     /*
      * Creates a CSV file containing the current DB contents.
