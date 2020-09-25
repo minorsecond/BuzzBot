@@ -11,6 +11,7 @@ StandardDrinkCalc::StandardDrinkCalc(QWidget *parent) {
      */
 
     ui.setupUi(this);
+    this->setFixedSize(99, 21);
     ui.standardDrinksOutput->setText("0");
 
     connect(ui.abvInput, &QDoubleSpinBox::textChanged, this, &StandardDrinkCalc::abv_changed);
