@@ -2,6 +2,7 @@
 #include "usersettings.h"
 #include "about.h"
 #include "export.h"
+#include "standard_drink_calculator.h"
 #include "exporters.h"
 #include "calculate.h"
 #include "../include/date.h"
@@ -78,17 +79,21 @@ void MainWindow::add_menubar_items() {
     auto * preferences_action = new QAction("Preferences");
     auto * about_action = new QAction("About");
     auto * export_action = new QAction("Export");
+    auto * calc_std_drinks = new QAction("Calculate Std. Drinks");
     QMenu * app_menu = menuBar()->addMenu("App Menu");
     preferences_action->setMenuRole(QAction::PreferencesRole);
     about_action->setMenuRole(QAction::AboutRole);
     export_action->setMenuRole(QAction::ApplicationSpecificRole);
+    calc_std_drinks->setMenuRole(QAction::ApplicationSpecificRole);
     app_menu->addAction(preferences_action);
     app_menu->addAction(about_action);
     app_menu->addAction(export_action);
+    app_menu->addAction(calc_std_drinks);
 
     connect(preferences_action, &QAction::triggered, this, &MainWindow::open_user_settings);
     connect(about_action, &QAction::triggered, this, &MainWindow::open_about_dialog);
     connect(export_action, &QAction::triggered, this, &MainWindow::open_export_dialog);
+    connect(calc_std_drinks, &QAction::triggered, this, &MainWindow::open_std_drink_calculator);
 }
 
 void MainWindow::configure_calendar() {
@@ -359,8 +364,8 @@ void MainWindow::update_table() {
         auto *type = new QTableWidgetItem(drink.type.c_str());
         auto *subtype = new QTableWidgetItem(drink.subtype.c_str());
         auto *producer = new QTableWidgetItem(drink.producer.c_str());
-        auto *abv = new QTableWidgetItem(double_to_string(drink.abv).c_str());
-        auto *size = new QTableWidgetItem(double_to_string(drink.size).c_str());
+        auto *abv = new QTableWidgetItem(Calculate::double_to_string(drink.abv).c_str());
+        auto *size = new QTableWidgetItem(Calculate::double_to_string(drink.size).c_str());
         auto *rating = new QTableWidgetItem(std::to_string(drink.rating).c_str());
         auto *id = new QTableWidgetItem;
         auto *timestamp = new QTableWidgetItem(drink.timestamp.c_str());
@@ -378,7 +383,7 @@ void MainWindow::update_table() {
         if (drink.ibu == -1.0) {  // -1 denotes no IBU value
             *ibu = QTableWidgetItem("");
         } else {
-            *ibu = QTableWidgetItem(double_to_string(drink.ibu).c_str());
+            *ibu = QTableWidgetItem(Calculate::double_to_string(drink.ibu).c_str());
         }
 
         ui->drinkLogTable->setItem(table_row_num, 0, date_qtw);
@@ -395,21 +400,6 @@ void MainWindow::update_table() {
         ui->drinkLogTable->setItem(table_row_num, 11, sort_order);
     }
     reset_table_sort();
-}
-
-std::string MainWindow::double_to_string(double input_double) {
-    /*
-     * Convert a double to a string with 1 decimal value.
-     * @param input_double: Double value that should be converted.
-     */
-
-    double converted_double;
-    converted_double = std::floor((input_double * 100.0) + .5) / 100.0;
-
-    std::ostringstream price_stream;
-    price_stream << converted_double;
-
-    return price_stream.str();
 }
 
 void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &) {
@@ -614,7 +604,7 @@ void MainWindow::update_drinks_this_week(double standard_drinks) {
     if (standard_drinks == 0.0) {
         ui->drinksThisWeekOutput->setText("0.0");
     } else {
-        ui->drinksThisWeekOutput->setText(QString::fromStdString(double_to_string(standard_drinks)));
+        ui->drinksThisWeekOutput->setText(QString::fromStdString(Calculate::double_to_string(standard_drinks)));
     }
 }
 
@@ -624,7 +614,7 @@ void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consume
      */
 
     double std_drinks_left = Calculate::standard_drinks_remaining(options.sex, std_drinks_consumed);
-    ui->drinksLeftOutput->setText(QString::fromStdString(double_to_string(std_drinks_left)));
+    ui->drinksLeftOutput->setText(QString::fromStdString(Calculate::double_to_string(std_drinks_left)));
 
     // Set standard drinks remaining text to red if negative
     if (std_drinks_left < 0) {
@@ -661,7 +651,7 @@ double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>
     if (oz_consumed == 0.0) {
         ui->ozAlcoholConsumedOutput->setText("0.0");
     } else {
-        ui->ozAlcoholConsumedOutput->setText(QString::fromStdString(double_to_string(oz_consumed)));
+        ui->ozAlcoholConsumedOutput->setText(QString::fromStdString(Calculate::double_to_string(oz_consumed)));
     }
 
     return oz_consumed;
@@ -673,7 +663,7 @@ void MainWindow::update_oz_alcohol_remaining(double oz_alcohol_consumed) {
      */
 
     double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(options.sex, oz_alcohol_consumed);
-    ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(double_to_string(oz_alcohol_remaining)));
+    ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(Calculate::double_to_string(oz_alcohol_remaining)));
 
     // Set oz alcohol remaining text to red if negative
     if (oz_alcohol_remaining < 0) {
@@ -706,7 +696,7 @@ void MainWindow::update_mean_abv() {
      * Update the mean ABV text label to the mean ABV of all beers in the database.
      */
 
-    std::string mean_abv = double_to_string(Calculate::mean_abv(storage));
+    std::string mean_abv = Calculate::double_to_string(Calculate::mean_abv(storage));
     if (mean_abv == "nan") {
         mean_abv = " ";
     }
@@ -718,7 +708,7 @@ void MainWindow::update_mean_ibu() {
      * Set the mean IBU text label to the mean IBU of all beers in the database.
      */
 
-    std::string mean_ibu = double_to_string(Calculate::mean_ibu(storage));
+    std::string mean_ibu = Calculate::double_to_string(Calculate::mean_ibu(storage));
     if (mean_ibu == "nan") {
         mean_ibu = " ";
     }
@@ -1013,6 +1003,15 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
         ui->wineSizeInput->clear();
         ui->wineNotesInput->clear();
     }
+}
+
+void MainWindow::open_std_drink_calculator() {
+    /*
+     * Open the standard drink calculator dialog box.
+     */
+
+    auto *  std_drink_calculator = new StandardDrinkCalc(this);
+    std_drink_calculator->show();
 }
 
 // LCOV_EXCL_STOP
