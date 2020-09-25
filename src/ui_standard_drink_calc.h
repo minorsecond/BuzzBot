@@ -12,10 +12,10 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpinBox>
 
 QT_BEGIN_NAMESPACE
@@ -26,17 +26,17 @@ public:
     QGridLayout *gridLayout;
     QLabel *volumeLabel;
     QLabel *abvInputLabel;
-    QDoubleSpinBox *abvInput;
-    QDialogButtonBox *standardDrinkCalcButtonBox;
-    QSpinBox *volumeInput;
     QLabel *standardDrinksLabel;
+    QDoubleSpinBox *abvInput;
     QLabel *standardDrinksOutput;
+    QSpinBox *volumeInput;
+    QPushButton *stdDrinkCalcOkButton;
 
     void setupUi(QDialog *stdDrinkDialog)
     {
         if (stdDrinkDialog->objectName().isEmpty())
             stdDrinkDialog->setObjectName(QString::fromUtf8("stdDrinkDialog"));
-        stdDrinkDialog->resize(230, 142);
+        stdDrinkDialog->resize(237, 142);
         gridLayout = new QGridLayout(stdDrinkDialog);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         volumeLabel = new QLabel(stdDrinkDialog);
@@ -49,37 +49,33 @@ public:
 
         gridLayout->addWidget(abvInputLabel, 0, 0, 1, 1);
 
-        abvInput = new QDoubleSpinBox(stdDrinkDialog);
-        abvInput->setObjectName(QString::fromUtf8("abvInput"));
-
-        gridLayout->addWidget(abvInput, 0, 1, 1, 1);
-
-        standardDrinkCalcButtonBox = new QDialogButtonBox(stdDrinkDialog);
-        standardDrinkCalcButtonBox->setObjectName(QString::fromUtf8("standardDrinkCalcButtonBox"));
-        standardDrinkCalcButtonBox->setOrientation(Qt::Horizontal);
-        standardDrinkCalcButtonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
-
-        gridLayout->addWidget(standardDrinkCalcButtonBox, 3, 0, 1, 2);
-
-        volumeInput = new QSpinBox(stdDrinkDialog);
-        volumeInput->setObjectName(QString::fromUtf8("volumeInput"));
-
-        gridLayout->addWidget(volumeInput, 1, 1, 1, 1);
-
         standardDrinksLabel = new QLabel(stdDrinkDialog);
         standardDrinksLabel->setObjectName(QString::fromUtf8("standardDrinksLabel"));
 
         gridLayout->addWidget(standardDrinksLabel, 2, 0, 1, 1);
+
+        abvInput = new QDoubleSpinBox(stdDrinkDialog);
+        abvInput->setObjectName(QString::fromUtf8("abvInput"));
+
+        gridLayout->addWidget(abvInput, 0, 1, 1, 1);
 
         standardDrinksOutput = new QLabel(stdDrinkDialog);
         standardDrinksOutput->setObjectName(QString::fromUtf8("standardDrinksOutput"));
 
         gridLayout->addWidget(standardDrinksOutput, 2, 1, 1, 1);
 
+        volumeInput = new QSpinBox(stdDrinkDialog);
+        volumeInput->setObjectName(QString::fromUtf8("volumeInput"));
+
+        gridLayout->addWidget(volumeInput, 1, 1, 1, 1);
+
+        stdDrinkCalcOkButton = new QPushButton(stdDrinkDialog);
+        stdDrinkCalcOkButton->setObjectName(QString::fromUtf8("stdDrinkCalcOkButton"));
+
+        gridLayout->addWidget(stdDrinkCalcOkButton, 3, 1, 1, 1);
+
 
         retranslateUi(stdDrinkDialog);
-        QObject::connect(standardDrinkCalcButtonBox, SIGNAL(accepted()), stdDrinkDialog, SLOT(accept()));
-        QObject::connect(standardDrinkCalcButtonBox, SIGNAL(rejected()), stdDrinkDialog, SLOT(reject()));
 
         QMetaObject::connectSlotsByName(stdDrinkDialog);
     } // setupUi
@@ -91,6 +87,7 @@ public:
         abvInputLabel->setText(QCoreApplication::translate("stdDrinkDialog", "ABV:", nullptr));
         standardDrinksLabel->setText(QCoreApplication::translate("stdDrinkDialog", "Standard drinks:", nullptr));
         standardDrinksOutput->setText(QCoreApplication::translate("stdDrinkDialog", "10", nullptr));
+        stdDrinkCalcOkButton->setText(QCoreApplication::translate("stdDrinkDialog", "OK", nullptr));
     } // retranslateUi
 
 };
