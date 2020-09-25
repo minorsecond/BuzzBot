@@ -86,8 +86,8 @@ void MainWindow::add_menubar_items() {
     app_menu->addAction(about_action);
     app_menu->addAction(export_action);
 
-    connect(preferences_action, SIGNAL(triggered()), this, SLOT(open_user_settings()));
-    connect(about_action, SIGNAL(triggered()), this, SLOT(open_about_dialog()));
+    connect(preferences_action, &QAction::triggered, this, &MainWindow::open_user_settings);
+    connect(about_action, &QAction::triggered, this, &MainWindow::open_about_dialog);
     connect(export_action, &QAction::triggered, this, &MainWindow::open_export_dialog);
 }
 
