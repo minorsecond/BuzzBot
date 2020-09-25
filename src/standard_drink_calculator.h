@@ -22,7 +22,6 @@ public:
 private slots:
     void volume_changed();
     void abv_changed();
-
 };
 
 #endif //BUZZBOT_STANDARD_DRINK_CALCULATOR_H
