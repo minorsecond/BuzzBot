@@ -49,7 +49,6 @@ void ExportDialog::open_browse_dialog() {
         ui.exportPathButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
         ui.exportPathInput->setText(filepath_qstring);
     }
-
 }
 
 QString ExportDialog::get_preferred_path() {
