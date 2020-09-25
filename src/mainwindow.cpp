@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "usersettings.h"
 #include "about.h"
+#include "export.h"
+#include "exporters.h"
 #include "calculate.h"
 #include "../include/date.h"
 #include <iomanip>
@@ -75,14 +77,18 @@ void MainWindow::add_menubar_items() {
 
     auto * preferences_action = new QAction("Preferences");
     auto * about_action = new QAction("About");
+    auto * export_action = new QAction("Export");
     QMenu * app_menu = menuBar()->addMenu("App Menu");
     preferences_action->setMenuRole(QAction::PreferencesRole);
     about_action->setMenuRole(QAction::AboutRole);
+    export_action->setMenuRole(QAction::ApplicationSpecificRole);
     app_menu->addAction(preferences_action);
     app_menu->addAction(about_action);
+    app_menu->addAction(export_action);
 
     connect(preferences_action, SIGNAL(triggered()), this, SLOT(open_user_settings()));
     connect(about_action, SIGNAL(triggered()), this, SLOT(open_about_dialog()));
+    connect(export_action, &QAction::triggered, this, &MainWindow::open_export_dialog);
 }
 
 void MainWindow::configure_calendar() {
@@ -454,6 +460,22 @@ void MainWindow::open_about_dialog() {
     auto *about_dialog = new About(this);
     about_dialog->setModal(false);
     about_dialog->show();
+}
+
+void MainWindow::open_export_dialog() {
+    /*
+     * Open the export dialog.
+     */
+
+    ExportDialog export_dialog = ExportDialog(nullptr);
+    export_dialog.setModal(false);
+
+    if (export_dialog.exec() == QDialog::Accepted) {
+        std::string path = export_dialog.get_export_path();
+        std::cout << "Exporting to CSV";
+        std::vector<Drink> all_drinks = storage.get_all<Drink>();
+        exporters::to_csv(all_drinks, path);
+    }
 }
 
 void MainWindow::open_user_settings() {
