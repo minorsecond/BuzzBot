@@ -14,6 +14,9 @@ ExportDialog::ExportDialog(QWidget *parent) {
     ui.setupUi(this);
     this->setFixedSize(550, 119);
 
+    // Disable OK button first
+    ui.exportPathButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+
     connect(ui.exportPathBrowse, &QPushButton::clicked, this, &ExportDialog::open_browse_dialog);
 }
 
