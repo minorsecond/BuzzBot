@@ -1,5 +1,5 @@
 /********************************************************************************
-** Form generated from reading UI file 'std_drink_dialog.ui'
+** Form generated from reading UI file 'standard_drink_calc.ui'
 **
 ** Created by: Qt User Interface Compiler version 5.15.1
 **
