@@ -27,13 +27,18 @@ class Ui_userSettingsDialog
 {
 public:
     QGridLayout *gridLayout_2;
-    QDialogButtonBox *userSettingsButtonBox;
     QFrame *frame_2;
     QGridLayout *gridLayout_3;
+    QGroupBox *dateCalculationGroup;
+    QGridLayout *gridLayout;
+    QRadioButton *rollingDateRadioButton;
+    QRadioButton *fixedDateRadioButton;
     QComboBox *weekdayStartInput;
     QLabel *weekdayStartLabel;
-    QSpacerItem *verticalSpacer;
+    QSpacerItem *verticalSpacer_2;
+    QDialogButtonBox *userSettingsButtonBox;
     QFrame *frame;
+    QGridLayout *gridLayout_5;
     QGroupBox *sexGroup;
     QGridLayout *gridLayout_4;
     QRadioButton *maleSelection;
@@ -43,23 +48,34 @@ public:
     {
         if (userSettingsDialog->objectName().isEmpty())
             userSettingsDialog->setObjectName(QString::fromUtf8("userSettingsDialog"));
-        userSettingsDialog->resize(405, 119);
+        userSettingsDialog->resize(410, 189);
         userSettingsDialog->setModal(true);
         gridLayout_2 = new QGridLayout(userSettingsDialog);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
-        userSettingsButtonBox = new QDialogButtonBox(userSettingsDialog);
-        userSettingsButtonBox->setObjectName(QString::fromUtf8("userSettingsButtonBox"));
-        userSettingsButtonBox->setOrientation(Qt::Vertical);
-        userSettingsButtonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
-
-        gridLayout_2->addWidget(userSettingsButtonBox, 0, 2, 1, 1);
-
         frame_2 = new QFrame(userSettingsDialog);
         frame_2->setObjectName(QString::fromUtf8("frame_2"));
         frame_2->setFrameShape(QFrame::StyledPanel);
         frame_2->setFrameShadow(QFrame::Raised);
         gridLayout_3 = new QGridLayout(frame_2);
         gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
+        dateCalculationGroup = new QGroupBox(frame_2);
+        dateCalculationGroup->setObjectName(QString::fromUtf8("dateCalculationGroup"));
+        gridLayout = new QGridLayout(dateCalculationGroup);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        rollingDateRadioButton = new QRadioButton(dateCalculationGroup);
+        rollingDateRadioButton->setObjectName(QString::fromUtf8("rollingDateRadioButton"));
+        rollingDateRadioButton->setChecked(true);
+
+        gridLayout->addWidget(rollingDateRadioButton, 0, 0, 1, 1);
+
+        fixedDateRadioButton = new QRadioButton(dateCalculationGroup);
+        fixedDateRadioButton->setObjectName(QString::fromUtf8("fixedDateRadioButton"));
+
+        gridLayout->addWidget(fixedDateRadioButton, 1, 0, 1, 1);
+
+
+        gridLayout_3->addWidget(dateCalculationGroup, 0, 0, 1, 1);
+
         weekdayStartInput = new QComboBox(frame_2);
         weekdayStartInput->addItem(QString());
         weekdayStartInput->addItem(QString());
@@ -70,27 +86,35 @@ public:
         weekdayStartInput->addItem(QString());
         weekdayStartInput->setObjectName(QString::fromUtf8("weekdayStartInput"));
 
-        gridLayout_3->addWidget(weekdayStartInput, 1, 0, 1, 1);
+        gridLayout_3->addWidget(weekdayStartInput, 3, 0, 1, 1);
 
         weekdayStartLabel = new QLabel(frame_2);
         weekdayStartLabel->setObjectName(QString::fromUtf8("weekdayStartLabel"));
 
-        gridLayout_3->addWidget(weekdayStartLabel, 0, 0, 1, 1);
+        gridLayout_3->addWidget(weekdayStartLabel, 2, 0, 1, 1);
 
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout_3->addItem(verticalSpacer, 2, 0, 1, 1);
+        gridLayout_3->addItem(verticalSpacer_2, 1, 0, 1, 1);
 
 
         gridLayout_2->addWidget(frame_2, 0, 1, 1, 1);
+
+        userSettingsButtonBox = new QDialogButtonBox(userSettingsDialog);
+        userSettingsButtonBox->setObjectName(QString::fromUtf8("userSettingsButtonBox"));
+        userSettingsButtonBox->setOrientation(Qt::Vertical);
+        userSettingsButtonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+
+        gridLayout_2->addWidget(userSettingsButtonBox, 0, 2, 1, 1);
 
         frame = new QFrame(userSettingsDialog);
         frame->setObjectName(QString::fromUtf8("frame"));
         frame->setFrameShape(QFrame::StyledPanel);
         frame->setFrameShadow(QFrame::Raised);
+        gridLayout_5 = new QGridLayout(frame);
+        gridLayout_5->setObjectName(QString::fromUtf8("gridLayout_5"));
         sexGroup = new QGroupBox(frame);
         sexGroup->setObjectName(QString::fromUtf8("sexGroup"));
-        sexGroup->setGeometry(QRect(0, 0, 141, 91));
         sexGroup->setAlignment(Qt::AlignCenter);
         sexGroup->setFlat(true);
         gridLayout_4 = new QGridLayout(sexGroup);
@@ -107,6 +131,9 @@ public:
         gridLayout_4->addWidget(femaleSelection, 1, 0, 1, 1);
 
 
+        gridLayout_5->addWidget(sexGroup, 0, 0, 1, 1);
+
+
         gridLayout_2->addWidget(frame, 0, 0, 1, 1);
 
 
@@ -120,6 +147,9 @@ public:
     void retranslateUi(QDialog *userSettingsDialog)
     {
         userSettingsDialog->setWindowTitle(QCoreApplication::translate("userSettingsDialog", "User Settings", nullptr));
+        dateCalculationGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Date Calculation", nullptr));
+        rollingDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Rolling date", nullptr));
+        fixedDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Fixed date", nullptr));
         weekdayStartInput->setItemText(0, QCoreApplication::translate("userSettingsDialog", "Sunday", nullptr));
         weekdayStartInput->setItemText(1, QCoreApplication::translate("userSettingsDialog", "Monday", nullptr));
         weekdayStartInput->setItemText(2, QCoreApplication::translate("userSettingsDialog", "Tuesday", nullptr));
