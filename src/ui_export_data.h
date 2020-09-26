@@ -42,7 +42,7 @@ public:
         exportPathInput->setSizePolicy(sizePolicy);
         exportPathLabel = new QLabel(exportDialog);
         exportPathLabel->setObjectName(QString::fromUtf8("exportPathLabel"));
-        exportPathLabel->setGeometry(QRect(12, 30, 74, 10));
+        exportPathLabel->setGeometry(QRect(12, 25, 74, 20));
         exportPathBrowse = new QPushButton(exportDialog);
         exportPathBrowse->setObjectName(QString::fromUtf8("exportPathBrowse"));
         exportPathBrowse->setGeometry(QRect(447, 21, 87, 32));
