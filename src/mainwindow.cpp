@@ -514,6 +514,7 @@ void MainWindow::program_options(bool write) {
     if (write) {
         std::string sex_setting = "sex:" + options.sex;
         std::string start_day = "start_day:" + options.weekday_start;
+        std::string date_calculation_method = "date_calculation_method:" + options.date_calculation_method;
         std::ofstream out_data;
 
         if (!out_data) {
@@ -524,6 +525,7 @@ void MainWindow::program_options(bool write) {
         out_data.open(path);
         out_data << sex_setting + '\n';
         out_data << start_day + '\n';
+        out_data << date_calculation_method + '\n';
         out_data.close();
     } else {
         std::cout << "Reading user settings from " << path << std::endl;
@@ -537,6 +539,8 @@ void MainWindow::program_options(bool write) {
                     options.sex = line.substr(line.find(':') + 1);
                 } else if (line_counter == 1) { // Second line should be week start day
                     options.weekday_start = line.substr(line.find(':') + 1);
+                } else if (line_counter == 2) { // Third line should be the date calculation method
+                    options.date_calculation_method = line.substr(line.find(':') + 1);
                 }
                 line_counter += 1;
             }
@@ -549,8 +553,10 @@ void MainWindow::update_stat_panel() {
      * Calculate number of standard drinks consumed since Sunday.
      */
 
+    date::year_month_day start_date;
     double standard_drinks = 0;
     date::weekday filter_day{};
+    std::string weekday_name;
 
     // Get date to filter on
     if (options.weekday_start == "Monday") {
@@ -570,7 +576,20 @@ void MainWindow::update_stat_panel() {
     auto todays_date = date::floor<date::days>(std::chrono::system_clock::now());
 
     // Get date of last filter_day
-    date::year_month_day start_date = todays_date - (date::weekday{todays_date} - filter_day);
+    if (options.date_calculation_method == "Fixed") {
+        std::cout << "Using fixed date method" << std::endl;
+        start_date = todays_date - (date::weekday{todays_date} - filter_day);
+        weekday_name = options.weekday_start;
+    } else {
+        std::cout << "Using rolling date method" << std::endl;
+        start_date = todays_date - date::days{7};
+
+        // Get weekday name
+        weekday_name = date::format("%A", date::weekday(start_date));
+    }
+
+    std::cout << "Calculating stats since " << start_date << ", which is last " << weekday_name << std::endl;
+
 
     // Create the date for the SQL query
     std::string year = date::format("%Y", start_date.year());
@@ -584,7 +603,7 @@ void MainWindow::update_stat_panel() {
         standard_drinks += Calculate::standard_drinks(beer.abv, beer.size);
     }
 
-    update_drinks_this_week(standard_drinks);
+    update_drinks_this_week(standard_drinks, weekday_name);
     update_standard_drinks_left_this_week(standard_drinks);
     double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week);
     update_oz_alcohol_remaining(oz_alc_consumed);
@@ -595,12 +614,12 @@ void MainWindow::update_stat_panel() {
     update_mean_ibu();
 }
 
-void MainWindow::update_drinks_this_week(double standard_drinks) {
+void MainWindow::update_drinks_this_week(double standard_drinks, const std::string& weekday_name) {
     /*
      * Update the standard drinks this week output label.
      */
 
-    std::string drinksThisWeekLabelText = "Std. drinks since " + options.weekday_start + ":";
+    std::string drinksThisWeekLabelText = "Std. drinks since " + weekday_name + ":";
     ui->drinksThisWeekLabel->setText(QString::fromStdString(drinksThisWeekLabelText));
     if (standard_drinks == 0.0) {
         ui->drinksThisWeekOutput->setText("0.0");

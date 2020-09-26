@@ -27,6 +27,16 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
     } else {
         ui.weekdayStartInput->setCurrentText(QString::fromStdString("Sunday"));
     }
+
+    // Set day of week calc
+    if (options.date_calculation_method == "Fixed") {
+        ui.fixedDateRadioButton->setChecked(true);
+        ui.rollingDateRadioButton->setChecked(false);
+    } else {
+        ui.fixedDateRadioButton->setChecked(false);
+        ui.rollingDateRadioButton->setChecked(true);
+    }
+
 }
 
 std::string UserSettings::get_sex() {
@@ -56,9 +66,9 @@ std::string UserSettings::get_date_calculation_method() {
      */
 
     if (ui.rollingDateRadioButton->isChecked()) {
-        return "Rolling"
+        return "Rolling";
     } else {
-        return "Fixed"
+        return "Fixed";
     }
 }
 // LCOV_EXCL_STOP
