@@ -597,6 +597,8 @@ void MainWindow::update_stat_panel() {
     std::string day = date::format("%d", start_date.day());
     std::string query_date = day + "/" + month + "/" + year;
 
+    std::cout << "Querying DB for drinks after " << query_date << std::endl;
+
     std::vector<Drink> beers_this_week = Database::filter("After Date", query_date, storage);
 
     for (const auto& beer : beers_this_week) {
@@ -605,7 +607,7 @@ void MainWindow::update_stat_panel() {
 
     update_drinks_this_week(standard_drinks, weekday_name);
     update_standard_drinks_left_this_week(standard_drinks);
-    double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week);
+    double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week, weekday_name);
     update_oz_alcohol_remaining(oz_alc_consumed);
     update_favorite_brewery();
     update_favorite_beer();
@@ -653,14 +655,14 @@ void MainWindow::reset_table_sort() {
     ui->drinkLogTable->sortItems(sort_column, Qt::DescendingOrder);
 }
 
-double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week) {
+double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week, const std::string& weekday_name) {
     /*
      * Update the Oz. alcohol consumed output label to the total amount alcohol consumed this week.
      */
 
     double oz_consumed = 0;
 
-    std::string ozThisWeekLabelText = "Oz. alcohol since " + options.weekday_start + ":";
+    std::string ozThisWeekLabelText = "Oz. alcohol since " + weekday_name + ":";
     ui->ozAlcoholConsumedLabel->setText(QString::fromStdString(ozThisWeekLabelText));
 
     for (const auto& beer : beers_this_week) {
