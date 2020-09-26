@@ -619,6 +619,8 @@ void MainWindow::update_stat_panel() {
 void MainWindow::update_drinks_this_week(double standard_drinks, const std::string& weekday_name) {
     /*
      * Update the standard drinks this week output label.
+     * @param standard_drinks: a double denoting the number of standard drinks consumed.
+     * @param weekday_name: The day the calculation began on.
      */
 
     std::string drinksThisWeekLabelText = "Std. drinks since " + weekday_name + ":";
@@ -658,6 +660,8 @@ void MainWindow::reset_table_sort() {
 double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week, const std::string& weekday_name) {
     /*
      * Update the Oz. alcohol consumed output label to the total amount alcohol consumed this week.
+     * @param beers_this_week: A vector of Drinks containing the drinks consumed in the past week.
+     * @param weekday_name: The day the week began on.
      */
 
     double oz_consumed = 0;
