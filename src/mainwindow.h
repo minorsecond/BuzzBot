@@ -7,6 +7,7 @@
 
 struct Options {
     std::string sex = "male";
+    std::string date_calculation_method = "Rolling";
     std::string weekday_start = "Sunday";
 };
 
@@ -29,9 +30,9 @@ private:
     static std::string settings_path();
     void program_options(bool write);
     void update_stat_panel();
-    void update_drinks_this_week(double standard_drinks);
+    void update_drinks_this_week(double standard_drinks, const std::string& weekday_name);
     void update_standard_drinks_left_this_week(double std_drinks_consumed);
-    double update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week);
+    double update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week, const std::string& weekday_name);
     void update_oz_alcohol_remaining(double oz_alcohol_consumed);
     void update_favorite_brewery();
     void update_favorite_beer();
