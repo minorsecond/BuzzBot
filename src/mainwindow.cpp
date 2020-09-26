@@ -477,6 +477,7 @@ void MainWindow::open_user_settings() {
     user_settings.setModal(true);
     if (user_settings.exec() == QDialog::Accepted) {
         options.sex = user_settings.get_sex();
+        options.date_calculation_method = user_settings.get_date_calculation_method();
         options.weekday_start = user_settings.get_weekday_start();
         update_stat_panel();
     }

@@ -48,4 +48,17 @@ std::string UserSettings::get_weekday_start() {
      */
     return ui.weekdayStartInput->currentText().toStdString();
 }
+
+std::string UserSettings::get_date_calculation_method() {
+    /*
+     * Returns the selected date calculation method.
+     * @return: String denoting date calculation method.
+     */
+
+    if (ui.rollingDateRadioButton->isChecked()) {
+        return "Rolling"
+    } else {
+        return "Fixed"
+    }
+}
 // LCOV_EXCL_STOP
