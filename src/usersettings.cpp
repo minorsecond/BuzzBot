@@ -36,7 +36,6 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
         ui.fixedDateRadioButton->setChecked(false);
         ui.rollingDateRadioButton->setChecked(true);
     }
-
 }
 
 std::string UserSettings::get_sex() {
