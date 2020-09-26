@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-VERSION=$(head -n 1 VERS)
+VERSION=$(tail -n 1 VERS)
 
 echo "Deploying version" $VERSION
 

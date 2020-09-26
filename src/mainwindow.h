@@ -7,7 +7,7 @@
 
 struct Options {
     std::string sex = "male";
-    std::string date_calculation_method = "Rolling";
+    std::string date_calculation_method = "Fixed";
     std::string weekday_start = "Sunday";
 };
 
