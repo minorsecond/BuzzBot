@@ -48,11 +48,11 @@ target_link_libraries(functions_test SQLite3 Boost::filesystem Catch2::Catch2 Qt
 
 set_target_properties(BuzzBot PROPERTIES
         MACOSX_BUNDLE_BUNDLE_NAME "BuzzBot"
-        MACOSX_BUNDLE_BUNDLE_VERSION "1.0.3-beta"
+        MACOSX_BUNDLE_BUNDLE_VERSION "1.0.3"
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_ICON_FILE icon.icns
-        MACOSX_BUNDLE_LONG_VERSION_STRING "1.0.3-beta"
-        MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0.3-beta"
+        MACOSX_BUNDLE_LONG_VERSION_STRING "1.0.3"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0.3"
         MACOSX_BUNDLE_COPYRIGHT "2020 Ross Wardrup"
         MACOSX_BUNDLE_GUI_IDENTIFIER com.rwardrup.buzzbot
         XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
