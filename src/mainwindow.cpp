@@ -78,8 +78,8 @@ void MainWindow::add_menubar_items() {
 
     auto * preferences_action = new QAction("Preferences");
     auto * about_action = new QAction("About");
-    auto * export_action = new QAction("Export");
-    auto * calc_std_drinks = new QAction("Calculate Std. Drinks");
+    auto * export_action = new QAction("Export...");
+    auto * calc_std_drinks = new QAction("Calculate Std. Drinks...");
     QMenu * app_menu = menuBar()->addMenu("App Menu");
     preferences_action->setMenuRole(QAction::PreferencesRole);
     about_action->setMenuRole(QAction::AboutRole);
