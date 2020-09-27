@@ -20,6 +20,9 @@ public:
     std::string get_sex();
     std::string get_weekday_start();
     std::string get_date_calculation_method();
+
+private slots:
+    void changed_date_calc();
 };
 
 #endif //BEERTABS_USERSETTINGS_H
