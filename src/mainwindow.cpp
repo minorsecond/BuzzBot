@@ -564,7 +564,6 @@ void MainWindow::update_stat_panel() {
 
     std::cout << "Calculating stats since " << start_date << ", which is last " << weekday_name << std::endl;
 
-
     // Create the date for the SQL query
     std::string year = date::format("%Y", start_date.year());
     std::string month = date::format("%m", start_date.month());
@@ -579,6 +578,7 @@ void MainWindow::update_stat_panel() {
         standard_drinks += Calculate::standard_drinks(beer.abv, beer.size);
     }
 
+    // Update the individual elements of the stat pane
     update_drinks_this_week(standard_drinks, weekday_name);
     update_standard_drinks_left_this_week(standard_drinks);
     double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week, weekday_name);
