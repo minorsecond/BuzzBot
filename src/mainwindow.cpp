@@ -585,12 +585,11 @@ void MainWindow::update_stat_panel() {
         std::cout << "Using fixed date method" << std::endl;
         start_date = todays_date - (date::weekday{todays_date} - filter_day);
         weekday_name = options.weekday_start;
-    } else {
+    } else {  // Don't include day 7 days ago.
         std::cout << "Using rolling date method" << std::endl;
-        start_date = todays_date - date::days{7};
-
+        start_date = todays_date - date::days{6};
         // Get weekday name
-        weekday_name = date::format("%A", date::weekday(start_date));
+        weekday_name = date::format("%A", date::weekday(todays_date - date::days{7}));
     }
 
     std::cout << "Calculating stats since " << start_date << ", which is last " << weekday_name << std::endl;
