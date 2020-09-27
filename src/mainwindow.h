@@ -69,6 +69,8 @@ private:
     void set_input_states();
     Drink get_drink_at_selected_row();
     void clear_fields(const std::string& alcohol_type);
+    void timer(const std::function<QDate(QDate date)>& func, unsigned int interval);
+    static QDate update_if_midnight(QDate previous_date);
 
 private slots:
     void submit_button_clicked();
