@@ -30,12 +30,18 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
 
     // Set day of week calc
     if (options.date_calculation_method == "Fixed") {
+        ui.weekdayStartInput->setEnabled(true);
         ui.fixedDateRadioButton->setChecked(true);
         ui.rollingDateRadioButton->setChecked(false);
     } else {
+        ui.weekdayStartInput->setEnabled(false);
         ui.fixedDateRadioButton->setChecked(false);
         ui.rollingDateRadioButton->setChecked(true);
     }
+
+    // Connections
+    connect(ui.rollingDateRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_date_calc);
+    connect(ui.fixedDateRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_date_calc);
 }
 
 std::string UserSettings::get_sex() {
@@ -68,6 +74,18 @@ std::string UserSettings::get_date_calculation_method() {
         return "Rolling";
     } else {
         return "Fixed";
+    }
+}
+
+void UserSettings::changed_date_calc() {
+    /*
+     * Disable/enable weekday start combobox.
+     */
+
+    if (ui.rollingDateRadioButton->isChecked()) {
+        ui.weekdayStartInput->setEnabled(false);
+    } else {
+        ui.weekdayStartInput->setEnabled(true);
     }
 }
 // LCOV_EXCL_STOP
