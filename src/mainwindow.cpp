@@ -1041,6 +1041,10 @@ date::weekday MainWindow::get_filter_weekday_start() const {
 }
 
 std::tuple<date::year_month_day, std::string> MainWindow::get_filter_date() {
+    /*
+     * Get the date and day of week for the filter date specified in the options.
+     * @return: Tuple containing the start date (a date::year_month_day object) and weekday name (string).
+     */
 
     date::year_month_day start_date{};
     std::string weekday_name;
