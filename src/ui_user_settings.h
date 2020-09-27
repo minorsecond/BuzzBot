@@ -158,9 +158,9 @@ public:
         weekdayStartInput->setItemText(5, QCoreApplication::translate("userSettingsDialog", "Friday", nullptr));
         weekdayStartInput->setItemText(6, QCoreApplication::translate("userSettingsDialog", "Saturday", nullptr));
 
-        weekdayStartLabel->setText(QCoreApplication::translate("userSettingsDialog", "Week begins on:", nullptr));
-        fixedDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Fixed date", nullptr));
-        rollingDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Rolling date", nullptr));
+        weekdayStartLabel->setText(QCoreApplication::translate("userSettingsDialog", "Reset stats on:", nullptr));
+        fixedDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Reset on day", nullptr));
+        rollingDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Rolling", nullptr));
         sexGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Sex", nullptr));
         maleSelection->setText(QCoreApplication::translate("userSettingsDialog", "Male", nullptr));
         femaleSelection->setText(QCoreApplication::translate("userSettingsDialog", "Female", nullptr));
