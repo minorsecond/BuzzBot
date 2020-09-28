@@ -69,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Start the stat pane update stat_update_timer
     QTimer *stats_timer = new QTimer(this);
-    connect(stats_timer, &QTimer::timeout, this, &MainWindow::update_stat_panel);
+    connect(stats_timer, &QTimer::timeout, this, &MainWindow::update_stats_if_new_day);
     stats_timer->start(5000);
 }
 
@@ -1069,6 +1069,20 @@ std::tuple<date::year_month_day, std::string> MainWindow::get_filter_date() {
     }
 
     return std::make_tuple(start_date, weekday_name);
+}
+
+void MainWindow::update_stats_if_new_day() {
+    /*
+     * Update the stats panel if day of the week isn't the same as the date in stats panel.
+     */
+
+    auto todays_date = date::floor<date::days>(std::chrono::system_clock::now());
+    std::string weekday_name = date::format("%A", date::weekday(todays_date));
+
+    if (ui->drinksThisWeekLabel->text().toStdString().find(weekday_name) == std::string::npos) {
+        std::cout << "Weekdays don't match, updating stats panel" << std::endl;
+        update_stat_panel();
+    }
 }
 
 // LCOV_EXCL_STOP
