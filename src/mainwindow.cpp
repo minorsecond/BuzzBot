@@ -5,7 +5,6 @@
 #include "standard_drink_calculator.h"
 #include "exporters.h"
 #include "calculate.h"
-#include "../include/date.h"
 #include <iomanip>
 #include <boost/filesystem.hpp>
 #include <iostream>
@@ -23,7 +22,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     /*
      * Set up the main window
-     *
      */
 
     ui->setupUi(this);
@@ -34,7 +32,6 @@ MainWindow::MainWindow(QWidget *parent)
     program_options(true);
 
     // Upgrade DB version
-    // TODO: Remove the brewery column from database at DB version 3
     Database::increment_version(storage, 3);
 
     add_menubar_items();
@@ -70,9 +67,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Update fields to match beer that comes first alphabetically
     reset_fields();
-
-    // Start the stat pane update timer
-    timer(update_if_midnight, 5);
 }
 
 void MainWindow::add_menubar_items() {
@@ -558,42 +552,17 @@ void MainWindow::update_stat_panel() {
      * Calculate number of standard drinks consumed since Sunday.
      */
 
-    date::year_month_day start_date;
+    date::year_month_day start_date{};
     double standard_drinks = 0;
-    date::weekday filter_day{};
     std::string weekday_name;
 
-    // Get date to filter on
-    if (options.weekday_start == "Monday") {
-        filter_day = date::Monday;
-    } else if (options.weekday_start == "Tuesday") {
-        filter_day = date::Tuesday;
-    } else if (options.weekday_start == "Wednesday") {
-        filter_day = date::Wednesday;
-    } else if (options.weekday_start == "Thursday") {
-        filter_day = date::Thursday;
-    } else if (options.weekday_start == "Friday") {
-        filter_day = date::Friday;
-    } else {
-        filter_day = date::Sunday;
-    }
-    // This returns yyyy-mm-dd
-    auto todays_date = date::floor<date::days>(std::chrono::system_clock::now());
+    // Get filter day & day of week.
+    std::tuple<date::year_month_day, std::string> filter_date_results = get_filter_date();
 
-    // Get date of last filter_day
-    if (options.date_calculation_method == "Fixed") {
-        std::cout << "Using fixed date method" << std::endl;
-        start_date = todays_date - (date::weekday{todays_date} - filter_day);
-        weekday_name = options.weekday_start;
-    } else {  // Don't include day 7 days ago.
-        std::cout << "Using rolling date method" << std::endl;
-        start_date = todays_date - date::days{6};
-        // Get weekday name
-        weekday_name = date::format("%A", date::weekday(todays_date - date::days{7}));
-    }
+    start_date = std::get<0>(filter_date_results);
+    weekday_name = std::get<1>(filter_date_results);
 
     std::cout << "Calculating stats since " << start_date << ", which is last " << weekday_name << std::endl;
-
 
     // Create the date for the SQL query
     std::string year = date::format("%Y", start_date.year());
@@ -609,6 +578,7 @@ void MainWindow::update_stat_panel() {
         standard_drinks += Calculate::standard_drinks(beer.abv, beer.size);
     }
 
+    // Update the individual elements of the stat pane
     update_drinks_this_week(standard_drinks, weekday_name);
     update_standard_drinks_left_this_week(standard_drinks);
     double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week, weekday_name);
@@ -1042,6 +1012,59 @@ void MainWindow::open_std_drink_calculator() {
 
     auto *  std_drink_calculator = new StandardDrinkCalc(this);
     std_drink_calculator->show();
+}
+
+date::weekday MainWindow::get_filter_weekday_start() const {
+    /*
+     * Get filter day from options.
+     * @return filter_day: a date object for the filter day.
+     */
+
+    date::weekday filter_day{};
+
+    // Get date to filter on
+    if (options.weekday_start == "Monday") {
+        filter_day = date::Monday;
+    } else if (options.weekday_start == "Tuesday") {
+        filter_day = date::Tuesday;
+    } else if (options.weekday_start == "Wednesday") {
+        filter_day = date::Wednesday;
+    } else if (options.weekday_start == "Thursday") {
+        filter_day = date::Thursday;
+    } else if (options.weekday_start == "Friday") {
+        filter_day = date::Friday;
+    } else {
+        filter_day = date::Sunday;
+    }
+
+    return filter_day;
+}
+
+std::tuple<date::year_month_day, std::string> MainWindow::get_filter_date() {
+    /*
+     * Get the date and day of week for the filter date specified in the options.
+     * @return: Tuple containing the start date (a date::year_month_day object) and weekday name (string).
+     */
+
+    date::year_month_day start_date{};
+    std::string weekday_name;
+
+    date::weekday filter_day = get_filter_weekday_start();
+    auto todays_date = date::floor<date::days>(std::chrono::system_clock::now());
+
+    // Get date of last filter_day
+    if (options.date_calculation_method == "Fixed") {
+        std::cout << "Using fixed date method" << std::endl;
+        start_date = todays_date - (date::weekday{todays_date} - filter_day);
+        weekday_name = options.weekday_start;
+    } else {  // Don't include day 7 days ago.
+        std::cout << "Using rolling date method" << std::endl;
+        start_date = todays_date - date::days{6};
+        // Get weekday name
+        weekday_name = date::format("%A", date::weekday(todays_date - date::days{7}));
+    }
+
+    return std::make_tuple(start_date, weekday_name);
 }
 
 QDate MainWindow::update_if_midnight(QDate previous_date) {
