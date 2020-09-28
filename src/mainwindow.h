@@ -72,8 +72,6 @@ private:
     void clear_fields(const std::string& alcohol_type);
     [[nodiscard]] date::weekday get_filter_weekday_start() const;
     std::tuple<date::year_month_day, std::string> get_filter_date();
-    void timer(const std::function<QDate(QDate date)>& func, unsigned int interval);
-    static QDate update_if_midnight(QDate previous_date);
 
 private slots:
     void submit_button_clicked();

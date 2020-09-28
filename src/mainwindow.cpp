@@ -12,8 +12,7 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <CoreFoundation/CFBundle.h>
-#include <thread>
-#include <chrono>
+#include <QTimer>
 
 // LCOV_EXCL_START
 MainWindow::MainWindow(QWidget *parent)
@@ -67,6 +66,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Update fields to match beer that comes first alphabetically
     reset_fields();
+
+    // Start the stat pane update stat_update_timer
+    QTimer *stats_timer = new QTimer(this);
+    connect(stats_timer, &QTimer::timeout, this, &MainWindow::update_stat_panel);
+    stats_timer->start(5000);
 }
 
 void MainWindow::add_menubar_items() {
@@ -1065,38 +1069,6 @@ std::tuple<date::year_month_day, std::string> MainWindow::get_filter_date() {
     }
 
     return std::make_tuple(start_date, weekday_name);
-}
-
-QDate MainWindow::update_if_midnight(QDate previous_date) {
-    /*
-     * Updates the stats pane when midnight. This is done to advance the days when needed.
-     */
-
-    QDate todays_date = QDate::currentDate();
-
-    if (todays_date > previous_date) {
-        MainWindow mainWindow;
-        mainWindow.update_stat_panel();
-
-        std::cout << "Updating day in stats pane." << std::endl;
-        std::cout << todays_date.toString().toStdString() << " > " << previous_date.toString().toStdString() << std::endl;
-    }
-
-    return todays_date;
-}
-
-void MainWindow::timer(const std::function<QDate(QDate date)>& func, unsigned int interval) {
-    /*
-     * Timer to run update_if_midnight every 5 seconds.
-     */
-
-    std::thread([func, interval] () {
-        QDate todays_date = QDate::currentDate();
-        while (true) {
-            todays_date = func(todays_date);
-            std::this_thread::sleep_for(std::chrono::seconds(interval));
-        }
-    }).detach();
 }
 
 // LCOV_EXCL_STOP
