@@ -6,6 +6,7 @@
 #include <QDir>
 #include <CoreFoundation/CFBundle.h>
 
+// LCOV_EXCL_START
 About::About(QWidget *parent) {
     /*
      * About app dialog
@@ -15,7 +16,7 @@ About::About(QWidget *parent) {
     this->setFixedSize(237, 272);
 
     // Version text
-    std::string version = "1.0.2";
+    std::string version = "1.0.5";
     ui.versionLabel->setText(QString::fromStdString("Version " + version));
 
     // Make Qt URL clickable
@@ -37,3 +38,4 @@ About::About(QWidget *parent) {
     ui.miniIcon->setPixmap(pixmap);
     ui.miniIcon->repaint();
 }
+// LCOV_EXCL_STOP
