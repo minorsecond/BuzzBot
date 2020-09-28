@@ -234,3 +234,13 @@ bool Calculate::compare_date(const Drink &a, const Drink &b) {
         return false;
     }
 }
+
+std::string Calculate::double_to_string(double input_double) {
+    double converted_double;
+    converted_double = std::floor((input_double * 100.0) + .5) / 100.0;
+
+    std::ostringstream output_string;
+    output_string << converted_double;
+
+    return output_string.str();
+}
