@@ -92,7 +92,7 @@ void MainWindow::add_menubar_items() {
 
     connect(preferences_action, &QAction::triggered, this, &MainWindow::open_user_settings);
     connect(about_action, &QAction::triggered, this, &MainWindow::open_about_dialog);
-    connect(export_action, &QAction::triggered, this, &MainWindow::open_export_dialog);
+    connect(export_action, &QAction::triggered, this, &MainWindow::export_data);
     connect(calc_std_drinks, &QAction::triggered, this, &MainWindow::open_std_drink_calculator);
 }
 
@@ -459,7 +459,7 @@ void MainWindow::open_about_dialog() {
     about_dialog->show();
 }
 
-void MainWindow::open_export_dialog() {
+void MainWindow::export_data() {
     /*
      * Open the export dialog.
      */
