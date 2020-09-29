@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "usersettings.h"
 #include "about.h"
-#include "export.h"
 #include "standard_drink_calculator.h"
 #include "confirm_dialog.h"
 #include "exporters.h"
@@ -12,6 +11,7 @@
 #include <QComboBox>
 #include <QMessageBox>
 #include <QStandardPaths>
+#include <QFileDialog>
 #include <CoreFoundation/CFBundle.h>
 
 // LCOV_EXCL_START
@@ -464,14 +464,14 @@ void MainWindow::open_export_dialog() {
      * Open the export dialog.
      */
 
-    ExportDialog export_dialog = ExportDialog(nullptr);
-    export_dialog.setModal(false);
+    QString filter = "CSV Files (*.csv)";
+    QString desktop_path = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0);
+    QString preferred_path = desktop_path + "/buzzbot.csv";
+    QString filepath_qstring = QFileDialog::getSaveFileName(this, "Save File", preferred_path, filter, &filter);
 
-    if (export_dialog.exec() == QDialog::Accepted) {
-        std::string path = export_dialog.get_export_path();
-        std::cout << "Exporting to CSV";
+    if (!filepath_qstring.isEmpty()) {
         std::vector<Drink> all_drinks = storage.get_all<Drink>();
-        exporters::to_csv(all_drinks, path);
+        exporters::to_csv(all_drinks, filepath_qstring.toStdString());
     }
 }
 
