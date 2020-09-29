@@ -3,6 +3,7 @@
 #include "about.h"
 #include "export.h"
 #include "standard_drink_calculator.h"
+#include "confirm_dialog.h"
 #include "exporters.h"
 #include "calculate.h"
 #include <iomanip>
@@ -281,18 +282,22 @@ void MainWindow::update_selected_row(QItemSelectionModel* select, Drink entered_
      * @param select: A selection model.
      * @param entered_drink: A Drink containing data from the database.
      */
-    // Get the selected row
-    int selection = select->selectedRows().at(0).row();
-    int row_to_update = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
 
-    // Get the existing timestamp
-    std::string timestamp = ui->drinkLogTable->item(selection, 10)->text().toStdString();
-    std::cout << "Updating row " << row_to_update << " Timestamp: " << timestamp << std::endl;
+    ConfirmDialog confirmation_dialog = ConfirmDialog(this, "Update");
+    if (confirmation_dialog.exec() == QDialog::Accepted) {
+        // Get the selected row
+        int selection = select->selectedRows().at(0).row();
+        int row_to_update = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
 
-    // Update the variables in the beer struct
-    entered_drink.id = row_to_update;
-    entered_drink.timestamp = timestamp;
-    Database::update(storage, entered_drink);
+        // Get the existing timestamp
+        std::string timestamp = ui->drinkLogTable->item(selection, 10)->text().toStdString();
+        std::cout << "Updating row " << row_to_update << " Timestamp: " << timestamp << std::endl;
+
+        // Update the variables in the beer struct
+        entered_drink.id = row_to_update;
+        entered_drink.timestamp = timestamp;
+        Database::update(storage, entered_drink);
+    }
 }
 
 void MainWindow::add_new_row(Drink entered_drink) {
@@ -431,18 +436,21 @@ void MainWindow::delete_row() {
      * Delete the row in the database that corresponds to the row selected in the table.
      */
 
-    int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
-    int row_to_delete = (ui->drinkLogTable->item(select, 9)->text().toUtf8().toInt());
-    std::cout << "Deleting row " << row_to_delete << std::endl;
-    Database::delete_row(storage, row_to_delete);
-    update_table();
-    update_stat_panel();
-    ui->deleteRowButton->setDisabled(true);
+    ConfirmDialog confirmation_dialog = ConfirmDialog(this, "Delete");
+    if (confirmation_dialog.exec() == QDialog::Accepted) {
+        int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
+        int row_to_delete = (ui->drinkLogTable->item(select, 9)->text().toUtf8().toInt());
+        std::cout << "Deleting row " << row_to_delete << std::endl;
+        Database::delete_row(storage, row_to_delete);
+        update_table();
+        update_stat_panel();
+        ui->deleteRowButton->setDisabled(true);
 
-    // Update the fields to reflect deleted row
-    update_beer_fields();
-    update_liquor_fields();
-    update_wine_fields();
+        // Update the fields to reflect deleted row
+        update_beer_fields();
+        update_liquor_fields();
+        update_wine_fields();
+    }
 }
 
 void MainWindow::open_about_dialog() {
