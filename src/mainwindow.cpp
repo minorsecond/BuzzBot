@@ -3,6 +3,7 @@
 #include "about.h"
 #include "export.h"
 #include "standard_drink_calculator.h"
+#include "confirm_dialog.h"
 #include "exporters.h"
 #include "calculate.h"
 #include <iomanip>
@@ -427,18 +428,21 @@ void MainWindow::delete_row() {
      * Delete the row in the database that corresponds to the row selected in the table.
      */
 
-    int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
-    int row_to_delete = (ui->drinkLogTable->item(select, 9)->text().toUtf8().toInt());
-    std::cout << "Deleting row " << row_to_delete << std::endl;
-    Database::delete_row(storage, row_to_delete);
-    update_table();
-    update_stat_panel();
-    ui->deleteRowButton->setDisabled(true);
+    auto *confirmation_dialog = new ConfirmDialog(this, "Delete");
+    if (confirmation_dialog->exec() == QDialog::Accepted) {
+        int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
+        int row_to_delete = (ui->drinkLogTable->item(select, 9)->text().toUtf8().toInt());
+        std::cout << "Deleting row " << row_to_delete << std::endl;
+        Database::delete_row(storage, row_to_delete);
+        update_table();
+        update_stat_panel();
+        ui->deleteRowButton->setDisabled(true);
 
-    // Update the fields to reflect deleted row
-    update_beer_fields();
-    update_liquor_fields();
-    update_wine_fields();
+        // Update the fields to reflect deleted row
+        update_beer_fields();
+        update_liquor_fields();
+        update_wine_fields();
+    }
 }
 
 void MainWindow::open_about_dialog() {
