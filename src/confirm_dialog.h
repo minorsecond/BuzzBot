@@ -17,7 +17,7 @@ class ConfirmDialog : public QDialog, public Ui::confirmationDialog {
     Ui::confirmationDialog ui {};
 
 public:
-    explicit ConfirmDialog(QWidget *parent, std::string action);
+    explicit ConfirmDialog(QWidget *parent, const std::string& action);
 };
 
 #endif //BUZZBOT_CONFIRM_DIALOG_H
