@@ -14,7 +14,6 @@
 #include <QStandardPaths>
 #include <CoreFoundation/CFBundle.h>
 #include <QTimer>
-#include <iomanip>
 #include <ctime>
 
 // LCOV_EXCL_START
@@ -1086,11 +1085,11 @@ void MainWindow::update_stats_if_new_day() {
      * Update the stats panel if day of the week isn't the same as the date in stats panel.
      */
 
+
     std::time_t t = std::time(nullptr);
     std::stringstream ssTp;
     ssTp << std::put_time(std::gmtime(&t), "%A");
     std::string weekday_name = ssTp.str();
-    std::cout << "Weekday: " << weekday_name << std::endl;
 
     if (ui->drinksThisWeekLabel->text().toStdString().find(weekday_name) == std::string::npos) {
         std::cout << "Weekdays don't match, updating stats panel" << std::endl;
