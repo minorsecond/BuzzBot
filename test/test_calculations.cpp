@@ -40,7 +40,7 @@ TEST_CASE("Oz Alcohol Remaining", "[Drink Calculations]") {
     double female_oz_remaining = Calculate::oz_alcohol_remaining("female", "Custom", 10, 5.5);
 
     REQUIRE(male_oz_remaining == 4.1);
-    REQUIRE(female_oz_remaining == 4.5);
+    REQUIRE(female_oz_remaining == 0.5);
 }
 
 TEST_CASE("Mean ABV", "[Drink Calculations]") {

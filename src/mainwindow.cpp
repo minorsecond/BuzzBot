@@ -618,7 +618,7 @@ void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consume
      * Update the std. drinks left this week to the amount of std. drinks left this week.
      */
 
-    double std_drinks_left = Calculate::standard_drinks_remaining(options.sex, std_drinks_consumed);
+    double std_drinks_left = Calculate::standard_drinks_remaining(options.sex, options.limit_standard, options.weekly_limit, std_drinks_consumed);
     ui->drinksLeftOutput->setText(QString::fromStdString(Calculate::double_to_string(std_drinks_left)));
 
     // Set standard drinks remaining text to red if negative
@@ -669,7 +669,7 @@ void MainWindow::update_oz_alcohol_remaining(double oz_alcohol_consumed) {
      * Update the OZ. alcohol remaining label text to the amount of alcohol remaining.
      */
 
-    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(options.sex, oz_alcohol_consumed);
+    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, oz_alcohol_consumed);
     ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(Calculate::double_to_string(oz_alcohol_remaining)));
 
     // Set oz alcohol remaining text to red if negative

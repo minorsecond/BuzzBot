@@ -78,17 +78,13 @@ double Calculate::oz_alcohol_remaining(const std::string& sex, const std::string
 
     double oz_alcohol_remaining {0};
 
-    if (sex == "male") {
-        if (standard == "NIAA") {
-            oz_alcohol_remaining = (0.6 * 14) - oz_consumed;
-        } else {
-            oz_alcohol_remaining = (0.6 * drink_limit) - oz_consumed;
-        }
+    if (standard == "Custom") {
+        oz_alcohol_remaining = (0.6 * drink_limit) - oz_consumed;
     } else {
-        if (standard == "NIAA") {
+        if (sex == "male") {
+            oz_alcohol_remaining = (0.6 * 14) - oz_consumed;
+        } else if (sex == "female") {
             oz_alcohol_remaining = (0.6 * 7) - oz_consumed;
-        } else {
-            oz_alcohol_remaining = (0.6 * drink_limit) - oz_consumed;
         }
     }
 
