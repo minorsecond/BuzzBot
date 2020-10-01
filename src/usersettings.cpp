@@ -12,12 +12,28 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
      */
 
     ui.setupUi(this);
-    this->setFixedSize(422, 195);
+    this->setFixedSize(615, 195);
 
     if (options.sex == "male") {
         ui.maleSelection->setChecked(true);
     } else if (options.sex == "female") {
         ui.femaleSelection->setChecked(true);
+    }
+
+    if (options.weekly_limit != -1) {
+        ui.customLimitSpinBox->setValue(options.weekly_limit);
+    } else {
+        ui.customLimitSpinBox->setValue(0);
+    }
+
+    if (options.limit_standard == "NIAAA") {
+        ui.niaaaStandardsRadioButton->setChecked(true);
+        ui.customLimitRadioButton->setChecked(false);
+        ui.customLimitSpinBox->setEnabled(false);
+    } else if (options.limit_standard == "Custom") {
+        ui.niaaaStandardsRadioButton->setChecked(false);
+        ui.customLimitRadioButton->setChecked(true);
+        ui.customLimitSpinBox->setEnabled(true);
     }
 
     // Set weekday selector
@@ -42,6 +58,8 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
     // Connections
     connect(ui.rollingDateRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_date_calc);
     connect(ui.fixedDateRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_date_calc);
+    connect(ui.niaaaStandardsRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_limit_setting);
+    connect(ui.customLimitRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_limit_setting);
 }
 
 std::string UserSettings::get_sex() {
@@ -87,5 +105,41 @@ void UserSettings::changed_date_calc() {
     } else {
         ui.weekdayStartInput->setEnabled(true);
     }
+}
+
+int UserSettings::get_drink_limit() {
+    /*
+     * Get the drink limit that user has specified.
+     */
+
+    return ui.customLimitSpinBox->value();
+}
+
+void UserSettings::changed_limit_setting() {
+    /*
+     * Disable/enable the custom limit spinbox.
+     */
+
+    if (ui.customLimitRadioButton->isChecked()) {
+        ui.customLimitSpinBox->setEnabled(true);
+    } else {
+        ui.customLimitSpinBox->setEnabled(false);
+    }
+}
+
+std::string UserSettings::get_limit_standard() {
+    /*
+     * Get the user-selected drink standard.
+     */
+
+    std::string selected_standard {"NIAAA"};
+
+    if (ui.niaaaStandardsRadioButton->isChecked()) {
+        selected_standard = "NIAAA";
+    } else if (ui.customLimitRadioButton->isChecked()) {
+        selected_standard = "Custom";
+    }
+
+    return selected_standard;
 }
 // LCOV_EXCL_STOP

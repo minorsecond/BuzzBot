@@ -27,7 +27,7 @@ double Calculate::oz_alcohol(double abv, int amount) {
     return (abv/100)*amount;
 }
 
-double Calculate::standard_drinks_remaining(const std::string& sex, double standard_drinks_consumed) {
+double Calculate::standard_drinks_remaining(const std::string& sex, const std::string& standard, int drink_limit, double standard_drinks_consumed) {
     /*
      * Calculate the number of standard drinks remaining for the user this week.
      * @param sex: The sex of the user.
@@ -36,14 +36,24 @@ double Calculate::standard_drinks_remaining(const std::string& sex, double stand
 
     double weekly_drinks_remaining;
 
+    if (standard == "NIAAA") {
+        if (sex == "male") {
+            drink_limit = 14;
+        } else if (sex == "female") {
+            drink_limit = 7;
+        } else {
+            std::cout << "Sex is incorrectly set: " << sex << std::endl;
+        }
+    }
+
     if (sex == "male") {
         // Low risk: 4 drinks daily, 14 per week
         // Binge drinking: over 5 drinks within 2 hours
-        weekly_drinks_remaining = 14-standard_drinks_consumed;
+        weekly_drinks_remaining = drink_limit-standard_drinks_consumed;
     } else {
         // Low risk: 3 drinks daily, 7 per week
         // Binge drinking: over 4 drinks within 2 hours
-        weekly_drinks_remaining = 7-standard_drinks_consumed;
+        weekly_drinks_remaining = drink_limit-standard_drinks_consumed;
     }
 
     return weekly_drinks_remaining;
@@ -58,7 +68,7 @@ double Calculate::round_to_two_decimal_points(double val) {
     return floor((val * 100) + .5)/100;
 }
 
-double Calculate::oz_alcohol_remaining(const std::string& sex, double oz_consumed) {
+double Calculate::oz_alcohol_remaining(const std::string& sex, const std::string& standard, int drink_limit, double oz_consumed) {
     /*
      * Calculate the amount of alcohol the user has remaining based on their sex.
      * @return: The amount of oz remaining for user.
@@ -66,11 +76,16 @@ double Calculate::oz_alcohol_remaining(const std::string& sex, double oz_consume
 
     // TODO: Allow using different standards and custom amounts
 
-    double oz_alcohol_remaining;
-    if (sex == "male") {
-        oz_alcohol_remaining = (0.6 * 14) - oz_consumed;
+    double oz_alcohol_remaining {0};
+
+    if (standard == "Custom") {
+        oz_alcohol_remaining = (0.6 * drink_limit) - oz_consumed;
     } else {
-        oz_alcohol_remaining = (0.6 * 7) - oz_consumed;
+        if (sex == "male") {
+            oz_alcohol_remaining = (0.6 * 14) - oz_consumed;
+        } else if (sex == "female") {
+            oz_alcohol_remaining = (0.6 * 7) - oz_consumed;
+        }
     }
 
     return round_to_two_decimal_points(oz_alcohol_remaining);
