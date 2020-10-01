@@ -10,6 +10,7 @@ struct Options {
     std::string sex = "male";
     std::string date_calculation_method = "Fixed";
     std::string weekday_start = "Sunday";
+    std::string limit_standard = "NIAAA";
 };
 
 class MainWindow : public QMainWindow
