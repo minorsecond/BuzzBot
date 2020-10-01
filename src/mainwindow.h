@@ -11,6 +11,7 @@ struct Options {
     std::string date_calculation_method = "Fixed";
     std::string weekday_start = "Sunday";
     std::string limit_standard = "NIAAA";
+    unsigned int weekly_limit = -1;
 };
 
 class MainWindow : public QMainWindow
