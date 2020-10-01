@@ -159,6 +159,8 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::drink_year) == year && c(&Drink::drink_month) == month &&
                                                       c(&Drink::drink_day) >= day));
 
+        std::cout << "*** Query size: " << filtered_drinks.size() << std::endl;
+
     } else if (filter_type == "Rating") {
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::rating) == filter_text));
     } else {
