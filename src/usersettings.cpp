@@ -107,7 +107,7 @@ void UserSettings::changed_date_calc() {
     }
 }
 
-unsigned int UserSettings::get_drink_limit() {
+int UserSettings::get_drink_limit() {
     /*
      * Get the drink limit that user has specified.
      */
@@ -125,5 +125,21 @@ void UserSettings::changed_limit_setting() {
     } else {
         ui.customLimitSpinBox->setEnabled(false);
     }
+}
+
+std::string UserSettings::get_limit_standard() {
+    /*
+     * Get the user-selected drink standard.
+     */
+
+    std::string selected_standard {"NIAAA"};
+
+    if (ui.niaaaStandardsRadioButton->isChecked()) {
+        selected_standard = "NIAAA";
+    } else if (ui.customLimitRadioButton->isChecked()) {
+        selected_standard = "Custom";
+    }
+
+    return selected_standard;
 }
 // LCOV_EXCL_STOP
