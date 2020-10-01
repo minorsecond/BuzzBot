@@ -1087,7 +1087,7 @@ void MainWindow::update_stats_if_new_day() {
 
     std::time_t t = std::time(nullptr);
     std::stringstream ssTp;
-    ssTp << std::put_time(std::gmtime(&t), "%A");
+    ssTp << std::put_time(std::localtime(&t), "%A");
     std::string weekday_name = ssTp.str();
 
     if (ui->drinksThisWeekLabel->text().toStdString().find(weekday_name) == std::string::npos) {
