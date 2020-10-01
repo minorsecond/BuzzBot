@@ -490,6 +490,8 @@ void MainWindow::open_user_settings() {
         options.sex = user_settings.get_sex();
         options.date_calculation_method = user_settings.get_date_calculation_method();
         options.weekday_start = user_settings.get_weekday_start();
+        options.limit_standard = user_settings.get_limit_standard();
+        options.weekly_limit = user_settings.get_drink_limit();
         update_stat_panel();
     }
     program_options(true);
@@ -523,9 +525,12 @@ void MainWindow::program_options(bool write) {
     std::string read_sex;
 
     if (write) {
+        std::cout << "Writing user settings." << std::endl;
         std::string sex_setting = "sex:" + options.sex;
         std::string start_day = "start_day:" + options.weekday_start;
         std::string date_calculation_method = "date_calculation_method:" + options.date_calculation_method;
+        std::string limit_standard = "limit_standard:" + options.limit_standard;
+        std::string weekly_limit = "custom_weekly_limit:" + std::to_string(options.weekly_limit);
         std::ofstream out_data;
 
         if (!out_data) {
@@ -537,6 +542,8 @@ void MainWindow::program_options(bool write) {
         out_data << sex_setting + '\n';
         out_data << start_day + '\n';
         out_data << date_calculation_method + '\n';
+        out_data << limit_standard + '\n';
+        out_data << weekly_limit + '\n';
         out_data.close();
     } else {
         std::cout << "Reading user settings from " << path << std::endl;
@@ -552,6 +559,11 @@ void MainWindow::program_options(bool write) {
                     options.weekday_start = line.substr(line.find(':') + 1);
                 } else if (line_counter == 2) { // Third line should be the date calculation method
                     options.date_calculation_method = line.substr(line.find(':') + 1);
+                } else if (line_counter == 3) { // Fourth line should be limit standard setting
+                    options.limit_standard = line.substr(line.find(':') + 1);
+                } else if (line_counter == 4) { // Fifth line should be the weekly limit that is custom set
+                    std::cout << "*** " << line.substr(line.find(':') + 1) << std::endl;
+                    options.weekly_limit = std::stoi(line.substr(line.find(':') + 1));
                 }
                 line_counter += 1;
             }
@@ -623,7 +635,7 @@ void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consume
      * Update the std. drinks left this week to the amount of std. drinks left this week.
      */
 
-    double std_drinks_left = Calculate::standard_drinks_remaining(options.sex, std_drinks_consumed);
+    double std_drinks_left = Calculate::standard_drinks_remaining(options.sex, options.limit_standard, options.weekly_limit, std_drinks_consumed);
     ui->drinksLeftOutput->setText(QString::fromStdString(Calculate::double_to_string(std_drinks_left)));
 
     // Set standard drinks remaining text to red if negative
@@ -674,7 +686,7 @@ void MainWindow::update_oz_alcohol_remaining(double oz_alcohol_consumed) {
      * Update the OZ. alcohol remaining label text to the amount of alcohol remaining.
      */
 
-    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(options.sex, oz_alcohol_consumed);
+    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, oz_alcohol_consumed);
     ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(Calculate::double_to_string(oz_alcohol_remaining)));
 
     // Set oz alcohol remaining text to red if negative
