@@ -27,7 +27,7 @@ double Calculate::oz_alcohol(double abv, int amount) {
     return (abv/100)*amount;
 }
 
-double Calculate::standard_drinks_remaining(const std::string& sex, const std::string& standard, unsigned int drink_limit, double standard_drinks_consumed) {
+double Calculate::standard_drinks_remaining(const std::string& sex, const std::string& standard, int drink_limit, double standard_drinks_consumed) {
     /*
      * Calculate the number of standard drinks remaining for the user this week.
      * @param sex: The sex of the user.
@@ -68,7 +68,7 @@ double Calculate::round_to_two_decimal_points(double val) {
     return floor((val * 100) + .5)/100;
 }
 
-double Calculate::oz_alcohol_remaining(const std::string& sex, const std::string& standard, unsigned int drink_limit, double oz_consumed) {
+double Calculate::oz_alcohol_remaining(const std::string& sex, const std::string& standard, int drink_limit, double oz_consumed) {
     /*
      * Calculate the amount of alcohol the user has remaining based on their sex.
      * @return: The amount of oz remaining for user.

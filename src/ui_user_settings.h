@@ -39,26 +39,28 @@ public:
     QGridLayout *gridLayout_3;
     QGroupBox *dateCalculationGroup;
     QGridLayout *gridLayout;
-    QComboBox *weekdayStartInput;
-    QLabel *weekdayStartLabel;
     QRadioButton *fixedDateRadioButton;
     QRadioButton *rollingDateRadioButton;
     QSpacerItem *verticalSpacer_2;
+    QComboBox *weekdayStartInput;
+    QLabel *weekdayStartLabel;
+    QSpacerItem *verticalSpacer;
     QFrame *weeklyLimitFrame;
     QGridLayout *gridLayout_7;
     QGroupBox *weeklyLimitGroup;
     QGridLayout *gridLayout_6;
+    QRadioButton *niaaaStandardsRadioButton;
+    QLabel *customLimitLabel;
+    QSpinBox *customLimitSpinBox;
     QRadioButton *customLimitRadioButton;
     QSpacerItem *verticalSpacer_3;
-    QRadioButton *niaaaStandardsRadioButton;
-    QLabel *label;
-    QSpinBox *spinBox;
+    QSpacerItem *verticalSpacer_4;
 
     void setupUi(QDialog *userSettingsDialog)
     {
         if (userSettingsDialog->objectName().isEmpty())
             userSettingsDialog->setObjectName(QString::fromUtf8("userSettingsDialog"));
-        userSettingsDialog->resize(609, 224);
+        userSettingsDialog->resize(609, 204);
         userSettingsDialog->setModal(true);
         gridLayout_2 = new QGridLayout(userSettingsDialog);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
@@ -110,6 +112,21 @@ public:
         dateCalculationGroup->setFlat(true);
         gridLayout = new QGridLayout(dateCalculationGroup);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        fixedDateRadioButton = new QRadioButton(dateCalculationGroup);
+        fixedDateRadioButton->setObjectName(QString::fromUtf8("fixedDateRadioButton"));
+
+        gridLayout->addWidget(fixedDateRadioButton, 2, 0, 1, 1);
+
+        rollingDateRadioButton = new QRadioButton(dateCalculationGroup);
+        rollingDateRadioButton->setObjectName(QString::fromUtf8("rollingDateRadioButton"));
+        rollingDateRadioButton->setChecked(true);
+
+        gridLayout->addWidget(rollingDateRadioButton, 0, 0, 1, 1);
+
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout->addItem(verticalSpacer_2, 4, 0, 1, 1);
+
         weekdayStartInput = new QComboBox(dateCalculationGroup);
         weekdayStartInput->addItem(QString());
         weekdayStartInput->addItem(QString());
@@ -120,27 +137,16 @@ public:
         weekdayStartInput->addItem(QString());
         weekdayStartInput->setObjectName(QString::fromUtf8("weekdayStartInput"));
 
-        gridLayout->addWidget(weekdayStartInput, 4, 0, 1, 1);
+        gridLayout->addWidget(weekdayStartInput, 6, 0, 1, 1);
 
         weekdayStartLabel = new QLabel(dateCalculationGroup);
         weekdayStartLabel->setObjectName(QString::fromUtf8("weekdayStartLabel"));
 
-        gridLayout->addWidget(weekdayStartLabel, 3, 0, 1, 1);
+        gridLayout->addWidget(weekdayStartLabel, 5, 0, 1, 1);
 
-        fixedDateRadioButton = new QRadioButton(dateCalculationGroup);
-        fixedDateRadioButton->setObjectName(QString::fromUtf8("fixedDateRadioButton"));
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout->addWidget(fixedDateRadioButton, 1, 0, 1, 1);
-
-        rollingDateRadioButton = new QRadioButton(dateCalculationGroup);
-        rollingDateRadioButton->setObjectName(QString::fromUtf8("rollingDateRadioButton"));
-        rollingDateRadioButton->setChecked(true);
-
-        gridLayout->addWidget(rollingDateRadioButton, 0, 0, 1, 1);
-
-        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout->addItem(verticalSpacer_2, 2, 0, 1, 1);
+        gridLayout->addItem(verticalSpacer, 1, 0, 1, 1);
 
 
         gridLayout_3->addWidget(dateCalculationGroup, 0, 0, 1, 1);
@@ -161,35 +167,39 @@ public:
         weeklyLimitGroup->setFlat(true);
         gridLayout_6 = new QGridLayout(weeklyLimitGroup);
         gridLayout_6->setObjectName(QString::fromUtf8("gridLayout_6"));
-        customLimitRadioButton = new QRadioButton(weeklyLimitGroup);
-        customLimitRadioButton->setObjectName(QString::fromUtf8("customLimitRadioButton"));
-
-        gridLayout_6->addWidget(customLimitRadioButton, 1, 0, 1, 1);
-
-        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout_6->addItem(verticalSpacer_3, 2, 0, 1, 1);
-
         niaaaStandardsRadioButton = new QRadioButton(weeklyLimitGroup);
         niaaaStandardsRadioButton->setObjectName(QString::fromUtf8("niaaaStandardsRadioButton"));
 
-        gridLayout_6->addWidget(niaaaStandardsRadioButton, 0, 0, 1, 2);
+        gridLayout_6->addWidget(niaaaStandardsRadioButton, 1, 0, 1, 1);
 
-        label = new QLabel(weeklyLimitGroup);
-        label->setObjectName(QString::fromUtf8("label"));
+        customLimitLabel = new QLabel(weeklyLimitGroup);
+        customLimitLabel->setObjectName(QString::fromUtf8("customLimitLabel"));
 
-        gridLayout_6->addWidget(label, 4, 0, 1, 2);
+        gridLayout_6->addWidget(customLimitLabel, 9, 0, 1, 2);
 
-        spinBox = new QSpinBox(weeklyLimitGroup);
-        spinBox->setObjectName(QString::fromUtf8("spinBox"));
+        customLimitSpinBox = new QSpinBox(weeklyLimitGroup);
+        customLimitSpinBox->setObjectName(QString::fromUtf8("customLimitSpinBox"));
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(spinBox->sizePolicy().hasHeightForWidth());
-        spinBox->setSizePolicy(sizePolicy);
-        spinBox->setMinimumSize(QSize(0, 25));
+        sizePolicy.setHeightForWidth(customLimitSpinBox->sizePolicy().hasHeightForWidth());
+        customLimitSpinBox->setSizePolicy(sizePolicy);
+        customLimitSpinBox->setMinimumSize(QSize(0, 25));
 
-        gridLayout_6->addWidget(spinBox, 5, 0, 1, 1);
+        gridLayout_6->addWidget(customLimitSpinBox, 10, 0, 1, 1);
+
+        customLimitRadioButton = new QRadioButton(weeklyLimitGroup);
+        customLimitRadioButton->setObjectName(QString::fromUtf8("customLimitRadioButton"));
+
+        gridLayout_6->addWidget(customLimitRadioButton, 3, 0, 1, 1);
+
+        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_6->addItem(verticalSpacer_3, 7, 0, 1, 1);
+
+        verticalSpacer_4 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_6->addItem(verticalSpacer_4, 2, 0, 1, 1);
 
 
         gridLayout_7->addWidget(weeklyLimitGroup, 0, 0, 1, 1);
@@ -212,6 +222,8 @@ public:
         maleSelection->setText(QCoreApplication::translate("userSettingsDialog", "Male", nullptr));
         femaleSelection->setText(QCoreApplication::translate("userSettingsDialog", "Female", nullptr));
         dateCalculationGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Date Calculation", nullptr));
+        fixedDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Reset on day", nullptr));
+        rollingDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Rolling", nullptr));
         weekdayStartInput->setItemText(0, QCoreApplication::translate("userSettingsDialog", "Sunday", nullptr));
         weekdayStartInput->setItemText(1, QCoreApplication::translate("userSettingsDialog", "Monday", nullptr));
         weekdayStartInput->setItemText(2, QCoreApplication::translate("userSettingsDialog", "Tuesday", nullptr));
@@ -221,12 +233,10 @@ public:
         weekdayStartInput->setItemText(6, QCoreApplication::translate("userSettingsDialog", "Saturday", nullptr));
 
         weekdayStartLabel->setText(QCoreApplication::translate("userSettingsDialog", "Reset stats on:", nullptr));
-        fixedDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Reset on day", nullptr));
-        rollingDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Rolling", nullptr));
         weeklyLimitGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Weekly Limit Standard", nullptr));
-        customLimitRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Custom", nullptr));
         niaaaStandardsRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "NIAAA", nullptr));
-        label->setText(QCoreApplication::translate("userSettingsDialog", "Custom Limit:", nullptr));
+        customLimitLabel->setText(QCoreApplication::translate("userSettingsDialog", "Custom Limit:", nullptr));
+        customLimitRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Custom", nullptr));
     } // retranslateUi
 
 };
