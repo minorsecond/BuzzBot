@@ -28,19 +28,19 @@ TEST_CASE("Oz Alcohol", "[Drink Calculations]") {
 }
 
 TEST_CASE("Std Drinks Remaining", "[Drink Calculations]") {
-    double male_drinks_remaining = Calculate::standard_drinks_remaining("male", 4.6);
-    double female_drinks_remaining = Calculate::standard_drinks_remaining("female", 8);
+    double male_drinks_remaining = Calculate::standard_drinks_remaining("male", "NIAAA", 0, 4.6);
+    double female_drinks_remaining = Calculate::standard_drinks_remaining("female", "Custom", 5, 8);
 
     REQUIRE(male_drinks_remaining == 9.4);
-    REQUIRE(female_drinks_remaining == -1.0);
+    REQUIRE(female_drinks_remaining == -3.0);
 }
 
 TEST_CASE("Oz Alcohol Remaining", "[Drink Calculations]") {
-    double male_oz_remaining = Calculate::oz_alcohol_remaining("male", 4.3);
-    double female_oz_remaining = Calculate::oz_alcohol_remaining("female", 5.5);
+    double male_oz_remaining = Calculate::oz_alcohol_remaining("male", "NIAAA", 0, 4.3);
+    double female_oz_remaining = Calculate::oz_alcohol_remaining("female", "Custom", 10, 5.5);
 
     REQUIRE(male_oz_remaining == 4.1);
-    REQUIRE(female_oz_remaining == -1.3);
+    REQUIRE(female_oz_remaining == 4.5);
 }
 
 TEST_CASE("Mean ABV", "[Drink Calculations]") {
