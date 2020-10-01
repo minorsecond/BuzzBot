@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>609</width>
-    <height>224</height>
+    <height>204</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -92,7 +92,40 @@
          <bool>true</bool>
         </property>
         <layout class="QGridLayout" name="gridLayout">
+         <item row="2" column="0">
+          <widget class="QRadioButton" name="fixedDateRadioButton">
+           <property name="text">
+            <string>Reset on day</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="rollingDateRadioButton">
+           <property name="text">
+            <string>Rolling</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
          <item row="4" column="0">
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Expanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="6" column="0">
           <widget class="QComboBox" name="weekdayStartInput">
            <item>
             <property name="text">
@@ -131,7 +164,7 @@
            </item>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item row="5" column="0">
           <widget class="QLabel" name="weekdayStartLabel">
            <property name="text">
             <string>Reset stats on:</string>
@@ -139,29 +172,9 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QRadioButton" name="fixedDateRadioButton">
-           <property name="text">
-            <string>Reset on day</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QRadioButton" name="rollingDateRadioButton">
-           <property name="text">
-            <string>Rolling</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <spacer name="verticalSpacer_2">
+          <spacer name="verticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Expanding</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -202,13 +215,43 @@
         </property>
         <layout class="QGridLayout" name="gridLayout_6">
          <item row="1" column="0">
+          <widget class="QRadioButton" name="niaaaStandardsRadioButton">
+           <property name="text">
+            <string>NIAAA</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="0" colspan="2">
+          <widget class="QLabel" name="customLimitLabel">
+           <property name="text">
+            <string>Custom Limit:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="0">
+          <widget class="QSpinBox" name="customLimitSpinBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>25</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
           <widget class="QRadioButton" name="customLimitRadioButton">
            <property name="text">
             <string>Custom</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item row="7" column="0">
           <spacer name="verticalSpacer_3">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -224,35 +267,18 @@
            </property>
           </spacer>
          </item>
-         <item row="0" column="0" colspan="2">
-          <widget class="QRadioButton" name="niaaaStandardsRadioButton">
-           <property name="text">
-            <string>NIAAA</string>
+         <item row="2" column="0">
+          <spacer name="verticalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
-          </widget>
-         </item>
-         <item row="4" column="0" colspan="2">
-          <widget class="QLabel" name="customLimitLabel">
-           <property name="text">
-            <string>Custom Limit:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QSpinBox" name="customLimitSpinBox">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
+           <property name="sizeHint" stdset="0">
             <size>
-             <width>0</width>
-             <height>25</height>
+             <width>20</width>
+             <height>40</height>
             </size>
            </property>
-          </widget>
+          </spacer>
          </item>
         </layout>
        </widget>

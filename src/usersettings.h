@@ -20,8 +20,10 @@ public:
     std::string get_sex();
     std::string get_weekday_start();
     std::string get_date_calculation_method();
+    unsigned int get_drink_limit();
 
 private slots:
+    void changed_limit_setting();
     void changed_date_calc();
 };
 
