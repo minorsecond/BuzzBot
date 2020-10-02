@@ -276,7 +276,7 @@ TEST_CASE("Filter DB", "[DB Functions]") {
 
     REQUIRE(filtered_beers.empty() == false);
     REQUIRE(filtered_beers.size() == 2);
-    REQUIRE(etrwo_read.drink_day == 8);
+    REQUIRE(etrwo_read.date == "2020-09-08");
 
     std::vector<Drink> filter_by_subtype = Database::filter("Subtype", "Hazy IPA", storage_1);
 
