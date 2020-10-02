@@ -151,15 +151,16 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::drink_year) == year && c(&Drink::drink_month) == month &&
                                                       c(&Drink::drink_day) == day));
     } else if (filter_type == "After Date") {
-        int year = stoi(filter_text.substr(6, 8));
-        int month = stoi(filter_text.substr(3, 2));
-        int day = stoi(filter_text.substr(0, 2));
+        //int year = stoi(filter_text.substr(6, 8));
+        //int month = stoi(filter_text.substr(3, 2));
+        //int day = stoi(filter_text.substr(0, 2));
 
-        std::cout << "*** Query year: " << year << ", query month: " << month << ", query day: " << day << std::endl;
-        filtered_drinks = storage.get_all<Drink>(where(c(&Drink::drink_year) == year && c(&Drink::drink_month) == month &&
-                                                      c(&Drink::drink_day) >= day));
+        //filtered_drinks = storage.get_all<Drink>(where(c(&Drink::drink_year) == year && c(&Drink::drink_month) == month &&
+        //                                              c(&Drink::drink_day) >= day));
 
-        std::cout << "*** Query size: " << filtered_drinks.size() << std::endl;
+        std::cout << "Filter date: " << filter_text << std::endl;
+        filtered_drinks = storage.get_all<Drink>(where(c(&Drink::date) >= filter_text));
+        std::cout << "Size of filtered drinks: " << filtered_drinks.size() << std::endl;
 
     } else if (filter_type == "Rating") {
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::rating) == filter_text));
@@ -210,6 +211,8 @@ int Database::increment_version(Storage storage, int current_version) {
      * Increment database version to current version.
      */
 
+    std::cout << "Using DB version " << storage.pragma.user_version() << std::endl;
+
     if (get_version(storage) == 0) {  // Never use 0
         storage.pragma.user_version(storage.pragma.user_version() + 1);
         storage.sync_schema(true);
@@ -218,6 +221,13 @@ int Database::increment_version(Storage storage, int current_version) {
     if (get_version(storage) == 1 && current_version == 2) {
         // In version 1.0.1, this populated the producer column with data from the now-nonexistent brewery column.
         storage.pragma.user_version(2);
+        storage.sync_schema(true);
+    }
+
+    if (get_version(storage) == 2 && current_version == 3) {
+        // This adds the year, month, day fields into the date field in the correct format.
+        populate_date_field();
+        storage.pragma.user_version(4);
         storage.sync_schema(true);
     }
     return storage.pragma.user_version();
@@ -254,10 +264,28 @@ std::vector<Drink> Database::sort_by_date_id(std::vector<Drink> drinks) {
     int sort_order = 1;
     for (int i = 0; i < drinks.size(); ++i) {
         drinks[i].sort_order = sort_order;
-        std::cout << drinks[i].name << " " << sort_order << std::endl;
-        std::cout << drinks[i].drink_year << "-" << drinks[i].drink_month << "-" << drinks[i].drink_day << std::endl;
         sort_order++;
     }
 
     return drinks;
+}
+
+void Database::populate_date_field() {
+    /*
+     * Convert the year, month, and date fields to the date field.
+     */
+
+    Storage storage = initStorage(path());
+    write_db_to_disk(storage);
+    std::vector all_drinks = storage.get_all<Drink>();
+    for (auto& drink : all_drinks) {
+        std::ostringstream month_padded;
+        std::ostringstream day_padded;
+        month_padded << std::setw(2) << std::setfill('0') << drink.drink_month;
+        day_padded << std::setw(2) << std::setfill('0') << drink.drink_day;
+        std::string formatted_date = std::to_string(drink.drink_year) + "-" + month_padded.str() + "-" + day_padded.str();
+        drink.date = formatted_date;
+        std::cout << "Formatted date: " << formatted_date << std::endl;
+        update(storage, drink);
+    }
 }
