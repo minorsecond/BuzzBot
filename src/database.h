@@ -34,7 +34,7 @@ inline auto initStorage(const std::string& file_name) {
     return sqlite_orm::make_storage(file_name,
                                     sqlite_orm::make_table("beers",
                                                           sqlite_orm::make_column("id", &Drink::id, sqlite_orm::autoincrement(), sqlite_orm::primary_key()),
-                                                          sqlite_orm::make_column("date", &Drink::date, sqlite_orm::default_value(QDate::currentDate().toString().toStdString())),
+                                                          sqlite_orm::make_column("date", &Drink::date, sqlite_orm::default_value("2020-01-01")),
                                                           sqlite_orm::make_column("drink_year", &Drink::drink_year),
                                                           sqlite_orm::make_column("drink_month", &Drink::drink_month),
                                                           sqlite_orm::make_column("drink_day", &Drink::drink_day),
