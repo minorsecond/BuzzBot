@@ -563,7 +563,8 @@ void MainWindow::update_stat_panel() {
     std::string year = date::format("%Y", start_date.year());
     std::string month = date::format("%m", start_date.month());
     std::string day = date::format("%d", start_date.day());
-    std::string query_date = day + "/" + month + "/" + year;
+    //std::string query_date = day + "-" + month + "-" + year;
+    std::string query_date = year + "-" + month + "-" + day;
 
     std::vector<Drink> beers_this_week = Database::filter("After Date", query_date, storage);
 
