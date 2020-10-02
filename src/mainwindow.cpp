@@ -1,8 +1,10 @@
 #include "mainwindow.h"
 #include "usersettings.h"
 #include "about.h"
+#include "standard_drink_calculator.h"
+#include "confirm_dialog.h"
+#include "exporters.h"
 #include "calculate.h"
-#include "../include/date.h"
 #include <iomanip>
 #include <boost/filesystem.hpp>
 #include <iostream>
@@ -10,6 +12,7 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <CoreFoundation/CFBundle.h>
+#include <QFileDialog>
 
 // LCOV_EXCL_START
 MainWindow::MainWindow(QWidget *parent)
@@ -75,14 +78,22 @@ void MainWindow::add_menubar_items() {
 
     auto * preferences_action = new QAction("Preferences");
     auto * about_action = new QAction("About");
+    auto * export_action = new QAction("Export...");
+    auto * calc_std_drinks = new QAction("Calculate Std. Drinks...");
     QMenu * app_menu = menuBar()->addMenu("App Menu");
     preferences_action->setMenuRole(QAction::PreferencesRole);
     about_action->setMenuRole(QAction::AboutRole);
+    export_action->setMenuRole(QAction::ApplicationSpecificRole);
+    calc_std_drinks->setMenuRole(QAction::ApplicationSpecificRole);
     app_menu->addAction(preferences_action);
     app_menu->addAction(about_action);
+    app_menu->addAction(export_action);
+    app_menu->addAction(calc_std_drinks);
 
-    connect(preferences_action, SIGNAL(triggered()), this, SLOT(open_user_settings()));
-    connect(about_action, SIGNAL(triggered()), this, SLOT(open_about_dialog()));
+    connect(preferences_action, &QAction::triggered, this, &MainWindow::open_user_settings);
+    connect(about_action, &QAction::triggered, this, &MainWindow::open_about_dialog);
+    connect(export_action, &QAction::triggered, this, &MainWindow::open_export_dialog);
+    connect(calc_std_drinks, &QAction::triggered, this, &MainWindow::open_std_drink_calculator);
 }
 
 void MainWindow::configure_calendar() {
@@ -267,18 +278,22 @@ void MainWindow::update_selected_row(QItemSelectionModel* select, Drink entered_
      * @param select: A selection model.
      * @param entered_drink: A Drink containing data from the database.
      */
-    // Get the selected row
-    int selection = select->selectedRows().at(0).row();
-    int row_to_update = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
 
-    // Get the existing timestamp
-    std::string timestamp = ui->drinkLogTable->item(selection, 10)->text().toStdString();
-    std::cout << "Updating row " << row_to_update << " Timestamp: " << timestamp << std::endl;
+    ConfirmDialog confirmation_dialog = ConfirmDialog(this, "Update");
+    if (confirmation_dialog.exec() == QDialog::Accepted) {
+        // Get the selected row
+        int selection = select->selectedRows().at(0).row();
+        int row_to_update = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
 
-    // Update the variables in the beer struct
-    entered_drink.id = row_to_update;
-    entered_drink.timestamp = timestamp;
-    Database::update(storage, entered_drink);
+        // Get the existing timestamp
+        std::string timestamp = ui->drinkLogTable->item(selection, 10)->text().toStdString();
+        std::cout << "Updating row " << row_to_update << " Timestamp: " << timestamp << std::endl;
+
+        // Update the variables in the beer struct
+        entered_drink.id = row_to_update;
+        entered_drink.timestamp = timestamp;
+        Database::update(storage, entered_drink);
+    }
 }
 
 void MainWindow::add_new_row(Drink entered_drink) {
@@ -353,8 +368,8 @@ void MainWindow::update_table() {
         auto *type = new QTableWidgetItem(drink.type.c_str());
         auto *subtype = new QTableWidgetItem(drink.subtype.c_str());
         auto *producer = new QTableWidgetItem(drink.producer.c_str());
-        auto *abv = new QTableWidgetItem(double_to_string(drink.abv).c_str());
-        auto *size = new QTableWidgetItem(double_to_string(drink.size).c_str());
+        auto *abv = new QTableWidgetItem(Calculate::double_to_string(drink.abv).c_str());
+        auto *size = new QTableWidgetItem(Calculate::double_to_string(drink.size).c_str());
         auto *rating = new QTableWidgetItem(std::to_string(drink.rating).c_str());
         auto *id = new QTableWidgetItem;
         auto *timestamp = new QTableWidgetItem(drink.timestamp.c_str());
@@ -372,7 +387,7 @@ void MainWindow::update_table() {
         if (drink.ibu == -1.0) {  // -1 denotes no IBU value
             *ibu = QTableWidgetItem("");
         } else {
-            *ibu = QTableWidgetItem(double_to_string(drink.ibu).c_str());
+            *ibu = QTableWidgetItem(Calculate::double_to_string(drink.ibu).c_str());
         }
 
         ui->drinkLogTable->setItem(table_row_num, 0, date_qtw);
@@ -389,21 +404,6 @@ void MainWindow::update_table() {
         ui->drinkLogTable->setItem(table_row_num, 11, sort_order);
     }
     reset_table_sort();
-}
-
-std::string MainWindow::double_to_string(double input_double) {
-    /*
-     * Convert a double to a string with 1 decimal value.
-     * @param input_double: Double value that should be converted.
-     */
-
-    double converted_double;
-    converted_double = std::floor((input_double * 100.0) + .5) / 100.0;
-
-    std::ostringstream price_stream;
-    price_stream << converted_double;
-
-    return price_stream.str();
 }
 
 void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &) {
@@ -432,18 +432,21 @@ void MainWindow::delete_row() {
      * Delete the row in the database that corresponds to the row selected in the table.
      */
 
-    int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
-    int row_to_delete = (ui->drinkLogTable->item(select, 9)->text().toUtf8().toInt());
-    std::cout << "Deleting row " << row_to_delete << std::endl;
-    Database::delete_row(storage, row_to_delete);
-    update_table();
-    update_stat_panel();
-    ui->deleteRowButton->setDisabled(true);
+    ConfirmDialog confirmation_dialog = ConfirmDialog(this, "Delete");
+    if (confirmation_dialog.exec() == QDialog::Accepted) {
+        int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
+        int row_to_delete = (ui->drinkLogTable->item(select, 9)->text().toUtf8().toInt());
+        std::cout << "Deleting row " << row_to_delete << std::endl;
+        Database::delete_row(storage, row_to_delete);
+        update_table();
+        update_stat_panel();
+        ui->deleteRowButton->setDisabled(true);
 
-    // Update the fields to reflect deleted row
-    update_beer_fields();
-    update_liquor_fields();
-    update_wine_fields();
+        // Update the fields to reflect deleted row
+        update_beer_fields();
+        update_liquor_fields();
+        update_wine_fields();
+    }
 }
 
 void MainWindow::open_about_dialog() {
@@ -456,6 +459,21 @@ void MainWindow::open_about_dialog() {
     about_dialog->show();
 }
 
+void MainWindow::open_export_dialog() {
+    /*
+     * Open the export dialog.
+     */
+
+    QString desktop_path = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0);
+    QString preferred_path = desktop_path + "/buzzbot.csv";
+
+    QString filter = "CSV Files (*.csv)";
+    QString filepath_qstring = QFileDialog::getSaveFileName(this, "Save File", preferred_path, filter, &filter);
+
+    std::vector<Drink> all_drinks = storage.get_all<Drink>();
+    exporters::to_csv(all_drinks, filepath_qstring.toStdString());
+}
+
 void MainWindow::open_user_settings() {
     /*
      * Open the user settings dialog box, where users can enter their sex and the day which the week should begin on.
@@ -465,7 +483,10 @@ void MainWindow::open_user_settings() {
     user_settings.setModal(true);
     if (user_settings.exec() == QDialog::Accepted) {
         options.sex = user_settings.get_sex();
+        options.date_calculation_method = user_settings.get_date_calculation_method();
         options.weekday_start = user_settings.get_weekday_start();
+        options.limit_standard = user_settings.get_limit_standard();
+        options.weekly_limit = user_settings.get_drink_limit();
         update_stat_panel();
     }
     program_options(true);
@@ -499,8 +520,12 @@ void MainWindow::program_options(bool write) {
     std::string read_sex;
 
     if (write) {
+        std::cout << "Writing user settings." << std::endl;
         std::string sex_setting = "sex:" + options.sex;
         std::string start_day = "start_day:" + options.weekday_start;
+        std::string date_calculation_method = "date_calculation_method:" + options.date_calculation_method;
+        std::string limit_standard = "limit_standard:" + options.limit_standard;
+        std::string weekly_limit = "custom_weekly_limit:" + std::to_string(options.weekly_limit);
         std::ofstream out_data;
 
         if (!out_data) {
@@ -511,6 +536,9 @@ void MainWindow::program_options(bool write) {
         out_data.open(path);
         out_data << sex_setting + '\n';
         out_data << start_day + '\n';
+        out_data << date_calculation_method + '\n';
+        out_data << limit_standard + '\n';
+        out_data << weekly_limit + '\n';
         out_data.close();
     } else {
         std::cout << "Reading user settings from " << path << std::endl;
@@ -524,6 +552,13 @@ void MainWindow::program_options(bool write) {
                     options.sex = line.substr(line.find(':') + 1);
                 } else if (line_counter == 1) { // Second line should be week start day
                     options.weekday_start = line.substr(line.find(':') + 1);
+                } else if (line_counter == 2) { // Third line should be the date calculation method
+                    options.date_calculation_method = line.substr(line.find(':') + 1);
+                } else if (line_counter == 3) { // Fourth line should be limit standard setting
+                    options.limit_standard = line.substr(line.find(':') + 1);
+                } else if (line_counter == 4) { // Fifth line should be the weekly limit that is custom set
+                    std::cout << "*** " << line.substr(line.find(':') + 1) << std::endl;
+                    options.weekly_limit = std::stoi(line.substr(line.find(':') + 1));
                 }
                 line_counter += 1;
             }
@@ -536,28 +571,17 @@ void MainWindow::update_stat_panel() {
      * Calculate number of standard drinks consumed since Sunday.
      */
 
+    date::year_month_day start_date{};
     double standard_drinks = 0;
-    date::weekday filter_day{};
+    std::string weekday_name;
 
-    // Get date to filter on
-    if (options.weekday_start == "Monday") {
-        filter_day = date::Monday;
-    } else if (options.weekday_start == "Tuesday") {
-        filter_day = date::Tuesday;
-    } else if (options.weekday_start == "Wednesday") {
-        filter_day = date::Wednesday;
-    } else if (options.weekday_start == "Thursday") {
-        filter_day = date::Thursday;
-    } else if (options.weekday_start == "Friday") {
-        filter_day = date::Friday;
-    } else {
-        filter_day = date::Sunday;
-    }
-    // This returns yyyy-mm-dd
-    auto todays_date = date::floor<date::days>(std::chrono::system_clock::now());
+    // Get filter day & day of week.
+    std::tuple<date::year_month_day, std::string> filter_date_results = get_filter_date();
 
-    // Get date of last filter_day
-    date::year_month_day start_date = todays_date - (date::weekday{todays_date} - filter_day);
+    start_date = std::get<0>(filter_date_results);
+    weekday_name = std::get<1>(filter_date_results);
+
+    std::cout << "Calculating stats since " << start_date << ", which is last " << weekday_name << std::endl;
 
     // Create the date for the SQL query
     std::string year = date::format("%Y", start_date.year());
@@ -566,15 +590,18 @@ void MainWindow::update_stat_panel() {
     //std::string query_date = day + "-" + month + "-" + year;
     std::string query_date = year + "-" + month + "-" + day;
 
+    std::cout << "Querying DB for drinks after " << query_date << std::endl;
+
     std::vector<Drink> beers_this_week = Database::filter("After Date", query_date, storage);
 
     for (const auto& beer : beers_this_week) {
         standard_drinks += Calculate::standard_drinks(beer.abv, beer.size);
     }
 
-    update_drinks_this_week(standard_drinks);
+    // Update the individual elements of the stat pane
+    update_drinks_this_week(standard_drinks, weekday_name);
     update_standard_drinks_left_this_week(standard_drinks);
-    double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week);
+    double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week, weekday_name);
     update_oz_alcohol_remaining(oz_alc_consumed);
     update_favorite_brewery();
     update_favorite_beer();
@@ -583,17 +610,19 @@ void MainWindow::update_stat_panel() {
     update_mean_ibu();
 }
 
-void MainWindow::update_drinks_this_week(double standard_drinks) {
+void MainWindow::update_drinks_this_week(double standard_drinks, const std::string& weekday_name) {
     /*
      * Update the standard drinks this week output label.
+     * @param standard_drinks: a double denoting the number of standard drinks consumed.
+     * @param weekday_name: The day the calculation began on.
      */
 
-    std::string drinksThisWeekLabelText = "Std. drinks since " + options.weekday_start + ":";
+    std::string drinksThisWeekLabelText = "Std. drinks since " + weekday_name + ":";
     ui->drinksThisWeekLabel->setText(QString::fromStdString(drinksThisWeekLabelText));
     if (standard_drinks == 0.0) {
         ui->drinksThisWeekOutput->setText("0.0");
     } else {
-        ui->drinksThisWeekOutput->setText(QString::fromStdString(double_to_string(standard_drinks)));
+        ui->drinksThisWeekOutput->setText(QString::fromStdString(Calculate::double_to_string(standard_drinks)));
     }
 }
 
@@ -602,8 +631,8 @@ void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consume
      * Update the std. drinks left this week to the amount of std. drinks left this week.
      */
 
-    double std_drinks_left = Calculate::standard_drinks_remaining(options.sex, std_drinks_consumed);
-    ui->drinksLeftOutput->setText(QString::fromStdString(double_to_string(std_drinks_left)));
+    double std_drinks_left = Calculate::standard_drinks_remaining(options.sex, options.limit_standard, options.weekly_limit, std_drinks_consumed);
+    ui->drinksLeftOutput->setText(QString::fromStdString(Calculate::double_to_string(std_drinks_left)));
 
     // Set standard drinks remaining text to red if negative
     if (std_drinks_left < 0) {
@@ -622,14 +651,16 @@ void MainWindow::reset_table_sort() {
     ui->drinkLogTable->sortItems(sort_column, Qt::DescendingOrder);
 }
 
-double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week) {
+double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week, const std::string& weekday_name) {
     /*
      * Update the Oz. alcohol consumed output label to the total amount alcohol consumed this week.
+     * @param beers_this_week: A vector of Drinks containing the drinks consumed in the past week.
+     * @param weekday_name: The day the week began on.
      */
 
     double oz_consumed = 0;
 
-    std::string ozThisWeekLabelText = "Oz. alcohol since " + options.weekday_start + ":";
+    std::string ozThisWeekLabelText = "Oz. alcohol since " + weekday_name + ":";
     ui->ozAlcoholConsumedLabel->setText(QString::fromStdString(ozThisWeekLabelText));
 
     for (const auto& beer : beers_this_week) {
@@ -640,7 +671,7 @@ double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>
     if (oz_consumed == 0.0) {
         ui->ozAlcoholConsumedOutput->setText("0.0");
     } else {
-        ui->ozAlcoholConsumedOutput->setText(QString::fromStdString(double_to_string(oz_consumed)));
+        ui->ozAlcoholConsumedOutput->setText(QString::fromStdString(Calculate::double_to_string(oz_consumed)));
     }
 
     return oz_consumed;
@@ -651,8 +682,8 @@ void MainWindow::update_oz_alcohol_remaining(double oz_alcohol_consumed) {
      * Update the OZ. alcohol remaining label text to the amount of alcohol remaining.
      */
 
-    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(options.sex, oz_alcohol_consumed);
-    ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(double_to_string(oz_alcohol_remaining)));
+    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, oz_alcohol_consumed);
+    ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(Calculate::double_to_string(oz_alcohol_remaining)));
 
     // Set oz alcohol remaining text to red if negative
     if (oz_alcohol_remaining < 0) {
@@ -685,7 +716,7 @@ void MainWindow::update_mean_abv() {
      * Update the mean ABV text label to the mean ABV of all beers in the database.
      */
 
-    std::string mean_abv = double_to_string(Calculate::mean_abv(storage));
+    std::string mean_abv = Calculate::double_to_string(Calculate::mean_abv(storage));
     if (mean_abv == "nan") {
         mean_abv = " ";
     }
@@ -697,7 +728,7 @@ void MainWindow::update_mean_ibu() {
      * Set the mean IBU text label to the mean IBU of all beers in the database.
      */
 
-    std::string mean_ibu = double_to_string(Calculate::mean_ibu(storage));
+    std::string mean_ibu = Calculate::double_to_string(Calculate::mean_ibu(storage));
     if (mean_ibu == "nan") {
         mean_ibu = " ";
     }
@@ -986,6 +1017,68 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
         ui->wineSizeInput->clear();
         ui->wineNotesInput->clear();
     }
+}
+
+void MainWindow::open_std_drink_calculator() {
+    /*
+     * Open the standard drink calculator dialog box.
+     */
+
+    auto *  std_drink_calculator = new StandardDrinkCalc(this);
+    std_drink_calculator->show();
+}
+
+date::weekday MainWindow::get_filter_weekday_start() const {
+    /*
+     * Get filter day from options.
+     * @return filter_day: a date object for the filter day.
+     */
+
+    date::weekday filter_day{};
+
+    // Get date to filter on
+    if (options.weekday_start == "Monday") {
+        filter_day = date::Monday;
+    } else if (options.weekday_start == "Tuesday") {
+        filter_day = date::Tuesday;
+    } else if (options.weekday_start == "Wednesday") {
+        filter_day = date::Wednesday;
+    } else if (options.weekday_start == "Thursday") {
+        filter_day = date::Thursday;
+    } else if (options.weekday_start == "Friday") {
+        filter_day = date::Friday;
+    } else {
+        filter_day = date::Sunday;
+    }
+
+    return filter_day;
+}
+
+std::tuple<date::year_month_day, std::string> MainWindow::get_filter_date() {
+    /*
+     * Get the date and day of week for the filter date specified in the options.
+     * @return: Tuple containing the start date (a date::year_month_day object) and weekday name (string).
+     */
+
+    date::year_month_day start_date{};
+    std::string weekday_name;
+
+    date::weekday filter_day = get_filter_weekday_start();
+    auto todays_date = date::floor<date::days>(std::chrono::system_clock::now());
+
+    // Get date of last filter_day
+    if (options.date_calculation_method == "Fixed") {
+        std::cout << "Using fixed date method" << std::endl;
+        start_date = todays_date - (date::weekday{todays_date} - filter_day);
+        weekday_name = options.weekday_start;
+    } else {  // Don't include day 7 days ago.
+        std::cout << "Using rolling date method" << std::endl;
+        start_date = todays_date - date::days{6};
+        // Get weekday name
+        weekday_name = date::format("%A", date::weekday(todays_date - date::days{7}));
+    }
+
+    return std::make_tuple(start_date, weekday_name);
 }
 
 // LCOV_EXCL_STOP
