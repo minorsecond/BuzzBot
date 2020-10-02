@@ -5,12 +5,12 @@
 #include <vector>
 #include <QDate>
 
-struct Drink {  // TODO: Remove brewery in DB version 3/Beertabs v1.0.0
+struct Drink {
     int id;
     std::string date;
-    int drink_year;
-    int drink_month;
-    int drink_day;
+    int drink_year;  // TODO: Remove this in DB version 4
+    int drink_month;  // TODO: Remove this
+    int drink_day;  // TODO: Remove this
     std::string name;
     std::string type;
     std::string subtype;

@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     program_options(true);
 
     // Upgrade DB version
-    // TODO: Remove the brewery column from database at DB version 3
+    // TODO: Remove references to drink_year, drink_month, & drink_day in DB version 4
     Database::increment_version(storage, 3);
 
     add_menubar_items();

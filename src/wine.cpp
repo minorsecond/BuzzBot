@@ -219,9 +219,9 @@ Drink MainWindow::get_wine_attrs_from_fields(std::string alcohol_type) {
     Drink drink;
 
     std::string drink_date = ui->wineDateInput->date().toString("yyyy-MM-dd").toStdString();
-    drink.drink_year = ui->wineDateInput->date().year();
-    drink.drink_month = ui->wineDateInput->date().month();
-    drink.drink_day = ui->wineDateInput->date().day();
+    drink.drink_year = ui->wineDateInput->date().year();  // TODO: Remove this
+    drink.drink_month = ui->wineDateInput->date().month();  // TODO: Remove this
+    drink.drink_day = ui->wineDateInput->date().day();  // TODO: Remove this
     drink.name = ui->wineNameInput->currentText().toStdString();
     drink.type = ui->wineTypeInput->currentText().toStdString();
     drink.subtype = ui->wineSubtypeInput->currentText().toStdString();
