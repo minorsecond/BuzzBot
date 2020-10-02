@@ -277,7 +277,6 @@ void Database::populate_date_field() {
     write_db_to_disk(storage);
     std::vector all_drinks = storage.get_all<Drink>();
     for (auto& drink : all_drinks) {
-
         std::ostringstream month_padded;
         std::ostringstream day_padded;
         month_padded << std::setw(2) << std::setfill('0') << drink.drink_month;
