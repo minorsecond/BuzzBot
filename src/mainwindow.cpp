@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     program_options(true);
 
     // Upgrade DB version
-    // TODO: Remove the brewery column from database at DB version 3
+    // TODO: Remove references to drink_year, drink_month, & drink_day in DB version 4
     Database::increment_version(storage, 3);
 
     add_menubar_items();
@@ -347,7 +347,7 @@ void MainWindow::update_table() {
     for (const auto& drink : drinks) {
         int table_row_num = ui->drinkLogTable->rowCount();
         ui->drinkLogTable->insertRow(table_row_num);
-        QDate date = QDate(drink.drink_year, drink.drink_month, drink.drink_day);
+        QDate date = QDate::fromString(QString::fromStdString(drink.date), "yyyy-MM-dd");
         auto *date_qtw = new QTableWidgetItem;
         auto *name = new QTableWidgetItem(drink.name.c_str());
         auto *type = new QTableWidgetItem(drink.type.c_str());
@@ -563,7 +563,8 @@ void MainWindow::update_stat_panel() {
     std::string year = date::format("%Y", start_date.year());
     std::string month = date::format("%m", start_date.month());
     std::string day = date::format("%d", start_date.day());
-    std::string query_date = day + "/" + month + "/" + year;
+    //std::string query_date = day + "-" + month + "-" + year;
+    std::string query_date = year + "-" + month + "-" + day;
 
     std::vector<Drink> beers_this_week = Database::filter("After Date", query_date, storage);
 
@@ -906,13 +907,7 @@ QDate MainWindow::format_date_for_input(const Drink& drink) {
      * @return date: A formatted QDate.
      */
 
-    std::ostringstream month_padded;
-    std::ostringstream day_padded;
-    month_padded << std::setw(2) << std::setfill('0') << drink.drink_month;
-    day_padded << std::setw(2) << std::setfill('0') << drink.drink_day;
-    std::string date_from_db = day_padded.str() + "/" + month_padded.str() + "/" + std::to_string(drink.drink_year);
-
-    return QDate::fromString(QString::fromUtf8(date_from_db.c_str()), "dd/MM/yyyy");
+    return QDate::fromString(QString::fromUtf8(drink.date.c_str()), "yyyy-MM-dd");
 }
 
 void MainWindow::clicked_clear_button() {
