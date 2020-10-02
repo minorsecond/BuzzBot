@@ -907,13 +907,6 @@ QDate MainWindow::format_date_for_input(const Drink& drink) {
      * @return date: A formatted QDate.
      */
 
-    std::ostringstream month_padded;
-    std::ostringstream day_padded;
-    month_padded << std::setw(2) << std::setfill('0') << drink.drink_month;
-    day_padded << std::setw(2) << std::setfill('0') << drink.drink_day;
-    std::string date_from_db = day_padded.str() + "/" + month_padded.str() + "/" + std::to_string(drink.drink_year);
-
-    //return QDate::fromString(QString::fromUtf8(date_from_db.c_str()), "dd/MM/yyyy");
     return QDate::fromString(QString::fromUtf8(drink.date.c_str()), "yyyy-MM-dd");
 }
 
