@@ -3,12 +3,14 @@
 
 #include "../include/sqlite_orm.h"
 #include <vector>
+#include <QDate>
 
-struct Drink {  // TODO: Remove brewery in DB version 3/Beertabs v1.0.0
+struct Drink {
     int id;
-    int drink_year;
-    int drink_month;
-    int drink_day;
+    std::string date;
+    int drink_year;  // TODO: Remove this in DB version 4
+    int drink_month;  // TODO: Remove this
+    int drink_day;  // TODO: Remove this
     std::string name;
     std::string type;
     std::string subtype;
@@ -32,6 +34,7 @@ inline auto initStorage(const std::string& file_name) {
     return sqlite_orm::make_storage(file_name,
                                     sqlite_orm::make_table("beers",
                                                           sqlite_orm::make_column("id", &Drink::id, sqlite_orm::autoincrement(), sqlite_orm::primary_key()),
+                                                          sqlite_orm::make_column("date", &Drink::date, sqlite_orm::default_value("2020-01-01")),
                                                           sqlite_orm::make_column("drink_year", &Drink::drink_year),
                                                           sqlite_orm::make_column("drink_month", &Drink::drink_month),
                                                           sqlite_orm::make_column("drink_day", &Drink::drink_day),
@@ -73,6 +76,7 @@ public:
 
 private:
     static bool compare_date(const Drink &a, const Drink &b);
+    static void populate_date_field();
 
 public:
     static std::string path();
