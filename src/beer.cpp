@@ -216,9 +216,11 @@ Drink MainWindow::get_beer_attrs_from_fields(std::string alcohol_type) {
 
     Drink drink;
 
-    drink.drink_year = ui->beerDateInput->date().year();
-    drink.drink_month = ui->beerDateInput->date().month();
-    drink.drink_day = ui->beerDateInput->date().day();
+    std::string drink_date = ui->beerDateInput->date().toString("yyyy-MM-dd").toStdString();
+    drink.date = drink_date;
+    drink.drink_year = ui->beerDateInput->date().year();  // TODO: Remove this
+    drink.drink_month = ui->beerDateInput->date().month();  // TODO: Remove this
+    drink.drink_day = ui->beerDateInput->date().day();  // TODO: Remove this
     drink.name = ui->beerNameInput->currentText().toStdString();
     drink.type = ui->beerTypeInput->currentText().toStdString();
     drink.subtype = ui->beerSubtypeInput->currentText().toStdString();

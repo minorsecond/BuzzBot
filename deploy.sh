@@ -33,10 +33,10 @@ echo "Building pkg."
 productbuild --symbolication ~/Desktop/BuzzBot/Symbols --component ~/Desktop/BuzzBot/App/BuzzBot.app /Applications --sign "3rd Party Mac Developer Installer: Robert Wardrup (7KNS6YGX5V)" ~/Desktop/BuzzBot/Buzzbot-Installer.pkg
 
 echo "Deployed. Now verifying installer"
-xcrun altool --validate-app -f ~/Desktop/BuzzBot/BuzzBot-Installer.pkg --type osx --primary-bundle-id "com.rwardrup.buzzbot" -u "rosswardrup@hotmail.com" -p "leua-xskx-hcve-tzpz"
+xcrun altool --validate-app -f ~/Desktop/BuzzBot/BuzzBot-Installer.pkg --type osx --primary-bundle-id "com.rwardrup.buzzbot" -u "rosswardrup@hotmail.com" -p "sfwf-mlfm-ngkw-nytf"
 
 echo "Uncomment xcrun altool --upload-app to upload to app store."
-#xcrun altool --upload-app --type osx --file ~/Desktop/BuzzBot/Buzzbot-Installer.pkg --primary-bundle-id "com.rwardrup.buzzbot" --username "rosswardrup@hotmail.com" -p "leua-xskx-hcve-tzpz"
+#xcrun altool --upload-app --type osx --file ~/Desktop/BuzzBot/Buzzbot-Installer.pkg --primary-bundle-id "com.rwardrup.buzzbot" --username "rosswardrup@hotmail.com" -p "sfwf-mlfm-ngkw-nytf"
 
 #echo "Notarizing app"
 #zip ~/Desktop/BuzzBot/BuzzBot.zip -r ~/Desktop/BuzzBot/BuzzBot.app/
