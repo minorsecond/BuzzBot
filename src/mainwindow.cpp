@@ -347,7 +347,7 @@ void MainWindow::update_table() {
     for (const auto& drink : drinks) {
         int table_row_num = ui->drinkLogTable->rowCount();
         ui->drinkLogTable->insertRow(table_row_num);
-        QDate date = QDate(drink.drink_year, drink.drink_month, drink.drink_day);
+        QDate date = QDate::fromString(QString::fromStdString(drink.date), "yyyy-MM-dd");
         auto *date_qtw = new QTableWidgetItem;
         auto *name = new QTableWidgetItem(drink.name.c_str());
         auto *type = new QTableWidgetItem(drink.type.c_str());
