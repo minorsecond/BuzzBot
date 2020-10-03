@@ -217,7 +217,7 @@ int Database::increment_version(Storage storage, int current_version) {
         // This adds the year, month, day fields into the date field in the correct format.
         std::cout << "*** Upgrading DB from version " << storage.pragma.user_version() <<  " to 5." << std::endl;
         populate_date_field();
-        storage.pragma.user_version(4);
+        storage.pragma.user_version(current_version);
         storage.sync_schema(true);
     }
     return storage.pragma.user_version();
