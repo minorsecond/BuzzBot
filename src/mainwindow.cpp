@@ -256,8 +256,8 @@ void MainWindow::submit_button_clicked() {
     Drink entered_drink = get_drink_attributes_from_fields();
 
     // Prevent blank submissions
-    if (entered_drink.name.empty() || entered_drink.abv == 0.0) {
-        QMessageBox::critical(nullptr, "Error", "Please enter drink name and ABV.");
+    if (entered_drink.name.empty() || entered_drink.abv == 0.0 || entered_drink.size == 0) {
+        QMessageBox::critical(nullptr, "Error", "Please enter drink name, ABV, and size.");
     } else {
         // Handle updating existing rows
         QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
