@@ -576,6 +576,7 @@ public:
         beerSizeInput->setObjectName(QString::fromUtf8("beerSizeInput"));
         sizePolicy1.setHeightForWidth(beerSizeInput->sizePolicy().hasHeightForWidth());
         beerSizeInput->setSizePolicy(sizePolicy1);
+        beerSizeInput->setMaximum(9999);
 
         gridLayout_3->addWidget(beerSizeInput, 2, 3, 1, 1);
 
@@ -616,6 +617,7 @@ public:
         beerAbvInput->setObjectName(QString::fromUtf8("beerAbvInput"));
         sizePolicy1.setHeightForWidth(beerAbvInput->sizePolicy().hasHeightForWidth());
         beerAbvInput->setSizePolicy(sizePolicy1);
+        beerAbvInput->setMaximum(100.000000000000000);
 
         gridLayout_3->addWidget(beerAbvInput, 2, 0, 1, 1);
 
@@ -675,6 +677,7 @@ public:
         liquorAbvInput->setObjectName(QString::fromUtf8("liquorAbvInput"));
         sizePolicy1.setHeightForWidth(liquorAbvInput->sizePolicy().hasHeightForWidth());
         liquorAbvInput->setSizePolicy(sizePolicy1);
+        liquorAbvInput->setMaximum(100.000000000000000);
 
         gridLayout_6->addWidget(liquorAbvInput, 2, 0, 1, 1);
 
@@ -706,6 +709,7 @@ public:
         liquorSizeInput->setObjectName(QString::fromUtf8("liquorSizeInput"));
         sizePolicy1.setHeightForWidth(liquorSizeInput->sizePolicy().hasHeightForWidth());
         liquorSizeInput->setSizePolicy(sizePolicy1);
+        liquorSizeInput->setMaximum(9999);
 
         gridLayout_6->addWidget(liquorSizeInput, 2, 2, 1, 1);
 
@@ -817,6 +821,7 @@ public:
         wineSizeInput->setObjectName(QString::fromUtf8("wineSizeInput"));
         sizePolicy1.setHeightForWidth(wineSizeInput->sizePolicy().hasHeightForWidth());
         wineSizeInput->setSizePolicy(sizePolicy1);
+        wineSizeInput->setMaximum(9999);
 
         gridLayout_9->addWidget(wineSizeInput, 2, 3, 1, 1);
 
@@ -840,6 +845,7 @@ public:
         wineAbvInput->setObjectName(QString::fromUtf8("wineAbvInput"));
         sizePolicy1.setHeightForWidth(wineAbvInput->sizePolicy().hasHeightForWidth());
         wineAbvInput->setSizePolicy(sizePolicy1);
+        wineAbvInput->setMaximum(100.000000000000000);
 
         gridLayout_9->addWidget(wineAbvInput, 2, 1, 1, 1);
 
@@ -999,7 +1005,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
