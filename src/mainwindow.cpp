@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Upgrade DB version
     // TODO: Remove references to drink_year, drink_month, & drink_day in DB version 4
-    Database::increment_version(storage, 3);
+    Database::increment_version(storage, 5);
 
     add_menubar_items();
 
