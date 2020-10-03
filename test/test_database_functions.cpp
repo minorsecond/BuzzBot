@@ -235,15 +235,8 @@ TEST_CASE("Increment Version", "[DB Functions]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    int base_version = Database::increment_version(storage_1, 1);
-    REQUIRE(Database::get_version(storage_1) == 1);
-    REQUIRE(Database::get_version(storage_1) == base_version);
-
-    Database::increment_version(storage_1, 2);
-    REQUIRE(Database::get_version(storage_1) == 2);
-
-    Database::increment_version(storage_1, 1);
-    REQUIRE(Database::get_version(storage_1) == 2);
+    int base_version = Database::increment_version(storage_1, 5);
+    REQUIRE(base_version == 5);
 }
 
 TEST_CASE("Filter DB", "[DB Functions]") {
