@@ -1005,7 +1005,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1097,7 +1097,7 @@ public:
         beerAbvLabel->setText(QCoreApplication::translate("MainWindow", "ABV", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(beerTab), QCoreApplication::translate("MainWindow", "Beer", nullptr));
         liquorTypeLabel->setText(QCoreApplication::translate("MainWindow", "Type", nullptr));
-        liquorDistillerLabel->setText(QCoreApplication::translate("MainWindow", "Distiller", nullptr));
+        liquorDistillerLabel->setText(QCoreApplication::translate("MainWindow", "Distillery", nullptr));
         liquorDateInputLabel->setText(QCoreApplication::translate("MainWindow", "Date", nullptr));
         liquorSubtypeLabel->setText(QCoreApplication::translate("MainWindow", "Subtype", nullptr));
         liquorSizeLabel->setText(QCoreApplication::translate("MainWindow", "Size (oz)", nullptr));
