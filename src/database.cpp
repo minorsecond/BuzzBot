@@ -211,19 +211,9 @@ int Database::increment_version(Storage storage, int current_version) {
 
     std::cout << "Using DB version " << storage.pragma.user_version() << std::endl;
 
-    if (get_version(storage) == 0) {  // Never use 0
-        storage.pragma.user_version(storage.pragma.user_version() + 1);
-        storage.sync_schema(true);
-    }
-
-    if (get_version(storage) == 1 && current_version == 2) {
-        // In version 1.0.1, this populated the producer column with data from the now-nonexistent brewery column.
-        storage.pragma.user_version(2);
-        storage.sync_schema(true);
-    }
-
-    if (get_version(storage) == 2 && current_version == 3) {
+    if (get_version(storage) < 5 && current_version == 5) {
         // This adds the year, month, day fields into the date field in the correct format.
+        std::cout << "*** Upgrading DB from version " << storage.pragma.user_version() <<  " to 5." << std::endl;
         populate_date_field();
         storage.pragma.user_version(4);
         storage.sync_schema(true);
