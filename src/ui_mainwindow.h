@@ -591,6 +591,8 @@ public:
         beerIbuInput->setObjectName(QString::fromUtf8("beerIbuInput"));
         sizePolicy1.setHeightForWidth(beerIbuInput->sizePolicy().hasHeightForWidth());
         beerIbuInput->setSizePolicy(sizePolicy1);
+        beerIbuInput->setDecimals(0);
+        beerIbuInput->setMaximum(9999.000000000000000);
 
         gridLayout_3->addWidget(beerIbuInput, 2, 1, 1, 1);
 
