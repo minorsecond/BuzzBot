@@ -188,7 +188,7 @@ void MainWindow::update_liquor_types_producers() {
     Drink selected_liquor = Database::get_drink_by_name(storage, "Liquor",input_liquor);
 
     if (!selected_liquor.id || selected_liquor.id == -1) {
-        //clear_fields("Liquor");
+        clear_fields("Liquor");
     } else {
         std::string liquor_type = selected_liquor.type;
         std::string liquor_subtype = selected_liquor.subtype;
