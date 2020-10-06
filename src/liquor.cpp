@@ -116,7 +116,7 @@ void MainWindow::update_liquor_names_producers() {
     ui->liquorAbvInput->setValue(0.0);
     ui->liquorSizeInput->setValue(0);
     ui->liquorRatingInput->setValue(0);
-    ui->liquorNameInput->clear();
+    //ui->liquorNameInput->clear();
     ui->liquorDistillerInput->clear();
 
     for (const auto& selected_drink : selected_drinks) {
@@ -128,9 +128,9 @@ void MainWindow::update_liquor_names_producers() {
         ui->liquorDistillerInput->addItem(distillery);
     }
 
-    for (const auto& drink_name : drink_names) {
-        ui->liquorNameInput->addItem(drink_name);
-    }
+    //for (const auto& drink_name : drink_names) {
+    //    ui->liquorNameInput->addItem(drink_name);
+    //}
 }
 
 void MainWindow::update_liquor_names_types() {
@@ -152,7 +152,7 @@ void MainWindow::update_liquor_names_types() {
     ui->liquorAbvInput->setValue(0.0);
     ui->liquorSizeInput->setValue(0);
     ui->liquorRatingInput->setValue(0);
-    ui->liquorNameInput->clear();
+    //ui->liquorNameInput->clear();
     ui->liquorTypeInput->clear();
     ui->liquorSubtypeInput->clear();
 
@@ -162,9 +162,9 @@ void MainWindow::update_liquor_names_types() {
         subtypes.insert(QString::fromStdString(selected_drink.subtype));
     }
 
-    for (const auto& name : liquor_names) {
-        ui->liquorNameInput->addItem(name);
-    }
+    //for (const auto& name : liquor_names) {
+    //    ui->liquorNameInput->addItem(name);
+    //}
 
     for (const auto& liquor_type : types) {
         ui->liquorTypeInput->addItem(liquor_type);
@@ -188,7 +188,7 @@ void MainWindow::update_liquor_types_producers() {
     Drink selected_liquor = Database::get_drink_by_name(storage, "Liquor",input_liquor);
 
     if (!selected_liquor.id || selected_liquor.id == -1) {
-        clear_fields("Liquor");
+        //clear_fields("Liquor");
     } else {
         std::string liquor_type = selected_liquor.type;
         std::string liquor_subtype = selected_liquor.subtype;
