@@ -112,7 +112,7 @@ void MainWindow::update_beer_names_producers() {
     ui->beerIbuInput->setValue(0.0);
     ui->beerSizeInput->setValue(0);
     ui->beerRatingInput->setValue(0);
-    ui->beerNameInput->clear();
+    //ui->beerNameInput->clear();
     ui->beerBreweryInput->clear();
 
     for (const auto& selected_beer : selected_beers) {
@@ -124,9 +124,9 @@ void MainWindow::update_beer_names_producers() {
         ui->beerBreweryInput->addItem(brewery);
     }
 
-    for (const auto& beer : drink_names) {
-        ui->beerNameInput->addItem(beer);
-    }
+    //for (const auto& beer : drink_names) {
+    //    ui->beerNameInput->addItem(beer);
+    //}
 }
 
 void MainWindow::update_beer_names_types() {
@@ -149,7 +149,7 @@ void MainWindow::update_beer_names_types() {
     ui->beerIbuInput->setValue(0.0);
     ui->beerSizeInput->setValue(0);
     ui->beerRatingInput->setValue(0);
-    ui->beerNameInput->clear();
+    //ui->beerNameInput->clear();
     ui->beerTypeInput->clear();
     ui->beerSubtypeInput->clear();
 
@@ -158,9 +158,9 @@ void MainWindow::update_beer_names_types() {
         types.insert(QString::fromStdString(selected_beer.type));
     }
 
-    for (const auto& name : beer_names) {
-        ui->beerNameInput->addItem(name);
-    }
+    //for (const auto& name : beer_names) {
+    //    ui->beerNameInput->addItem(name);
+    //}
 
     for (const auto& beer_type : types) {
         ui->beerTypeInput->addItem(beer_type);
@@ -186,7 +186,7 @@ void MainWindow::update_beer_types_producers() {
     std::cout << "ID " << selected_beer.id << std::endl;
 
     if (!selected_beer.id || selected_beer.id == -1) {  // Clear fields if new name
-        clear_fields("Beer");
+        //clear_fields("Beer");
     } else {
         std::string beer_type = selected_beer.type;
         std::string beer_subtype = selected_beer.subtype;
