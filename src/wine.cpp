@@ -116,7 +116,7 @@ void MainWindow::update_wine_names_producers() {
     ui->wineAbvInput->setValue(0.0);
     ui->wineSizeInput->setValue(0);
     ui->wineRatingInput->setValue(0);
-    ui->wineNameInput->clear();
+    //ui->wineNameInput->clear();
     ui->wineryInput->clear();
 
     for (const auto& selected_drink : selected_drinks) {
@@ -128,9 +128,9 @@ void MainWindow::update_wine_names_producers() {
         ui->wineryInput->addItem(winery);
     }
 
-    for (const auto& drink_name : drink_names) {
-        ui->wineNameInput->addItem(drink_name);
-    }
+    //for (const auto& drink_name : drink_names) {
+    //    ui->wineNameInput->addItem(drink_name);
+    //}
 }
 
 void MainWindow::update_wine_names_types() {
@@ -152,7 +152,7 @@ void MainWindow::update_wine_names_types() {
     ui->wineAbvInput->setValue(0.0);
     ui->wineSizeInput->setValue(0);
     ui->wineRatingInput->setValue(0);
-    ui->wineNameInput->clear();
+    //ui->wineNameInput->clear();
     ui->wineTypeInput->clear();
     ui->wineSubtypeInput->clear();
 
@@ -162,9 +162,9 @@ void MainWindow::update_wine_names_types() {
         subtypes.insert(QString::fromStdString(selected_drink.subtype));
     }
 
-    for (const auto& name : wine_names) {
-        ui->wineNameInput->addItem(name);
-    }
+    //for (const auto& name : wine_names) {
+    //    ui->wineNameInput->addItem(name);
+    //}
 
     for (const auto& wine_type : types) {
         ui->wineTypeInput->addItem(wine_type);
@@ -189,7 +189,7 @@ void MainWindow::update_wine_types_producers() {
     Drink selected_wine = Database::get_drink_by_name(storage, "Wine",input_wine);
 
     if (!selected_wine.id || selected_wine.id == -1) {
-        clear_fields("Wine");
+        //clear_fields("Wine");
     } else {
         std::string wine_type = selected_wine.type;
         std::string wine_subtype = selected_wine.subtype;
