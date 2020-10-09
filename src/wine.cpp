@@ -189,7 +189,7 @@ void MainWindow::update_wine_types_producers() {
     Drink selected_wine = Database::get_drink_by_name(storage, "Wine",input_wine);
 
     if (!selected_wine.id || selected_wine.id == -1) {
-        //clear_fields("Wine");
+        clear_fields("Wine");
     } else {
         std::string wine_type = selected_wine.type;
         std::string wine_subtype = selected_wine.subtype;

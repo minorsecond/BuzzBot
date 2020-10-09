@@ -986,41 +986,46 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
 
     // Do not clear names!
 
-    if (alcohol_type == "Beer") {
-        //ui->beerBreweryInput->clear();
-        ui->beerBreweryInput->setCurrentText("");
-        //ui->beerTypeInput->clear();
-        ui->beerTypeInput->setCurrentText("");
-        //ui->beerSubtypeInput->clear();
-        ui->beerSubtypeInput->setCurrentText("");
-        ui->beerAbvInput->clear();
-        ui->beerIbuInput->clear();
-        ui->beerSizeInput->clear();
-        ui->beerRatingInput->clear();
-        ui->beerNotesInput->clear();
-    } else if (alcohol_type == "Liquor") {
-        //ui->liquorDistillerInput->clear();
-        ui->liquorDistillerInput->setCurrentText("");
-        //ui->liquorTypeInput->clear();
-        ui->liquorTypeInput->setCurrentText("");
-        //ui->liquorSubtypeInput->clear();
-        ui->liquorSubtypeInput->setCurrentText("");
-        ui->liquorAbvInput->clear();
-        ui->liquorSizeInput->clear();
-        ui->liquorRatingInput->clear();
-        ui->liquorNotesInput->clear();
-    } else if (alcohol_type == "Wine") {
-        //ui->wineryInput->clear();
-        ui->wineryInput->setCurrentText("");
-        //ui->wineTypeInput->clear();
-        ui->wineTypeInput->setCurrentText("");
-        //ui->wineSubtypeInput->clear();
-        ui->wineSubtypeInput->setCurrentText("");
-        ui->wineVintage->clear();
-        ui->wineAbvInput->clear();
-        ui->wineRatingInput->clear();
-        ui->wineSizeInput->clear();
-        ui->wineNotesInput->clear();
+    QItemSelectionModel *selection_model = ui->drinkLogTable->selectionModel();
+    QModelIndexList selected_rows = selection_model->selectedRows();
+
+    if (selected_rows.empty()) {
+        if (alcohol_type == "Beer") {
+            //ui->beerBreweryInput->clear();
+            //ui->beerBreweryInput->setCurrentText("");
+            //ui->beerTypeInput->clear();
+            //ui->beerTypeInput->setCurrentText("");
+            //ui->beerSubtypeInput->clear();
+            //ui->beerSubtypeInput->setCurrentText("");
+            ui->beerAbvInput->clear();
+            ui->beerIbuInput->clear();
+            ui->beerSizeInput->clear();
+            ui->beerRatingInput->clear();
+            ui->beerNotesInput->clear();
+        } else if (alcohol_type == "Liquor") {
+            //ui->liquorDistillerInput->clear();
+            //ui->liquorDistillerInput->setCurrentText("");
+            //ui->liquorTypeInput->clear();
+            //ui->liquorTypeInput->setCurrentText("");
+            //ui->liquorSubtypeInput->clear();
+            //ui->liquorSubtypeInput->setCurrentText("");
+            ui->liquorAbvInput->clear();
+            ui->liquorSizeInput->clear();
+            ui->liquorRatingInput->clear();
+            ui->liquorNotesInput->clear();
+        } else if (alcohol_type == "Wine") {
+            //ui->wineryInput->clear();
+            //ui->wineryInput->setCurrentText("");
+            //ui->wineTypeInput->clear();
+            //ui->wineTypeInput->setCurrentText("");
+            //ui->wineSubtypeInput->clear();
+            //ui->wineSubtypeInput->setCurrentText("");
+            ui->wineVintage->clear();
+            ui->wineAbvInput->clear();
+            ui->wineRatingInput->clear();
+            ui->wineSizeInput->clear();
+            ui->wineNotesInput->clear();
+        }
     }
 }
 
