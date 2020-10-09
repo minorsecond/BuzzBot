@@ -186,7 +186,7 @@ void MainWindow::update_beer_types_producers() {
     std::cout << "ID " << selected_beer.id << std::endl;
 
     if (!selected_beer.id || selected_beer.id == -1) {  // Clear fields if new name
-        //clear_fields("Beer");
+        clear_fields("Beer");
     } else {
         std::string beer_type = selected_beer.type;
         std::string beer_subtype = selected_beer.subtype;
