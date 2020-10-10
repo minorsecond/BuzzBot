@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
     program_options(true);
 
     // Upgrade DB version
-    // TODO: Remove references to drink_year, drink_month, & drink_day in DB version 4
+    // TODO: Remove references to drink_year, drink_month, & drink_day in DB version 6
     Database::increment_version(storage, 5);
 
     add_menubar_items();
@@ -70,7 +70,7 @@ MainWindow::MainWindow(QWidget *parent)
     reset_fields();
 
     // Start the stat pane update stat_update_timer
-    QTimer *stats_timer = new QTimer(this);
+    auto *stats_timer = new QTimer(this);
     connect(stats_timer, &QTimer::timeout, this, &MainWindow::update_stats_if_new_day);
     stats_timer->start(5000);
 }
@@ -1095,7 +1095,6 @@ void MainWindow::update_stats_if_new_day() {
     /*
      * Update the stats panel if day of the week isn't the same as the date in stats panel.
      */
-
 
     std::time_t t = std::time(nullptr);
     std::stringstream ssTp;
