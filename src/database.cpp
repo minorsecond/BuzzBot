@@ -81,7 +81,7 @@ Drink Database::read_row(int row_num, Storage storage) {
      * @return beer: The results of the database query.
      */
     
-    Drink beer = storage.get<Drink>(row_num);
+    auto beer = storage.get<Drink>(row_num);
     return beer;
 }
 
