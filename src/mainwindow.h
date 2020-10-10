@@ -93,5 +93,6 @@ private slots:
     void producer_input_changed(const QString&);
     void tab_changed();
     void clicked_clear_button();
+    void update_stats_if_new_day();
 };
 #endif // MAINWINDOW_H
