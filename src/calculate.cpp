@@ -251,6 +251,12 @@ bool Calculate::compare_date(const Drink &a, const Drink &b) {
 }
 
 std::string Calculate::double_to_string(double input_double) {
+    /*
+     * Convert a double to a string with two decimal points.
+     * @param input_double: Input double to be converted
+     * @return output_string: string-formatted double with two decimal points.
+     */
+
     double converted_double;
     converted_double = std::floor((input_double * 100.0) + .5) / 100.0;
 
