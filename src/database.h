@@ -69,8 +69,6 @@ public:
     static std::vector<Drink> get_beers_by_brewery(Storage storage, std::string brewery);
     static int get_version(Storage storage);
     static int increment_version(Storage storage, int current_version);
-    static void populate_producer_column();
-    static void copy_beers_to_drinks_table();
     static std::vector<Drink> sort_by_date_id(std::vector<Drink> drinks);
     static std::string get_latest_notes(Storage storage, const std::string& name, const std::string& alcohol_type);
 
