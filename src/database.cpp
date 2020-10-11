@@ -163,7 +163,7 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
      * @return drink_by_name: A Drink matching the name.
      */
 
-    // TODO: Filter by alcohol_type that should be passed in by selected tabwidget tab
+    // TODO: Filter by alcohol_type that should be passed in by selected tab widget tab
     std::vector<Drink> drink_by_name_result = storage.get_all<Drink>(where(c(&Drink::name) == std::move(beer_name) && c(&Drink::alcohol_type) == std::move(alcohol_type)));
     Drink drink_by_name;
 
@@ -213,13 +213,7 @@ bool Database::compare_date(const Drink &a, const Drink &b) {
      * @return: True if second date is more recent than the first date. Else, false.
      */
 
-    if (a.drink_year < b.drink_year) {
-        return true;
-    } else if (a.drink_year == b.drink_year && a.drink_month < b.drink_month) {
-        return true;
-    } else if (a.drink_year == b.drink_year && a.drink_month == b.drink_month && a.drink_day < b.drink_day) {
-        return true;
-    } else if (a.drink_year == b.drink_year && a.drink_month == b.drink_month && a.drink_day == b.drink_day && a.id < b.id) {
+    if (a.date < b.date || (a.date == b.date && a.id < b.id)) {
         return true;
     } else {
         return false;
