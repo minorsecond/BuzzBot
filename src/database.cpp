@@ -145,7 +145,6 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
     } else if (filter_type == "After Date") {
         std::cout << "Filter date: " << filter_text << std::endl;
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::date) >= filter_text));
-        std::cout << "Size of filtered drinks: " << filtered_drinks.size() << std::endl;
 
     } else if (filter_type == "Rating") {
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::rating) == filter_text));
@@ -260,7 +259,6 @@ void Database::populate_date_field() {
         day_padded << std::setw(2) << std::setfill('0') << drink.drink_day;
         std::string formatted_date = std::to_string(drink.drink_year) + "-" + month_padded.str() + "-" + day_padded.str();
         drink.date = formatted_date;
-        std::cout << "Formatted date: " << formatted_date << std::endl;
         update(storage, drink);
     }
 }
