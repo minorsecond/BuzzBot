@@ -183,8 +183,6 @@ void MainWindow::update_beer_types_producers() {
     std::string input_beer = ui->beerNameInput->currentText().toStdString();
     Drink selected_beer = Database::get_drink_by_name(storage, "Beer", input_beer);
 
-    std::cout << "ID " << selected_beer.id << std::endl;
-
     if (!selected_beer.id || selected_beer.id == -1) {  // Clear fields if new name
         clear_fields("Beer");
     } else {

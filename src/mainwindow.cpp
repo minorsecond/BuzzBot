@@ -80,7 +80,6 @@ void MainWindow::add_menubar_items() {
      * Add items to the system menubar.
      */
 
-
     auto * preferences_action = new QAction("Preferences");
     auto * about_action = new QAction("About");
     auto * export_action = new QAction("Export...");
@@ -325,7 +324,6 @@ void MainWindow::reset_fields() {
     std::string alcohol_type = get_current_tab();
 
     if (alcohol_type == "Beer") {
-        std::cout << "Updating beer fields on name change" << std::endl;
         update_beer_fields();
         update_types_producers_on_name_change();
 
@@ -427,8 +425,6 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
     } else if (drink_at_row.alcohol_type == "Wine") {
         populate_wine_fields(drink_at_row);
         ui->tabWidget->setCurrentIndex(2);
-    } else {
-        std::cout << "Not updating fields because not in correct tab." << std::endl;
     }
 }
 
@@ -525,7 +521,7 @@ void MainWindow::program_options(bool write) {
     std::string read_sex;
 
     if (write) {
-        std::cout << "Writing user settings." << std::endl;
+        std::cout << "Writing user settings to " << path << std::endl;
         std::string sex_setting = "sex:" + options.sex;
         std::string start_day = "start_day:" + options.weekday_start;
         std::string date_calculation_method = "date_calculation_method:" + options.date_calculation_method;
@@ -804,7 +800,6 @@ void MainWindow::name_input_changed(const QString&) {
      * Update fields when a beer name is chosen.
      */
 
-    std::cout << "Name input changed" << std::endl;
     update_types_producers_on_name_change();
 }
 
@@ -1034,7 +1029,7 @@ void MainWindow::open_std_drink_calculator() {
      * Open the standard drink calculator dialog box.
      */
 
-    auto *  std_drink_calculator = new StandardDrinkCalc(this);
+    auto * std_drink_calculator = new StandardDrinkCalc(this);
     std_drink_calculator->show();
 }
 
@@ -1102,7 +1097,6 @@ void MainWindow::update_stats_if_new_day() {
     std::string weekday_name = ssTp.str();
 
     if (ui->drinksThisWeekLabel->text().toStdString().find(weekday_name) == std::string::npos) {
-        std::cout << "Weekdays don't match, updating stats panel" << std::endl;
         update_stat_panel();
     }
 }
