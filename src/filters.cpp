@@ -85,9 +85,7 @@ void MainWindow::enable_filter_text(const QString&) {
      * Enable the filter text combobox when user selects anything other than None in the filter category box.
      */
 
-    if (ui->filterCategoryInput->currentText().toStdString() == "None")
-        ui->filterTextInput->setDisabled(true);
-    else
+    (ui->filterCategoryInput->currentText().toStdString() == "None") ? ui->filterTextInput->setDisabled(true) : \
         ui->filterTextInput->setEnabled(true);
 
     std::string filter_type = ui->filterCategoryInput->currentText().toStdString();
