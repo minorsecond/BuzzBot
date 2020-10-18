@@ -102,6 +102,8 @@ void MainWindow::update_liquor_names_producers() {
      * Update the names and distillery fields of the liquor tab when the type changes.
      */
 
+    // TODO: Remove this in future if necessary
+
     std::string alcohol_type = get_current_tab();
     std::set<QString> drink_names;
     std::set<QString> producer_names;
@@ -137,6 +139,8 @@ void MainWindow::update_liquor_names_types() {
     /*
      * Update the name and type on the liquor tab when the distillery changes.
      */
+
+    // TODO: Remove this in future if necessary
 
     std::string input_distillery = ui->liquorDistillerInput->currentText().toStdString();
     std::vector<Drink> selected_drinks = Database::get_beers_by_brewery(storage, input_distillery);

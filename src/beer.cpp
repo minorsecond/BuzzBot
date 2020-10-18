@@ -99,6 +99,8 @@ void MainWindow::update_beer_names_producers() {
      * Update the names and breweries fields of the beer tab if type changes.
      */
 
+    // TODO: Remove this in future if necessary
+
     std::set<QString> drink_names;
     std::set<QString> producer_names;
     std::string input_type = ui->beerTypeInput->currentText().toStdString();
@@ -133,6 +135,8 @@ void MainWindow::update_beer_names_types() {
     /*
      * Update the name and type on the beer tab if brewery changes.
      */
+
+    // TODO: Remove this in future if necessary
 
     std::string input_brewery = ui->beerBreweryInput->currentText().toStdString();
     std::vector<Drink> selected_beers = Database::get_beers_by_brewery(storage, input_brewery);
