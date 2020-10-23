@@ -40,21 +40,8 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
     output_csv << "ID\n";
 
     for (const auto& drink : drinks) {
-        std::string ibu;
-        std::string vintage;
-
-        // Formatters
-        if (drink.ibu == -1) {
-            ibu = "";
-        } else {
-            ibu = std::to_string(drink.ibu);
-        }
-
-        if (drink.vintage == -999) {
-            vintage = "";
-        } else {
-            vintage = std::to_string(drink.vintage);
-        }
+        std::string ibu = (drink.ibu == -1) ? "" : std::to_string(drink.ibu);
+        std::string vintage = (drink.vintage == -999) ? "" : std::to_string(drink.vintage);
 
         output_csv << std::to_string(drink.drink_year) + ",";
         output_csv << std::to_string(drink.drink_month) + ",";

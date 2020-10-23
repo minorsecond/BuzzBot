@@ -30,6 +30,13 @@ double Calculate::oz_alcohol(double abv, int amount) {
 double Calculate::standard_drinks_remaining(const std::string& sex, const std::string& standard, int drink_limit, double standard_drinks_consumed) {
     /*
      * Calculate the number of standard drinks remaining for the user this week.
+     *
+     * Male low risk: 4 drinks daily, 14 per week.
+     * Male high risk: Over 5 drinks within 2 hours or over 14 drinks per week.
+     *
+     * Female low risk: 3 drinks daily, 7 per week.
+     * Female high risk: over 4 drinks within 2 hours or over 7 drinks per week.
+     *
      * @param sex: The sex of the user.
      * @param standard_drinks_consumed: The number of standard drinks consumed so far this week.
      */
@@ -46,15 +53,7 @@ double Calculate::standard_drinks_remaining(const std::string& sex, const std::s
         }
     }
 
-    if (sex == "male") {
-        // Low risk: 4 drinks daily, 14 per week
-        // Binge drinking: over 5 drinks within 2 hours
-        weekly_drinks_remaining = drink_limit-standard_drinks_consumed;
-    } else {
-        // Low risk: 3 drinks daily, 7 per week
-        // Binge drinking: over 4 drinks within 2 hours
-        weekly_drinks_remaining = drink_limit-standard_drinks_consumed;
-    }
+    (sex == "male") ? weekly_drinks_remaining = drink_limit - standard_drinks_consumed : weekly_drinks_remaining = drink_limit - standard_drinks_consumed;
 
     return weekly_drinks_remaining;
 }
