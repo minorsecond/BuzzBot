@@ -103,6 +103,8 @@ void MainWindow::update_wine_names_producers() {
      * Update the names and winery fields of the wine tab on type change.
      */
 
+    // TODO: Remove this in future if necessary
+
     std::set<QString> drink_names;
     std::set<QString> producer_names;
 
@@ -137,6 +139,8 @@ void MainWindow::update_wine_names_types() {
     /*
      * Update the name and type on the liquor tab on winery change.
      */
+
+    // TODO: Remove this in future if necessary
 
     std::string input_winery = ui->wineryInput->currentText().toStdString();
     std::vector<Drink> selected_drinks = Database::get_beers_by_brewery(storage, input_winery);
