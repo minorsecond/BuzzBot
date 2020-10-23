@@ -99,6 +99,8 @@ void MainWindow::update_beer_names_producers() {
      * Update the names and breweries fields of the beer tab if type changes.
      */
 
+    // TODO: Remove this in future if necessary
+
     std::set<QString> drink_names;
     std::set<QString> producer_names;
     std::string input_type = ui->beerTypeInput->currentText().toStdString();
@@ -112,7 +114,7 @@ void MainWindow::update_beer_names_producers() {
     ui->beerIbuInput->setValue(0.0);
     ui->beerSizeInput->setValue(0);
     ui->beerRatingInput->setValue(0);
-    ui->beerNameInput->clear();
+    //ui->beerNameInput->clear();
     ui->beerBreweryInput->clear();
 
     for (const auto& selected_beer : selected_beers) {
@@ -124,15 +126,17 @@ void MainWindow::update_beer_names_producers() {
         ui->beerBreweryInput->addItem(brewery);
     }
 
-    for (const auto& beer : drink_names) {
-        ui->beerNameInput->addItem(beer);
-    }
+    //for (const auto& beer : drink_names) {
+    //    ui->beerNameInput->addItem(beer);
+    //}
 }
 
 void MainWindow::update_beer_names_types() {
     /*
      * Update the name and type on the beer tab if brewery changes.
      */
+
+    // TODO: Remove this in future if necessary
 
     std::string input_brewery = ui->beerBreweryInput->currentText().toStdString();
     std::vector<Drink> selected_beers = Database::get_beers_by_brewery(storage, input_brewery);
@@ -149,7 +153,7 @@ void MainWindow::update_beer_names_types() {
     ui->beerIbuInput->setValue(0.0);
     ui->beerSizeInput->setValue(0);
     ui->beerRatingInput->setValue(0);
-    ui->beerNameInput->clear();
+    //ui->beerNameInput->clear();
     ui->beerTypeInput->clear();
     ui->beerSubtypeInput->clear();
 
@@ -158,9 +162,9 @@ void MainWindow::update_beer_names_types() {
         types.insert(QString::fromStdString(selected_beer.type));
     }
 
-    for (const auto& name : beer_names) {
-        ui->beerNameInput->addItem(name);
-    }
+    //for (const auto& name : beer_names) {
+    //    ui->beerNameInput->addItem(name);
+    //}
 
     for (const auto& beer_type : types) {
         ui->beerTypeInput->addItem(beer_type);
@@ -182,8 +186,6 @@ void MainWindow::update_beer_types_producers() {
 
     std::string input_beer = ui->beerNameInput->currentText().toStdString();
     Drink selected_beer = Database::get_drink_by_name(storage, "Beer", input_beer);
-
-    std::cout << "ID " << selected_beer.id << std::endl;
 
     if (!selected_beer.id || selected_beer.id == -1) {  // Clear fields if new name
         clear_fields("Beer");

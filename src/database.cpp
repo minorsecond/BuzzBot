@@ -81,7 +81,7 @@ Drink Database::read_row(int row_num, Storage storage) {
      * @return beer: The results of the database query.
      */
     
-    Drink beer = storage.get<Drink>(row_num);
+    auto beer = storage.get<Drink>(row_num);
     return beer;
 }
 
@@ -142,23 +142,9 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::producer) == filter_text));
     } else if (filter_type == "Alcohol Type") {
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::alcohol_type) == filter_text));
-    } else if (filter_type == "Date") {
-        int year = stoi(filter_text.substr(6, 8));
-        int month = stoi(filter_text.substr(3, 2));
-        int day = stoi(filter_text.substr(0, 2));
-        filtered_drinks = storage.get_all<Drink>(where(c(&Drink::drink_year) == year && c(&Drink::drink_month) == month &&
-                                                      c(&Drink::drink_day) == day));
     } else if (filter_type == "After Date") {
-        //int year = stoi(filter_text.substr(6, 8));
-        //int month = stoi(filter_text.substr(3, 2));
-        //int day = stoi(filter_text.substr(0, 2));
-
-        //filtered_drinks = storage.get_all<Drink>(where(c(&Drink::drink_year) == year && c(&Drink::drink_month) == month &&
-        //                                              c(&Drink::drink_day) >= day));
-
         std::cout << "Filter date: " << filter_text << std::endl;
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::date) >= filter_text));
-        std::cout << "Size of filtered drinks: " << filtered_drinks.size() << std::endl;
 
     } else if (filter_type == "Rating") {
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::rating) == filter_text));
@@ -177,7 +163,7 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
      * @return drink_by_name: A Drink matching the name.
      */
 
-    // TODO: Filter by alcohol_type that should be passed in by selected tabwidget tab
+    // TODO: Filter by alcohol_type that should be passed in by selected tab widget tab
     std::vector<Drink> drink_by_name_result = storage.get_all<Drink>(where(c(&Drink::name) == std::move(beer_name) && c(&Drink::alcohol_type) == std::move(alcohol_type)));
     Drink drink_by_name;
 
@@ -215,7 +201,7 @@ int Database::increment_version(Storage storage, int current_version) {
         // This adds the year, month, day fields into the date field in the correct format.
         std::cout << "*** Upgrading DB from version " << storage.pragma.user_version() <<  " to 5." << std::endl;
         populate_date_field();
-        storage.pragma.user_version(4);
+        storage.pragma.user_version(current_version);
         storage.sync_schema(true);
     }
     return storage.pragma.user_version();
@@ -227,13 +213,7 @@ bool Database::compare_date(const Drink &a, const Drink &b) {
      * @return: True if second date is more recent than the first date. Else, false.
      */
 
-    if (a.drink_year < b.drink_year) {
-        return true;
-    } else if (a.drink_year == b.drink_year && a.drink_month < b.drink_month) {
-        return true;
-    } else if (a.drink_year == b.drink_year && a.drink_month == b.drink_month && a.drink_day < b.drink_day) {
-        return true;
-    } else if (a.drink_year == b.drink_year && a.drink_month == b.drink_month && a.drink_day == b.drink_day && a.id < b.id) {
+    if (a.date < b.date || (a.date == b.date && a.id < b.id)) {
         return true;
     } else {
         return false;
@@ -273,7 +253,6 @@ void Database::populate_date_field() {
         day_padded << std::setw(2) << std::setfill('0') << drink.drink_day;
         std::string formatted_date = std::to_string(drink.drink_year) + "-" + month_padded.str() + "-" + day_padded.str();
         drink.date = formatted_date;
-        std::cout << "Formatted date: " << formatted_date << std::endl;
         update(storage, drink);
     }
 }

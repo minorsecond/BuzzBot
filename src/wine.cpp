@@ -103,6 +103,8 @@ void MainWindow::update_wine_names_producers() {
      * Update the names and winery fields of the wine tab on type change.
      */
 
+    // TODO: Remove this in future if necessary
+
     std::set<QString> drink_names;
     std::set<QString> producer_names;
 
@@ -116,7 +118,7 @@ void MainWindow::update_wine_names_producers() {
     ui->wineAbvInput->setValue(0.0);
     ui->wineSizeInput->setValue(0);
     ui->wineRatingInput->setValue(0);
-    ui->wineNameInput->clear();
+    //ui->wineNameInput->clear();
     ui->wineryInput->clear();
 
     for (const auto& selected_drink : selected_drinks) {
@@ -128,15 +130,17 @@ void MainWindow::update_wine_names_producers() {
         ui->wineryInput->addItem(winery);
     }
 
-    for (const auto& drink_name : drink_names) {
-        ui->wineNameInput->addItem(drink_name);
-    }
+    //for (const auto& drink_name : drink_names) {
+    //    ui->wineNameInput->addItem(drink_name);
+    //}
 }
 
 void MainWindow::update_wine_names_types() {
     /*
      * Update the name and type on the liquor tab on winery change.
      */
+
+    // TODO: Remove this in future if necessary
 
     std::string input_winery = ui->wineryInput->currentText().toStdString();
     std::vector<Drink> selected_drinks = Database::get_beers_by_brewery(storage, input_winery);
@@ -152,7 +156,7 @@ void MainWindow::update_wine_names_types() {
     ui->wineAbvInput->setValue(0.0);
     ui->wineSizeInput->setValue(0);
     ui->wineRatingInput->setValue(0);
-    ui->wineNameInput->clear();
+    //ui->wineNameInput->clear();
     ui->wineTypeInput->clear();
     ui->wineSubtypeInput->clear();
 
@@ -162,9 +166,9 @@ void MainWindow::update_wine_names_types() {
         subtypes.insert(QString::fromStdString(selected_drink.subtype));
     }
 
-    for (const auto& name : wine_names) {
-        ui->wineNameInput->addItem(name);
-    }
+    //for (const auto& name : wine_names) {
+    //    ui->wineNameInput->addItem(name);
+    //}
 
     for (const auto& wine_type : types) {
         ui->wineTypeInput->addItem(wine_type);

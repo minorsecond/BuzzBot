@@ -102,6 +102,8 @@ void MainWindow::update_liquor_names_producers() {
      * Update the names and distillery fields of the liquor tab when the type changes.
      */
 
+    // TODO: Remove this in future if necessary
+
     std::string alcohol_type = get_current_tab();
     std::set<QString> drink_names;
     std::set<QString> producer_names;
@@ -116,7 +118,7 @@ void MainWindow::update_liquor_names_producers() {
     ui->liquorAbvInput->setValue(0.0);
     ui->liquorSizeInput->setValue(0);
     ui->liquorRatingInput->setValue(0);
-    ui->liquorNameInput->clear();
+    //ui->liquorNameInput->clear();
     ui->liquorDistillerInput->clear();
 
     for (const auto& selected_drink : selected_drinks) {
@@ -128,15 +130,17 @@ void MainWindow::update_liquor_names_producers() {
         ui->liquorDistillerInput->addItem(distillery);
     }
 
-    for (const auto& drink_name : drink_names) {
-        ui->liquorNameInput->addItem(drink_name);
-    }
+    //for (const auto& drink_name : drink_names) {
+    //    ui->liquorNameInput->addItem(drink_name);
+    //}
 }
 
 void MainWindow::update_liquor_names_types() {
     /*
      * Update the name and type on the liquor tab when the distillery changes.
      */
+
+    // TODO: Remove this in future if necessary
 
     std::string input_distillery = ui->liquorDistillerInput->currentText().toStdString();
     std::vector<Drink> selected_drinks = Database::get_beers_by_brewery(storage, input_distillery);
@@ -152,7 +156,7 @@ void MainWindow::update_liquor_names_types() {
     ui->liquorAbvInput->setValue(0.0);
     ui->liquorSizeInput->setValue(0);
     ui->liquorRatingInput->setValue(0);
-    ui->liquorNameInput->clear();
+    //ui->liquorNameInput->clear();
     ui->liquorTypeInput->clear();
     ui->liquorSubtypeInput->clear();
 
@@ -162,9 +166,9 @@ void MainWindow::update_liquor_names_types() {
         subtypes.insert(QString::fromStdString(selected_drink.subtype));
     }
 
-    for (const auto& name : liquor_names) {
-        ui->liquorNameInput->addItem(name);
-    }
+    //for (const auto& name : liquor_names) {
+    //    ui->liquorNameInput->addItem(name);
+    //}
 
     for (const auto& liquor_type : types) {
         ui->liquorTypeInput->addItem(liquor_type);
