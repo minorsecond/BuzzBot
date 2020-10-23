@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
     program_options(true);
 
     // Upgrade DB version
-    // TODO: Remove references to drink_year, drink_month, & drink_day in DB version 4
+    // TODO: Remove references to drink_year, drink_month, & drink_day in DB version 6
     Database::increment_version(storage, 5);
 
     add_menubar_items();
@@ -70,7 +70,7 @@ MainWindow::MainWindow(QWidget *parent)
     reset_fields();
 
     // Start the stat pane update stat_update_timer
-    QTimer *stats_timer = new QTimer(this);
+    auto *stats_timer = new QTimer(this);
     connect(stats_timer, &QTimer::timeout, this, &MainWindow::update_stats_if_new_day);
     stats_timer->start(5000);
 }
@@ -79,7 +79,6 @@ void MainWindow::add_menubar_items() {
     /*
      * Add items to the system menubar.
      */
-
 
     auto * preferences_action = new QAction("Preferences");
     auto * about_action = new QAction("About");
@@ -192,6 +191,8 @@ void MainWindow::add_slot_connections() {
         corner_button->disconnect();
     }
 
+    // TODO: Remove connections for type and producer inputs later if decided they won't be needed
+
     // Slot connections
     connect(corner_button, &QAbstractButton::clicked, this, &MainWindow::reset_table_sort);
     connect(ui->drinkLogTable->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::populate_fields);
@@ -202,16 +203,16 @@ void MainWindow::add_slot_connections() {
     connect(ui->deleteRowButton, &QPushButton::clicked, this, &MainWindow::delete_row);
     connect(ui->beerNameInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::name_input_changed);
     connect(ui->beerNameInput, &QComboBox::editTextChanged, this, &MainWindow::name_input_changed);
-    connect(ui->beerTypeInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::type_input_changed);
-    connect(ui->beerBreweryInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::producer_input_changed);
+    //connect(ui->beerTypeInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::type_input_changed);
+    //connect(ui->beerBreweryInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::producer_input_changed);
     connect(ui->liquorNameInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::name_input_changed);
     connect(ui->liquorNameInput, &QComboBox::editTextChanged, this, &MainWindow::name_input_changed);
-    connect(ui->liquorTypeInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::type_input_changed);
-    connect(ui->liquorDistillerInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::producer_input_changed);
+    //connect(ui->liquorTypeInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::type_input_changed);
+    //connect(ui->liquorDistillerInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::producer_input_changed);
     connect(ui->wineNameInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::name_input_changed);
     connect(ui->wineNameInput, &QComboBox::editTextChanged, this, &MainWindow::name_input_changed);
-    connect(ui->wineTypeInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::type_input_changed);
-    connect(ui->wineryInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::producer_input_changed);
+    //connect(ui->wineTypeInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::type_input_changed);
+    //connect(ui->wineryInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::producer_input_changed);
     connect(ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::tab_changed);
 }
 
@@ -322,7 +323,6 @@ void MainWindow::reset_fields() {
     std::string alcohol_type = get_current_tab();
 
     if (alcohol_type == "Beer") {
-        std::cout << "Updating beer fields on name change" << std::endl;
         update_beer_fields();
         update_types_producers_on_name_change();
 
@@ -419,8 +419,6 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
     } else if (drink_at_row.alcohol_type == "Wine") {
         populate_wine_fields(drink_at_row);
         ui->tabWidget->setCurrentIndex(2);
-    } else {
-        std::cout << "Not updating fields because not in correct tab." << std::endl;
     }
 }
 
@@ -517,7 +515,7 @@ void MainWindow::program_options(bool write) {
     std::string read_sex;
 
     if (write) {
-        std::cout << "Writing user settings." << std::endl;
+        std::cout << "Writing user settings to " << path << std::endl;
         std::string sex_setting = "sex:" + options.sex;
         std::string start_day = "start_day:" + options.weekday_start;
         std::string date_calculation_method = "date_calculation_method:" + options.date_calculation_method;
@@ -796,7 +794,6 @@ void MainWindow::name_input_changed(const QString&) {
      * Update fields when a beer name is chosen.
      */
 
-    std::cout << "Name input changed" << std::endl;
     update_types_producers_on_name_change();
 }
 
@@ -1026,7 +1023,7 @@ void MainWindow::open_std_drink_calculator() {
      * Open the standard drink calculator dialog box.
      */
 
-    auto *  std_drink_calculator = new StandardDrinkCalc(this);
+    auto * std_drink_calculator = new StandardDrinkCalc(this);
     std_drink_calculator->show();
 }
 
@@ -1088,14 +1085,12 @@ void MainWindow::update_stats_if_new_day() {
      * Update the stats panel if day of the week isn't the same as the date in stats panel.
      */
 
-
     std::time_t t = std::time(nullptr);
     std::stringstream ssTp;
     ssTp << std::put_time(std::localtime(&t), "%A");
     std::string weekday_name = ssTp.str();
 
     if (ui->drinksThisWeekLabel->text().toStdString().find(weekday_name) == std::string::npos) {
-        std::cout << "Weekdays don't match, updating stats panel" << std::endl;
         update_stat_panel();
     }
 }
