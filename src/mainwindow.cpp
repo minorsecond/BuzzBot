@@ -26,6 +26,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->setupUi(this);
 
+    // Select entire row vs just a cell
+    ui->drinkLogTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+
     // Read options and create if the file doesn't exist
     // TODO: Create the settings file within program_options()
     program_options(false);
