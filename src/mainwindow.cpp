@@ -26,6 +26,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->setupUi(this);
 
+    // Select entire row vs just a cell
+    ui->drinkLogTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+
     // Read options and create if the file doesn't exist
     // TODO: Create the settings file within program_options()
     program_options(false);
@@ -262,11 +265,8 @@ void MainWindow::submit_button_clicked() {
     } else {
         // Handle updating existing rows
         QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
-        if (select->hasSelection()) {
-            update_selected_row(select, entered_drink);
-        } else {
-            add_new_row(entered_drink);
-        }
+        (select->hasSelection()) ? update_selected_row(select, entered_drink) : add_new_row(entered_drink);
+
         update_table();
         if (selected_rows.empty()) {
             reset_fields();  // Reset fields if not updating a row
@@ -388,12 +388,7 @@ void MainWindow::update_table() {
         std::string notes = drink.notes;
 
         // Handle blank IBU
-        auto *ibu = new QTableWidgetItem;
-        if (drink.ibu == -1.0) {  // -1 denotes no IBU value
-            *ibu = QTableWidgetItem("");
-        } else {
-            *ibu = QTableWidgetItem(Calculate::double_to_string(drink.ibu).c_str());
-        }
+        auto *ibu = (drink.ibu == -1.0) ? new QTableWidgetItem("") : new QTableWidgetItem(Calculate::double_to_string(drink.ibu).c_str());
 
         ui->drinkLogTable->setItem(table_row_num, 0, date_qtw);
         ui->drinkLogTable->setItem(table_row_num, 1, name);
