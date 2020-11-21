@@ -23,7 +23,6 @@ enable_testing()
 
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 find_package(SQLite3 REQUIRED)
-find_package(Boost COMPONENTS filesystem)
 find_package(Catch2 REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -45,8 +44,8 @@ add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${
 add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/mini-icon.png ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/mini-icon.png)
 
 set_target_properties(BuzzBot PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
-target_link_libraries(BuzzBot Qt5::Core Qt5::Widgets SQLite3 Boost::filesystem "-framework CoreFoundation")
-target_link_libraries(functions_test SQLite3 Boost::filesystem Catch2::Catch2 Qt5::Core)
+target_link_libraries(BuzzBot Qt5::Core Qt5::Widgets SQLite3 "-framework CoreFoundation")
+target_link_libraries(functions_test SQLite3 Catch2::Catch2 Qt5::Core)
 
 set_target_properties(BuzzBot PROPERTIES
         MACOSX_BUNDLE_BUNDLE_NAME "BuzzBot"
