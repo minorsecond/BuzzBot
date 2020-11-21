@@ -1,8 +1,8 @@
 #include "database.h"
-#include <boost/filesystem.hpp>
 #include <utility>
 #include <iostream>
 #include <QStandardPaths>
+#include <filesystem>
 
 using namespace sqlite_orm;
 std::string Database::path() {
@@ -14,7 +14,9 @@ std::string Database::path() {
     // Find path to application support directory
     std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
     std::string full_path = directory + "/buzzbot.db";
-    boost::filesystem::create_directory(directory);
+    std::filesystem::create_directory(directory);
+
+    std::cout << "Using DB located at " << full_path << std::endl;
 
     return full_path;
 }

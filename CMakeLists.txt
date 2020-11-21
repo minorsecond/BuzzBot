@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libproc.h")
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
 
+set(Qt5_DIR "/Users/rwardrup/Qt/5.15.0/clang_64/lib/cmake/Qt5")
+
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     message("Building debug")
     add_compile_options(-Wall -g -o0 --coverage)
