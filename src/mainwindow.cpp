@@ -6,8 +6,9 @@
 #include "exporters.h"
 #include "calculate.h"
 #include <iomanip>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <iostream>
+#include <fstream>
 #include <QComboBox>
 #include <QMessageBox>
 #include <QStandardPaths>
@@ -501,7 +502,7 @@ std::string MainWindow::settings_path() {
 
     std::string settings_path = directory + "/buzzbot_settings.conf";
 
-    boost::filesystem::create_directory(directory);
+    std::filesystem::create_directory(directory);
 
     return settings_path;
 }
