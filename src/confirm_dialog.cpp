@@ -15,7 +15,9 @@ ConfirmDialog::ConfirmDialog(QWidget *parent, const std::string& action) {
 
     if (action == "Delete") {
         ui.actionConfirmationLabel->setText("You are attempting to delete a row. Click OK to confirm.");
-    } else {
+    } else if (action == "Update") {
         ui.actionConfirmationLabel->setText("You are attempting to edit a row. Click OK to confirm.");
+    } else if (action == "Clear Data") {
+        ui.actionConfirmationLabel->setText("You are attempting to clear the database. Click OK to confirm.");
     }
 }
