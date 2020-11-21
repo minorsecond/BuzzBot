@@ -65,6 +65,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->wineVintage->setMaximum(QDate::currentDate().year());
     ui->wineVintage->setMinimum(0);
 
+    // Rounded rect frames
+    ui->frame->setStyleSheet("QWidget#frame{ border: 1px solid grey; border-radius: 6px; }");
+    ui->frame_2->setStyleSheet("QWidget#frame_2{ border: 1px solid grey; border-radius: 6px; }");
+    ui->frame_4->setStyleSheet("QWidget#frame_4{ border: 1px solid grey; border-radius: 6px; }");
+
     // Sort table by date column, by default
     reset_table_sort();
     configure_table();
