@@ -17,6 +17,12 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
     ui.setupUi(this);
     this->setFixedSize(615, 195);
 
+    // Rounded rect frames
+    ui.frame->setStyleSheet("QWidget#frame{ border: 1px solid grey; border-radius: 6px; }");
+    ui.frame_2->setStyleSheet("QWidget#frame_2{ border: 1px solid grey; border-radius: 6px; }");
+    ui.frame_3->setStyleSheet("QWidget#frame_3{ border: 1px solid grey; border-radius: 6px; }");
+    ui.weeklyLimitFrame->setStyleSheet("QWidget#weeklyLimitFrame{ border: 1px solid grey; border-radius: 6px; }");
+
     if (options.sex == "male") {
         ui.maleSelection->setChecked(true);
     } else if (options.sex == "female") {
