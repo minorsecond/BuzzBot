@@ -358,6 +358,8 @@ void MainWindow::update_table() {
     // Temporarily sort by database ID to fix issues with blank rows
     //ui->drinkLogTable->sortItems(9, Qt::AscendingOrder);
 
+    std::cout << "*** Updating table ***" << std::endl;
+
     std::string filter_category = ui->filterCategoryInput->currentText().toStdString();
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
 
@@ -489,6 +491,8 @@ void MainWindow::open_user_settings() {
         update_stat_panel();
     }
     program_options(true);
+    update_table();
+    update_stat_panel();
 }
 
 std::string MainWindow::settings_path() {
@@ -556,7 +560,6 @@ void MainWindow::program_options(bool write) {
                 } else if (line_counter == 3) { // Fourth line should be limit standard setting
                     options.limit_standard = line.substr(line.find(':') + 1);
                 } else if (line_counter == 4) { // Fifth line should be the weekly limit that is custom set
-                    std::cout << "*** " << line.substr(line.find(':') + 1) << std::endl;
                     options.weekly_limit = std::stoi(line.substr(line.find(':') + 1));
                 }
                 line_counter += 1;
@@ -753,25 +756,6 @@ void MainWindow::update_types_producers_on_name_change() {
             update_wine_types_producers();
         }
     }
-}
-
-void MainWindow::type_input_changed(const QString &) {
-    /*
-     * Change the beer attributes based on the type of beer selected in the typeInput field.
-     */
-
-    std::string alcohol_type = get_current_tab();
-
-    if (alcohol_type == "Beer") {
-        update_beer_names_producers();
-    } else if (alcohol_type == "Liquor") {
-        update_liquor_names_producers();
-    } else if (alcohol_type == "Wine") {
-        update_wine_names_producers();
-    }
-
-    // Update fields based on newly selected drink
-    update_types_producers_on_name_change();
 }
 
 void MainWindow::producer_input_changed(const QString&) {
