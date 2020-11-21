@@ -28,11 +28,11 @@ private:
     Storage storage = initStorage(Database::path());
     void populate_filter_menus(const std::string& filter_type);
     void update_beer_fields();
+    void update_stat_panel();
     void update_liquor_fields();
     void update_wine_fields();
     static std::string settings_path();
     void program_options(bool write);
-    void update_stat_panel();
     void update_drinks_this_week(double standard_drinks, const std::string& weekday_name);
     void update_standard_drinks_left_this_week(double std_drinks_consumed);
     double update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week, const std::string& weekday_name);
@@ -89,7 +89,6 @@ private slots:
     void open_std_drink_calculator();
     void reset_table_sort();
     void name_input_changed(const QString&);
-    void type_input_changed(const QString&);
     void producer_input_changed(const QString&);
     void tab_changed();
     void clicked_clear_button();
