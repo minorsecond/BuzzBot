@@ -55,6 +55,12 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
         ui.rollingDateRadioButton->setChecked(true);
     }
 
+    // Set delete data button text color to red
+    QPalette pal = ui.clearDataButton->palette();
+    pal.setColor(QPalette::ButtonText, QColor(Qt::red));
+    ui.clearDataButton->setPalette(pal);
+    ui.clearDataButton->update();
+
     // Connections
     connect(ui.rollingDateRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_date_calc);
     connect(ui.fixedDateRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_date_calc);
