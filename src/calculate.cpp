@@ -6,7 +6,7 @@
 #include <cmath>
 #include <iostream>
 
-double Calculate::standard_drinks(double abv, int amount) {
+double Calculate::standard_drinks(double abv, double amount) {
     /*
      * Calculate the number of standard drinks in a beer.
      * @param abv: the alcohol by volume of the beer.
@@ -17,7 +17,7 @@ double Calculate::standard_drinks(double abv, int amount) {
     return round_to_two_decimal_points(alcohol_amt / .6);
 }
 
-double Calculate::oz_alcohol(double abv, int amount) {
+double Calculate::oz_alcohol(double abv, double amount) {
     /*
      * Calculate the ounces of alcohol in a beer.
      * @param abv: The alcohol by volume of the beer.
