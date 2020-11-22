@@ -198,7 +198,7 @@ void MainWindow::update_liquor_types_producers() {
         std::string liquor_subtype = selected_liquor.subtype;
         std::string producer = selected_liquor.producer;
         double abv = selected_liquor.abv;
-        int size = selected_liquor._size;
+        double size = selected_liquor._size;
         int rating = selected_liquor.rating;
 
         ui->liquorTypeInput->setCurrentText(QString::fromStdString(liquor_type));
