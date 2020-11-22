@@ -169,8 +169,11 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
     std::vector<Drink> drink_by_name_result = storage.get_all<Drink>(where(c(&Drink::name) == std::move(beer_name) && c(&Drink::alcohol_type) == std::move(alcohol_type)));
     Drink drink_by_name;
 
+    std::sort(drink_by_name_result.begin(), drink_by_name_result.end(), compare_date);
+
     if (!drink_by_name_result.empty()) {
         drink_by_name = drink_by_name_result.at(0);
+        std::cout << "*** Selected size: " << drink_by_name._size << std::endl;
     } else {
         drink_by_name.id = -1;
     }
@@ -201,8 +204,8 @@ int Database::increment_version(Storage storage, int current_version) {
 
     if (get_version(storage) < 6 && current_version == 6) {
         // This adds the year, month, day fields into the date field in the correct format.
-        std::cout << "*** Upgrading DB from version " << storage.pragma.user_version() <<  " to 5." << std::endl;
-        populate_date_field();
+        std::cout << "*** Upgrading DB from version " << storage.pragma.user_version() <<  " to " << current_version << std::endl;
+        populate_size_field();
         storage.pragma.user_version(current_version);
         storage.sync_schema(true);
     }
@@ -238,25 +241,6 @@ std::vector<Drink> Database::sort_by_date_id(std::vector<Drink> drinks) {
     }
 
     return drinks;
-}
-
-void Database::populate_date_field() {
-    /*
-     * Convert the year, month, and date fields to the date field.
-     */
-
-    Storage storage = initStorage(path());
-    write_db_to_disk(storage);
-    std::vector all_drinks = storage.get_all<Drink>();
-    for (auto& drink : all_drinks) {
-        std::ostringstream month_padded;
-        std::ostringstream day_padded;
-        month_padded << std::setw(2) << std::setfill('0') << drink.drink_month;
-        day_padded << std::setw(2) << std::setfill('0') << drink.drink_day;
-        std::string formatted_date = std::to_string(drink.drink_year) + "-" + month_padded.str() + "-" + day_padded.str();
-        drink.date = formatted_date;
-        update(storage, drink);
-    }
 }
 
 void Database::populate_size_field() {

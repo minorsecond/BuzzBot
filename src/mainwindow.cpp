@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Upgrade DB version
     // TODO: Remove references to drink_year, drink_month, & drink_day in DB version 6
-    Database::increment_version(storage, 5);
+    Database::increment_version(storage, 6);
 
     add_menubar_items();
 
@@ -266,7 +266,7 @@ void MainWindow::submit_button_clicked() {
     Drink entered_drink = get_drink_attributes_from_fields();
 
     // Prevent blank submissions
-    if (entered_drink.name.empty() || entered_drink.abv == 0.0 || entered_drink.size == 0) {
+    if (entered_drink.name.empty() || entered_drink.abv == 0.0 || entered_drink._size == 0.0) {
         QMessageBox::critical(nullptr, "Error", "Please enter drink name, ABV, and size.");
     } else {
         // Handle updating existing rows
@@ -382,7 +382,7 @@ void MainWindow::update_table() {
         auto *subtype = new QTableWidgetItem(drink.subtype.c_str());
         auto *producer = new QTableWidgetItem(drink.producer.c_str());
         auto *abv = new QTableWidgetItem(Calculate::double_to_string(drink.abv).c_str());
-        auto *size = new QTableWidgetItem(Calculate::double_to_string(drink.size).c_str());
+        auto *size = new QTableWidgetItem(Calculate::double_to_string(drink._size).c_str());
         auto *rating = new QTableWidgetItem(std::to_string(drink.rating).c_str());
         auto *id = new QTableWidgetItem;
         auto *timestamp = new QTableWidgetItem(drink.timestamp.c_str());
@@ -602,7 +602,7 @@ void MainWindow::update_stat_panel() {
     std::vector<Drink> beers_this_week = Database::filter("After Date", query_date, storage);
 
     for (const auto& beer : beers_this_week) {
-        standard_drinks += Calculate::standard_drinks(beer.abv, beer.size);
+        standard_drinks += Calculate::standard_drinks(beer.abv, beer._size);
     }
 
     // Update the individual elements of the stat pane
@@ -671,7 +671,7 @@ double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>
     ui->ozAlcoholConsumedLabel->setText(QString::fromStdString(ozThisWeekLabelText));
 
     for (const auto& beer : beers_this_week) {
-        double beer_oz_alcohol = (beer.abv/100) * beer.size;
+        double beer_oz_alcohol = (beer.abv/100) * beer._size;
         oz_consumed += beer_oz_alcohol;
     }
 
