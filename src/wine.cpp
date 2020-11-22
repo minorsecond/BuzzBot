@@ -199,7 +199,7 @@ void MainWindow::update_wine_types_producers() {
         std::string wine_subtype = selected_wine.subtype;
         std::string producer = selected_wine.producer;
         double abv = selected_wine.abv;
-        int size = selected_wine._size;
+        double size = selected_wine._size;
         int rating = selected_wine.rating;
 
         ui->wineTypeInput->setCurrentText(QString::fromStdString(wine_type));
