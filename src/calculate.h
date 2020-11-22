@@ -10,8 +10,8 @@
 
 class Calculate {
 public:
-    static double oz_alcohol(double abv, int amount);
-    static double standard_drinks(double abv, int amount);
+    static double oz_alcohol(double abv, double amount);
+    static double standard_drinks(double abv, double amount);
     static double standard_drinks_remaining(const std::string& sex, const std::string& standard, int drink_limit, double standard_drinks_consumed);
     static double oz_alcohol_remaining(const std::string& sex, const std::string& standard, int drink_limit, double oz_consumed);
     static double round_to_two_decimal_points(double val);
