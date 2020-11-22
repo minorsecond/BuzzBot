@@ -89,13 +89,13 @@ public:
     QGridLayout *gridLayout_3;
     QSpinBox *beerRatingInput;
     QLabel *beerIbuLabel;
-    QSpinBox *beerSizeInput;
     QLabel *beerSizeLabel;
     QDoubleSpinBox *beerIbuInput;
     QLabel *beerRatingLabel;
     QLabel *beerAbvLabel;
     QDoubleSpinBox *beerAbvInput;
     QSpacerItem *verticalSpacer_2;
+    QDoubleSpinBox *beerSizeInput;
     QWidget *liquorTab;
     QGridLayout *gridLayout_8;
     QLabel *liquorTypeLabel;
@@ -148,7 +148,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(1006, 692);
+        MainWindow->resize(1006, 694);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -572,14 +572,6 @@ public:
 
         gridLayout_3->addWidget(beerIbuLabel, 1, 1, 1, 1);
 
-        beerSizeInput = new QSpinBox(beerTab);
-        beerSizeInput->setObjectName(QString::fromUtf8("beerSizeInput"));
-        sizePolicy1.setHeightForWidth(beerSizeInput->sizePolicy().hasHeightForWidth());
-        beerSizeInput->setSizePolicy(sizePolicy1);
-        beerSizeInput->setMaximum(9999);
-
-        gridLayout_3->addWidget(beerSizeInput, 2, 3, 1, 1);
-
         beerSizeLabel = new QLabel(beerTab);
         beerSizeLabel->setObjectName(QString::fromUtf8("beerSizeLabel"));
         sizePolicy.setHeightForWidth(beerSizeLabel->sizePolicy().hasHeightForWidth());
@@ -624,6 +616,13 @@ public:
         verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         gridLayout_3->addItem(verticalSpacer_2, 0, 0, 1, 1);
+
+        beerSizeInput = new QDoubleSpinBox(beerTab);
+        beerSizeInput->setObjectName(QString::fromUtf8("beerSizeInput"));
+        beerSizeInput->setDecimals(1);
+        beerSizeInput->setMaximum(10000.000000000000000);
+
+        gridLayout_3->addWidget(beerSizeInput, 2, 3, 1, 1);
 
 
         gridLayout_7->addLayout(gridLayout_3, 6, 1, 1, 1);
@@ -969,7 +968,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1006, 22));
+        menubar->setGeometry(QRect(0, 0, 1006, 24));
         MainWindow->setMenuBar(menubar);
         QWidget::setTabOrder(tabWidget, beerDateInput);
         QWidget::setTabOrder(beerDateInput, beerNameInput);
@@ -979,8 +978,7 @@ public:
         QWidget::setTabOrder(beerSubtypeInput, beerAbvInput);
         QWidget::setTabOrder(beerAbvInput, beerIbuInput);
         QWidget::setTabOrder(beerIbuInput, beerRatingInput);
-        QWidget::setTabOrder(beerRatingInput, beerSizeInput);
-        QWidget::setTabOrder(beerSizeInput, liquorDateInput);
+        QWidget::setTabOrder(beerRatingInput, liquorDateInput);
         QWidget::setTabOrder(liquorDateInput, liquorNameInput);
         QWidget::setTabOrder(liquorNameInput, liquorDistillerInput);
         QWidget::setTabOrder(liquorDistillerInput, liquorTypeInput);

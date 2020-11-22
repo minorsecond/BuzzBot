@@ -199,7 +199,7 @@ int Database::increment_version(Storage storage, int current_version) {
 
     std::cout << "Using DB version " << storage.pragma.user_version() << std::endl;
 
-    if (get_version(storage) < 5 && current_version == 5) {
+    if (get_version(storage) < 6 && current_version == 6) {
         // This adds the year, month, day fields into the date field in the correct format.
         std::cout << "*** Upgrading DB from version " << storage.pragma.user_version() <<  " to 5." << std::endl;
         populate_date_field();
@@ -255,6 +255,21 @@ void Database::populate_date_field() {
         day_padded << std::setw(2) << std::setfill('0') << drink.drink_day;
         std::string formatted_date = std::to_string(drink.drink_year) + "-" + month_padded.str() + "-" + day_padded.str();
         drink.date = formatted_date;
+        update(storage, drink);
+    }
+}
+
+void Database::populate_size_field() {
+    /*
+     * Populate the _size field with contents of size field.
+     * To be removed in later version of database.
+     */
+
+    Storage storage = initStorage(path());
+    write_db_to_disk(storage);
+    std::vector all_drinks = storage.get_all<Drink>();
+    for (auto& drink : all_drinks) {
+        drink._size = (double)drink.size;
         update(storage, drink);
     }
 }

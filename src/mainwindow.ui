@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1006</width>
-    <height>692</height>
+    <height>694</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -795,19 +795,6 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="3">
-           <widget class="QSpinBox" name="beerSizeInput">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximum">
-             <number>9999</number>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="3">
            <widget class="QLabel" name="beerSizeLabel">
             <property name="sizePolicy">
@@ -897,6 +884,16 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="2" column="3">
+           <widget class="QDoubleSpinBox" name="beerSizeInput">
+            <property name="decimals">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <double>10000.000000000000000</double>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -1514,7 +1511,7 @@
      <x>0</x>
      <y>0</y>
      <width>1006</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
@@ -1529,7 +1526,6 @@
   <tabstop>beerAbvInput</tabstop>
   <tabstop>beerIbuInput</tabstop>
   <tabstop>beerRatingInput</tabstop>
-  <tabstop>beerSizeInput</tabstop>
   <tabstop>liquorDateInput</tabstop>
   <tabstop>liquorNameInput</tabstop>
   <tabstop>liquorDistillerInput</tabstop>
