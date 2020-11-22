@@ -568,7 +568,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="beerTab">
        <attribute name="title">
@@ -1038,19 +1038,6 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="2">
-           <widget class="QSpinBox" name="liquorSizeInput">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximum">
-             <number>9999</number>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="1">
            <spacer name="verticalSpacer_3">
             <property name="orientation">
@@ -1063,6 +1050,16 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="2" column="2">
+           <widget class="QDoubleSpinBox" name="liquorSizeInput">
+            <property name="decimals">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <double>10000.000000000000000</double>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -1236,19 +1233,6 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="3">
-           <widget class="QSpinBox" name="wineSizeInput">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximum">
-             <number>9999</number>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="2">
            <widget class="QLabel" name="wineRatingLabel">
             <property name="sizePolicy">
@@ -1319,6 +1303,16 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="2" column="3">
+           <widget class="QDoubleSpinBox" name="wineSizeInput">
+            <property name="decimals">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <double>10000.000000000000000</double>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -1533,7 +1527,6 @@
   <tabstop>liquorSubtypeInput</tabstop>
   <tabstop>liquorAbvInput</tabstop>
   <tabstop>liquorRatingInput</tabstop>
-  <tabstop>liquorSizeInput</tabstop>
   <tabstop>wineDateInput</tabstop>
   <tabstop>wineNameInput</tabstop>
   <tabstop>wineryInput</tabstop>
@@ -1542,7 +1535,6 @@
   <tabstop>wineVintage</tabstop>
   <tabstop>wineAbvInput</tabstop>
   <tabstop>wineRatingInput</tabstop>
-  <tabstop>wineSizeInput</tabstop>
   <tabstop>filterCategoryInput</tabstop>
   <tabstop>filterTextInput</tabstop>
   <tabstop>deleteRowButton</tabstop>

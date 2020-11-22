@@ -46,7 +46,7 @@ inline auto initStorage(const std::string& file_name) {
                                                           sqlite_orm::make_column("abv", &Drink::abv),
                                                           sqlite_orm::make_column("ibu", &Drink::ibu),
                                                           sqlite_orm::make_column("size", &Drink::size),
-                                                          sqlite_orm::make_column("_size", &Drink::_size),
+                                                          sqlite_orm::make_column("_size", &Drink::_size, sqlite_orm::default_value(0.0)),
                                                           sqlite_orm::make_column("rating", &Drink::rating),
                                                           sqlite_orm::make_column("notes", &Drink::notes),
                                                           sqlite_orm::make_column("vintage", &Drink::vintage, sqlite_orm::default_value(-999)),
@@ -76,7 +76,6 @@ public:
 
 private:
     static bool compare_date(const Drink &a, const Drink &b);
-    static void populate_date_field();
     static void populate_size_field();
 
 public:
