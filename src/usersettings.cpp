@@ -3,6 +3,9 @@
 //
 
 #include "usersettings.h"
+#include "confirm_dialog.h"
+#include "database.h"
+#include <iostream>
 
 // LCOV_EXCL_START
 UserSettings::UserSettings(QWidget *parent, const Options& options) {
@@ -13,6 +16,12 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
 
     ui.setupUi(this);
     this->setFixedSize(615, 195);
+
+    // Rounded rect frames
+    ui.frame->setStyleSheet("QWidget#frame{ border: 1px solid grey; border-radius: 6px; }");
+    ui.frame_2->setStyleSheet("QWidget#frame_2{ border: 1px solid grey; border-radius: 6px; }");
+    ui.frame_3->setStyleSheet("QWidget#frame_3{ border: 1px solid grey; border-radius: 6px; }");
+    ui.weeklyLimitFrame->setStyleSheet("QWidget#weeklyLimitFrame{ border: 1px solid grey; border-radius: 6px; }");
 
     if (options.sex == "male") {
         ui.maleSelection->setChecked(true);
@@ -55,11 +64,18 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
         ui.rollingDateRadioButton->setChecked(true);
     }
 
+    // Set delete data button text color to red
+    QPalette pal = ui.clearDataButton->palette();
+    pal.setColor(QPalette::ButtonText, QColor(Qt::red));
+    ui.clearDataButton->setPalette(pal);
+    ui.clearDataButton->update();
+
     // Connections
     connect(ui.rollingDateRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_date_calc);
     connect(ui.fixedDateRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_date_calc);
     connect(ui.niaaaStandardsRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_limit_setting);
     connect(ui.customLimitRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_limit_setting);
+    connect(ui.clearDataButton, &QPushButton::clicked, this, &UserSettings::clicked_clear_data);
 }
 
 std::string UserSettings::get_sex() {
@@ -141,5 +157,18 @@ std::string UserSettings::get_limit_standard() {
     }
 
     return selected_standard;
+}
+
+void UserSettings::clicked_clear_data() {
+    /*
+     * Clear the data if user so desires.
+     */
+
+    ConfirmDialog confirmation_dialog = ConfirmDialog(this, "Clear Data");
+    if (confirmation_dialog.exec() == QDialog::Accepted) {
+        Storage storage = initStorage(Database::path());
+        Database::truncate(storage);
+        std::cout << "*** Truncated the database ***" << std::endl;
+    }
 }
 // LCOV_EXCL_STOP

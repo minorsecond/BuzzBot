@@ -90,7 +90,7 @@ void MainWindow::populate_wine_fields(const Drink& drink_at_row) {
     ui->wineryInput->setCurrentText(drink_at_row.producer.c_str());
     ui->wineVintage->setValue(drink_at_row.vintage);
     ui->wineAbvInput->setValue(drink_at_row.abv);
-    ui->wineSizeInput->setValue(drink_at_row.size);
+    ui->wineSizeInput->setValue(drink_at_row._size);
     ui->wineRatingInput->setValue(drink_at_row.rating);
     ui->wineNotesInput->setText(notes.c_str());
 
@@ -199,7 +199,7 @@ void MainWindow::update_wine_types_producers() {
         std::string wine_subtype = selected_wine.subtype;
         std::string producer = selected_wine.producer;
         double abv = selected_wine.abv;
-        int size = selected_wine.size;
+        double size = selected_wine._size;
         int rating = selected_wine.rating;
 
         ui->wineTypeInput->setCurrentText(QString::fromStdString(wine_type));
@@ -234,7 +234,7 @@ Drink MainWindow::get_wine_attrs_from_fields(std::string alcohol_type) {
     drink.vintage = ui->wineVintage->value();
     drink.abv = ui->wineAbvInput->value();
     drink.ibu = -1.0;  // -1 denotes no IBU value
-    drink.size = ui->wineSizeInput->value();
+    drink._size = ui->wineSizeInput->value();
     drink.rating = ui->wineRatingInput->value();
     drink.notes = ui->wineNotesInput->toPlainText().toStdString();
     drink.alcohol_type = std::move(alcohol_type);

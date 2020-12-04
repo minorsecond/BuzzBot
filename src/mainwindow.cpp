@@ -6,8 +6,9 @@
 #include "exporters.h"
 #include "calculate.h"
 #include <iomanip>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <iostream>
+#include <fstream>
 #include <QComboBox>
 #include <QMessageBox>
 #include <QStandardPaths>
@@ -36,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Upgrade DB version
     // TODO: Remove references to drink_year, drink_month, & drink_day in DB version 6
-    Database::increment_version(storage, 5);
+    Database::increment_version(storage, 6);
 
     add_menubar_items();
 
@@ -63,6 +64,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->wineVintage->setMaximum(QDate::currentDate().year());
     ui->wineVintage->setMinimum(0);
+
+    // Rounded rect frames
+    ui->frame->setStyleSheet("QWidget#frame{ border: 1px solid grey; border-radius: 6px; }");
+    ui->frame_2->setStyleSheet("QWidget#frame_2{ border: 1px solid grey; border-radius: 6px; }");
+    ui->frame_4->setStyleSheet("QWidget#frame_4{ border: 1px solid grey; border-radius: 6px; }");
 
     // Sort table by date column, by default
     reset_table_sort();
@@ -260,7 +266,7 @@ void MainWindow::submit_button_clicked() {
     Drink entered_drink = get_drink_attributes_from_fields();
 
     // Prevent blank submissions
-    if (entered_drink.name.empty() || entered_drink.abv == 0.0 || entered_drink.size == 0) {
+    if (entered_drink.name.empty() || entered_drink.abv == 0.0 || entered_drink._size == 0.0) {
         QMessageBox::critical(nullptr, "Error", "Please enter drink name, ABV, and size.");
     } else {
         // Handle updating existing rows
@@ -357,6 +363,8 @@ void MainWindow::update_table() {
     // Temporarily sort by database ID to fix issues with blank rows
     //ui->drinkLogTable->sortItems(9, Qt::AscendingOrder);
 
+    std::cout << "*** Updating table ***" << std::endl;
+
     std::string filter_category = ui->filterCategoryInput->currentText().toStdString();
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
 
@@ -374,7 +382,7 @@ void MainWindow::update_table() {
         auto *subtype = new QTableWidgetItem(drink.subtype.c_str());
         auto *producer = new QTableWidgetItem(drink.producer.c_str());
         auto *abv = new QTableWidgetItem(Calculate::double_to_string(drink.abv).c_str());
-        auto *size = new QTableWidgetItem(Calculate::double_to_string(drink.size).c_str());
+        auto *size = new QTableWidgetItem(Calculate::double_to_string(drink._size).c_str());
         auto *rating = new QTableWidgetItem(std::to_string(drink.rating).c_str());
         auto *id = new QTableWidgetItem;
         auto *timestamp = new QTableWidgetItem(drink.timestamp.c_str());
@@ -488,6 +496,8 @@ void MainWindow::open_user_settings() {
         update_stat_panel();
     }
     program_options(true);
+    update_table();
+    update_stat_panel();
 }
 
 std::string MainWindow::settings_path() {
@@ -501,7 +511,7 @@ std::string MainWindow::settings_path() {
 
     std::string settings_path = directory + "/buzzbot_settings.conf";
 
-    boost::filesystem::create_directory(directory);
+    std::filesystem::create_directory(directory);
 
     return settings_path;
 }
@@ -555,7 +565,6 @@ void MainWindow::program_options(bool write) {
                 } else if (line_counter == 3) { // Fourth line should be limit standard setting
                     options.limit_standard = line.substr(line.find(':') + 1);
                 } else if (line_counter == 4) { // Fifth line should be the weekly limit that is custom set
-                    std::cout << "*** " << line.substr(line.find(':') + 1) << std::endl;
                     options.weekly_limit = std::stoi(line.substr(line.find(':') + 1));
                 }
                 line_counter += 1;
@@ -593,7 +602,7 @@ void MainWindow::update_stat_panel() {
     std::vector<Drink> beers_this_week = Database::filter("After Date", query_date, storage);
 
     for (const auto& beer : beers_this_week) {
-        standard_drinks += Calculate::standard_drinks(beer.abv, beer.size);
+        standard_drinks += Calculate::standard_drinks(beer.abv, beer._size);
     }
 
     // Update the individual elements of the stat pane
@@ -662,7 +671,7 @@ double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>
     ui->ozAlcoholConsumedLabel->setText(QString::fromStdString(ozThisWeekLabelText));
 
     for (const auto& beer : beers_this_week) {
-        double beer_oz_alcohol = (beer.abv/100) * beer.size;
+        double beer_oz_alcohol = (beer.abv/100) * beer._size;
         oz_consumed += beer_oz_alcohol;
     }
 
@@ -752,25 +761,6 @@ void MainWindow::update_types_producers_on_name_change() {
             update_wine_types_producers();
         }
     }
-}
-
-void MainWindow::type_input_changed(const QString &) {
-    /*
-     * Change the beer attributes based on the type of beer selected in the typeInput field.
-     */
-
-    std::string alcohol_type = get_current_tab();
-
-    if (alcohol_type == "Beer") {
-        update_beer_names_producers();
-    } else if (alcohol_type == "Liquor") {
-        update_liquor_names_producers();
-    } else if (alcohol_type == "Wine") {
-        update_wine_names_producers();
-    }
-
-    // Update fields based on newly selected drink
-    update_types_producers_on_name_change();
 }
 
 void MainWindow::producer_input_changed(const QString&) {
