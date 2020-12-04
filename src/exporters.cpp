@@ -53,7 +53,7 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
         output_csv << vintage + ",";
         output_csv << std::to_string(drink.abv) + ",";
         output_csv << ibu + ",";
-        output_csv << std::to_string(drink.size) + ",";
+        output_csv << std::to_string(drink._size) + ",";
         output_csv << std::to_string(drink.rating) + ",";
         output_csv << drink.notes + ",";
         output_csv << drink.alcohol_type + ",";

@@ -89,7 +89,7 @@ void MainWindow::populate_liquor_fields(const Drink& drink_at_row) {
     ui->liquorSubtypeInput->setCurrentText(drink_at_row.subtype.c_str());
     ui->liquorDistillerInput->setCurrentText(drink_at_row.producer.c_str());
     ui->liquorAbvInput->setValue(drink_at_row.abv);
-    ui->liquorSizeInput->setValue(drink_at_row.size);
+    ui->liquorSizeInput->setValue(drink_at_row._size);
     ui->liquorRatingInput->setValue(drink_at_row.rating);
     ui->liquorNotesInput->setText(notes.c_str());
 
@@ -198,7 +198,7 @@ void MainWindow::update_liquor_types_producers() {
         std::string liquor_subtype = selected_liquor.subtype;
         std::string producer = selected_liquor.producer;
         double abv = selected_liquor.abv;
-        int size = selected_liquor.size;
+        double size = selected_liquor._size;
         int rating = selected_liquor.rating;
 
         ui->liquorTypeInput->setCurrentText(QString::fromStdString(liquor_type));
@@ -233,7 +233,7 @@ Drink MainWindow::get_liquor_attrs_from_fields(std::string alcohol_type) {
     drink.vintage = -999;
     drink.abv = ui->liquorAbvInput->value();
     drink.ibu = -1.0;  // -1 denotes no IBU value
-    drink.size = ui->liquorSizeInput->value();
+    drink._size = ui->liquorSizeInput->value();
     drink.rating = ui->liquorRatingInput->value();
     drink.notes = ui->liquorNotesInput->toPlainText().toStdString();
     drink.alcohol_type = std::move(alcohol_type);

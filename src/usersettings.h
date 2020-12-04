@@ -27,6 +27,7 @@ public:
 private slots:
     void changed_limit_setting();
     void changed_date_calc();
+    void clicked_clear_data();
 };
 
 #endif //BEERTABS_USERSETTINGS_H
