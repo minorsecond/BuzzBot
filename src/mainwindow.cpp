@@ -363,8 +363,6 @@ void MainWindow::update_table() {
     // Temporarily sort by database ID to fix issues with blank rows
     //ui->drinkLogTable->sortItems(9, Qt::AscendingOrder);
 
-    std::cout << "*** Updating table ***" << std::endl;
-
     std::string filter_category = ui->filterCategoryInput->currentText().toStdString();
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
 
