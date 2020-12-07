@@ -173,7 +173,6 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
 
     if (!drink_by_name_result.empty()) {
         drink_by_name = drink_by_name_result.at(0);
-        std::cout << "*** Selected size: " << drink_by_name._size << std::endl;
     } else {
         drink_by_name.id = -1;
     }
