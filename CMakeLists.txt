@@ -5,7 +5,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libproc.h")
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
 
-set(Qt5_DIR "/Users/rwardrup/Qt/5.15.2/clang_64/lib/cmake/Qt5")
+#set(Qt6_DIR "/Users/rwardrup/Qt/6.0.0/clang_64/lib/cmake/Qt6")
+set(CMAKE_PREFIX_PATH "/Users/rwardrup/Qt/6.0.0/clang_64/")
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     message("Building debug")
@@ -21,7 +22,7 @@ set(CMAKE_AUTOUIC ON)
 
 enable_testing()
 
-find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(Catch2 REQUIRED)
 
@@ -44,8 +45,8 @@ add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${
 add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/mini-icon.png ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/mini-icon.png)
 
 set_target_properties(BuzzBot PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
-target_link_libraries(BuzzBot Qt5::Core Qt5::Widgets SQLite3 "-framework CoreFoundation")
-target_link_libraries(functions_test SQLite3 Catch2::Catch2 Qt5::Core)
+target_link_libraries(BuzzBot Qt6::Core Qt6::Widgets SQLite3 "-framework CoreFoundation")
+target_link_libraries(functions_test SQLite3 Catch2::Catch2 Qt6::Core)
 
 set_target_properties(BuzzBot PROPERTIES
         MACOSX_BUNDLE_BUNDLE_NAME "BuzzBot"
