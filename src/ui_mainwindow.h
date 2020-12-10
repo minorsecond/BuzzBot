@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.0
+** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -46,25 +46,27 @@ public:
     QLabel *statsLabel;
     QFrame *frame;
     QGridLayout *gridLayout_5;
-    QLabel *drinksLeftOutput;
-    QLabel *ozAlcoholConsumedOutput;
-    QLabel *favoriteTypeLabel;
-    QLabel *favoriteBeerOutput;
-    QLabel *ozAlcoholConsumedLabel;
+    QLabel *drinksThisWeekOutput;
     QLabel *favoriteBreweryOutput;
-    QLabel *avgAbvDrinkOutput;
-    QLabel *favoriteBreweryLabel;
+    QLabel *ozAlcoholConsumedOutput;
+    QSpacerItem *horizontalSpacer;
+    QLabel *favoriteBeerLabel;
+    QLabel *favoriteBeerOutput;
+    QLabel *drinksLeftLabel;
+    QLabel *averageIbuDrinkLabel;
+    QLabel *ozAlcoholRemainingLabel;
+    QLabel *avgAbvDrinkLabel;
+    QLabel *drinksThisWeekLabel;
     QLabel *avgIbuDrinkOutput;
     QLabel *favoriteTypeOutput;
-    QLabel *avgAbvDrinkLabel;
+    QLabel *favoriteTypeLabel;
+    QLabel *avgAbvDrinkOutput;
+    QLabel *favoriteBreweryLabel;
     QLabel *ozAlcoholRemainingOutput;
-    QLabel *favoriteBeerLabel;
-    QLabel *averageIbuDrinkLabel;
-    QLabel *drinksThisWeekOutput;
-    QLabel *drinksThisWeekLabel;
-    QLabel *drinksLeftLabel;
-    QLabel *ozAlcoholRemainingLabel;
-    QSpacerItem *horizontalSpacer;
+    QLabel *ozAlcoholConsumedLabel;
+    QLabel *drinksLeftOutput;
+    QLabel *stdDrinksTodayLabel;
+    QLabel *stdDrinksTodayOutput;
     QLabel *drinkDataLabel;
     QFrame *frame_4;
     QGridLayout *gridLayout_2;
@@ -278,131 +280,141 @@ public:
         frame->setFrameShadow(QFrame::Raised);
         gridLayout_5 = new QGridLayout(frame);
         gridLayout_5->setObjectName(QString::fromUtf8("gridLayout_5"));
-        drinksLeftOutput = new QLabel(frame);
-        drinksLeftOutput->setObjectName(QString::fromUtf8("drinksLeftOutput"));
-        sizePolicy.setHeightForWidth(drinksLeftOutput->sizePolicy().hasHeightForWidth());
-        drinksLeftOutput->setSizePolicy(sizePolicy);
+        drinksThisWeekOutput = new QLabel(frame);
+        drinksThisWeekOutput->setObjectName(QString::fromUtf8("drinksThisWeekOutput"));
+        sizePolicy.setHeightForWidth(drinksThisWeekOutput->sizePolicy().hasHeightForWidth());
+        drinksThisWeekOutput->setSizePolicy(sizePolicy);
 
-        gridLayout_5->addWidget(drinksLeftOutput, 1, 2, 1, 1);
-
-        ozAlcoholConsumedOutput = new QLabel(frame);
-        ozAlcoholConsumedOutput->setObjectName(QString::fromUtf8("ozAlcoholConsumedOutput"));
-        sizePolicy.setHeightForWidth(ozAlcoholConsumedOutput->sizePolicy().hasHeightForWidth());
-        ozAlcoholConsumedOutput->setSizePolicy(sizePolicy);
-
-        gridLayout_5->addWidget(ozAlcoholConsumedOutput, 2, 2, 1, 1);
-
-        favoriteTypeLabel = new QLabel(frame);
-        favoriteTypeLabel->setObjectName(QString::fromUtf8("favoriteTypeLabel"));
-
-        gridLayout_5->addWidget(favoriteTypeLabel, 6, 0, 1, 1);
-
-        favoriteBeerOutput = new QLabel(frame);
-        favoriteBeerOutput->setObjectName(QString::fromUtf8("favoriteBeerOutput"));
-        sizePolicy.setHeightForWidth(favoriteBeerOutput->sizePolicy().hasHeightForWidth());
-        favoriteBeerOutput->setSizePolicy(sizePolicy);
-
-        gridLayout_5->addWidget(favoriteBeerOutput, 5, 2, 1, 1);
-
-        ozAlcoholConsumedLabel = new QLabel(frame);
-        ozAlcoholConsumedLabel->setObjectName(QString::fromUtf8("ozAlcoholConsumedLabel"));
-        sizePolicy.setHeightForWidth(ozAlcoholConsumedLabel->sizePolicy().hasHeightForWidth());
-        ozAlcoholConsumedLabel->setSizePolicy(sizePolicy);
-
-        gridLayout_5->addWidget(ozAlcoholConsumedLabel, 2, 0, 1, 1);
+        gridLayout_5->addWidget(drinksThisWeekOutput, 1, 2, 1, 1);
 
         favoriteBreweryOutput = new QLabel(frame);
         favoriteBreweryOutput->setObjectName(QString::fromUtf8("favoriteBreweryOutput"));
         sizePolicy.setHeightForWidth(favoriteBreweryOutput->sizePolicy().hasHeightForWidth());
         favoriteBreweryOutput->setSizePolicy(sizePolicy);
 
-        gridLayout_5->addWidget(favoriteBreweryOutput, 4, 2, 1, 1);
+        gridLayout_5->addWidget(favoriteBreweryOutput, 5, 2, 1, 1);
 
-        avgAbvDrinkOutput = new QLabel(frame);
-        avgAbvDrinkOutput->setObjectName(QString::fromUtf8("avgAbvDrinkOutput"));
-        sizePolicy.setHeightForWidth(avgAbvDrinkOutput->sizePolicy().hasHeightForWidth());
-        avgAbvDrinkOutput->setSizePolicy(sizePolicy);
+        ozAlcoholConsumedOutput = new QLabel(frame);
+        ozAlcoholConsumedOutput->setObjectName(QString::fromUtf8("ozAlcoholConsumedOutput"));
+        sizePolicy.setHeightForWidth(ozAlcoholConsumedOutput->sizePolicy().hasHeightForWidth());
+        ozAlcoholConsumedOutput->setSizePolicy(sizePolicy);
 
-        gridLayout_5->addWidget(avgAbvDrinkOutput, 8, 2, 1, 1);
+        gridLayout_5->addWidget(ozAlcoholConsumedOutput, 3, 2, 1, 1);
 
-        favoriteBreweryLabel = new QLabel(frame);
-        favoriteBreweryLabel->setObjectName(QString::fromUtf8("favoriteBreweryLabel"));
-        sizePolicy.setHeightForWidth(favoriteBreweryLabel->sizePolicy().hasHeightForWidth());
-        favoriteBreweryLabel->setSizePolicy(sizePolicy);
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout_5->addWidget(favoriteBreweryLabel, 4, 0, 1, 1);
-
-        avgIbuDrinkOutput = new QLabel(frame);
-        avgIbuDrinkOutput->setObjectName(QString::fromUtf8("avgIbuDrinkOutput"));
-        sizePolicy.setHeightForWidth(avgIbuDrinkOutput->sizePolicy().hasHeightForWidth());
-        avgIbuDrinkOutput->setSizePolicy(sizePolicy);
-
-        gridLayout_5->addWidget(avgIbuDrinkOutput, 9, 2, 1, 1);
-
-        favoriteTypeOutput = new QLabel(frame);
-        favoriteTypeOutput->setObjectName(QString::fromUtf8("favoriteTypeOutput"));
-
-        gridLayout_5->addWidget(favoriteTypeOutput, 6, 2, 1, 1);
-
-        avgAbvDrinkLabel = new QLabel(frame);
-        avgAbvDrinkLabel->setObjectName(QString::fromUtf8("avgAbvDrinkLabel"));
-        sizePolicy.setHeightForWidth(avgAbvDrinkLabel->sizePolicy().hasHeightForWidth());
-        avgAbvDrinkLabel->setSizePolicy(sizePolicy);
-
-        gridLayout_5->addWidget(avgAbvDrinkLabel, 8, 0, 1, 1);
-
-        ozAlcoholRemainingOutput = new QLabel(frame);
-        ozAlcoholRemainingOutput->setObjectName(QString::fromUtf8("ozAlcoholRemainingOutput"));
-        sizePolicy.setHeightForWidth(ozAlcoholRemainingOutput->sizePolicy().hasHeightForWidth());
-        ozAlcoholRemainingOutput->setSizePolicy(sizePolicy);
-
-        gridLayout_5->addWidget(ozAlcoholRemainingOutput, 3, 2, 1, 1);
+        gridLayout_5->addItem(horizontalSpacer, 5, 3, 1, 1);
 
         favoriteBeerLabel = new QLabel(frame);
         favoriteBeerLabel->setObjectName(QString::fromUtf8("favoriteBeerLabel"));
         sizePolicy.setHeightForWidth(favoriteBeerLabel->sizePolicy().hasHeightForWidth());
         favoriteBeerLabel->setSizePolicy(sizePolicy);
 
-        gridLayout_5->addWidget(favoriteBeerLabel, 5, 0, 1, 1);
+        gridLayout_5->addWidget(favoriteBeerLabel, 6, 0, 1, 1);
 
-        averageIbuDrinkLabel = new QLabel(frame);
-        averageIbuDrinkLabel->setObjectName(QString::fromUtf8("averageIbuDrinkLabel"));
-        sizePolicy.setHeightForWidth(averageIbuDrinkLabel->sizePolicy().hasHeightForWidth());
-        averageIbuDrinkLabel->setSizePolicy(sizePolicy);
+        favoriteBeerOutput = new QLabel(frame);
+        favoriteBeerOutput->setObjectName(QString::fromUtf8("favoriteBeerOutput"));
+        sizePolicy.setHeightForWidth(favoriteBeerOutput->sizePolicy().hasHeightForWidth());
+        favoriteBeerOutput->setSizePolicy(sizePolicy);
 
-        gridLayout_5->addWidget(averageIbuDrinkLabel, 9, 0, 1, 1);
-
-        drinksThisWeekOutput = new QLabel(frame);
-        drinksThisWeekOutput->setObjectName(QString::fromUtf8("drinksThisWeekOutput"));
-        sizePolicy.setHeightForWidth(drinksThisWeekOutput->sizePolicy().hasHeightForWidth());
-        drinksThisWeekOutput->setSizePolicy(sizePolicy);
-
-        gridLayout_5->addWidget(drinksThisWeekOutput, 0, 2, 1, 1);
-
-        drinksThisWeekLabel = new QLabel(frame);
-        drinksThisWeekLabel->setObjectName(QString::fromUtf8("drinksThisWeekLabel"));
-        sizePolicy.setHeightForWidth(drinksThisWeekLabel->sizePolicy().hasHeightForWidth());
-        drinksThisWeekLabel->setSizePolicy(sizePolicy);
-
-        gridLayout_5->addWidget(drinksThisWeekLabel, 0, 0, 1, 1);
+        gridLayout_5->addWidget(favoriteBeerOutput, 6, 2, 1, 1);
 
         drinksLeftLabel = new QLabel(frame);
         drinksLeftLabel->setObjectName(QString::fromUtf8("drinksLeftLabel"));
         sizePolicy.setHeightForWidth(drinksLeftLabel->sizePolicy().hasHeightForWidth());
         drinksLeftLabel->setSizePolicy(sizePolicy);
 
-        gridLayout_5->addWidget(drinksLeftLabel, 1, 0, 1, 1);
+        gridLayout_5->addWidget(drinksLeftLabel, 2, 0, 1, 1);
+
+        averageIbuDrinkLabel = new QLabel(frame);
+        averageIbuDrinkLabel->setObjectName(QString::fromUtf8("averageIbuDrinkLabel"));
+        sizePolicy.setHeightForWidth(averageIbuDrinkLabel->sizePolicy().hasHeightForWidth());
+        averageIbuDrinkLabel->setSizePolicy(sizePolicy);
+
+        gridLayout_5->addWidget(averageIbuDrinkLabel, 10, 0, 1, 1);
 
         ozAlcoholRemainingLabel = new QLabel(frame);
         ozAlcoholRemainingLabel->setObjectName(QString::fromUtf8("ozAlcoholRemainingLabel"));
         sizePolicy.setHeightForWidth(ozAlcoholRemainingLabel->sizePolicy().hasHeightForWidth());
         ozAlcoholRemainingLabel->setSizePolicy(sizePolicy);
 
-        gridLayout_5->addWidget(ozAlcoholRemainingLabel, 3, 0, 1, 1);
+        gridLayout_5->addWidget(ozAlcoholRemainingLabel, 4, 0, 1, 1);
 
-        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        avgAbvDrinkLabel = new QLabel(frame);
+        avgAbvDrinkLabel->setObjectName(QString::fromUtf8("avgAbvDrinkLabel"));
+        sizePolicy.setHeightForWidth(avgAbvDrinkLabel->sizePolicy().hasHeightForWidth());
+        avgAbvDrinkLabel->setSizePolicy(sizePolicy);
 
-        gridLayout_5->addItem(horizontalSpacer, 4, 3, 1, 1);
+        gridLayout_5->addWidget(avgAbvDrinkLabel, 9, 0, 1, 1);
+
+        drinksThisWeekLabel = new QLabel(frame);
+        drinksThisWeekLabel->setObjectName(QString::fromUtf8("drinksThisWeekLabel"));
+        sizePolicy.setHeightForWidth(drinksThisWeekLabel->sizePolicy().hasHeightForWidth());
+        drinksThisWeekLabel->setSizePolicy(sizePolicy);
+
+        gridLayout_5->addWidget(drinksThisWeekLabel, 1, 0, 1, 1);
+
+        avgIbuDrinkOutput = new QLabel(frame);
+        avgIbuDrinkOutput->setObjectName(QString::fromUtf8("avgIbuDrinkOutput"));
+        sizePolicy.setHeightForWidth(avgIbuDrinkOutput->sizePolicy().hasHeightForWidth());
+        avgIbuDrinkOutput->setSizePolicy(sizePolicy);
+
+        gridLayout_5->addWidget(avgIbuDrinkOutput, 10, 2, 1, 1);
+
+        favoriteTypeOutput = new QLabel(frame);
+        favoriteTypeOutput->setObjectName(QString::fromUtf8("favoriteTypeOutput"));
+
+        gridLayout_5->addWidget(favoriteTypeOutput, 7, 2, 1, 1);
+
+        favoriteTypeLabel = new QLabel(frame);
+        favoriteTypeLabel->setObjectName(QString::fromUtf8("favoriteTypeLabel"));
+
+        gridLayout_5->addWidget(favoriteTypeLabel, 7, 0, 1, 1);
+
+        avgAbvDrinkOutput = new QLabel(frame);
+        avgAbvDrinkOutput->setObjectName(QString::fromUtf8("avgAbvDrinkOutput"));
+        sizePolicy.setHeightForWidth(avgAbvDrinkOutput->sizePolicy().hasHeightForWidth());
+        avgAbvDrinkOutput->setSizePolicy(sizePolicy);
+
+        gridLayout_5->addWidget(avgAbvDrinkOutput, 9, 2, 1, 1);
+
+        favoriteBreweryLabel = new QLabel(frame);
+        favoriteBreweryLabel->setObjectName(QString::fromUtf8("favoriteBreweryLabel"));
+        sizePolicy.setHeightForWidth(favoriteBreweryLabel->sizePolicy().hasHeightForWidth());
+        favoriteBreweryLabel->setSizePolicy(sizePolicy);
+
+        gridLayout_5->addWidget(favoriteBreweryLabel, 5, 0, 1, 1);
+
+        ozAlcoholRemainingOutput = new QLabel(frame);
+        ozAlcoholRemainingOutput->setObjectName(QString::fromUtf8("ozAlcoholRemainingOutput"));
+        sizePolicy.setHeightForWidth(ozAlcoholRemainingOutput->sizePolicy().hasHeightForWidth());
+        ozAlcoholRemainingOutput->setSizePolicy(sizePolicy);
+
+        gridLayout_5->addWidget(ozAlcoholRemainingOutput, 4, 2, 1, 1);
+
+        ozAlcoholConsumedLabel = new QLabel(frame);
+        ozAlcoholConsumedLabel->setObjectName(QString::fromUtf8("ozAlcoholConsumedLabel"));
+        sizePolicy.setHeightForWidth(ozAlcoholConsumedLabel->sizePolicy().hasHeightForWidth());
+        ozAlcoholConsumedLabel->setSizePolicy(sizePolicy);
+
+        gridLayout_5->addWidget(ozAlcoholConsumedLabel, 3, 0, 1, 1);
+
+        drinksLeftOutput = new QLabel(frame);
+        drinksLeftOutput->setObjectName(QString::fromUtf8("drinksLeftOutput"));
+        sizePolicy.setHeightForWidth(drinksLeftOutput->sizePolicy().hasHeightForWidth());
+        drinksLeftOutput->setSizePolicy(sizePolicy);
+
+        gridLayout_5->addWidget(drinksLeftOutput, 2, 2, 1, 1);
+
+        stdDrinksTodayLabel = new QLabel(frame);
+        stdDrinksTodayLabel->setObjectName(QString::fromUtf8("stdDrinksTodayLabel"));
+
+        gridLayout_5->addWidget(stdDrinksTodayLabel, 0, 0, 1, 1);
+
+        stdDrinksTodayOutput = new QLabel(frame);
+        stdDrinksTodayOutput->setObjectName(QString::fromUtf8("stdDrinksTodayOutput"));
+
+        gridLayout_5->addWidget(stdDrinksTodayOutput, 0, 2, 1, 1);
 
 
         gridLayout_4->addWidget(frame, 2, 1, 2, 3);
@@ -1056,24 +1068,26 @@ public:
         drinkLogTable->setSortingEnabled(__sortingEnabled);
 
         statsLabel->setText(QCoreApplication::translate("MainWindow", "Stats", nullptr));
-        drinksLeftOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
-        ozAlcoholConsumedOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
-        favoriteTypeLabel->setText(QCoreApplication::translate("MainWindow", "Most frequent type:", nullptr));
-        favoriteBeerOutput->setText(QCoreApplication::translate("MainWindow", "Everything Rhymes with Orange", nullptr));
-        ozAlcoholConsumedLabel->setText(QCoreApplication::translate("MainWindow", "Oz. alcohol consumed:", nullptr));
+        drinksThisWeekOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
         favoriteBreweryOutput->setText(QCoreApplication::translate("MainWindow", "Roughtail Brewing Co.", nullptr));
-        avgAbvDrinkOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
-        favoriteBreweryLabel->setText(QCoreApplication::translate("MainWindow", "Favorite producer:", nullptr));
+        ozAlcoholConsumedOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
+        favoriteBeerLabel->setText(QCoreApplication::translate("MainWindow", "Most frequent drink:", nullptr));
+        favoriteBeerOutput->setText(QCoreApplication::translate("MainWindow", "Everything Rhymes with Orange", nullptr));
+        drinksLeftLabel->setText(QCoreApplication::translate("MainWindow", "Std. drinks remaining:", nullptr));
+        averageIbuDrinkLabel->setText(QCoreApplication::translate("MainWindow", "Average IBU per beer:", nullptr));
+        ozAlcoholRemainingLabel->setText(QCoreApplication::translate("MainWindow", "Oz. alcohol remaining:", nullptr));
+        avgAbvDrinkLabel->setText(QCoreApplication::translate("MainWindow", "Average ABV per drink:", nullptr));
+        drinksThisWeekLabel->setText(QCoreApplication::translate("MainWindow", "Std. drinks this week:", nullptr));
         avgIbuDrinkOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
         favoriteTypeOutput->setText(QCoreApplication::translate("MainWindow", "IPA", nullptr));
-        avgAbvDrinkLabel->setText(QCoreApplication::translate("MainWindow", "Average ABV per drink:", nullptr));
+        favoriteTypeLabel->setText(QCoreApplication::translate("MainWindow", "Most frequent type:", nullptr));
+        avgAbvDrinkOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
+        favoriteBreweryLabel->setText(QCoreApplication::translate("MainWindow", "Favorite producer:", nullptr));
         ozAlcoholRemainingOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
-        favoriteBeerLabel->setText(QCoreApplication::translate("MainWindow", "Most frequent drink:", nullptr));
-        averageIbuDrinkLabel->setText(QCoreApplication::translate("MainWindow", "Average IBU per beer:", nullptr));
-        drinksThisWeekOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
-        drinksThisWeekLabel->setText(QCoreApplication::translate("MainWindow", "Std. drinks this week:", nullptr));
-        drinksLeftLabel->setText(QCoreApplication::translate("MainWindow", "Std. drinks remaining:", nullptr));
-        ozAlcoholRemainingLabel->setText(QCoreApplication::translate("MainWindow", "Oz. alcohol remaining:", nullptr));
+        ozAlcoholConsumedLabel->setText(QCoreApplication::translate("MainWindow", "Oz. alcohol consumed:", nullptr));
+        drinksLeftOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
+        stdDrinksTodayLabel->setText(QCoreApplication::translate("MainWindow", "Std. drinks today:", nullptr));
+        stdDrinksTodayOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
         drinkDataLabel->setText(QCoreApplication::translate("MainWindow", "Drink Data", nullptr));
         clearFieldsButton->setText(QCoreApplication::translate("MainWindow", "Clear Selections", nullptr));
         deleteRowButton->setText(QCoreApplication::translate("MainWindow", "Delete Row", nullptr));
