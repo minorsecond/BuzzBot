@@ -588,12 +588,7 @@ void MainWindow::update_stat_panel() {
 
     std::cout << "Calculating stats since " << start_date << ", which is last " << weekday_name << std::endl;
 
-    // Create the date for the SQL query
-    std::string year = date::format("%Y", start_date.year());
-    std::string month = date::format("%m", start_date.month());
-    std::string day = date::format("%d", start_date.day());
-    //std::string query_date = day + "-" + month + "-" + year;
-    std::string query_date = year + "-" + month + "-" + day;
+    std::string query_date = format_date(start_date);
 
     std::cout << "Querying DB for drinks after " << query_date << std::endl;
 
@@ -1095,21 +1090,30 @@ void MainWindow::update_std_drinks_today() {
     double std_drinks_today {0.0};
     date::year_month_day todays_date = date::floor<date::days>(std::chrono::system_clock::now());
 
-    // Format year_month_date into correct string format.  TODO: Refactor this
-    std::string year = date::format("%Y", todays_date.year());
-    std::string month = date::format("%m", todays_date.month());
-    std::string day = date::format("%d", todays_date.day());
-    std::string query_date = year + "-" + month + "-" + day;
+    std::string query_date = format_date(todays_date);
 
     std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
 
     for (auto& drink : drinks_today) {
         double std_drinks = Calculate::standard_drinks(drink.abv, drink._size);
-        std::cout << "************** " + std::to_string(drink._size) << " **************" << std::endl;
         std_drinks_today += std_drinks;
     }
 
     ui->stdDrinksTodayOutput->setText(QString::fromStdString(Calculate::double_to_string(std_drinks_today)));
+}
+
+std::string MainWindow::format_date(date::year_month_day date) {
+    /*
+     * Format date for use in DB filter.
+     * @return: formated date string.
+     */
+
+    std::string year = date::format("%Y", date.year());
+    std::string month = date::format("%m", date.month());
+    std::string day = date::format("%d", date.day());
+    std::string query_date = year + "-" + month + "-" + day;
+
+    return query_date;
 }
 
 // LCOV_EXCL_STOP
