@@ -74,6 +74,7 @@ private:
     void clear_fields(const std::string& alcohol_type);
     [[nodiscard]] date::weekday get_filter_weekday_start() const;
     std::tuple<date::year_month_day, std::string> get_filter_date();
+    void update_std_drinks_today();
 
 private slots:
     void submit_button_clicked();

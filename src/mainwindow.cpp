@@ -613,6 +613,7 @@ void MainWindow::update_stat_panel() {
     update_favorite_type();
     update_mean_abv();
     update_mean_ibu();
+    update_std_drinks_today();
 }
 
 void MainWindow::update_drinks_this_week(double standard_drinks, const std::string& weekday_name) {
@@ -1084,6 +1085,31 @@ void MainWindow::update_stats_if_new_day() {
     if (ui->drinksThisWeekLabel->text().toStdString().find(weekday_name) == std::string::npos) {
         update_stat_panel();
     }
+}
+
+void MainWindow::update_std_drinks_today() {
+    /*
+     * Calculate standard drinks consumed today & update the line in the stats panel.
+     */
+
+    double std_drinks_today {0.0};
+    date::year_month_day todays_date = date::floor<date::days>(std::chrono::system_clock::now());
+
+    // Format year_month_date into correct string format.  TODO: Refactor this
+    std::string year = date::format("%Y", todays_date.year());
+    std::string month = date::format("%m", todays_date.month());
+    std::string day = date::format("%d", todays_date.day());
+    std::string query_date = year + "-" + month + "-" + day;
+
+    std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
+
+    for (auto& drink : drinks_today) {
+        double std_drinks = Calculate::standard_drinks(drink.abv, drink._size);
+        std::cout << "************** " + std::to_string(drink._size) << " **************" << std::endl;
+        std_drinks_today += std_drinks;
+    }
+
+    ui->stdDrinksTodayOutput->setText(QString::fromStdString(Calculate::double_to_string(std_drinks_today)));
 }
 
 // LCOV_EXCL_STOP
