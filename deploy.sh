@@ -15,7 +15,7 @@ mkdir ~/Desktop/BuzzBot/Symbols/
 symbols -noTextInSOD -noDaemon -arch all -symbolsPackageDir ~/Desktop/BuzzBot/Symbols ~/Desktop/BuzzBot/BuzzBot.app.dSYM/Contents/Resources/DWARF/BuzzBot
 
 echo "Running macdeployqt."
-~/Qt/*/*/bin/macdeployqt ~/Desktop/BuzzBot/App/BuzzBot.app -always-overwrite -appstore-compliant
+~/Qt/5.15.2/*/bin/macdeployqt ~/Desktop/BuzzBot/App/BuzzBot.app -always-overwrite -appstore-compliant
 
 echo "Configuring plist."
 /usr/libexec/PlistBuddy -c "Add :CFBundleSupportedPlatforms array" ~/Desktop/BuzzBot/App/BuzzBot.app/Contents/Info.plist
