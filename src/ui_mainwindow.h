@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.2
+** Created by: Qt User Interface Compiler version 6.0.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -268,7 +268,6 @@ public:
         statsLabel->setSizePolicy(sizePolicy);
         QFont font;
         font.setBold(true);
-        font.setWeight(75);
         statsLabel->setFont(font);
         statsLabel->setAlignment(Qt::AlignCenter);
 
