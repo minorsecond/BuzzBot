@@ -15,7 +15,7 @@ StandardDrinkCalc::StandardDrinkCalc(QWidget *parent) {
     ui.standardDrinksOutput->setText("0");
 
     connect(ui.abvInput, &QDoubleSpinBox::textChanged, this, &StandardDrinkCalc::abv_changed);
-    connect(ui.volumeInput, &QSpinBox::textChanged, this, &StandardDrinkCalc::volume_changed);
+    connect(ui.volumeInput, &QDoubleSpinBox::textChanged, this, &StandardDrinkCalc::volume_changed);
     connect(ui.stdDrinkCalcOkButton, &QPushButton::clicked, this, &StandardDrinkCalc::close);
 }
 
