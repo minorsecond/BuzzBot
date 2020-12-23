@@ -24,7 +24,7 @@ void StandardDrinkCalc::volume_changed() {
      * Calculate standard drinks when volume number changes.
      */
 
-    int volume = ui.volumeInput->value();
+    double volume = ui.volumeInput->value();
     double abv = ui.abvInput->value();
 
     std::string standard_drinks = Calculate::double_to_string(Calculate::standard_drinks(abv, volume));
@@ -37,7 +37,7 @@ void StandardDrinkCalc::abv_changed() {
      */
 
     double abv = ui.abvInput->value();
-    int volume = ui.volumeInput->value();
+    double volume = ui.volumeInput->value();
 
     std::string standard_drinks = Calculate::double_to_string(Calculate::standard_drinks(abv, volume));
     ui.standardDrinksOutput->setText(QString::fromStdString(standard_drinks));
