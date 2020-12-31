@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'user_settings.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.0
+** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -253,7 +253,7 @@ public:
         rollingDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Rolling", nullptr));
         weekdayStartLabel->setText(QCoreApplication::translate("userSettingsDialog", "Reset stats on:", nullptr));
         weeklyLimitGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Weekly Limit Standard", nullptr));
-        niaaaStandardsRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "NIAAA", nullptr));
+        niaaaStandardsRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "CDC/NIAAA", nullptr));
         customLimitLabel->setText(QCoreApplication::translate("userSettingsDialog", "Custom Limit:", nullptr));
         customLimitRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Custom", nullptr));
     } // retranslateUi

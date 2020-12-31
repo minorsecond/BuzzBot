@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'standard_drink_calc.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.0
+** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -16,7 +16,6 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSpinBox>
 
 QT_BEGIN_NAMESPACE
 
@@ -29,8 +28,8 @@ public:
     QLabel *standardDrinksLabel;
     QDoubleSpinBox *abvInput;
     QLabel *standardDrinksOutput;
-    QSpinBox *volumeInput;
     QPushButton *stdDrinkCalcOkButton;
+    QDoubleSpinBox *volumeInput;
 
     void setupUi(QDialog *stdDrinkDialog)
     {
@@ -64,15 +63,16 @@ public:
 
         gridLayout->addWidget(standardDrinksOutput, 2, 1, 1, 1);
 
-        volumeInput = new QSpinBox(stdDrinkDialog);
-        volumeInput->setObjectName(QString::fromUtf8("volumeInput"));
-
-        gridLayout->addWidget(volumeInput, 1, 1, 1, 1);
-
         stdDrinkCalcOkButton = new QPushButton(stdDrinkDialog);
         stdDrinkCalcOkButton->setObjectName(QString::fromUtf8("stdDrinkCalcOkButton"));
 
         gridLayout->addWidget(stdDrinkCalcOkButton, 3, 1, 1, 1);
+
+        volumeInput = new QDoubleSpinBox(stdDrinkDialog);
+        volumeInput->setObjectName(QString::fromUtf8("volumeInput"));
+        volumeInput->setDecimals(1);
+
+        gridLayout->addWidget(volumeInput, 1, 1, 1, 1);
 
 
         retranslateUi(stdDrinkDialog);

@@ -76,8 +76,6 @@ void MainWindow::populate_beer_fields(const Drink& drink_at_row) {
      * Populate the beer entry fields if user is on the beer entry tab.
      */
 
-    std::cout << "*** Size: " << drink_at_row._size << std::endl;
-
     QDate date = format_date_for_input(drink_at_row);
     // Only update the beer fields if the user is currently on the beer tab
     std::string notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
@@ -198,7 +196,6 @@ void MainWindow::update_beer_types_producers() {
         double abv = selected_beer.abv;
         double ibu = selected_beer.ibu;
         double size = selected_beer._size;
-        std::cout << "*** Size 2: " << selected_beer._size << std::endl;
         int rating = selected_beer.rating;
         ui->beerTypeInput->setCurrentText(QString::fromStdString(beer_type));
         ui->beerSubtypeInput->setCurrentText(QString::fromStdString(beer_subtype));
