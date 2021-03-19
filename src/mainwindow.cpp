@@ -1088,9 +1088,16 @@ void MainWindow::update_std_drinks_today() {
      */
 
     double std_drinks_today {0.0};
-    date::year_month_day todays_date = date::floor<date::days>(std::chrono::system_clock::now());
 
-    std::string query_date = format_date(todays_date);
+    auto now_time = std::chrono::system_clock::now();
+
+    // Delete the following
+    auto now_c = std::chrono::system_clock::to_time_t(now_time);
+    std::tm now_tm = *std::localtime(&now_c);
+    char query_date[70];
+    std::strftime(query_date, sizeof query_date, "%Y-%m-%d", &now_tm);
+    std::cout << "*** calculate date is " << query_date << " & query date is " << query_date << std::endl;
+    // Delete the above
 
     std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
 
