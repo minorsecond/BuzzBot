@@ -254,7 +254,7 @@ public:
         rollingDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Rolling", nullptr));
         weekdayStartLabel->setText(QCoreApplication::translate("userSettingsDialog", "Reset stats on:", nullptr));
         weeklyLimitGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Weekly Limit Standard", nullptr));
-        niaaaStandardsRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "NIAAA", nullptr));
+        niaaaStandardsRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "CDC/NIAAA", nullptr));
         customLimitLabel->setText(QCoreApplication::translate("userSettingsDialog", "Custom Limit:", nullptr));
         customLimitRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Custom", nullptr));
     } // retranslateUi
