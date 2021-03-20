@@ -1081,7 +1081,7 @@ public:
         favoriteTypeOutput->setText(QCoreApplication::translate("MainWindow", "IPA", nullptr));
         favoriteTypeLabel->setText(QCoreApplication::translate("MainWindow", "Most frequent type:", nullptr));
         avgAbvDrinkOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
-        favoriteBreweryLabel->setText(QCoreApplication::translate("MainWindow", "Favorite producer:", nullptr));
+        favoriteBreweryLabel->setText(QCoreApplication::translate("MainWindow", "Most frequent producer:", nullptr));
         ozAlcoholRemainingOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
         ozAlcoholConsumedLabel->setText(QCoreApplication::translate("MainWindow", "Oz. alcohol consumed:", nullptr));
         drinksLeftOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));

@@ -227,7 +227,6 @@
       </property>
       <property name="font">
        <font>
-        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -440,7 +439,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Favorite producer:</string>
+          <string>Most frequent producer:</string>
          </property>
         </widget>
        </item>
@@ -510,7 +509,6 @@
       </property>
       <property name="font">
        <font>
-        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
