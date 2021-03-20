@@ -29,7 +29,7 @@ About::About(QWidget *parent) {
     QString icon_path_qstring = CFStringGetCStringPtr(mac_path, CFStringGetSystemEncoding());
 
     // Set path to icon
-    std::string icon_path = icon_path_qstring.toStdString() + "/Contents/Resources/icon.icns";
+    std::string icon_path = icon_path_qstring.toStdString() + "/Contents/Resources/mini-icon.png";
     CFRelease(app_url_ref);
     CFRelease(mac_path);
 
