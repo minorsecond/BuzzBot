@@ -66,7 +66,7 @@ TEST_CASE("Mean ABV", "[Drink Calculations]") {
     storage_1.insert(mosaic);
     storage_1.insert(etrwo2);
     Database::write_db_to_disk(storage_1);
-    double mean_abv = Calculate::mean_abv(storage_1);
+    double mean_abv = Calculate::mean_abv(storage_1, "Beer");
 
     REQUIRE(mean_abv == 8.13);
 }
@@ -94,7 +94,7 @@ TEST_CASE("Mean IBU", "[Drink Calculations]") {
     storage_1.insert(mosaic);
     storage_1.insert(etrwo2);
     Database::write_db_to_disk(storage_1);
-    double mean_ibu = Calculate::mean_ibu(storage_1);
+    double mean_ibu = Calculate::mean_ibu(storage_1, "Beer");
 
     REQUIRE(mean_ibu == 65);
 }
@@ -123,7 +123,7 @@ TEST_CASE("Favorite Brewery", "[Favorite Calculations]") {
     storage_1.insert(etrwo2);
     Database::write_db_to_disk(storage_1);
 
-    std::string favorite_brewery = Calculate::favorite_producer(storage_1);
+    std::string favorite_brewery = Calculate::favorite_producer(storage_1, "Beer");
     REQUIRE(favorite_brewery == "Roughtail Brewing");
 }
 
@@ -151,7 +151,7 @@ TEST_CASE("Favorite Drink", "[Favorite Calculations]") {
     storage_1.insert(etrwo2);
     Database::write_db_to_disk(storage_1);
 
-    std::string favorite_beer = Calculate::favorite_beer(storage_1);
+    std::string favorite_beer = Calculate::favorite_drink(storage_1, "Beer");
     REQUIRE(favorite_beer == "Everything Rhymes with Orange");
 }
 
@@ -179,6 +179,6 @@ TEST_CASE("Favorite Type", "[Favorite Calculations]") {
     storage_1.insert(etrwo2);
     Database::write_db_to_disk(storage_1);
 
-    std::string favorite_type = Calculate::favorite_type(storage_1);
+    std::string favorite_type = Calculate::favorite_type(storage_1, "Beer");
     REQUIRE(favorite_type == "IPA");
 }
