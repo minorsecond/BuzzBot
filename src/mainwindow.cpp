@@ -605,9 +605,9 @@ void MainWindow::update_stat_panel() {
     double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week, weekday_name);
     update_oz_alcohol_remaining(oz_alc_consumed);
     update_favorite_brewery(current_tab);
-    update_favorite_beer();
-    update_favorite_type();
-    update_mean_abv();
+    update_favorite_beer(current_tab);
+    update_favorite_type(current_tab);
+    update_mean_abv(current_tab);
     update_mean_ibu();
     update_std_drinks_today();
 }
@@ -704,21 +704,21 @@ void MainWindow::update_favorite_brewery(const std::string& drink_type) {
     ui->favoriteBreweryOutput->setText(QString::fromStdString(fave_brewery));
 }
 
-void MainWindow::update_favorite_beer() {
+void MainWindow::update_favorite_beer(const std::string& drink_type) {
     /*
      * Update the favorite beer text label to the most common beer in the database.
      */
 
-    std::string fave_beer = Calculate::favorite_beer(storage);
+    std::string fave_beer = Calculate::favorite_drink(storage, drink_type);
     ui->favoriteBeerOutput->setText(QString::fromStdString(fave_beer));
 }
 
-void MainWindow::update_mean_abv() {
+void MainWindow::update_mean_abv(const std::string& drink_type) {
     /*
      * Update the mean ABV text label to the mean ABV of all beers in the database.
      */
 
-    std::string mean_abv = Calculate::double_to_string(Calculate::mean_abv(storage));
+    std::string mean_abv = Calculate::double_to_string(Calculate::mean_abv(storage, drink_type));
     if (mean_abv == "nan") {
         mean_abv = " ";
     }
@@ -785,12 +785,12 @@ void MainWindow::name_input_changed(const QString&) {
     update_types_producers_on_name_change();
 }
 
-void MainWindow::update_favorite_type() {
+void MainWindow::update_favorite_type(const std::string& drink_type) {
     /*
      * Set the favoriteTypeOutput to the most common beer found in the database.
      */
 
-    std::string fave_type = Calculate::favorite_type(storage);
+    std::string fave_type = Calculate::favorite_type(storage, drink_type);
     ui->favoriteTypeOutput->setText(QString::fromStdString(fave_type));
 }
 
