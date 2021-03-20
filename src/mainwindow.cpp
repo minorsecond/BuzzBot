@@ -579,6 +579,7 @@ void MainWindow::update_stat_panel() {
     date::year_month_day start_date{};
     double standard_drinks = 0;
     std::string weekday_name;
+    std::string current_tab = get_current_tab();
 
     // Get filter day & day of week.
     std::tuple<date::year_month_day, std::string> filter_date_results = get_filter_date();
@@ -603,11 +604,11 @@ void MainWindow::update_stat_panel() {
     update_standard_drinks_left_this_week(standard_drinks);
     double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week, weekday_name);
     update_oz_alcohol_remaining(oz_alc_consumed);
-    update_favorite_brewery();
-    update_favorite_beer();
-    update_favorite_type();
-    update_mean_abv();
-    update_mean_ibu();
+    update_favorite_brewery(current_tab);
+    update_favorite_beer(current_tab);
+    update_favorite_type(current_tab);
+    update_mean_abv(current_tab);
+    update_mean_ibu(current_tab);
     update_std_drinks_today();
 }
 
@@ -694,46 +695,54 @@ void MainWindow::update_oz_alcohol_remaining(double oz_alcohol_consumed) {
     }
 }
 
-void MainWindow::update_favorite_brewery() {
+void MainWindow::update_favorite_brewery(const std::string& drink_type) {
     /*
      * Update the favorite brewery text label to the most common beer in the database.
      */
 
-    std::string fave_brewery = Calculate::favorite_producer(storage);
+    std::string fave_brewery = Calculate::favorite_producer(storage, drink_type);
+    if (fave_brewery.empty()) {
+        fave_brewery = "No " + drink_type + " entered";
+    }
     ui->favoriteBreweryOutput->setText(QString::fromStdString(fave_brewery));
 }
 
-void MainWindow::update_favorite_beer() {
+void MainWindow::update_favorite_beer(const std::string& drink_type) {
     /*
      * Update the favorite beer text label to the most common beer in the database.
      */
 
-    std::string fave_beer = Calculate::favorite_beer(storage);
+    std::string fave_beer = Calculate::favorite_drink(storage, drink_type);
+    if (fave_beer.empty()) {
+        fave_beer = "No " + drink_type + " entered";
+    }
     ui->favoriteBeerOutput->setText(QString::fromStdString(fave_beer));
 }
 
-void MainWindow::update_mean_abv() {
+void MainWindow::update_mean_abv(const std::string& drink_type) {
     /*
      * Update the mean ABV text label to the mean ABV of all beers in the database.
      */
 
-    std::string mean_abv = Calculate::double_to_string(Calculate::mean_abv(storage));
-    if (mean_abv == "nan") {
-        mean_abv = " ";
+    std::string mean_abv = Calculate::double_to_string(Calculate::mean_abv(storage, drink_type));
+    if (mean_abv == "nan" || mean_abv.empty()) {
+        mean_abv = "No " + drink_type + " entered";
     }
     ui->avgAbvDrinkOutput->setText(QString::fromStdString(mean_abv));
 }
 
-void MainWindow::update_mean_ibu() {
+void MainWindow::update_mean_ibu(const std::string& drink_type) {
     /*
      * Set the mean IBU text label to the mean IBU of all beers in the database.
      */
 
-    std::string mean_ibu = Calculate::double_to_string(Calculate::mean_ibu(storage));
-    if (mean_ibu == "nan") {
-        mean_ibu = " ";
+    if (drink_type == "Beer") {
+        std::string mean_ibu = Calculate::double_to_string(Calculate::mean_ibu(storage, drink_type));
+        if (mean_ibu == "nan" || mean_ibu.empty()) {
+            mean_ibu = "No " + drink_type + " entered";
+        }
+        ui->avgIbuDrinkOutput->setText(QString::fromStdString(mean_ibu));
     }
-    ui->avgIbuDrinkOutput->setText(QString::fromStdString(mean_ibu));
 }
 
 void MainWindow::update_types_producers_on_name_change() {
@@ -784,12 +793,15 @@ void MainWindow::name_input_changed(const QString&) {
     update_types_producers_on_name_change();
 }
 
-void MainWindow::update_favorite_type() {
+void MainWindow::update_favorite_type(const std::string& drink_type) {
     /*
      * Set the favoriteTypeOutput to the most common beer found in the database.
      */
 
-    std::string fave_type = Calculate::favorite_type(storage);
+    std::string fave_type = Calculate::favorite_type(storage, drink_type);
+    if (fave_type.empty()) {
+        fave_type = "No " + drink_type + " entered";
+    }
     ui->favoriteTypeOutput->setText(QString::fromStdString(fave_type));
 }
 
@@ -847,9 +859,11 @@ void MainWindow::tab_changed() {
     std::string name = selected_drink.name;
     std::string selected_drink_alc_type = selected_drink.alcohol_type;
     std::string new_tab = get_current_tab();
+    update_stat_panel();
 
     reset_fields();
     if (new_tab == "Beer") {
+        ui->averageIbuDrinkLabel->setText("Average IBU per beer:");
         if (!name.empty()) {  // If a current row is selected, update the beer name to that row and get notes
             ui->beerNameInput->setCurrentText(QString::fromStdString(name));
             // When user clicks on beer tab with a liquor or wine selected in the table, clear the selection
@@ -864,6 +878,8 @@ void MainWindow::tab_changed() {
             }
         }
     } else if (new_tab == "Liquor") {
+        ui->averageIbuDrinkLabel->setText("");
+        ui->avgIbuDrinkOutput->setText("");
         if (!name.empty()) {
             ui->liquorNameInput->setCurrentText(QString::fromStdString(name));
             if (new_tab != selected_drink_alc_type) {
@@ -876,6 +892,8 @@ void MainWindow::tab_changed() {
             }
         }
     } else if(new_tab == "Wine") {
+        ui->averageIbuDrinkLabel->setText("");
+        ui->avgIbuDrinkOutput->setText("");
         if (!name.empty()) {
             ui->wineNameInput->setCurrentText(QString::fromStdString(name));
             if (new_tab != selected_drink_alc_type) {
