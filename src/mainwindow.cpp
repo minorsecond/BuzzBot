@@ -736,14 +736,13 @@ void MainWindow::update_mean_ibu(const std::string& drink_type) {
      * Set the mean IBU text label to the mean IBU of all beers in the database.
      */
 
-    std::string mean_ibu = Calculate::double_to_string(Calculate::mean_ibu(storage, drink_type));
-    if (mean_ibu.empty()) {
-        mean_ibu = "No " + drink_type + " entered";
+    if (drink_type == "Beer") {
+        std::string mean_ibu = Calculate::double_to_string(Calculate::mean_ibu(storage, drink_type));
+        if (mean_ibu == "nan" || mean_ibu.empty()) {
+            mean_ibu = "No " + drink_type + " entered";
+        }
+        ui->avgIbuDrinkOutput->setText(QString::fromStdString(mean_ibu));
     }
-    if (mean_ibu == "nan") {
-        mean_ibu = " ";
-    }
-    ui->avgIbuDrinkOutput->setText(QString::fromStdString(mean_ibu));
 }
 
 void MainWindow::update_types_producers_on_name_change() {
