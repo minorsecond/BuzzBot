@@ -848,6 +848,7 @@ void MainWindow::tab_changed() {
     std::string name = selected_drink.name;
     std::string selected_drink_alc_type = selected_drink.alcohol_type;
     std::string new_tab = get_current_tab();
+    update_stat_panel();
 
     reset_fields();
     if (new_tab == "Beer") {
