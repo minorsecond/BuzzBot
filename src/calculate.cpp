@@ -90,7 +90,7 @@ double Calculate::oz_alcohol_remaining(const std::string& sex, const std::string
     return round_to_two_decimal_points(oz_alcohol_remaining);
 }
 
-std::string Calculate::favorite_producer(Storage storage) {
+std::string Calculate::favorite_producer(const Storage& storage, const std::string& drink_type) {
     /*
      * Get the number of time each brewery appears in the database.
      * @param storage: A Storage instance.
@@ -101,7 +101,8 @@ std::string Calculate::favorite_producer(Storage storage) {
     std::vector<std::string> producers;
     std::string favorite_producer;
 
-    std::vector<Drink> all_drinks = storage.get_all<Drink>();
+    //std::vector<Drink> all_drinks = storage.get_all<Drink>();
+    std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
     producers.reserve(all_drinks.size());
     for (const auto& drink: all_drinks) {
