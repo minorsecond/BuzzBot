@@ -41,7 +41,7 @@ private:
     void update_favorite_beer(const std::string& drink_type);
     void update_favorite_type(const std::string& drink_type);
     void update_mean_abv(const std::string& drink_type);
-    void update_mean_ibu();
+    void update_mean_ibu(const std::string& drink_type);
     void update_types_producers_on_name_change();
     std::string get_latest_notes(const std::string& name, const std::string& alcohol_type);
     std::string get_current_tab();
