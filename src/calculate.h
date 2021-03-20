@@ -15,7 +15,7 @@ public:
     static double standard_drinks_remaining(const std::string& sex, const std::string& standard, int drink_limit, double standard_drinks_consumed);
     static double oz_alcohol_remaining(const std::string& sex, const std::string& standard, int drink_limit, double oz_consumed);
     static double round_to_two_decimal_points(double val);
-    static std::string favorite_producer(Storage storage);
+    static std::string favorite_producer(const Storage& storage, const std::string& drink_type);
     static std::string favorite_beer(Storage storage);
     static std::string favorite_type(Storage storage);
     static double mean_abv(Storage storage);

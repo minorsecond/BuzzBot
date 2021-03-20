@@ -579,6 +579,7 @@ void MainWindow::update_stat_panel() {
     date::year_month_day start_date{};
     double standard_drinks = 0;
     std::string weekday_name;
+    std::string current_tab = get_current_tab();
 
     // Get filter day & day of week.
     std::tuple<date::year_month_day, std::string> filter_date_results = get_filter_date();
@@ -603,7 +604,7 @@ void MainWindow::update_stat_panel() {
     update_standard_drinks_left_this_week(standard_drinks);
     double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week, weekday_name);
     update_oz_alcohol_remaining(oz_alc_consumed);
-    update_favorite_brewery();
+    update_favorite_brewery(current_tab);
     update_favorite_beer();
     update_favorite_type();
     update_mean_abv();
@@ -694,12 +695,12 @@ void MainWindow::update_oz_alcohol_remaining(double oz_alcohol_consumed) {
     }
 }
 
-void MainWindow::update_favorite_brewery() {
+void MainWindow::update_favorite_brewery(const std::string& drink_type) {
     /*
      * Update the favorite brewery text label to the most common beer in the database.
      */
 
-    std::string fave_brewery = Calculate::favorite_producer(storage);
+    std::string fave_brewery = Calculate::favorite_producer(storage, drink_type);
     ui->favoriteBreweryOutput->setText(QString::fromStdString(fave_brewery));
 }
 
