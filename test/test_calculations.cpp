@@ -151,7 +151,7 @@ TEST_CASE("Favorite Drink", "[Favorite Calculations]") {
     storage_1.insert(etrwo2);
     Database::write_db_to_disk(storage_1);
 
-    std::string favorite_beer = Calculate::favorite_beer(storage_1);
+    std::string favorite_beer = Calculate::favorite_drink(storage_1);
     REQUIRE(favorite_beer == "Everything Rhymes with Orange");
 }
 

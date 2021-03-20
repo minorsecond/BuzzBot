@@ -124,21 +124,21 @@ std::string Calculate::favorite_producer(const Storage& storage, const std::stri
     return favorite_producer;
 }
 
-std::string Calculate::favorite_beer(Storage storage) {
+std::string Calculate::favorite_drink(const Storage& storage, const std::string& drink_type) {
     /*
      * Calculates favorite beer based on most common beer in database
      * @param Storage: a Storage instance
-     * @return favorite_beer: The most common beer in the database.
+     * @return favorite_drink: The most common beer in the database.
      */
 
     std::map<std::string, unsigned> beer_counts;
     std::vector<std::string> beers;
     std::string favorite_beer;
 
-    std::vector<Drink> all_beers = storage.get_all<Drink>();
+    std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
-    beers.reserve(all_beers.size());
-    for (const auto& beer: all_beers) {
+    beers.reserve(all_drinks.size());
+    for (const auto& beer: all_drinks) {
         beers.push_back(beer.name);
     }
     for (const auto& brewery : beers) {
@@ -158,7 +158,7 @@ std::string Calculate::favorite_beer(Storage storage) {
     return favorite_beer;
 }
 
-double Calculate::mean_abv(Storage storage) {
+double Calculate::mean_abv(const Storage& storage, const std::string& drink_type) {
     /*
      * Calculate the mean ABV for all drinks.
      * @param storage: A storage instance.
@@ -167,9 +167,9 @@ double Calculate::mean_abv(Storage storage) {
 
     double abv_sum = 0.0;
     unsigned beer_count = 0;
-    std::vector<Drink> all_beers = storage.get_all<Drink>();
+    std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
-    for (const auto& beer : all_beers) {
+    for (const auto& beer : all_drinks) {
         beer_count += 1;
         abv_sum += beer.abv;
     }
@@ -199,7 +199,7 @@ double Calculate::mean_ibu(Storage storage) {
     return ibu_sum / beer_count;
 }
 
-std::string Calculate::favorite_type(Storage storage) {
+std::string Calculate::favorite_type(const Storage& storage, const std::string& drink_type) {
     /*
      * Calculates favorite beer type based on most common type in database
      * @param Storage: a Storage instance
@@ -210,10 +210,10 @@ std::string Calculate::favorite_type(Storage storage) {
     std::vector<std::string> types;
     std::string favorite_type;
 
-    std::vector<Drink> all_beers = storage.get_all<Drink>();
+    std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
-    types.reserve(all_beers.size());
-    for (const auto& beer: all_beers) {
+    types.reserve(all_drinks.size());
+    for (const auto& beer: all_drinks) {
         types.push_back(beer.type);
     }
     for (const auto& type : types) {
