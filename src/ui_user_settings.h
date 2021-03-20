@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'user_settings.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.2
+** Created by: Qt User Interface Compiler version 6.0.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,6 +10,7 @@
 #define UI_USER_SETTINGS_H
 
 #include <QtCore/QVariant>
+#include <QtWidgets/QAbstractButton>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
@@ -227,8 +228,8 @@ public:
 
 
         retranslateUi(userSettingsDialog);
-        QObject::connect(userSettingsButtonBox, SIGNAL(accepted()), userSettingsDialog, SLOT(accept()));
-        QObject::connect(userSettingsButtonBox, SIGNAL(rejected()), userSettingsDialog, SLOT(reject()));
+        QObject::connect(userSettingsButtonBox, &QDialogButtonBox::accepted, userSettingsDialog, &QDialog::accept);
+        QObject::connect(userSettingsButtonBox, &QDialogButtonBox::rejected, userSettingsDialog, &QDialog::reject);
 
         QMetaObject::connectSlotsByName(userSettingsDialog);
     } // setupUi

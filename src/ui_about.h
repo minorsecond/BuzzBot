@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'about.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.2
+** Created by: Qt User Interface Compiler version 6.0.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -83,7 +83,6 @@ public:
         QFont font;
         font.setPointSize(16);
         font.setBold(true);
-        font.setWeight(75);
         appNameLabel->setFont(font);
         appNameLabel->setAlignment(Qt::AlignHCenter|Qt::AlignTop);
 
