@@ -16,7 +16,7 @@ About::About(QWidget *parent) {
     this->setFixedSize(237, 272);
 
     // Version text
-    std::string version = "1.2.3";
+    std::string version = "1.2.4";
     ui.versionLabel->setText(QString::fromStdString("Version " + version));
 
     // Make Qt URL clickable
