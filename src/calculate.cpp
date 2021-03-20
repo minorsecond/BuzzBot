@@ -177,7 +177,7 @@ double Calculate::mean_abv(const Storage& storage, const std::string& drink_type
     return round_to_two_decimal_points(abv_sum / beer_count);
 }
 
-double Calculate::mean_ibu(Storage storage) {
+double Calculate::mean_ibu(Storage storage, const std::string& drink_type) {
     /*
      * Calculate the mean IBU of all beers in the database.
      * @param storage: A storage instance.
@@ -186,9 +186,9 @@ double Calculate::mean_ibu(Storage storage) {
 
     double ibu_sum = 0.0;
     unsigned beer_count = 0;
-    std::vector<Drink> all_beers = storage.get_all<Drink>();
+    std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
-    for (const auto& beer : all_beers) {
+    for (const auto& beer : all_drinks) {
         // Ignore empty IBU values
         if (beer.ibu > 0) {
             beer_count += 1;
