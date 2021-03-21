@@ -21,7 +21,7 @@ echo "Configuring plist."
 /usr/libexec/PlistBuddy -c "Add :CFBundleSupportedPlatforms array" ~/Desktop/BuzzBot/App/BuzzBot.app/Contents/Info.plist
 /usr/libexec/PlistBuddy -c "Add :CFBundleSupportedPlatforms:0 string MacOSX" ~/Desktop/BuzzBot/App/BuzzBot.app/Contents/Info.plist
 /usr/libexec/PlistBuddy -c "Add :LSApplicationCategoryType string public.app-category.lifestyle" ~/Desktop/BuzzBot/App/BuzzBot.app/Contents/Info.plist
-/usr/libexec/PlistBuddy -c "Add :LSMinimumSystemVersion string 10.15.5" ~/Desktop/BuzzBot/App/BuzzBot.app/Contents/Info.plist
+/usr/libexec/PlistBuddy -c "Set :LSMinimumSystemVersion 10.15.5" ~/Desktop/BuzzBot/App/BuzzBot.app/Contents/Info.plist
 
 echo "Codesigning."
 find ~/Desktop/BuzzBot/App/BuzzBot.app -name "*.dylib" | xargs -I $ codesign --options runtime --verify --verbose --sign "3rd Party Mac Developer Application: Robert Wardrup (7KNS6YGX5V)" $
