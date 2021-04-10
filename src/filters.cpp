@@ -3,6 +3,7 @@
 //
 
 #include "mainwindow.h"
+#include "iostream"
 
 std::vector<std::set<QString>> MainWindow::generate_filter_item_sets() {
     /*
@@ -74,8 +75,19 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
             ui->filterTextInput->addItem(brewery);
         }
     } else if (filter_type == "Rating") {
-        for (const auto& rating : filter_values.at(4)) {
-            ui->filterTextInput->addItem(rating);
+        // Convert rating integers to QStrings and put in set
+        std::vector<int> ratings_tmp;
+        for (const auto& rating_value : filter_values.at(4)) {
+            int rating_int = std::stoi(rating_value.toStdString());
+            ratings_tmp.push_back(rating_int);
+        }
+
+        // Sort ratings in descending order
+        std::sort(ratings_tmp.begin(), ratings_tmp.end(), std::greater<int>());
+
+        for (const auto& rating : ratings_tmp) {
+            QString rating_qstring = QString::fromStdString(std::to_string(rating));
+            ui->filterTextInput->addItem(rating_qstring);
         }
     }
 }
