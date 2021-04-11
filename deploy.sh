@@ -5,9 +5,10 @@ VERSION=$(head -n 1 VERS)
 echo "Deploying version" $VERSION
 
 echo "Copying BuzzBot.app to desktop."
-rm -R ~/Desktop/BuzzBot/
+rm -Rf ~/Desktop/BuzzBot/
 mkdir -p ~/Desktop/BuzzBot/App
 cp -R cmake-build-release/BuzzBot.app ~/Desktop/BuzzBot/App/BuzzBot.app
+chmod -R 775 ~/Desktop/BuzzBot/App/BuzzBot.app/
 
 echo "Extracting debug symbols"
 dsymutil ~/Desktop/BuzzBot/App/BuzzBot.app/Contents/MacOS/BuzzBot -o ~/Desktop/BuzzBot/BuzzBot.app.dSYM
@@ -15,7 +16,7 @@ mkdir ~/Desktop/BuzzBot/Symbols/
 symbols -noTextInSOD -noDaemon -arch all -symbolsPackageDir ~/Desktop/BuzzBot/Symbols ~/Desktop/BuzzBot/BuzzBot.app.dSYM/Contents/Resources/DWARF/BuzzBot
 
 echo "Running macdeployqt."
-~/Qt/6.0.0/*/bin/macdeployqt ~/Desktop/BuzzBot/App/BuzzBot.app -always-overwrite -appstore-compliant
+~/Qt/6.0.0/clang_64/bin/macdeployqt ~/Desktop/BuzzBot/App/BuzzBot.app -always-overwrite -appstore-compliant
 
 echo "Configuring plist."
 /usr/libexec/PlistBuddy -c "Add :CFBundleSupportedPlatforms array" ~/Desktop/BuzzBot/App/BuzzBot.app/Contents/Info.plist
