@@ -603,7 +603,7 @@ void MainWindow::update_stat_panel() {
     update_drinks_this_week(standard_drinks, weekday_name);
     update_standard_drinks_left_this_week(standard_drinks);
     double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week, weekday_name);
-    update_oz_alcohol_remaining(oz_alc_consumed);
+    update_volume_alcohol_remaining(oz_alc_consumed);
     update_favorite_brewery(current_tab);
     update_favorite_beer(current_tab);
     update_favorite_type(current_tab);
@@ -679,12 +679,12 @@ double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>
     return oz_consumed;
 }
 
-void MainWindow::update_oz_alcohol_remaining(double oz_alcohol_consumed) {
+void MainWindow::update_volume_alcohol_remaining(double volume_alcohol_consumed) {
     /*
      * Update the OZ. alcohol remaining label text to the amount of alcohol remaining.
      */
 
-    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, oz_alcohol_consumed);
+    double oz_alcohol_remaining = Calculate::volume_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, volume_alcohol_consumed);
     ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(Calculate::double_to_string(oz_alcohol_remaining)));
 
     // Set oz alcohol remaining text to red if negative
