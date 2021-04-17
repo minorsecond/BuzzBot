@@ -46,6 +46,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     add_menubar_items();
 
+    if (options.units == "Metric") {
+        ui->beerSizeLabel->setText("Size (ml)");
+    } else {
+        ui->beerSizeLabel->setText("Size (oz)");
+    }
+
     // Set size hints
     ui->beerDateInput->setProperty("sizeHint", QVariant(QSizeF(241, 22)));
 
@@ -516,6 +522,13 @@ void MainWindow::open_user_settings() {
     update_table();
     update_stat_panel();
     update_types_and_producers();
+
+    if (options.units == "Metric") {
+        ui->beerSizeLabel->setText("Size (ml)");
+    } else {
+        ui->beerSizeLabel->setText("Size (oz)");
+    }
+
 }
 
 std::string MainWindow::settings_path() {
