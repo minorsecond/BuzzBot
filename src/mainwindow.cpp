@@ -602,8 +602,8 @@ void MainWindow::update_stat_panel() {
     // Update the individual elements of the stat pane
     update_drinks_this_week(standard_drinks, weekday_name);
     update_standard_drinks_left_this_week(standard_drinks);
-    double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week, weekday_name);
-    update_volume_alcohol_remaining(oz_alc_consumed);
+    double vol_alc_consumed = update_vol_alcohol_consumed_this_week(beers_this_week, weekday_name);
+    update_volume_alcohol_remaining(vol_alc_consumed);
     update_favorite_brewery(current_tab);
     update_favorite_beer(current_tab);
     update_favorite_type(current_tab);
@@ -653,42 +653,42 @@ void MainWindow::reset_table_sort() {
     ui->drinkLogTable->sortItems(sort_column, Qt::DescendingOrder);
 }
 
-double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week, const std::string& weekday_name) {
+double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week, const std::string& weekday_name) {
     /*
-     * Update the Oz. alcohol consumed output label to the total amount alcohol consumed this week.
+     * Update the volume alcohol consumed output label to the total amount alcohol consumed this week.
      * @param beers_this_week: A vector of Drinks containing the drinks consumed in the past week.
      * @param weekday_name: The day the week began on.
      */
 
-    double oz_consumed = 0;
+    double volume_consumed = 0;
 
-    std::string ozThisWeekLabelText = "Oz. alcohol since " + weekday_name + ":";
-    ui->volAlcoholConsumedLabel->setText(QString::fromStdString(ozThisWeekLabelText));
+    std::string volumeThisWeekLabelText = "Oz. alcohol since " + weekday_name + ":";
+    ui->volAlcoholConsumedLabel->setText(QString::fromStdString(volumeThisWeekLabelText));
 
     for (const auto& beer : beers_this_week) {
-        double beer_oz_alcohol = (beer.abv/100) * beer._size;
-        oz_consumed += beer_oz_alcohol;
+        double drinks_vol_alcohol = (beer.abv / 100) * beer._size;
+        volume_consumed += drinks_vol_alcohol;
     }
 
-    if (oz_consumed == 0.0) {
+    if (volume_consumed == 0.0) {
         ui->volAlcoholConsumedOutput->setText("0.0");
     } else {
-        ui->volAlcoholConsumedOutput->setText(QString::fromStdString(Calculate::double_to_string(oz_consumed)));
+        ui->volAlcoholConsumedOutput->setText(QString::fromStdString(Calculate::double_to_string(volume_consumed)));
     }
 
-    return oz_consumed;
+    return volume_consumed;
 }
 
 void MainWindow::update_volume_alcohol_remaining(double volume_alcohol_consumed) {
     /*
-     * Update the OZ. alcohol remaining label text to the amount of alcohol remaining.
+     * Update the volume alcohol remaining label text to the amount of alcohol remaining.
      */
 
-    double oz_alcohol_remaining = Calculate::volume_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, volume_alcohol_consumed);
-    ui->volAlcoholRemainingOutput->setText(QString::fromStdString(Calculate::double_to_string(oz_alcohol_remaining)));
+    double volume_alcohol_remaining = Calculate::volume_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, volume_alcohol_consumed);
+    ui->volAlcoholRemainingOutput->setText(QString::fromStdString(Calculate::double_to_string(volume_alcohol_remaining)));
 
-    // Set oz alcohol remaining text to red if negative
-    if (oz_alcohol_remaining < 0) {
+    // Set volume alcohol remaining text to red if negative
+    if (volume_alcohol_remaining < 0) {
         ui->volAlcoholRemainingOutput->setStyleSheet("QLabel {color : red;}");
     } else {
         ui->volAlcoholRemainingOutput->setStyleSheet("");
