@@ -12,6 +12,7 @@ struct Options {
     std::string weekday_start = "Sunday";
     std::string limit_standard = "NIAAA";
     std::string units = "Imperial";
+    std::string std_drink_size = "0.6";  // Store as ounces
     int weekly_limit = -1;
 };
 
