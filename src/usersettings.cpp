@@ -15,12 +15,16 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
      */
 
     ui.setupUi(this);
-    this->setFixedSize(615, 195);
+    this->setFixedSize(650, 300);
+
+    ui.stdDrinkDefInput->setSingleStep(0.1);
 
     // Rounded rect frames
     ui.frame->setStyleSheet("QWidget#frame{ border: 1px solid grey; border-radius: 6px; }");
     ui.frame_2->setStyleSheet("QWidget#frame_2{ border: 1px solid grey; border-radius: 6px; }");
     ui.frame_3->setStyleSheet("QWidget#frame_3{ border: 1px solid grey; border-radius: 6px; }");
+    ui.frame_4->setStyleSheet("QWidget#frame_4{ border: 1px solid grey; border-radius: 6px; }");
+    ui.frame_5->setStyleSheet("QWidget#frame_5{ border: 1px solid grey; border-radius: 6px; }");
     ui.weeklyLimitFrame->setStyleSheet("QWidget#weeklyLimitFrame{ border: 1px solid grey; border-radius: 6px; }");
 
     if (options.sex == "male") {
@@ -43,6 +47,14 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
         ui.niaaaStandardsRadioButton->setChecked(false);
         ui.customLimitRadioButton->setChecked(true);
         ui.customLimitSpinBox->setEnabled(true);
+    }
+
+    ui.stdDrinkDefInput->setValue(std::stod(options.std_drink_size));
+
+    if (options.units == "Metric") {
+        ui.metricRadioButton->setChecked(true);
+    } else {
+        ui.imperialRadioButton->setChecked(true);
     }
 
     // Set weekday selector
@@ -70,12 +82,16 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
     ui.clearDataButton->setPalette(pal);
     ui.clearDataButton->update();
 
+    update_std_drink_size_label();
+
     // Connections
     connect(ui.rollingDateRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_date_calc);
     connect(ui.fixedDateRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_date_calc);
     connect(ui.niaaaStandardsRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_limit_setting);
     connect(ui.customLimitRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_limit_setting);
     connect(ui.clearDataButton, &QPushButton::clicked, this, &UserSettings::clicked_clear_data);
+    connect(ui.imperialRadioButton, &QRadioButton::clicked, this, &UserSettings::update_std_drink_size_label);
+    connect(ui.metricRadioButton, &QRadioButton::clicked, this, &UserSettings::update_std_drink_size_label);
 }
 
 std::string UserSettings::get_sex() {
@@ -169,6 +185,44 @@ void UserSettings::clicked_clear_data() {
         Storage storage = initStorage(Database::path());
         Database::truncate(storage);
         std::cout << "*** Truncated the database ***" << std::endl;
+    }
+}
+
+std::string UserSettings::get_units() {
+    /*
+     * Get nuits
+     * @return: String of either Imperial or Metric
+     */
+
+    std::string selected_units {"Imperial"}; // Default to imperial as most users will be from the US
+
+    if (ui.metricRadioButton->isChecked()) {
+        selected_units = "Metric";
+    } else {
+        selected_units = "Imperial";
+    }
+
+    return selected_units;
+}
+
+double UserSettings::get_std_drink_size() {
+    /*
+     * Get the volume of alcohol that denotes a standard drink.
+     */
+
+    double std_drink_size = ui.stdDrinkDefInput->value();
+    return std_drink_size;
+}
+
+void UserSettings::update_std_drink_size_label() {
+    /*
+     * Update the standard drink size label when unit is changed.
+     */
+
+    if (ui.imperialRadioButton->isChecked()) {
+        ui.stdDrinkDefLabel->setText("Oz. Alcohol");
+    } else {
+        ui.stdDrinkDefLabel->setText("ml Alcohol");
     }
 }
 // LCOV_EXCL_STOP

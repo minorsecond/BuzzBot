@@ -8,19 +8,21 @@
 #include <iostream>
 
 TEST_CASE("Standard Drinks", "[Drink Calculations]") {
-    double mosaic_standard_drinks = Calculate::standard_drinks(8.6, 12);
-    double etrwo_standard_drinks = Calculate::standard_drinks(6.5, 12);
-    double old_rasputin_standard_drinks = Calculate::standard_drinks(9, 12);
+    double mosaic_standard_drinks = Calculate::standard_drinks(8.6, 12, 0.6);
+    double etrwo_standard_drinks = Calculate::standard_drinks(6.5, 12, 0.6);
+    double old_rasputin_standard_drinks = Calculate::standard_drinks(9, 12, 0.6);
+    double asahi_super_dry_standard_drinks = Calculate::standard_drinks(5.2, 354.88, 12.7);
 
     REQUIRE(mosaic_standard_drinks == 1.72);
     REQUIRE(etrwo_standard_drinks == 1.30);
     REQUIRE(old_rasputin_standard_drinks == 1.80);
+    REQUIRE(asahi_super_dry_standard_drinks == 1.45);
 }
 
 TEST_CASE("Oz Alcohol", "[Drink Calculations]") {
-    double mosaic_oz_alcohol = Calculate::oz_alcohol(8.6, 12);
-    double etrwo_oz_alcohol = Calculate::oz_alcohol(6.5, 12);
-    double old_rasputin_oz_alcohol = Calculate::oz_alcohol(9, 12);
+    double mosaic_oz_alcohol = Calculate::alcohol_volume(8.6, 12);
+    double etrwo_oz_alcohol = Calculate::alcohol_volume(6.5, 12);
+    double old_rasputin_oz_alcohol = Calculate::alcohol_volume(9, 12);
 
     REQUIRE(mosaic_oz_alcohol == 1.032);
     REQUIRE(etrwo_oz_alcohol == 0.78);
@@ -36,8 +38,8 @@ TEST_CASE("Std Drinks Remaining", "[Drink Calculations]") {
 }
 
 TEST_CASE("Oz Alcohol Remaining", "[Drink Calculations]") {
-    double male_oz_remaining = Calculate::oz_alcohol_remaining("male", "NIAAA", 0, 4.3);
-    double female_oz_remaining = Calculate::oz_alcohol_remaining("female", "Custom", 10, 5.5);
+    double male_oz_remaining = Calculate::volume_alcohol_remaining("male", "NIAAA", 0, 4.3, 0.6);
+    double female_oz_remaining = Calculate::volume_alcohol_remaining("female", "Custom", 10, 5.5, 0.6);
 
     REQUIRE(male_oz_remaining == 4.1);
     REQUIRE(female_oz_remaining == 0.5);
