@@ -265,3 +265,14 @@ std::string Calculate::double_to_string(double input_double) {
 
     return output_string.str();
 }
+
+double Calculate::oz_to_ml(double input_oz) {
+    /*
+     * Convert oz to ml for metric support. 1 oz = 29.5735 ml.
+     * @param input_oz: A double denoting drink volume in ounces.
+     * @return: A double denoting drink volume in milliliters.
+     */
+
+    double ml = input_oz * 29.5735;
+    return ml;
+}
