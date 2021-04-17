@@ -15,7 +15,8 @@ void MainWindow::update_beer_fields() {
     std::set<QString> breweries;
     std::set<QString> types;
     std::set<QString> subtypes;
-    std::set<QString> names;
+    std::set<std::string> names;
+    std::vector<std::string> names_tmp;
     std::vector<Drink> all_beers = Database::filter("Alcohol Type", "Beer", storage);
 
     // Block signals to avoid crashing
@@ -33,12 +34,12 @@ void MainWindow::update_beer_fields() {
         QString brewery_name = QString::fromStdString(beer.producer);
         QString beer_type = QString::fromStdString(beer.type);
         QString beer_subtype = QString::fromStdString(beer.subtype);
-        QString beer_name = QString::fromStdString(beer.name);
+        std::string name = beer.name;
 
         breweries.insert(brewery_name);
         types.insert(beer_type);
         subtypes.insert(beer_subtype);
-        names.insert(beer_name);
+        names.insert(name);
     }
 
     for (const auto& brewery : breweries) {
@@ -60,9 +61,17 @@ void MainWindow::update_beer_fields() {
     }
 
     for (const auto& name : names) {
-        if (!name.isEmpty()) {
-            ui->beerNameInput->addItem(name);
+        if (!name.empty()) {
+            if (std::find(names_tmp.begin(), names_tmp.end(), name) == names_tmp.end())
+                names_tmp.push_back(name);
         }
+    }
+
+    std::sort(names_tmp.begin(), names_tmp.end(), Calculate::compare_strings);
+
+    for (const auto& name : names_tmp) {
+        QString name_q = QString::fromStdString(name);
+        ui->beerNameInput->addItem(name_q);
     }
 
     // Reset to first name in field

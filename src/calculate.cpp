@@ -5,6 +5,7 @@
 #include "calculate.h"
 #include <cmath>
 #include <iostream>
+#include <algorithm>
 
 double Calculate::standard_drinks(double abv, double amount, double std_drink_size) {
     /*
@@ -289,4 +290,25 @@ double Calculate::ml_to_oz(double input_ml) {
 
     double oz = input_ml / 29.5735;
     return oz;
+}
+
+bool Calculate::compare_strings(std::string lhs, std::string rhs) {
+    /*
+     * Compare two strings alphabetically. Used to compare strings, ignoring case.
+     */
+
+    std::string lhs_tmp;
+    std::string rhs_tmp;
+
+    for (char& c : lhs) {
+        c = std::toupper(c, std::locale());
+        lhs_tmp += c;
+    }
+
+    for (char& c : rhs) {
+        c = std::toupper(c, std::locale());
+        rhs_tmp += c;
+    }
+
+    return lhs < rhs;
 }
