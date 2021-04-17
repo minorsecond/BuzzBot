@@ -9,15 +9,18 @@
 double Calculate::standard_drinks(double abv, double amount) {
     /*
      * Calculate the number of standard drinks in a beer.
+     * 1 Std. drink in the US is .6 oz pure alcohol. In Europe,
+     * it's 17.5 ml pure alcohol. These two measurements are
+     * roughly the same.
      * @param abv: the alcohol by volume of the beer.
      * @param amount: the amount of beer in the container.
      */
 
-    double alcohol_amt = oz_alcohol(abv, amount);
+    double alcohol_amt = alcohol_volume(abv, amount);
     return round_to_two_decimal_points(alcohol_amt / .6);
 }
 
-double Calculate::oz_alcohol(double abv, double amount) {
+double Calculate::alcohol_volume(double abv, double amount) {
     /*
      * Calculate the ounces of alcohol in a beer.
      * @param abv: The alcohol by volume of the beer.
