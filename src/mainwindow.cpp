@@ -529,7 +529,6 @@ void MainWindow::open_user_settings() {
     } else {
         ui->beerSizeLabel->setText("Size (oz)");
     }
-
 }
 
 std::string MainWindow::settings_path() {
