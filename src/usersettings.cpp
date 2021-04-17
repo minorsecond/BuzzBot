@@ -17,6 +17,8 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
     ui.setupUi(this);
     this->setFixedSize(650, 300);
 
+    ui.stdDrinkDefInput->setSingleStep(0.1);
+
     // Rounded rect frames
     ui.frame->setStyleSheet("QWidget#frame{ border: 1px solid grey; border-radius: 6px; }");
     ui.frame_2->setStyleSheet("QWidget#frame_2{ border: 1px solid grey; border-radius: 6px; }");
