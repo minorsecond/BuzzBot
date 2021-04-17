@@ -539,9 +539,7 @@ std::string MainWindow::settings_path() {
     // Find path to application support directory
 
     std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
-
     std::string settings_path = directory + "/buzzbot_settings.conf";
-
     std::filesystem::create_directory(directory);
 
     return settings_path;
