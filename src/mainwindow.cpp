@@ -390,11 +390,17 @@ void MainWindow::update_table() {
         auto *subtype = new QTableWidgetItem(drink.subtype.c_str());
         auto *producer = new QTableWidgetItem(drink.producer.c_str());
         auto *abv = new QTableWidgetItem(Calculate::double_to_string(drink.abv).c_str());
-        auto *size = new QTableWidgetItem(Calculate::double_to_string(drink._size).c_str());
         auto *rating = new QTableWidgetItem(std::to_string(drink.rating).c_str());
         auto *id = new QTableWidgetItem;
         auto *timestamp = new QTableWidgetItem(drink.timestamp.c_str());
         auto *sort_order =  new QTableWidgetItem(drink.sort_order);
+
+        // Calculate & Display size
+        double drink_size = drink._size;
+        if (options.units == "Metric") {
+            drink_size = Calculate::oz_to_ml(drink_size);
+        }
+        auto *size = new QTableWidgetItem(Calculate::double_to_string(drink_size).c_str());
 
         // Sort ID numerically
         id->setData(Qt::DisplayRole, drink.id);
@@ -612,6 +618,14 @@ void MainWindow::update_stat_panel() {
 
     for (const auto& beer : beers_this_week) {
         standard_drinks += Calculate::standard_drinks(beer.abv, beer._size);
+    }
+
+    if (options.units == "Imperial") {
+        ui->volAlcoholConsumedLabel->setText("Oz. alcohol consumed:");
+        ui->volAlcoholRemainingLabel->setText("Oz. alcohol remaining:");
+    } else {
+        ui->volAlcoholConsumedLabel->setText("ml alcohol consumed:");
+        ui->volAlcoholRemainingLabel->setText("ml alcohol remaining:");
     }
 
     // Update the individual elements of the stat pane
@@ -1007,6 +1021,10 @@ Drink MainWindow::get_drink_at_selected_row() {
             ui->deleteRowButton->setDisabled(true);
 
         selected_drink = Database::read_row(row_to_get, storage);
+
+        if (options.units == "Metric") {
+            selected_drink._size = Calculate::oz_to_ml(selected_drink._size);
+        }
     }
     return selected_drink;
 }
