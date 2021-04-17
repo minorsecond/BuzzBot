@@ -679,8 +679,16 @@ double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink
     std::string volumeThisWeekLabelText = units + " alcohol since " + weekday_name + ":";
     ui->volAlcoholConsumedLabel->setText(QString::fromStdString(volumeThisWeekLabelText));
 
+    // Calculate total volume for the week
     for (const auto& beer : beers_this_week) {
-        double drinks_vol_alcohol = (beer.abv / 100) * beer._size;
+        double drinks_vol_alcohol {0.0};
+        if (options.units == "Imperial") {
+            drinks_vol_alcohol = (beer.abv / 100) * beer._size;
+        } else {
+            // Everything is stored in DB as oz. Convert back to ml for display.
+            double drink_size = Calculate::oz_to_ml(beer._size);
+            drinks_vol_alcohol = (beer.abv / 100) * drink_size;
+        }
         volume_consumed += drinks_vol_alcohol;
     }
 

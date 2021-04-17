@@ -279,3 +279,14 @@ double Calculate::oz_to_ml(double input_oz) {
     double ml = input_oz * 29.5735;
     return ml;
 }
+
+double Calculate::ml_to_oz(double input_ml) {
+    /*
+     * Convert ml to oz for metric support. 29.5735 ml = 1 lz.
+     * @param input_ml: A double denoting drink volume in milliliters.
+     * @return: A double denoting drink volume in ounces.
+     */
+
+    double oz = input_ml / 29.5735;
+    return oz;
+}
