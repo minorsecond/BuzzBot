@@ -485,12 +485,13 @@ void MainWindow::open_user_settings() {
 
     UserSettings user_settings = UserSettings(nullptr, options);
     user_settings.setModal(true);
-    if (user_settings.exec() == QDialog::Accepted) {
+    if (user_settings.exec() == QDialog::Accepted) {  // Update settings when OK button is clicked
         options.sex = user_settings.get_sex();
         options.date_calculation_method = user_settings.get_date_calculation_method();
         options.weekday_start = user_settings.get_weekday_start();
         options.limit_standard = user_settings.get_limit_standard();
         options.weekly_limit = user_settings.get_drink_limit();
+        options.units = user_settings.get_units();
         update_stat_panel();
     }
     program_options(true);
@@ -532,6 +533,7 @@ void MainWindow::program_options(bool write) {
         std::string date_calculation_method = "date_calculation_method:" + options.date_calculation_method;
         std::string limit_standard = "limit_standard:" + options.limit_standard;
         std::string weekly_limit = "custom_weekly_limit:" + std::to_string(options.weekly_limit);
+        std::string units = "units:" + options.units;
         std::ofstream out_data;
 
         if (!out_data) {
@@ -545,6 +547,7 @@ void MainWindow::program_options(bool write) {
         out_data << date_calculation_method + '\n';
         out_data << limit_standard + '\n';
         out_data << weekly_limit + '\n';
+        out_data << units + '\n';
         out_data.close();
     } else {
         std::cout << "Reading user settings from " << path << std::endl;
@@ -564,6 +567,8 @@ void MainWindow::program_options(bool write) {
                     options.limit_standard = line.substr(line.find(':') + 1);
                 } else if (line_counter == 4) { // Fifth line should be the weekly limit that is custom set
                     options.weekly_limit = std::stoi(line.substr(line.find(':') + 1));
+                } else if (line_counter == 5) { // Sixth line should be the selected units, either Metric or Imperial
+                    options.units = line.substr(line.find(':') + 1);
                 }
                 line_counter += 1;
             }

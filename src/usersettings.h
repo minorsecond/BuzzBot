@@ -22,6 +22,7 @@ public:
     std::string get_date_calculation_method();
     int get_drink_limit();
     std::string get_limit_standard();
+    std::string get_units();
 
 
 private slots:
