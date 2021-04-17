@@ -15,6 +15,7 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
@@ -59,6 +60,11 @@ public:
     QRadioButton *fixedDateRadioButton;
     QRadioButton *rollingDateRadioButton;
     QSpacerItem *verticalSpacer_2;
+    QFrame *frame_5;
+    QGridLayout *gridLayout_11;
+    QDoubleSpinBox *stdDrinkDefInput;
+    QLabel *stdDrinkDefLabel;
+    QLabel *stdDrinkDefTitle;
     QSpacerItem *verticalSpacer_5;
     QVBoxLayout *verticalLayout_5;
     QFrame *weeklyLimitFrame;
@@ -77,7 +83,7 @@ public:
     {
         if (userSettingsDialog->objectName().isEmpty())
             userSettingsDialog->setObjectName(QString::fromUtf8("userSettingsDialog"));
-        userSettingsDialog->resize(830, 398);
+        userSettingsDialog->resize(885, 398);
         userSettingsDialog->setModal(true);
         gridLayout_2 = new QGridLayout(userSettingsDialog);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
@@ -214,6 +220,31 @@ public:
 
         verticalLayout->addWidget(frame_2);
 
+        frame_5 = new QFrame(userSettingsDialog);
+        frame_5->setObjectName(QString::fromUtf8("frame_5"));
+        frame_5->setFrameShape(QFrame::StyledPanel);
+        frame_5->setFrameShadow(QFrame::Raised);
+        gridLayout_11 = new QGridLayout(frame_5);
+        gridLayout_11->setObjectName(QString::fromUtf8("gridLayout_11"));
+        stdDrinkDefInput = new QDoubleSpinBox(frame_5);
+        stdDrinkDefInput->setObjectName(QString::fromUtf8("stdDrinkDefInput"));
+
+        gridLayout_11->addWidget(stdDrinkDefInput, 1, 0, 1, 1);
+
+        stdDrinkDefLabel = new QLabel(frame_5);
+        stdDrinkDefLabel->setObjectName(QString::fromUtf8("stdDrinkDefLabel"));
+
+        gridLayout_11->addWidget(stdDrinkDefLabel, 1, 1, 1, 1);
+
+        stdDrinkDefTitle = new QLabel(frame_5);
+        stdDrinkDefTitle->setObjectName(QString::fromUtf8("stdDrinkDefTitle"));
+        stdDrinkDefTitle->setAlignment(Qt::AlignCenter);
+
+        gridLayout_11->addWidget(stdDrinkDefTitle, 0, 0, 1, 2);
+
+
+        verticalLayout->addWidget(frame_5);
+
         verticalSpacer_5 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer_5);
@@ -318,6 +349,8 @@ public:
 
         fixedDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Reset on day", nullptr));
         rollingDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Rolling", nullptr));
+        stdDrinkDefLabel->setText(QCoreApplication::translate("userSettingsDialog", "Oz. Alcohol", nullptr));
+        stdDrinkDefTitle->setText(QCoreApplication::translate("userSettingsDialog", "Std. Drink Definition:", nullptr));
         weeklyLimitGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Weekly Limit Standard", nullptr));
         customLimitRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Custom", nullptr));
         niaaaStandardsRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "CDC/NIAAA", nullptr));

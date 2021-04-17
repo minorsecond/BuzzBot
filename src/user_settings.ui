@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>830</width>
+    <width>885</width>
     <height>398</height>
    </rect>
   </property>
@@ -239,6 +239,38 @@
               </spacer>
              </item>
             </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_5">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_11">
+          <item row="1" column="0">
+           <widget class="QDoubleSpinBox" name="stdDrinkDefInput"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="stdDrinkDefLabel">
+            <property name="text">
+             <string>Oz. Alcohol</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QLabel" name="stdDrinkDefTitle">
+            <property name="text">
+             <string>Std. Drink Definition:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
            </widget>
           </item>
          </layout>
