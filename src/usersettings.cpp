@@ -80,12 +80,16 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
     ui.clearDataButton->setPalette(pal);
     ui.clearDataButton->update();
 
+    update_std_drink_size_label();
+
     // Connections
     connect(ui.rollingDateRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_date_calc);
     connect(ui.fixedDateRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_date_calc);
     connect(ui.niaaaStandardsRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_limit_setting);
     connect(ui.customLimitRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_limit_setting);
     connect(ui.clearDataButton, &QPushButton::clicked, this, &UserSettings::clicked_clear_data);
+    connect(ui.imperialRadioButton, &QRadioButton::clicked, this, &UserSettings::update_std_drink_size_label);
+    connect(ui.metricRadioButton, &QRadioButton::clicked, this, &UserSettings::update_std_drink_size_label);
 }
 
 std::string UserSettings::get_sex() {
@@ -206,5 +210,17 @@ double UserSettings::get_std_drink_size() {
 
     double std_drink_size = ui.stdDrinkDefInput->value();
     return std_drink_size;
+}
+
+void UserSettings::update_std_drink_size_label() {
+    /*
+     * Update the standard drink size label when unit is changed.
+     */
+
+    if (ui.imperialRadioButton->isChecked()) {
+        ui.stdDrinkDefLabel->setText("Oz. Alcohol");
+    } else {
+        ui.stdDrinkDefLabel->setText("ml Alcohol");
+    }
 }
 // LCOV_EXCL_STOP
