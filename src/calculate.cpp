@@ -70,7 +70,7 @@ double Calculate::round_to_two_decimal_points(double val) {
     return floor((val * 100) + .5)/100;
 }
 
-double Calculate::volume_alcohol_remaining(const std::string& sex, const std::string& standard, int drink_limit, double volume_consumed) {
+double Calculate::volume_alcohol_remaining(const std::string& sex, const std::string& standard, int drink_limit, double volume_consumed, double std_drink_size) {
     /*
      * Calculate the amount of alcohol the user has remaining based on their sex.
      * @return: The amount of volume remaining for user.
@@ -81,12 +81,12 @@ double Calculate::volume_alcohol_remaining(const std::string& sex, const std::st
     double vol_alcohol_remaining {0};
 
     if (standard == "Custom") {
-        vol_alcohol_remaining = (0.6 * drink_limit) - volume_consumed;
+        vol_alcohol_remaining = (std_drink_size * drink_limit) - volume_consumed;
     } else {
         if (sex == "male") {
-            vol_alcohol_remaining = (0.6 * 14) - volume_consumed;
+            vol_alcohol_remaining = (std_drink_size * 14) - volume_consumed;
         } else if (sex == "female") {
-            vol_alcohol_remaining = (0.6 * 7) - volume_consumed;
+            vol_alcohol_remaining = (std_drink_size * 7) - volume_consumed;
         }
     }
 
