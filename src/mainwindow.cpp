@@ -704,9 +704,20 @@ double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink
 void MainWindow::update_volume_alcohol_remaining(double volume_alcohol_consumed) {
     /*
      * Update the volume alcohol remaining label text to the amount of alcohol remaining.
+     * @param: volume_alcohol_consumed: A double denoting the volume of alcohol consumed in the past week. This will
+     * either be in ounces or milliliters, depending on the option setting. The value is set in
+     * update_vol_alcohol_consumed_this_week().
      */
 
-    double volume_alcohol_remaining = Calculate::volume_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, volume_alcohol_consumed);
+    double volume_alcohol_remaining {0.0};
+
+    if (options.units == "Imperial") {
+        volume_alcohol_remaining = Calculate::volume_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, volume_alcohol_consumed);
+    } else {
+        volume_alcohol_consumed = Calculate::ml_to_oz(volume_alcohol_consumed);
+        volume_alcohol_remaining = Calculate::volume_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, volume_alcohol_consumed);
+        volume_alcohol_remaining = Calculate::oz_to_ml(volume_alcohol_remaining);
+    }
     ui->volAlcoholRemainingOutput->setText(QString::fromStdString(Calculate::double_to_string(volume_alcohol_remaining)));
 
     // Set volume alcohol remaining text to red if negative
