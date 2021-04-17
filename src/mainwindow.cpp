@@ -322,6 +322,11 @@ void MainWindow::add_new_row(Drink entered_drink) {
     // New row. Get a new timestamp
     std::string timestamp = storage.select(sqlite_orm::datetime("now")).front();
     entered_drink.timestamp = timestamp;
+
+    // Convert ml to oz
+    if (options.units == "Metric") {
+        entered_drink._size = Calculate::ml_to_oz(entered_drink._size);
+    }
     Database::write(entered_drink, storage);
 }
 
