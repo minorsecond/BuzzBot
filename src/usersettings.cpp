@@ -46,6 +46,12 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
         ui.customLimitSpinBox->setEnabled(true);
     }
 
+    if (options.units == "Metric") {
+        ui.metricRadioButton->setChecked(true);
+    } else {
+        ui.imperialRadioButton->setChecked(true);
+    }
+
     // Set weekday selector
     std::string current_date = options.weekday_start;
     if (!current_date.empty()) {
@@ -171,5 +177,22 @@ void UserSettings::clicked_clear_data() {
         Database::truncate(storage);
         std::cout << "*** Truncated the database ***" << std::endl;
     }
+}
+
+std::string UserSettings::get_units() {
+    /*
+     * Get nuits
+     * @return: String of either Imperial or Metric
+     */
+
+    std::string selected_units {"Imperial"}; // Default to imperial as most users will be from the US
+
+    if (ui.metricRadioButton->isChecked()) {
+        selected_units = "Metric";
+    } else {
+        selected_units = "Imperial";
+    }
+
+    return selected_units;
 }
 // LCOV_EXCL_STOP

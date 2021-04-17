@@ -128,6 +128,7 @@ public:
 
         imperialRadioButton = new QRadioButton(unitsGroup);
         imperialRadioButton->setObjectName(QString::fromUtf8("imperialRadioButton"));
+        imperialRadioButton->setChecked(true);
 
         gridLayout_10->addWidget(imperialRadioButton, 0, 0, 1, 1);
 
