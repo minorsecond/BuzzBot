@@ -70,6 +70,7 @@ public:
     QSpacerItem *verticalSpacer_3;
     QSpinBox *customLimitSpinBox;
     QLabel *customLimitLabel;
+    QLabel *label;
     QSpacerItem *verticalSpacer_6;
 
     void setupUi(QDialog *userSettingsDialog)
@@ -268,6 +269,12 @@ public:
 
         gridLayout_7->addWidget(weeklyLimitGroup, 0, 0, 1, 1);
 
+        label = new QLabel(weeklyLimitFrame);
+        label->setObjectName(QString::fromUtf8("label"));
+        label->setAlignment(Qt::AlignCenter);
+
+        gridLayout_7->addWidget(label, 1, 0, 1, 1);
+
 
         verticalLayout_5->addWidget(weeklyLimitFrame);
 
@@ -314,7 +321,8 @@ public:
         weeklyLimitGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Weekly Limit Standard", nullptr));
         customLimitRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Custom", nullptr));
         niaaaStandardsRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "CDC/NIAAA", nullptr));
-        customLimitLabel->setText(QCoreApplication::translate("userSettingsDialog", "Custom Limit:", nullptr));
+        customLimitLabel->setText(QCoreApplication::translate("userSettingsDialog", "Custom Limit *:", nullptr));
+        label->setText(QCoreApplication::translate("userSettingsDialog", "* Standard drinks", nullptr));
     } // retranslateUi
 
 };
