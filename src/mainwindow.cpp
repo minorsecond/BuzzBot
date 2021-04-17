@@ -175,15 +175,15 @@ void MainWindow::configure_table() {
     ui->filterTextInput->setDisabled(true);
 
     // Set column widths
-    ui->drinkLogTable->setColumnWidth(0, 75);
-    ui->drinkLogTable->setColumnWidth(1, 428);
-    ui->drinkLogTable->setColumnWidth(2, 200);
-    ui->drinkLogTable->setColumnWidth(3, 200);
-    ui->drinkLogTable->setColumnWidth(4, 428);
-    ui->drinkLogTable->setColumnWidth(5, 50);
-    ui->drinkLogTable->setColumnWidth(6, 50);
-    ui->drinkLogTable->setColumnWidth(7, 50);
-    ui->drinkLogTable->setColumnWidth(8, 55);
+    ui->drinkLogTable->setColumnWidth(0, 75); // Date
+    ui->drinkLogTable->setColumnWidth(1, 428); // Name
+    ui->drinkLogTable->setColumnWidth(2, 200); // Type
+    ui->drinkLogTable->setColumnWidth(3, 200); // Subtype
+    ui->drinkLogTable->setColumnWidth(4, 428); // Producer
+    ui->drinkLogTable->setColumnWidth(5, 50); // ABV
+    ui->drinkLogTable->setColumnWidth(6, 50); // IBU
+    ui->drinkLogTable->setColumnWidth(7, 55); // Size
+    ui->drinkLogTable->setColumnWidth(8, 55); // Rating
     ui->drinkLogTable->setColumnHidden(9, true);  // Hide ID column
     ui->drinkLogTable->setColumnHidden(10, true);  // Hide Timestamp column
     ui->drinkLogTable->setColumnHidden(11, true);  // Hide Sort column
@@ -399,6 +399,8 @@ void MainWindow::update_table() {
         double drink_size = drink._size;
         if (options.units == "Metric") {
             drink_size = Calculate::oz_to_ml(drink_size);
+            // Round to tenth place
+            drink_size = floor(drink_size * 10 + 0.5) / 10;
         }
         auto *size = new QTableWidgetItem(Calculate::double_to_string(drink_size).c_str());
 
@@ -714,6 +716,8 @@ double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink
     if (volume_consumed == 0.0) {
         ui->volAlcoholConsumedOutput->setText("0.0");
     } else {
+        // Round to tenth place
+        volume_consumed = floor(volume_consumed * 10 + 0.5) / 10;
         ui->volAlcoholConsumedOutput->setText(QString::fromStdString(Calculate::double_to_string(volume_consumed)));
     }
 
@@ -736,6 +740,9 @@ void MainWindow::update_volume_alcohol_remaining(double volume_alcohol_consumed)
         volume_alcohol_consumed = Calculate::ml_to_oz(volume_alcohol_consumed);
         volume_alcohol_remaining = Calculate::volume_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, volume_alcohol_consumed);
         volume_alcohol_remaining = Calculate::oz_to_ml(volume_alcohol_remaining);
+
+        // Round to tenth place
+        volume_alcohol_remaining = floor(volume_alcohol_remaining * 10 + 0.5) / 10;
     }
     ui->volAlcoholRemainingOutput->setText(QString::fromStdString(Calculate::double_to_string(volume_alcohol_remaining)));
 
