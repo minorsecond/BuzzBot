@@ -22,7 +22,7 @@ double Calculate::standard_drinks(double abv, double amount) {
 
 double Calculate::alcohol_volume(double abv, double amount) {
     /*
-     * Calculate the ounces of alcohol in a beer.
+     * Calculate the volume of alcohol in a beer.
      * @param abv: The alcohol by volume of the beer.
      * @param amount: The amount of beer in the container.
      */
@@ -70,27 +70,27 @@ double Calculate::round_to_two_decimal_points(double val) {
     return floor((val * 100) + .5)/100;
 }
 
-double Calculate::oz_alcohol_remaining(const std::string& sex, const std::string& standard, int drink_limit, double oz_consumed) {
+double Calculate::volume_alcohol_remaining(const std::string& sex, const std::string& standard, int drink_limit, double volume_consumed) {
     /*
      * Calculate the amount of alcohol the user has remaining based on their sex.
-     * @return: The amount of oz remaining for user.
+     * @return: The amount of volume remaining for user.
      */
 
     // TODO: Allow using different standards and custom amounts
 
-    double oz_alcohol_remaining {0};
+    double vol_alcohol_remaining {0};
 
     if (standard == "Custom") {
-        oz_alcohol_remaining = (0.6 * drink_limit) - oz_consumed;
+        vol_alcohol_remaining = (0.6 * drink_limit) - volume_consumed;
     } else {
         if (sex == "male") {
-            oz_alcohol_remaining = (0.6 * 14) - oz_consumed;
+            vol_alcohol_remaining = (0.6 * 14) - volume_consumed;
         } else if (sex == "female") {
-            oz_alcohol_remaining = (0.6 * 7) - oz_consumed;
+            vol_alcohol_remaining = (0.6 * 7) - volume_consumed;
         }
     }
 
-    return round_to_two_decimal_points(oz_alcohol_remaining);
+    return round_to_two_decimal_points(vol_alcohol_remaining);
 }
 
 std::string Calculate::favorite_producer(const Storage& storage, const std::string& drink_type) {
