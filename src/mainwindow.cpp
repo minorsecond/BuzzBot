@@ -638,7 +638,7 @@ void MainWindow::update_stat_panel() {
     std::vector<Drink> beers_this_week = Database::filter("After Date", query_date, storage);
 
     for (const auto& beer : beers_this_week) {
-        standard_drinks += Calculate::standard_drinks(beer.abv, beer._size);
+        standard_drinks += Calculate::standard_drinks(beer.abv, beer._size, std::stod(options.std_drink_size));
     }
 
     if (options.units == "Imperial") {
@@ -1110,7 +1110,7 @@ void MainWindow::open_std_drink_calculator() {
      * Open the standard drink calculator dialog box.
      */
 
-    auto * std_drink_calculator = new StandardDrinkCalc(this);
+    auto * std_drink_calculator = new StandardDrinkCalc(this, std::stod(options.std_drink_size), options.units);
     std_drink_calculator->show();
 }
 
@@ -1202,7 +1202,7 @@ void MainWindow::update_std_drinks_today() {
     std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
 
     for (auto& drink : drinks_today) {
-        double std_drinks = Calculate::standard_drinks(drink.abv, drink._size);
+        double std_drinks = Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size));
         std_drinks_today += std_drinks;
     }
 
