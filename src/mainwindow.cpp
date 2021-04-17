@@ -663,7 +663,7 @@ double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>
     double oz_consumed = 0;
 
     std::string ozThisWeekLabelText = "Oz. alcohol since " + weekday_name + ":";
-    ui->ozAlcoholConsumedLabel->setText(QString::fromStdString(ozThisWeekLabelText));
+    ui->volAlcoholConsumedLabel->setText(QString::fromStdString(ozThisWeekLabelText));
 
     for (const auto& beer : beers_this_week) {
         double beer_oz_alcohol = (beer.abv/100) * beer._size;
@@ -671,9 +671,9 @@ double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>
     }
 
     if (oz_consumed == 0.0) {
-        ui->ozAlcoholConsumedOutput->setText("0.0");
+        ui->volAlcoholConsumedOutput->setText("0.0");
     } else {
-        ui->ozAlcoholConsumedOutput->setText(QString::fromStdString(Calculate::double_to_string(oz_consumed)));
+        ui->volAlcoholConsumedOutput->setText(QString::fromStdString(Calculate::double_to_string(oz_consumed)));
     }
 
     return oz_consumed;
@@ -685,13 +685,13 @@ void MainWindow::update_volume_alcohol_remaining(double volume_alcohol_consumed)
      */
 
     double oz_alcohol_remaining = Calculate::volume_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, volume_alcohol_consumed);
-    ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(Calculate::double_to_string(oz_alcohol_remaining)));
+    ui->volAlcoholRemainingOutput->setText(QString::fromStdString(Calculate::double_to_string(oz_alcohol_remaining)));
 
     // Set oz alcohol remaining text to red if negative
     if (oz_alcohol_remaining < 0) {
-        ui->ozAlcoholRemainingOutput->setStyleSheet("QLabel {color : red;}");
+        ui->volAlcoholRemainingOutput->setStyleSheet("QLabel {color : red;}");
     } else {
-        ui->ozAlcoholRemainingOutput->setStyleSheet("");
+        ui->volAlcoholRemainingOutput->setStyleSheet("");
     }
 }
 
