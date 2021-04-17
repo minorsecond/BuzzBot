@@ -30,6 +30,7 @@ private slots:
     void changed_limit_setting();
     void changed_date_calc();
     void clicked_clear_data();
+    void update_std_drink_size_label();
 };
 
 #endif //BEERTABS_USERSETTINGS_H
