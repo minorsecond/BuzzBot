@@ -343,21 +343,21 @@ void MainWindow::reset_fields() {
 
     if (alcohol_type == "Beer") {
         update_beer_fields();
-        update_types_producers_on_name_change();
+        update_types_and_producers();
 
         // Set datepicker to today's date
         QDate todays_date = QDate::currentDate();
         ui->beerDateInput->setDate(todays_date);
     } else if (alcohol_type == "Liquor") {
         update_liquor_fields();
-        update_types_producers_on_name_change();
+        update_types_and_producers();
 
         // Set datepicker to today's date
         QDate todays_date = QDate::currentDate();
         ui->liquorDateInput->setDate(todays_date);
     } else if (alcohol_type == "Wine") {
         update_wine_fields();
-        update_types_producers_on_name_change();
+        update_types_and_producers();
 
         // Set datepicker to today's date
         QDate todays_date = QDate::currentDate();
@@ -515,6 +515,7 @@ void MainWindow::open_user_settings() {
     program_options(true);
     update_table();
     update_stat_panel();
+    update_types_and_producers();
 }
 
 std::string MainWindow::settings_path() {
@@ -804,7 +805,7 @@ void MainWindow::update_mean_ibu(const std::string& drink_type) {
     }
 }
 
-void MainWindow::update_types_producers_on_name_change() {
+void MainWindow::update_types_and_producers() {
     /*
      * Change the drink attributes based on the drink selected in the nameInput field.
      */
@@ -841,7 +842,7 @@ void MainWindow::producer_input_changed(const QString&) {
     }
 
     // Update fields based on newly selected beer
-    update_types_producers_on_name_change();
+    update_types_and_producers();
 }
 
 void MainWindow::name_input_changed(const QString&) {
@@ -849,7 +850,7 @@ void MainWindow::name_input_changed(const QString&) {
      * Update fields when a beer name is chosen.
      */
 
-    update_types_producers_on_name_change();
+    update_types_and_producers();
 }
 
 void MainWindow::update_favorite_type(const std::string& drink_type) {
