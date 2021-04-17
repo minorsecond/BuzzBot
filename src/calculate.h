@@ -13,7 +13,7 @@ public:
     static double alcohol_volume(double abv, double amount);
     static double standard_drinks(double abv, double amount);
     static double standard_drinks_remaining(const std::string& sex, const std::string& standard, int drink_limit, double standard_drinks_consumed);
-    static double oz_alcohol_remaining(const std::string& sex, const std::string& standard, int drink_limit, double oz_consumed);
+    static double volume_alcohol_remaining(const std::string& sex, const std::string& standard, int drink_limit, double oz_consumed);
     static double round_to_two_decimal_points(double val);
     static std::string favorite_producer(const Storage& storage, const std::string& drink_type);
     static std::string favorite_drink(const Storage& storage, const std::string& drink_type);
