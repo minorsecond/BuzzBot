@@ -6,7 +6,7 @@
 #include <cmath>
 #include <iostream>
 
-double Calculate::standard_drinks(double abv, double amount) {
+double Calculate::standard_drinks(double abv, double amount, double std_drink_size) {
     /*
      * Calculate the number of standard drinks in a beer.
      * 1 Std. drink in the US is .6 oz pure alcohol. In Europe,
@@ -17,7 +17,7 @@ double Calculate::standard_drinks(double abv, double amount) {
      */
 
     double alcohol_amt = alcohol_volume(abv, amount);
-    return round_to_two_decimal_points(alcohol_amt / .6);
+    return round_to_two_decimal_points(alcohol_amt / std_drink_size);
 }
 
 double Calculate::alcohol_volume(double abv, double amount) {

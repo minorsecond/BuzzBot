@@ -11,7 +11,7 @@
 class Calculate {
 public:
     static double alcohol_volume(double abv, double amount);
-    static double standard_drinks(double abv, double amount);
+    static double standard_drinks(double abv, double amount, double std_drink_size);
     static double standard_drinks_remaining(const std::string& sex, const std::string& standard, int drink_limit, double standard_drinks_consumed);
     static double volume_alcohol_remaining(const std::string& sex, const std::string& standard, int drink_limit, double oz_consumed);
     static double round_to_two_decimal_points(double val);
