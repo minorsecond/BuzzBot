@@ -47,6 +47,8 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
         ui.customLimitSpinBox->setEnabled(true);
     }
 
+    ui.stdDrinkDefInput->setValue(std::stod(options.std_drink_size));
+
     if (options.units == "Metric") {
         ui.metricRadioButton->setChecked(true);
     } else {
@@ -195,5 +197,14 @@ std::string UserSettings::get_units() {
     }
 
     return selected_units;
+}
+
+double UserSettings::get_std_drink_size() {
+    /*
+     * Get the volume of alcohol that denotes a standard drink.
+     */
+
+    double std_drink_size = ui.stdDrinkDefInput->value();
+    return std_drink_size;
 }
 // LCOV_EXCL_STOP

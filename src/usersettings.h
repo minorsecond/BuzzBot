@@ -23,6 +23,7 @@ public:
     int get_drink_limit();
     std::string get_limit_standard();
     std::string get_units();
+    double get_std_drink_size();
 
 
 private slots:
