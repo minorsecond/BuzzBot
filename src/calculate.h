@@ -24,6 +24,7 @@ public:
     static std::string double_to_string(double input_double);
     static double oz_to_ml(double input_oz);
     static double ml_to_oz(double input_ml);
+    static bool compare_strings(std::string lhs, std::string rhs);
 };
 
 
