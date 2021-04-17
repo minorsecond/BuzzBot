@@ -11,6 +11,8 @@ struct Options {
     std::string date_calculation_method = "Fixed";
     std::string weekday_start = "Sunday";
     std::string limit_standard = "NIAAA";
+    std::string units = "Imperial";
+    std::string std_drink_size = "0.6";  // Store as ounces
     int weekly_limit = -1;
 };
 
@@ -35,14 +37,14 @@ private:
     void program_options(bool write);
     void update_drinks_this_week(double standard_drinks, const std::string& weekday_name);
     void update_standard_drinks_left_this_week(double std_drinks_consumed);
-    double update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week, const std::string& weekday_name);
-    void update_oz_alcohol_remaining(double oz_alcohol_consumed);
+    double update_vol_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week, const std::string& weekday_name);
+    void update_volume_alcohol_remaining(double volume_alcohol_consumed);
     void update_favorite_brewery(const std::string& drink_type);
     void update_favorite_beer(const std::string& drink_type);
     void update_favorite_type(const std::string& drink_type);
     void update_mean_abv(const std::string& drink_type);
     void update_mean_ibu(const std::string& drink_type);
-    void update_types_producers_on_name_change();
+    void update_types_and_producers();
     std::string get_latest_notes(const std::string& name, const std::string& alcohol_type);
     std::string get_current_tab();
     Drink get_drink_attributes_from_fields();

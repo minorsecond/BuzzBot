@@ -6,20 +6,23 @@
 #include <cmath>
 #include <iostream>
 
-double Calculate::standard_drinks(double abv, double amount) {
+double Calculate::standard_drinks(double abv, double amount, double std_drink_size) {
     /*
      * Calculate the number of standard drinks in a beer.
+     * 1 Std. drink in the US is .6 oz pure alcohol. In Europe,
+     * it's 17.5 ml pure alcohol. These two measurements are
+     * roughly the same.
      * @param abv: the alcohol by volume of the beer.
      * @param amount: the amount of beer in the container.
      */
 
-    double alcohol_amt = oz_alcohol(abv, amount);
-    return round_to_two_decimal_points(alcohol_amt / .6);
+    double alcohol_amt = alcohol_volume(abv, amount);
+    return round_to_two_decimal_points(alcohol_amt / std_drink_size);
 }
 
-double Calculate::oz_alcohol(double abv, double amount) {
+double Calculate::alcohol_volume(double abv, double amount) {
     /*
-     * Calculate the ounces of alcohol in a beer.
+     * Calculate the volume of alcohol in a beer.
      * @param abv: The alcohol by volume of the beer.
      * @param amount: The amount of beer in the container.
      */
@@ -67,27 +70,27 @@ double Calculate::round_to_two_decimal_points(double val) {
     return floor((val * 100) + .5)/100;
 }
 
-double Calculate::oz_alcohol_remaining(const std::string& sex, const std::string& standard, int drink_limit, double oz_consumed) {
+double Calculate::volume_alcohol_remaining(const std::string& sex, const std::string& standard, int drink_limit, double volume_consumed, double std_drink_size) {
     /*
      * Calculate the amount of alcohol the user has remaining based on their sex.
-     * @return: The amount of oz remaining for user.
+     * @return: The amount of volume remaining for user.
      */
 
     // TODO: Allow using different standards and custom amounts
 
-    double oz_alcohol_remaining {0};
+    double vol_alcohol_remaining {0};
 
     if (standard == "Custom") {
-        oz_alcohol_remaining = (0.6 * drink_limit) - oz_consumed;
+        vol_alcohol_remaining = (std_drink_size * drink_limit) - volume_consumed;
     } else {
         if (sex == "male") {
-            oz_alcohol_remaining = (0.6 * 14) - oz_consumed;
+            vol_alcohol_remaining = (std_drink_size * 14) - volume_consumed;
         } else if (sex == "female") {
-            oz_alcohol_remaining = (0.6 * 7) - oz_consumed;
+            vol_alcohol_remaining = (std_drink_size * 7) - volume_consumed;
         }
     }
 
-    return round_to_two_decimal_points(oz_alcohol_remaining);
+    return round_to_two_decimal_points(vol_alcohol_remaining);
 }
 
 std::string Calculate::favorite_producer(const Storage& storage, const std::string& drink_type) {
@@ -264,4 +267,26 @@ std::string Calculate::double_to_string(double input_double) {
     output_string << converted_double;
 
     return output_string.str();
+}
+
+double Calculate::oz_to_ml(double input_oz) {
+    /*
+     * Convert oz to ml for metric support. 1 oz = 29.5735 ml.
+     * @param input_oz: A double denoting drink volume in ounces.
+     * @return: A double denoting drink volume in milliliters.
+     */
+
+    double ml = input_oz * 29.5735;
+    return ml;
+}
+
+double Calculate::ml_to_oz(double input_ml) {
+    /*
+     * Convert ml to oz for metric support. 29.5735 ml = 1 lz.
+     * @param input_ml: A double denoting drink volume in milliliters.
+     * @return: A double denoting drink volume in ounces.
+     */
+
+    double oz = input_ml / 29.5735;
+    return oz;
 }

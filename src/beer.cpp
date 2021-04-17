@@ -3,6 +3,7 @@
 //
 
 #include "mainwindow.h"
+#include "calculate.h"
 #include <iostream>
 
 // LCOV_EXCL_START
@@ -86,9 +87,9 @@ void MainWindow::populate_beer_fields(const Drink& drink_at_row) {
     ui->beerBreweryInput->setCurrentText(drink_at_row.producer.c_str());
     ui->beerAbvInput->setValue(drink_at_row.abv);
     ui->beerIbuInput->setValue(drink_at_row.ibu);
-    ui->beerSizeInput->setValue(drink_at_row._size);
     ui->beerRatingInput->setValue(drink_at_row.rating);
     ui->beerNotesInput->setText(notes.c_str());
+    ui->beerSizeInput->setValue(drink_at_row._size);
 
     // Switch to the beer tab
     ui->tabWidget->setCurrentIndex(0);
@@ -196,6 +197,11 @@ void MainWindow::update_beer_types_producers() {
         double abv = selected_beer.abv;
         double ibu = selected_beer.ibu;
         double size = selected_beer._size;
+
+        if (options.units == "Metric") {
+            size = Calculate::oz_to_ml(size);
+        }
+
         int rating = selected_beer.rating;
         ui->beerTypeInput->setCurrentText(QString::fromStdString(beer_type));
         ui->beerSubtypeInput->setCurrentText(QString::fromStdString(beer_subtype));
