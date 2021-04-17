@@ -35,6 +35,11 @@ MainWindow::MainWindow(QWidget *parent)
     program_options(false);
     program_options(true);
 
+    // Change unit text depending on settings
+    if (options.units == "Metric") {
+        ui->volAlcoholRemainingLabel->setText("ml. Alcohol Remaining:");
+    }
+
     // Upgrade DB version
     // TODO: Remove references to drink_year, drink_month, & drink_day in DB version 6
     Database::increment_version(storage, 6);
@@ -667,7 +672,11 @@ double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink
 
     double volume_consumed = 0;
 
-    std::string volumeThisWeekLabelText = "Oz. alcohol since " + weekday_name + ":";
+    std::string units = "Oz.";
+    if (options.units == "Metric") {
+        units = "ml";
+    }
+    std::string volumeThisWeekLabelText = units + " alcohol since " + weekday_name + ":";
     ui->volAlcoholConsumedLabel->setText(QString::fromStdString(volumeThisWeekLabelText));
 
     for (const auto& beer : beers_this_week) {
