@@ -32,9 +32,13 @@ TEST_CASE("Oz Alcohol", "[Drink Calculations]") {
 TEST_CASE("Std Drinks Remaining", "[Drink Calculations]") {
     double male_drinks_remaining = Calculate::standard_drinks_remaining("male", "NIAAA", 0, 4.6);
     double female_drinks_remaining = Calculate::standard_drinks_remaining("female", "Custom", 5, 8);
+    double female_drinks_remaining_2 = Calculate::standard_drinks_remaining("female", "NIAAA", 0,4);
+    double female_drinks_remaining_3 = Calculate::standard_drinks_remaining("female", "NIAAA", 0,12);
 
     REQUIRE(male_drinks_remaining == 9.4);
     REQUIRE(female_drinks_remaining == -3.0);
+    REQUIRE(female_drinks_remaining_2 == 3);
+    REQUIRE(female_drinks_remaining_3 == -5)
 }
 
 TEST_CASE("Oz Alcohol Remaining", "[Drink Calculations]") {

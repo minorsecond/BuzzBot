@@ -57,7 +57,7 @@ double Calculate::standard_drinks_remaining(const std::string& sex, const std::s
         }
     }
 
-    (sex == "male") ? weekly_drinks_remaining = drink_limit - standard_drinks_consumed : weekly_drinks_remaining = drink_limit - standard_drinks_consumed;
+    weekly_drinks_remaining = drink_limit - standard_drinks_consumed;
 
     return weekly_drinks_remaining;
 }
