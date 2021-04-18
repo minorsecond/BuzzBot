@@ -62,9 +62,10 @@ public:
     QSpacerItem *verticalSpacer_2;
     QFrame *frame_5;
     QGridLayout *gridLayout_11;
+    QLabel *stdDrinkDefTitle;
     QDoubleSpinBox *stdDrinkDefInput;
     QLabel *stdDrinkDefLabel;
-    QLabel *stdDrinkDefTitle;
+    QComboBox *stdDrinkDefComboBox;
     QSpacerItem *verticalSpacer_5;
     QVBoxLayout *verticalLayout_5;
     QFrame *weeklyLimitFrame;
@@ -227,21 +228,26 @@ public:
         frame_5->setFrameShadow(QFrame::Raised);
         gridLayout_11 = new QGridLayout(frame_5);
         gridLayout_11->setObjectName(QString::fromUtf8("gridLayout_11"));
-        stdDrinkDefInput = new QDoubleSpinBox(frame_5);
-        stdDrinkDefInput->setObjectName(QString::fromUtf8("stdDrinkDefInput"));
-
-        gridLayout_11->addWidget(stdDrinkDefInput, 1, 0, 1, 1);
-
-        stdDrinkDefLabel = new QLabel(frame_5);
-        stdDrinkDefLabel->setObjectName(QString::fromUtf8("stdDrinkDefLabel"));
-
-        gridLayout_11->addWidget(stdDrinkDefLabel, 1, 1, 1, 1);
-
         stdDrinkDefTitle = new QLabel(frame_5);
         stdDrinkDefTitle->setObjectName(QString::fromUtf8("stdDrinkDefTitle"));
         stdDrinkDefTitle->setAlignment(Qt::AlignCenter);
 
         gridLayout_11->addWidget(stdDrinkDefTitle, 0, 0, 1, 2);
+
+        stdDrinkDefInput = new QDoubleSpinBox(frame_5);
+        stdDrinkDefInput->setObjectName(QString::fromUtf8("stdDrinkDefInput"));
+
+        gridLayout_11->addWidget(stdDrinkDefInput, 2, 0, 1, 1);
+
+        stdDrinkDefLabel = new QLabel(frame_5);
+        stdDrinkDefLabel->setObjectName(QString::fromUtf8("stdDrinkDefLabel"));
+
+        gridLayout_11->addWidget(stdDrinkDefLabel, 2, 1, 1, 1);
+
+        stdDrinkDefComboBox = new QComboBox(frame_5);
+        stdDrinkDefComboBox->setObjectName(QString::fromUtf8("stdDrinkDefComboBox"));
+
+        gridLayout_11->addWidget(stdDrinkDefComboBox, 1, 0, 1, 2);
 
 
         verticalLayout->addWidget(frame_5);
@@ -354,8 +360,8 @@ public:
 
         fixedDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Reset on day", nullptr));
         rollingDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Rolling", nullptr));
-        stdDrinkDefLabel->setText(QCoreApplication::translate("userSettingsDialog", "Oz. Alcohol", nullptr));
         stdDrinkDefTitle->setText(QCoreApplication::translate("userSettingsDialog", "Std. Drink Definition:", nullptr));
+        stdDrinkDefLabel->setText(QCoreApplication::translate("userSettingsDialog", "Oz. Alcohol", nullptr));
         weeklyLimitGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Weekly Limit Standard", nullptr));
         customLimitRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Custom", nullptr));
         niaaaStandardsRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "CDC/NIAAA", nullptr));

@@ -253,16 +253,6 @@
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout_11">
-          <item row="1" column="0">
-           <widget class="QDoubleSpinBox" name="stdDrinkDefInput"/>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="stdDrinkDefLabel">
-            <property name="text">
-             <string>Oz. Alcohol</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0" colspan="2">
            <widget class="QLabel" name="stdDrinkDefTitle">
             <property name="text">
@@ -272,6 +262,19 @@
              <set>Qt::AlignCenter</set>
             </property>
            </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QDoubleSpinBox" name="stdDrinkDefInput"/>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="stdDrinkDefLabel">
+            <property name="text">
+             <string>Oz. Alcohol</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QComboBox" name="stdDrinkDefComboBox"/>
           </item>
          </layout>
         </widget>
