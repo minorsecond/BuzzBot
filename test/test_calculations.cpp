@@ -202,3 +202,9 @@ TEST_CASE("Favorite Type", "[Favorite Calculations]") {
     std::string favorite_type = Calculate::favorite_type(storage_1, "Beer");
     REQUIRE(favorite_type == "IPA");
 }
+
+TEST_CASE("String Comparison", "[Misc Calculations]") {
+    std::string lhs = "WWW";
+    std::string rhs = "aaa";
+    REQUIRE(Calculate::compare_strings(lhs, rhs) == false);
+}
