@@ -17,6 +17,16 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
     ui.setupUi(this);
     this->setFixedSize(650, 300);
 
+    // Add country names to std drink size combobox
+    auto country_name_iterator = std_drink_standards.begin();
+    int std_drink_cbox_index {1};
+    while (country_name_iterator != std_drink_standards.end()) {
+        ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString(country_name_iterator->first));
+        country_name_iterator++;
+        std_drink_cbox_index += 1;
+    }
+    ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString("Custom"));
+
     ui.stdDrinkDefInput->setSingleStep(0.1);
 
     // Rounded rect frames
