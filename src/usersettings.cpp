@@ -244,10 +244,8 @@ double UserSettings::get_std_drink_size() {
 
     std::string std_drink_cbox_value = ui.stdDrinkDefComboBox->currentText().toStdString();
     double std_drink_size {0.0};
+    std_drink_size = ui.stdDrinkDefInput->value();
 
-    if (std_drink_cbox_value == "Custom") {
-        std_drink_size = ui.stdDrinkDefInput->value();
-    }
     return std_drink_size;
 }
 
