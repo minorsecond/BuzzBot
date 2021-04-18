@@ -643,8 +643,12 @@ void MainWindow::update_stat_panel() {
         if (options.std_drink_country == "Custom") {
             standard_drinks += Calculate::standard_drinks(beer.abv, beer._size, std::stod(options.std_drink_size));
         } else {
-            double std_drink_size = std_drink_standards.find(options.std_drink_country)->second;
-            std::cout << std_drink_size << std::endl;
+            double std_drink_size = std_drink_standards.find(options.std_drink_country)->second;  // This is in oz.
+
+            /*
+             * Beer._size will always be in ounces. std_drink_size should also be in ounces. The result will be
+             * independent of whichever unit the user has selected, as everything is stored as ounces.
+             */
             standard_drinks += Calculate::standard_drinks(beer.abv, beer._size, std_drink_size);
         }
     }
@@ -660,6 +664,8 @@ void MainWindow::update_stat_panel() {
     // Update the individual elements of the stat pane
     update_drinks_this_week(standard_drinks, weekday_name);
     update_standard_drinks_left_this_week(standard_drinks);
+
+    // update_vol_alcohol_consumed_this_week returns either ml or oz, depending on setting
     double vol_alc_consumed = update_vol_alcohol_consumed_this_week(beers_this_week, weekday_name);
     update_volume_alcohol_remaining(vol_alc_consumed);
     update_favorite_brewery(current_tab);
