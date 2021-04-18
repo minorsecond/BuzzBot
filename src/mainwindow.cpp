@@ -509,6 +509,7 @@ void MainWindow::open_user_settings() {
 
     UserSettings user_settings = UserSettings(nullptr, options, std_drink_standards);
     user_settings.setModal(true);
+    std::string std_drink_size = options.std_drink_size;
     if (user_settings.exec() == QDialog::Accepted) {  // Update settings when OK button is clicked
         options.sex = user_settings.get_sex();
         options.date_calculation_method = user_settings.get_date_calculation_method();
@@ -516,10 +517,11 @@ void MainWindow::open_user_settings() {
         options.limit_standard = user_settings.get_limit_standard();
         options.weekly_limit = user_settings.get_drink_limit();
         options.units = user_settings.get_units();
-        options.std_drink_size = Calculate::double_to_string(user_settings.get_std_drink_size());
+        std_drink_size = Calculate::double_to_string(user_settings.get_std_drink_size());
         options.std_drink_country = user_settings.get_std_drink_country();
         update_stat_panel();
     }
+
     program_options(true);
     update_table();
     update_stat_panel();
@@ -527,9 +529,17 @@ void MainWindow::open_user_settings() {
 
     if (options.units == "Metric") {
         ui->beerSizeLabel->setText("Size (ml)");
+        ui->liquorSizeLabel->setText("Size (ml)");
+        ui->wineSizeLabel->setText("Size (ml)");
+        options.std_drink_size = Calculate::double_to_string(Calculate::ml_to_oz(std::stod(std_drink_size)));
     } else {
         ui->beerSizeLabel->setText("Size (oz)");
+        ui->liquorSizeLabel->setText("Size (oz)");
+        ui->wineSizeLabel->setText("Size (oz)");
+        options.std_drink_size = std_drink_size;
     }
+
+    std::cout << std_drink_size << std::endl;
 }
 
 std::string MainWindow::settings_path() {
@@ -1217,8 +1227,6 @@ void MainWindow::update_std_drinks_today() {
     std::tm now_tm = *std::localtime(&now_c);
     char query_date[70];
     std::strftime(query_date, sizeof query_date, "%Y-%m-%d", &now_tm);
-    std::cout << "*** calculate date is " << query_date << " & query date is " << query_date << std::endl;
-    // Delete the above
 
     std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
 
