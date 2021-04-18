@@ -760,7 +760,13 @@ void MainWindow::update_volume_alcohol_remaining(double volume_alcohol_consumed)
      */
 
     double volume_alcohol_remaining {0.0};
-    double std_drink_size = std::stod(options.std_drink_size);
+    double std_drink_size;
+
+    if (options.std_drink_country == "Custom") {
+        std_drink_size = std::stod(options.std_drink_size);
+    } else {
+        std_drink_size = std_drink_standards.find(options.std_drink_country)->second;
+    }
 
     if (options.units == "Imperial") {
         volume_alcohol_remaining = Calculate::volume_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, volume_alcohol_consumed, std_drink_size);
