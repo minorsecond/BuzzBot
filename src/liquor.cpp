@@ -72,7 +72,6 @@ void MainWindow::update_liquor_fields() {
         }
     }
 
-    // TODO: Figure out why this sometimes causes segfaults in debug.
     std::sort(names_tmp.begin(), names_tmp.end(), Calculate::compare_strings);
 
     for (const auto& name : names_tmp) {
