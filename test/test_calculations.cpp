@@ -38,7 +38,7 @@ TEST_CASE("Std Drinks Remaining", "[Drink Calculations]") {
     REQUIRE(male_drinks_remaining == 9.4);
     REQUIRE(female_drinks_remaining == -3.0);
     REQUIRE(female_drinks_remaining_2 == 3);
-    REQUIRE(female_drinks_remaining_3 == -5)
+    REQUIRE(female_drinks_remaining_3 == -5);
 }
 
 TEST_CASE("Oz Alcohol Remaining", "[Drink Calculations]") {
