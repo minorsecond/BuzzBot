@@ -77,6 +77,7 @@ public:
     QSpinBox *customLimitSpinBox;
     QLabel *customLimitLabel;
     QLabel *label;
+    QSpacerItem *verticalSpacer;
     QSpacerItem *verticalSpacer_6;
 
     void setupUi(QDialog *userSettingsDialog)
@@ -305,6 +306,10 @@ public:
         label->setAlignment(Qt::AlignCenter);
 
         gridLayout_7->addWidget(label, 1, 0, 1, 1);
+
+        verticalSpacer = new QSpacerItem(20, 55, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_7->addItem(verticalSpacer, 2, 0, 1, 1);
 
 
         verticalLayout_5->addWidget(weeklyLimitFrame);
