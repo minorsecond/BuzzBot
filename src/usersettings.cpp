@@ -16,7 +16,7 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
      */
 
     ui.setupUi(this);
-    this->setFixedSize(650, 300);
+    this->setFixedSize(675, 300);
 
     // Add country names to std drink size combobox
     auto country_name_iterator = std_drink_standards.begin();
