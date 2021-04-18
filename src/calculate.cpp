@@ -300,6 +300,7 @@ bool Calculate::compare_strings(std::string lhs, std::string rhs) {
     std::string lhs_tmp;
     std::string rhs_tmp;
 
+    // Convert strings to uppercase
     for (char& c : lhs) {
         c = std::toupper(c, std::locale());
         lhs_tmp += c;
