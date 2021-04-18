@@ -210,7 +210,13 @@ double UserSettings::get_std_drink_size() {
      * Get the volume of alcohol that denotes a standard drink.
      */
 
-    double std_drink_size = ui.stdDrinkDefInput->value();
+    std::string std_drink_cbox_value = ui.stdDrinkDefComboBox->currentText().toStdString();
+    double std_drink_size {0.0};
+
+    if (std_drink_cbox_value == "Custom") {
+        std_drink_size = ui.stdDrinkDefInput->value();
+    } else {
+    }
     return std_drink_size;
 }
 
