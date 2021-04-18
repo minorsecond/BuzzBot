@@ -9,7 +9,7 @@
 #include <iostream>
 
 // LCOV_EXCL_START
-UserSettings::UserSettings(QWidget *parent, const Options& options) {
+UserSettings::UserSettings(QWidget *parent, const Options& options, const std::map<std::string, double>& country_info) {
     /*
      * Dialog box for user settings.
      * @param parent: parent widget.
@@ -19,11 +19,11 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
     this->setFixedSize(675, 300);
 
     // Add country names to std drink size combobox
-    auto country_name_iterator = std_drink_standards.begin();
+    auto country_name_iterator = country_info.begin();
     int std_drink_cbox_index {1};
-    while (country_name_iterator != std_drink_standards.end()) {
-        std::string country_info = country_name_iterator->first + " (" + Calculate::double_to_string(country_name_iterator->second) + ")";
-        ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString(country_info));
+    while (country_name_iterator != country_info.end()) {
+        std::string country_name_drinks = country_name_iterator->first + " (" + Calculate::double_to_string(country_name_iterator->second) + ")";
+        ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString(country_name_drinks));
         country_name_iterator++;
         std_drink_cbox_index += 1;
     }
@@ -31,14 +31,14 @@ UserSettings::UserSettings(QWidget *parent, const Options& options) {
 
     if (options.std_drink_country == "Custom") {
         ui.stdDrinkDefComboBox->setCurrentIndex(ui.stdDrinkDefComboBox->count() - 1);
-        ui.stdDrinkDefInput->setEnabled(false);
+        ui.stdDrinkDefInput->setEnabled(true);
     } else {
-
-        std::string search_string = options.std_drink_country + " (" + options.std_drink_size + ")";
+        double std_drinks = country_info.find(options.std_drink_country)->second;
+        std::string search_string = options.std_drink_country + " (" + Calculate::double_to_string(std_drinks)+ ")";
         int index = ui.stdDrinkDefComboBox->findText(QString::fromStdString(search_string));
         std::cout << search_string << " - " << index << std::endl;
         ui.stdDrinkDefComboBox->setCurrentIndex(index);
-        ui.stdDrinkDefInput->setEnabled(true);
+        ui.stdDrinkDefInput->setEnabled(false);
     }
 
     ui.stdDrinkDefInput->setSingleStep(0.1);
@@ -240,8 +240,6 @@ double UserSettings::get_std_drink_size() {
 
     if (std_drink_cbox_value == "Custom") {
         std_drink_size = ui.stdDrinkDefInput->value();
-    } else {
-        std_drink_size = std_drink_standards.find(std_drink_cbox_value)->second;
     }
     return std_drink_size;
 }
@@ -263,7 +261,11 @@ std::string UserSettings::get_std_drink_country() {
      * Get the selected standard drink country.
      */
 
-    return ui.stdDrinkDefComboBox->currentText().toStdString();
+    std::string country_data = ui.stdDrinkDefComboBox->currentText().toStdString();
+    country_data = std::regex_replace(country_data, std::regex(R"(\([^()]*\))"), "");
+    country_data = std::regex_replace(country_data, std::regex(R"(/^\s+|\s+$|\s+(?=\s)/g)"), "");
+
+    return country_data;
 }
 
 void UserSettings::std_drink_country_changed() {

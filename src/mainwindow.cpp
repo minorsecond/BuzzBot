@@ -507,7 +507,7 @@ void MainWindow::open_user_settings() {
      * Open the user settings dialog box, where users can enter their sex and the day which the week should begin on.
      */
 
-    UserSettings user_settings = UserSettings(nullptr, options);
+    UserSettings user_settings = UserSettings(nullptr, options, std_drink_standards);
     user_settings.setModal(true);
     if (user_settings.exec() == QDialog::Accepted) {  // Update settings when OK button is clicked
         options.sex = user_settings.get_sex();
@@ -640,7 +640,13 @@ void MainWindow::update_stat_panel() {
     std::vector<Drink> beers_this_week = Database::filter("After Date", query_date, storage);
 
     for (const auto& beer : beers_this_week) {
-        standard_drinks += Calculate::standard_drinks(beer.abv, beer._size, std::stod(options.std_drink_size));
+        if (options.std_drink_country == "Custom") {
+            standard_drinks += Calculate::standard_drinks(beer.abv, beer._size, std::stod(options.std_drink_size));
+        } else {
+            double std_drink_size = std_drink_standards.find(options.std_drink_country)->second;
+            std::cout << std_drink_size << std::endl;
+            standard_drinks += Calculate::standard_drinks(beer.abv, beer._size, std_drink_size);
+        }
     }
 
     if (options.units == "Imperial") {
