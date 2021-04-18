@@ -4,6 +4,7 @@
 
 #include <utility>
 #include "mainwindow.h"
+#include "calculate.h"
 
 // LCOV_EXCL_START
 void MainWindow::update_liquor_fields() {
@@ -14,7 +15,8 @@ void MainWindow::update_liquor_fields() {
     std::set<QString> distilleries;
     std::set<QString> types;
     std::set<QString> subtypes;
-    std::set<QString> names;
+    std::vector<std::string> names_tmp;
+    std::set<std::string> names;
 
     std::vector<Drink> all_liquor = Database::filter("Alcohol Type", "Liquor", storage);
 
@@ -37,7 +39,7 @@ void MainWindow::update_liquor_fields() {
         QString distiller_name = QString::fromStdString(liquor.producer);
         QString liquor_type = QString::fromStdString(liquor.type);
         QString liquor_subtype = QString::fromStdString(liquor.subtype);
-        QString liquor_name = QString::fromStdString(liquor.name);
+        std::string liquor_name = liquor.name;
 
         distilleries.insert(distiller_name);
         types.insert(liquor_type);
@@ -64,9 +66,17 @@ void MainWindow::update_liquor_fields() {
     }
 
     for (const auto& name : names) {
-        if (!name.isEmpty()) {
-            ui->liquorNameInput->addItem(name);
+        if (!name.empty()) {
+            if (std::find(names_tmp.begin(), names_tmp.end(), name) == names_tmp.end())
+                names_tmp.push_back(name);
         }
+    }
+
+    std::sort(names_tmp.begin(), names_tmp.end(), Calculate::compare_strings);
+
+    for (const auto& name : names_tmp) {
+        QString name_q = QString::fromStdString(name);
+        ui->liquorNameInput->addItem(name_q);
     }
 
     // Rest to first name in field
