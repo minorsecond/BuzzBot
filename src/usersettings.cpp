@@ -20,7 +20,7 @@ UserSettings::UserSettings(QWidget *parent, const Options& options, const std::m
 
     // Add country names to std drink size combobox
     auto country_name_iterator = country_info.begin();
-    int std_drink_cbox_index {1};
+    int std_drink_cbox_index {0};
     while (country_name_iterator != country_info.end()) {
         std::string country_name_drinks = country_name_iterator->first + " (" + Calculate::double_to_string(country_name_iterator->second) + ")";
         ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString(country_name_drinks));

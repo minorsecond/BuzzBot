@@ -1211,7 +1211,13 @@ void MainWindow::update_std_drinks_today() {
     std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
 
     for (auto& drink : drinks_today) {
-        double std_drinks = Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size));
+        double std_drinks {0.0};
+        if (options.std_drink_country == "Custom") {
+            std_drinks= Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size));
+        } else {
+            double std_drink_size = std_drink_standards.find(options.std_drink_country)->second;
+            std_drinks = Calculate::standard_drinks(drink.abv, drink._size, std_drink_size);
+        }
         std_drinks_today += std_drinks;
     }
 
