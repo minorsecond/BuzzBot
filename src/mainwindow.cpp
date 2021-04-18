@@ -517,6 +517,7 @@ void MainWindow::open_user_settings() {
         options.weekly_limit = user_settings.get_drink_limit();
         options.units = user_settings.get_units();
         options.std_drink_size = Calculate::double_to_string(user_settings.get_std_drink_size());
+        options.std_drink_country = user_settings.get_std_drink_country();
         update_stat_panel();
     }
     program_options(true);
@@ -565,6 +566,7 @@ void MainWindow::program_options(bool write) {
         std::string weekly_limit = "custom_weekly_limit:" + std::to_string(options.weekly_limit);
         std::string units = "units:" + options.units;
         std::string std_drink_size = "std_drink_size:" + options.std_drink_size;
+        std::string std_drink_country = "std_drink_country:" + options.std_drink_country;
         std::ofstream out_data;
 
         if (!out_data) {
@@ -580,6 +582,7 @@ void MainWindow::program_options(bool write) {
         out_data << weekly_limit + '\n';
         out_data << units + '\n';
         out_data << std_drink_size + '\n';
+        out_data << std_drink_country + '\n';
         out_data.close();
     } else {
         std::cout << "Reading user settings from " << path << std::endl;
@@ -603,6 +606,8 @@ void MainWindow::program_options(bool write) {
                     options.units = line.substr(line.find(':') + 1);
                 } else if (line_counter == 6) { // Seventh line should be the std drink size (stored in oz)
                     options.std_drink_size = line.substr(line.find(':') + 1);
+                } else if (line_counter == 7) { // Eigth line should be the std drink country
+                    options.std_drink_country = line.substr(line.find(':') + 1);
                 }
                 line_counter += 1;
             }

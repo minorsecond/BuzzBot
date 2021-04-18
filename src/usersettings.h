@@ -24,6 +24,7 @@ public:
     std::string get_limit_standard();
     std::string get_units();
     double get_std_drink_size();
+    std::string get_std_drink_country();
 
 private:
     // Std drink sizes are all stored in Oz. Data are all from Wikipedia:
@@ -59,6 +60,7 @@ private slots:
     void changed_date_calc();
     void clicked_clear_data();
     void update_std_drink_size_label();
+    void std_drink_country_changed();
 };
 
 #endif //BEERTABS_USERSETTINGS_H
