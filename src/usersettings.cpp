@@ -22,7 +22,15 @@ UserSettings::UserSettings(QWidget *parent, const Options& options, const std::m
     auto country_name_iterator = country_info.begin();
     int std_drink_cbox_index {0};
     while (country_name_iterator != country_info.end()) {
-        std::string country_name_drinks = country_name_iterator->first + " (" + Calculate::double_to_string(country_name_iterator->second) + ")";
+
+        std::string standard_drink_size;
+        if (options.units == "Metric") {
+            standard_drink_size = Calculate::double_to_string(Calculate::oz_to_ml(country_name_iterator->second));
+        } else {
+            standard_drink_size = Calculate::double_to_string(country_name_iterator->second);
+        }
+
+        std::string country_name_drinks = country_name_iterator->first;
         ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString(country_name_drinks));
         country_name_iterator++;
         std_drink_cbox_index += 1;
@@ -33,8 +41,7 @@ UserSettings::UserSettings(QWidget *parent, const Options& options, const std::m
         ui.stdDrinkDefComboBox->setCurrentIndex(ui.stdDrinkDefComboBox->count() - 1);
         ui.stdDrinkDefInput->setEnabled(true);
     } else {
-        double std_drinks = country_info.find(options.std_drink_country)->second;
-        std::string search_string = options.std_drink_country + " (" + Calculate::double_to_string(std_drinks)+ ")";
+        std::string search_string = options.std_drink_country;
         int index = ui.stdDrinkDefComboBox->findText(QString::fromStdString(search_string));
         std::cout << search_string << " - " << index << std::endl;
         ui.stdDrinkDefComboBox->setCurrentIndex(index);
@@ -251,6 +258,7 @@ void UserSettings::update_std_drink_size_label() {
 
     if (ui.imperialRadioButton->isChecked()) {
         ui.stdDrinkDefLabel->setText("Oz. Alcohol");
+
     } else {
         ui.stdDrinkDefLabel->setText("ml Alcohol");
     }
@@ -281,4 +289,5 @@ void UserSettings::std_drink_country_changed() {
         //ui.stdDrinkDefInput->setValue(new_std_drink_size);
     }
 }
+
 // LCOV_EXCL_STOP
