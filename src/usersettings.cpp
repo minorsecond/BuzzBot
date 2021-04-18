@@ -13,6 +13,8 @@ UserSettings::UserSettings(QWidget *parent, const Options& options, const std::m
     /*
      * Dialog box for user settings.
      * @param parent: parent widget.
+     * @param options: Options struct containing settings from user file.
+     * @country_info: map of countries and their standard drink sizes, in ounces.
      */
 
     ui.setupUi(this);
@@ -240,6 +242,7 @@ std::string UserSettings::get_units() {
 double UserSettings::get_std_drink_size() {
     /*
      * Get the volume of alcohol that denotes a standard drink.
+     * @return: Value set in stdDrinkDefComboBox that denotes how big a standard drink is.
      */
 
     std::string std_drink_cbox_value = ui.stdDrinkDefComboBox->currentText().toStdString();
