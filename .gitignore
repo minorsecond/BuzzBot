@@ -4,7 +4,7 @@
 *~
 cmake-build-*
 *.autosave
-*.af
+*.a
 *.core
 *.moc
 *.o
