@@ -214,6 +214,9 @@ int Database::get_version(Storage storage) {
 int Database::increment_version(Storage storage, int current_version) {
     /*
      * Increment database version to current version.
+     * @param storage: A storage instance.
+     * @param current_version: The version that the DB should be incremented to.
+     * @return: An integer denoting new DB version, straight from the DB.
      */
 
     std::cout << "Using DB version " << storage.pragma.user_version() << std::endl;
