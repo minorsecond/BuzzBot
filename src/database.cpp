@@ -181,16 +181,33 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
 }
 
 std::vector<Drink> Database::get_beers_by_type(Storage storage, std::string beer_type) {
+    /*
+     * Get drinks by type.
+     * @param storage: A storage instance.
+     * @param beer_type: The type of drink to filter on.
+     * @return: A vector of drinks that match beer_type.
+     */
     std::vector<Drink> beers_by_type = storage.get_all<Drink>(where(c(&Drink::type) == std::move(beer_type)));
     return beers_by_type;
 }
 
 std::vector<Drink> Database::get_beers_by_brewery(Storage storage, std::string producer) {
+    /*
+     * Get drinks by producer.
+     * @param storage: A storage instance.
+     * @param producer: The producer name to filter on.
+     * @return: A vector of drinks produced by a producer.
+     */
     std::vector<Drink> beers_by_brewery = storage.get_all<Drink>(where(c(&Drink::producer) == std::move(producer)));
     return beers_by_brewery;
 }
 
 int Database::get_version(Storage storage) {
+    /*
+     * Get the current database version.
+     * @param storage: A storage instance.
+     * @return: An integer denoting the current database version.
+     */
     return storage.pragma.user_version();
 }
 
