@@ -22,7 +22,7 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
     std::ofstream output_csv(path);
 
     // Create the header
-    output_csv << "Date";
+    output_csv << "Date,";
     output_csv << "Name,";
     output_csv << "Type,";
     output_csv << "Subtype,";
@@ -41,17 +41,24 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
         std::string ibu = (drink.ibu == -1) ? "" : std::to_string(drink.ibu);
         std::string vintage = (drink.vintage == -999) ? "" : std::to_string(drink.vintage);
 
+        // TODO: sanitize string formatting, deal with commas, tabs, etc.
+        std::string drink_name = '"' + drink.name + '"';
+        std::string drink_type = '"' + drink.type + '"';
+        std::string drink_subtype = '"' + drink.subtype + '"';
+        std::string drink_producer = '"' + drink.producer + '"';
+        std::string drink_notes = '"' + drink.notes + '"';
+
         output_csv << drink.date + ",";
-        output_csv << drink.name + ",";
-        output_csv << drink.type + ",";
-        output_csv << drink.subtype + ",";
-        output_csv << drink.producer + ",";
+        output_csv << drink_name + ",";
+        output_csv << drink_type + ",";
+        output_csv << drink_subtype + ",";
+        output_csv << drink_producer + ",";
         output_csv << vintage + ",";
         output_csv << std::to_string(drink.abv) + ",";
         output_csv << ibu + ",";
         output_csv << std::to_string(drink._size) + ",";
         output_csv << std::to_string(drink.rating) + ",";
-        output_csv << drink.notes + ",";
+        output_csv << drink_notes + ",";
         output_csv << drink.alcohol_type + ",";
         output_csv << drink.timestamp + ",";
         output_csv << std::to_string(drink.id) + "\n";
