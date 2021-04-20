@@ -210,8 +210,12 @@ void MainWindow::update_wine_types_producers() {
         std::string producer = selected_wine.producer;
         double abv = selected_wine.abv;
         double size = selected_wine._size;
-        int rating = selected_wine.rating;
 
+        if (options.units == "Metric") {
+            size = round(Calculate::oz_to_ml(size));
+        }
+
+        int rating = selected_wine.rating;
         ui->wineTypeInput->setCurrentText(QString::fromStdString(wine_type));
         ui->wineSubtypeInput->setCurrentText(QString::fromStdString(wine_subtype));
         ui->wineryInput->setCurrentText(QString::fromStdString(producer));

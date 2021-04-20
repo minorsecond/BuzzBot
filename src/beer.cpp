@@ -209,7 +209,7 @@ void MainWindow::update_beer_types_producers() {
         double size = selected_beer._size;
 
         if (options.units == "Metric") {
-            size = Calculate::oz_to_ml(size);
+            size = round(Calculate::oz_to_ml(size));
         }
 
         int rating = selected_beer.rating;

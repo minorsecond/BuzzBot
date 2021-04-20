@@ -315,6 +315,11 @@ void MainWindow::update_selected_row(QItemSelectionModel* select, Drink entered_
         // Update the variables in the beer struct
         entered_drink.id = row_to_update;
         entered_drink.timestamp = timestamp;
+
+        if (options.units == "Metric") {
+            entered_drink._size = round(Calculate::ml_to_oz(entered_drink._size));
+        }
+
         Database::update(storage, entered_drink);
     }
 }
@@ -405,8 +410,9 @@ void MainWindow::update_table() {
         double drink_size = drink._size;
         if (options.units == "Metric") {
             drink_size = Calculate::oz_to_ml(drink_size);
-            // Round to tenth place
-            drink_size = floor(drink_size * 10 + 0.5) / 10;
+
+            // Round to nearest integer
+            drink_size = round(drink_size);
         }
         auto *size = new QTableWidgetItem(Calculate::double_to_string(drink_size).c_str());
 
@@ -1028,7 +1034,7 @@ Drink MainWindow::get_drink_attributes_from_fields() {
     Drink drink;
 
     if (alcohol_type == "Beer") {
-        drink = get_beer_attrs_from_fields(alcohol_type);
+        drink = get_beer_attrs_from_fields(alcohol_type);  // TODO: This should be converted to OZ
     } else if (alcohol_type == "Liquor") {
         drink = get_liquor_attrs_from_fields(alcohol_type);
     } else if (alcohol_type == "Wine") {
@@ -1080,7 +1086,11 @@ Drink MainWindow::get_drink_at_selected_row() {
         selected_drink = Database::read_row(row_to_get, storage);
 
         if (options.units == "Metric") {
-            selected_drink._size = Calculate::oz_to_ml(selected_drink._size);
+
+            // Round to nearest whole number before adding value to drink size field.
+            double tmp_size = round(Calculate::oz_to_ml(selected_drink._size));
+            std::cout << "TMP SIZE: " << tmp_size << std::endl;
+            selected_drink._size = tmp_size;
         }
     }
     return selected_drink;
