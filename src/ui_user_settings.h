@@ -39,16 +39,6 @@ public:
     QGridLayout *gridLayout_4;
     QRadioButton *maleSelection;
     QRadioButton *femaleSelection;
-    QFrame *frame_4;
-    QGridLayout *gridLayout_9;
-    QGroupBox *unitsGroup;
-    QGridLayout *gridLayout_10;
-    QRadioButton *metricRadioButton;
-    QRadioButton *imperialRadioButton;
-    QDialogButtonBox *userSettingsButtonBox;
-    QFrame *frame_3;
-    QGridLayout *gridLayout_8;
-    QPushButton *clearDataButton;
     QHBoxLayout *horizontalLayout;
     QVBoxLayout *verticalLayout;
     QFrame *frame_2;
@@ -62,9 +52,10 @@ public:
     QSpacerItem *verticalSpacer_2;
     QFrame *frame_5;
     QGridLayout *gridLayout_11;
+    QLabel *stdDrinkDefTitle;
     QDoubleSpinBox *stdDrinkDefInput;
     QLabel *stdDrinkDefLabel;
-    QLabel *stdDrinkDefTitle;
+    QComboBox *stdDrinkDefComboBox;
     QSpacerItem *verticalSpacer_5;
     QVBoxLayout *verticalLayout_5;
     QFrame *weeklyLimitFrame;
@@ -79,6 +70,16 @@ public:
     QLabel *label;
     QSpacerItem *verticalSpacer;
     QSpacerItem *verticalSpacer_6;
+    QFrame *frame_4;
+    QGridLayout *gridLayout_9;
+    QGroupBox *unitsGroup;
+    QGridLayout *gridLayout_10;
+    QRadioButton *metricRadioButton;
+    QRadioButton *imperialRadioButton;
+    QDialogButtonBox *userSettingsButtonBox;
+    QFrame *frame_3;
+    QGridLayout *gridLayout_8;
+    QPushButton *clearDataButton;
 
     void setupUi(QDialog *userSettingsDialog)
     {
@@ -116,56 +117,6 @@ public:
 
 
         gridLayout_2->addWidget(frame, 0, 0, 1, 1);
-
-        frame_4 = new QFrame(userSettingsDialog);
-        frame_4->setObjectName(QString::fromUtf8("frame_4"));
-        frame_4->setFrameShape(QFrame::StyledPanel);
-        frame_4->setFrameShadow(QFrame::Raised);
-        gridLayout_9 = new QGridLayout(frame_4);
-        gridLayout_9->setObjectName(QString::fromUtf8("gridLayout_9"));
-        unitsGroup = new QGroupBox(frame_4);
-        unitsGroup->setObjectName(QString::fromUtf8("unitsGroup"));
-        unitsGroup->setAlignment(Qt::AlignCenter);
-        unitsGroup->setFlat(true);
-        gridLayout_10 = new QGridLayout(unitsGroup);
-        gridLayout_10->setObjectName(QString::fromUtf8("gridLayout_10"));
-        metricRadioButton = new QRadioButton(unitsGroup);
-        metricRadioButton->setObjectName(QString::fromUtf8("metricRadioButton"));
-
-        gridLayout_10->addWidget(metricRadioButton, 1, 0, 1, 1);
-
-        imperialRadioButton = new QRadioButton(unitsGroup);
-        imperialRadioButton->setObjectName(QString::fromUtf8("imperialRadioButton"));
-        imperialRadioButton->setChecked(true);
-
-        gridLayout_10->addWidget(imperialRadioButton, 0, 0, 1, 1);
-
-
-        gridLayout_9->addWidget(unitsGroup, 0, 0, 1, 1);
-
-
-        gridLayout_2->addWidget(frame_4, 1, 0, 1, 1);
-
-        userSettingsButtonBox = new QDialogButtonBox(userSettingsDialog);
-        userSettingsButtonBox->setObjectName(QString::fromUtf8("userSettingsButtonBox"));
-        userSettingsButtonBox->setOrientation(Qt::Vertical);
-        userSettingsButtonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
-
-        gridLayout_2->addWidget(userSettingsButtonBox, 0, 5, 1, 1);
-
-        frame_3 = new QFrame(userSettingsDialog);
-        frame_3->setObjectName(QString::fromUtf8("frame_3"));
-        frame_3->setFrameShape(QFrame::StyledPanel);
-        frame_3->setFrameShadow(QFrame::Raised);
-        gridLayout_8 = new QGridLayout(frame_3);
-        gridLayout_8->setObjectName(QString::fromUtf8("gridLayout_8"));
-        clearDataButton = new QPushButton(frame_3);
-        clearDataButton->setObjectName(QString::fromUtf8("clearDataButton"));
-
-        gridLayout_8->addWidget(clearDataButton, 0, 1, 1, 1);
-
-
-        gridLayout_2->addWidget(frame_3, 2, 0, 1, 1);
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
@@ -227,21 +178,32 @@ public:
         frame_5->setFrameShadow(QFrame::Raised);
         gridLayout_11 = new QGridLayout(frame_5);
         gridLayout_11->setObjectName(QString::fromUtf8("gridLayout_11"));
-        stdDrinkDefInput = new QDoubleSpinBox(frame_5);
-        stdDrinkDefInput->setObjectName(QString::fromUtf8("stdDrinkDefInput"));
-
-        gridLayout_11->addWidget(stdDrinkDefInput, 1, 0, 1, 1);
-
-        stdDrinkDefLabel = new QLabel(frame_5);
-        stdDrinkDefLabel->setObjectName(QString::fromUtf8("stdDrinkDefLabel"));
-
-        gridLayout_11->addWidget(stdDrinkDefLabel, 1, 1, 1, 1);
-
         stdDrinkDefTitle = new QLabel(frame_5);
         stdDrinkDefTitle->setObjectName(QString::fromUtf8("stdDrinkDefTitle"));
         stdDrinkDefTitle->setAlignment(Qt::AlignCenter);
 
         gridLayout_11->addWidget(stdDrinkDefTitle, 0, 0, 1, 2);
+
+        stdDrinkDefInput = new QDoubleSpinBox(frame_5);
+        stdDrinkDefInput->setObjectName(QString::fromUtf8("stdDrinkDefInput"));
+
+        gridLayout_11->addWidget(stdDrinkDefInput, 2, 0, 1, 1);
+
+        stdDrinkDefLabel = new QLabel(frame_5);
+        stdDrinkDefLabel->setObjectName(QString::fromUtf8("stdDrinkDefLabel"));
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(stdDrinkDefLabel->sizePolicy().hasHeightForWidth());
+        stdDrinkDefLabel->setSizePolicy(sizePolicy);
+        stdDrinkDefLabel->setMinimumSize(QSize(70, 21));
+
+        gridLayout_11->addWidget(stdDrinkDefLabel, 2, 1, 1, 1);
+
+        stdDrinkDefComboBox = new QComboBox(frame_5);
+        stdDrinkDefComboBox->setObjectName(QString::fromUtf8("stdDrinkDefComboBox"));
+
+        gridLayout_11->addWidget(stdDrinkDefComboBox, 1, 0, 1, 2);
 
 
         verticalLayout->addWidget(frame_5);
@@ -284,11 +246,11 @@ public:
 
         customLimitSpinBox = new QSpinBox(weeklyLimitGroup);
         customLimitSpinBox->setObjectName(QString::fromUtf8("customLimitSpinBox"));
-        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(customLimitSpinBox->sizePolicy().hasHeightForWidth());
-        customLimitSpinBox->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(customLimitSpinBox->sizePolicy().hasHeightForWidth());
+        customLimitSpinBox->setSizePolicy(sizePolicy1);
         customLimitSpinBox->setMinimumSize(QSize(0, 25));
 
         gridLayout_6->addWidget(customLimitSpinBox, 8, 0, 1, 1);
@@ -322,7 +284,57 @@ public:
         horizontalLayout->addLayout(verticalLayout_5);
 
 
-        gridLayout_2->addLayout(horizontalLayout, 0, 3, 4, 1);
+        gridLayout_2->addLayout(horizontalLayout, 0, 2, 4, 1);
+
+        frame_4 = new QFrame(userSettingsDialog);
+        frame_4->setObjectName(QString::fromUtf8("frame_4"));
+        frame_4->setFrameShape(QFrame::StyledPanel);
+        frame_4->setFrameShadow(QFrame::Raised);
+        gridLayout_9 = new QGridLayout(frame_4);
+        gridLayout_9->setObjectName(QString::fromUtf8("gridLayout_9"));
+        unitsGroup = new QGroupBox(frame_4);
+        unitsGroup->setObjectName(QString::fromUtf8("unitsGroup"));
+        unitsGroup->setAlignment(Qt::AlignCenter);
+        unitsGroup->setFlat(true);
+        gridLayout_10 = new QGridLayout(unitsGroup);
+        gridLayout_10->setObjectName(QString::fromUtf8("gridLayout_10"));
+        metricRadioButton = new QRadioButton(unitsGroup);
+        metricRadioButton->setObjectName(QString::fromUtf8("metricRadioButton"));
+
+        gridLayout_10->addWidget(metricRadioButton, 1, 0, 1, 1);
+
+        imperialRadioButton = new QRadioButton(unitsGroup);
+        imperialRadioButton->setObjectName(QString::fromUtf8("imperialRadioButton"));
+        imperialRadioButton->setChecked(true);
+
+        gridLayout_10->addWidget(imperialRadioButton, 0, 0, 1, 1);
+
+
+        gridLayout_9->addWidget(unitsGroup, 0, 0, 1, 1);
+
+
+        gridLayout_2->addWidget(frame_4, 1, 0, 1, 1);
+
+        userSettingsButtonBox = new QDialogButtonBox(userSettingsDialog);
+        userSettingsButtonBox->setObjectName(QString::fromUtf8("userSettingsButtonBox"));
+        userSettingsButtonBox->setOrientation(Qt::Vertical);
+        userSettingsButtonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+
+        gridLayout_2->addWidget(userSettingsButtonBox, 0, 3, 1, 1);
+
+        frame_3 = new QFrame(userSettingsDialog);
+        frame_3->setObjectName(QString::fromUtf8("frame_3"));
+        frame_3->setFrameShape(QFrame::StyledPanel);
+        frame_3->setFrameShadow(QFrame::Raised);
+        gridLayout_8 = new QGridLayout(frame_3);
+        gridLayout_8->setObjectName(QString::fromUtf8("gridLayout_8"));
+        clearDataButton = new QPushButton(frame_3);
+        clearDataButton->setObjectName(QString::fromUtf8("clearDataButton"));
+
+        gridLayout_8->addWidget(clearDataButton, 0, 1, 1, 1);
+
+
+        gridLayout_2->addWidget(frame_3, 2, 0, 1, 1);
 
 
         retranslateUi(userSettingsDialog);
@@ -338,10 +350,6 @@ public:
         sexGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Sex", nullptr));
         maleSelection->setText(QCoreApplication::translate("userSettingsDialog", "Male", nullptr));
         femaleSelection->setText(QCoreApplication::translate("userSettingsDialog", "Female", nullptr));
-        unitsGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Units", nullptr));
-        metricRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Metric (ml)", nullptr));
-        imperialRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Imperial (oz)", nullptr));
-        clearDataButton->setText(QCoreApplication::translate("userSettingsDialog", "Clear Data", nullptr));
         dateCalculationGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Date Calculation", nullptr));
         weekdayStartLabel->setText(QCoreApplication::translate("userSettingsDialog", "Reset stats on:", nullptr));
         weekdayStartInput->setItemText(0, QCoreApplication::translate("userSettingsDialog", "Sunday", nullptr));
@@ -354,13 +362,17 @@ public:
 
         fixedDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Reset on day", nullptr));
         rollingDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Rolling", nullptr));
-        stdDrinkDefLabel->setText(QCoreApplication::translate("userSettingsDialog", "Oz. Alcohol", nullptr));
         stdDrinkDefTitle->setText(QCoreApplication::translate("userSettingsDialog", "Std. Drink Definition:", nullptr));
+        stdDrinkDefLabel->setText(QCoreApplication::translate("userSettingsDialog", "Oz. Alcohol", nullptr));
         weeklyLimitGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Weekly Limit Standard", nullptr));
         customLimitRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Custom", nullptr));
         niaaaStandardsRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "CDC/NIAAA", nullptr));
         customLimitLabel->setText(QCoreApplication::translate("userSettingsDialog", "Custom Limit *:", nullptr));
         label->setText(QCoreApplication::translate("userSettingsDialog", "* Standard drinks", nullptr));
+        unitsGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Units", nullptr));
+        metricRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Metric (ml)", nullptr));
+        imperialRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Imperial (oz)", nullptr));
+        clearDataButton->setText(QCoreApplication::translate("userSettingsDialog", "Clear Data", nullptr));
     } // retranslateUi
 
 };
