@@ -5,9 +5,10 @@ VERSION=$(head -n 1 VERS)
 echo "Deploying version" $VERSION
 
 echo "Copying BuzzBot.app to desktop."
-rm -R ~/Desktop/BuzzBot/
+rm -Rf ~/Desktop/BuzzBot/
 mkdir -p ~/Desktop/BuzzBot/App
 cp -R cmake-build-release/BuzzBot.app ~/Desktop/BuzzBot/App/BuzzBot.app
+chmod -R 775 ~/Desktop/BuzzBot/App/BuzzBot.app/
 
 echo "Extracting debug symbols"
 dsymutil ~/Desktop/BuzzBot/App/BuzzBot.app/Contents/MacOS/BuzzBot -o ~/Desktop/BuzzBot/BuzzBot.app.dSYM
@@ -15,13 +16,13 @@ mkdir ~/Desktop/BuzzBot/Symbols/
 symbols -noTextInSOD -noDaemon -arch all -symbolsPackageDir ~/Desktop/BuzzBot/Symbols ~/Desktop/BuzzBot/BuzzBot.app.dSYM/Contents/Resources/DWARF/BuzzBot
 
 echo "Running macdeployqt."
-~/Qt/*/*/bin/macdeployqt ~/Desktop/BuzzBot/App/BuzzBot.app -always-overwrite -appstore-compliant
+~/Qt/6.0.0/clang_64/bin/macdeployqt ~/Desktop/BuzzBot/App/BuzzBot.app -always-overwrite -appstore-compliant
 
 echo "Configuring plist."
 /usr/libexec/PlistBuddy -c "Add :CFBundleSupportedPlatforms array" ~/Desktop/BuzzBot/App/BuzzBot.app/Contents/Info.plist
 /usr/libexec/PlistBuddy -c "Add :CFBundleSupportedPlatforms:0 string MacOSX" ~/Desktop/BuzzBot/App/BuzzBot.app/Contents/Info.plist
 /usr/libexec/PlistBuddy -c "Add :LSApplicationCategoryType string public.app-category.lifestyle" ~/Desktop/BuzzBot/App/BuzzBot.app/Contents/Info.plist
-/usr/libexec/PlistBuddy -c "Add :LSMinimumSystemVersion string 10.15.5" ~/Desktop/BuzzBot/App/BuzzBot.app/Contents/Info.plist
+/usr/libexec/PlistBuddy -c "Set :LSMinimumSystemVersion 10.15.5" ~/Desktop/BuzzBot/App/BuzzBot.app/Contents/Info.plist
 
 echo "Codesigning."
 find ~/Desktop/BuzzBot/App/BuzzBot.app -name "*.dylib" | xargs -I $ codesign --options runtime --verify --verbose --sign "3rd Party Mac Developer Application: Robert Wardrup (7KNS6YGX5V)" $

@@ -5,21 +5,26 @@
 #include "calculate.h"
 #include <cmath>
 #include <iostream>
+#include <algorithm>
 
-double Calculate::standard_drinks(double abv, double amount) {
+double Calculate::standard_drinks(double abv, double amount, double std_drink_size) {
     /*
      * Calculate the number of standard drinks in a beer.
+     * 1 Std. drink in the US is .6 oz pure alcohol. In Europe,
+     * it's 17.5 ml pure alcohol. These two measurements are
+     * roughly the same.
      * @param abv: the alcohol by volume of the beer.
      * @param amount: the amount of beer in the container.
+     * @param std_drink_size: the size of the standard drink, in the same unit as amount.
      */
 
-    double alcohol_amt = oz_alcohol(abv, amount);
-    return round_to_two_decimal_points(alcohol_amt / .6);
+    double alcohol_amt = alcohol_volume(abv, amount);
+    return round_to_two_decimal_points(alcohol_amt / std_drink_size);
 }
 
-double Calculate::oz_alcohol(double abv, double amount) {
+double Calculate::alcohol_volume(double abv, double amount) {
     /*
-     * Calculate the ounces of alcohol in a beer.
+     * Calculate the volume of alcohol in a beer.
      * @param abv: The alcohol by volume of the beer.
      * @param amount: The amount of beer in the container.
      */
@@ -53,7 +58,7 @@ double Calculate::standard_drinks_remaining(const std::string& sex, const std::s
         }
     }
 
-    (sex == "male") ? weekly_drinks_remaining = drink_limit - standard_drinks_consumed : weekly_drinks_remaining = drink_limit - standard_drinks_consumed;
+    weekly_drinks_remaining = drink_limit - standard_drinks_consumed;
 
     return weekly_drinks_remaining;
 }
@@ -67,30 +72,30 @@ double Calculate::round_to_two_decimal_points(double val) {
     return floor((val * 100) + .5)/100;
 }
 
-double Calculate::oz_alcohol_remaining(const std::string& sex, const std::string& standard, int drink_limit, double oz_consumed) {
+double Calculate::volume_alcohol_remaining(const std::string& sex, const std::string& standard, int drink_limit, double volume_consumed, double std_drink_size) {
     /*
      * Calculate the amount of alcohol the user has remaining based on their sex.
-     * @return: The amount of oz remaining for user.
+     * @return: The amount of volume remaining for user.
      */
 
     // TODO: Allow using different standards and custom amounts
 
-    double oz_alcohol_remaining {0};
+    double vol_alcohol_remaining {0};
 
     if (standard == "Custom") {
-        oz_alcohol_remaining = (0.6 * drink_limit) - oz_consumed;
+        vol_alcohol_remaining = (std_drink_size * drink_limit) - volume_consumed;
     } else {
         if (sex == "male") {
-            oz_alcohol_remaining = (0.6 * 14) - oz_consumed;
+            vol_alcohol_remaining = (std_drink_size * 14) - volume_consumed;
         } else if (sex == "female") {
-            oz_alcohol_remaining = (0.6 * 7) - oz_consumed;
+            vol_alcohol_remaining = (std_drink_size * 7) - volume_consumed;
         }
     }
 
-    return round_to_two_decimal_points(oz_alcohol_remaining);
+    return round_to_two_decimal_points(vol_alcohol_remaining);
 }
 
-std::string Calculate::favorite_producer(Storage storage) {
+std::string Calculate::favorite_producer(const Storage& storage, const std::string& drink_type) {
     /*
      * Get the number of time each brewery appears in the database.
      * @param storage: A Storage instance.
@@ -101,7 +106,8 @@ std::string Calculate::favorite_producer(Storage storage) {
     std::vector<std::string> producers;
     std::string favorite_producer;
 
-    std::vector<Drink> all_drinks = storage.get_all<Drink>();
+    //std::vector<Drink> all_drinks = storage.get_all<Drink>();
+    std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
     producers.reserve(all_drinks.size());
     for (const auto& drink: all_drinks) {
@@ -123,21 +129,21 @@ std::string Calculate::favorite_producer(Storage storage) {
     return favorite_producer;
 }
 
-std::string Calculate::favorite_beer(Storage storage) {
+std::string Calculate::favorite_drink(const Storage& storage, const std::string& drink_type) {
     /*
      * Calculates favorite beer based on most common beer in database
      * @param Storage: a Storage instance
-     * @return favorite_beer: The most common beer in the database.
+     * @return favorite_drink: The most common beer in the database.
      */
 
     std::map<std::string, unsigned> beer_counts;
     std::vector<std::string> beers;
     std::string favorite_beer;
 
-    std::vector<Drink> all_beers = storage.get_all<Drink>();
+    std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
-    beers.reserve(all_beers.size());
-    for (const auto& beer: all_beers) {
+    beers.reserve(all_drinks.size());
+    for (const auto& beer: all_drinks) {
         beers.push_back(beer.name);
     }
     for (const auto& brewery : beers) {
@@ -157,7 +163,7 @@ std::string Calculate::favorite_beer(Storage storage) {
     return favorite_beer;
 }
 
-double Calculate::mean_abv(Storage storage) {
+double Calculate::mean_abv(const Storage& storage, const std::string& drink_type) {
     /*
      * Calculate the mean ABV for all drinks.
      * @param storage: A storage instance.
@@ -166,9 +172,9 @@ double Calculate::mean_abv(Storage storage) {
 
     double abv_sum = 0.0;
     unsigned beer_count = 0;
-    std::vector<Drink> all_beers = storage.get_all<Drink>();
+    std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
-    for (const auto& beer : all_beers) {
+    for (const auto& beer : all_drinks) {
         beer_count += 1;
         abv_sum += beer.abv;
     }
@@ -176,7 +182,7 @@ double Calculate::mean_abv(Storage storage) {
     return round_to_two_decimal_points(abv_sum / beer_count);
 }
 
-double Calculate::mean_ibu(Storage storage) {
+double Calculate::mean_ibu(Storage storage, const std::string& drink_type) {
     /*
      * Calculate the mean IBU of all beers in the database.
      * @param storage: A storage instance.
@@ -185,9 +191,9 @@ double Calculate::mean_ibu(Storage storage) {
 
     double ibu_sum = 0.0;
     unsigned beer_count = 0;
-    std::vector<Drink> all_beers = storage.get_all<Drink>();
+    std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
-    for (const auto& beer : all_beers) {
+    for (const auto& beer : all_drinks) {
         // Ignore empty IBU values
         if (beer.ibu > 0) {
             beer_count += 1;
@@ -198,7 +204,7 @@ double Calculate::mean_ibu(Storage storage) {
     return ibu_sum / beer_count;
 }
 
-std::string Calculate::favorite_type(Storage storage) {
+std::string Calculate::favorite_type(const Storage& storage, const std::string& drink_type) {
     /*
      * Calculates favorite beer type based on most common type in database
      * @param Storage: a Storage instance
@@ -209,10 +215,10 @@ std::string Calculate::favorite_type(Storage storage) {
     std::vector<std::string> types;
     std::string favorite_type;
 
-    std::vector<Drink> all_beers = storage.get_all<Drink>();
+    std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
-    types.reserve(all_beers.size());
-    for (const auto& beer: all_beers) {
+    types.reserve(all_drinks.size());
+    for (const auto& beer: all_drinks) {
         types.push_back(beer.type);
     }
     for (const auto& type : types) {
@@ -232,23 +238,6 @@ std::string Calculate::favorite_type(Storage storage) {
     return favorite_type;
 }
 
-bool Calculate::compare_date(const Drink &a, const Drink &b) {
-    /*
-     * Determine if second date is greater than the first date.
-     * @return: True if second date is more recent than the first date. Else, false.
-     */
-
-    if (a.drink_year < b.drink_year) {
-        return true;
-    } else if (a.drink_year == b.drink_year && a.drink_month < b.drink_month) {
-        return true;
-    } else if (a.drink_year == b.drink_year && a.drink_month == b.drink_month && a.drink_day < b.drink_day) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 std::string Calculate::double_to_string(double input_double) {
     /*
      * Convert a double to a string with two decimal points.
@@ -263,4 +252,48 @@ std::string Calculate::double_to_string(double input_double) {
     output_string << converted_double;
 
     return output_string.str();
+}
+
+double Calculate::oz_to_ml(double input_oz) {
+    /*
+     * Convert oz to ml for metric support. 1 oz = 29.5735 ml.
+     * @param input_oz: A double denoting drink volume in ounces.
+     * @return: A double denoting drink volume in milliliters.
+     */
+
+    double ml = input_oz * 29.5735;
+    return ml;
+}
+
+double Calculate::ml_to_oz(double input_ml) {
+    /*
+     * Convert ml to oz for metric support. 29.5735 ml = 1 lz.
+     * @param input_ml: A double denoting drink volume in milliliters.
+     * @return: A double denoting drink volume in ounces.
+     */
+
+    double oz = input_ml / 29.5735;
+    return oz;
+}
+
+bool Calculate::compare_strings(std::string lhs, std::string rhs) {
+    /*
+     * Compare two strings alphabetically. Used to compare strings, ignoring case.
+     */
+
+    std::string lhs_tmp;
+    std::string rhs_tmp;
+
+    // Convert strings to uppercase
+    for (char& c : lhs) {
+        c = std::toupper(c, std::locale());
+        lhs_tmp += c;
+    }
+
+    for (char& c : rhs) {
+        c = std::toupper(c, std::locale());
+        rhs_tmp += c;
+    }
+
+    return lhs < rhs;
 }
