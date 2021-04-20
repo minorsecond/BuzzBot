@@ -15,7 +15,7 @@ class UserSettings : public QDialog, public Ui::userSettingsDialog {
 
     Q_OBJECT
     Ui::userSettingsDialog ui{};
-public:
+ public:
     explicit UserSettings(QWidget *parent, const Options &options, const std::map<std::string, double>& country_info);
     std::string get_sex();
     std::string get_weekday_start();
@@ -31,7 +31,7 @@ public:
     void set_day_of_week_setting_state(const Options& options);
     void set_frame_style();
 
-private slots:
+ private slots:
     void changed_limit_setting();
     void changed_date_calc();
     void clicked_clear_data();
