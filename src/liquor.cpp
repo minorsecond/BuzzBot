@@ -211,7 +211,7 @@ void MainWindow::update_liquor_types_producers() {
         double size = selected_liquor._size;
 
         if (options.units == "Metric") {
-            size = round(Calculate::oz_to_ml(size));
+            size = Calculate::oz_to_ml(size);
         }
 
         int rating = selected_liquor.rating;
