@@ -8,16 +8,12 @@
 struct Drink {
     int id;
     std::string date;
-    int drink_year;  // TODO: Remove this in DB version 4
-    int drink_month;  // TODO: Remove this
-    int drink_day;  // TODO: Remove this
     std::string name;
     std::string type;
     std::string subtype;
     std::string producer;
     double abv;
     double ibu;
-    int size;
     double _size;  // TODO: Replace size with _size
     int rating;
     std::string notes;
@@ -36,16 +32,12 @@ inline auto initStorage(const std::string& file_name) {
                                     sqlite_orm::make_table("beers",
                                                           sqlite_orm::make_column("id", &Drink::id, sqlite_orm::autoincrement(), sqlite_orm::primary_key()),
                                                           sqlite_orm::make_column("date", &Drink::date, sqlite_orm::default_value("2020-01-01")),
-                                                          sqlite_orm::make_column("drink_year", &Drink::drink_year),
-                                                          sqlite_orm::make_column("drink_month", &Drink::drink_month),
-                                                          sqlite_orm::make_column("drink_day", &Drink::drink_day),
                                                           sqlite_orm::make_column("drink_name", &Drink::name),
                                                           sqlite_orm::make_column("drink_type", &Drink::type),
                                                           sqlite_orm::make_column("drink_subtype", &Drink::subtype, sqlite_orm::default_value("")),
                                                           sqlite_orm::make_column("producer", &Drink::producer, sqlite_orm::default_value("")),
                                                           sqlite_orm::make_column("abv", &Drink::abv),
                                                           sqlite_orm::make_column("ibu", &Drink::ibu),
-                                                          sqlite_orm::make_column("size", &Drink::size),
                                                           sqlite_orm::make_column("_size", &Drink::_size, sqlite_orm::default_value(0.0)),
                                                           sqlite_orm::make_column("rating", &Drink::rating),
                                                           sqlite_orm::make_column("notes", &Drink::notes),
