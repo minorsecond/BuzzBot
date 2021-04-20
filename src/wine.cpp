@@ -212,7 +212,7 @@ void MainWindow::update_wine_types_producers() {
         double size = selected_wine._size;
 
         if (options.units == "Metric") {
-            size = round(Calculate::oz_to_ml(size));
+            size = Calculate::oz_to_ml(size);
         }
 
         int rating = selected_wine.rating;

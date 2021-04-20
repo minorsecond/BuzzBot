@@ -48,8 +48,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     if (options.units == "Metric") {
         ui->beerSizeLabel->setText("Size (ml)");
+        ui->liquorSizeLabel->setText("Size (ml)");
+        ui->wineSizeLabel->setText("Size (ml)");
     } else {
         ui->beerSizeLabel->setText("Size (oz)");
+        ui->liquorSizeLabel->setText("Size (oz)");
+        ui->wineSizeLabel->setText("Size (oz)");
     }
 
     // Set size hints
@@ -317,7 +321,7 @@ void MainWindow::update_selected_row(QItemSelectionModel* select, Drink entered_
         entered_drink.timestamp = timestamp;
 
         if (options.units == "Metric") {
-            entered_drink._size = round(Calculate::ml_to_oz(entered_drink._size));
+            entered_drink._size = Calculate::ml_to_oz(entered_drink._size);
         }
 
         Database::update(storage, entered_drink);
@@ -411,8 +415,8 @@ void MainWindow::update_table() {
         if (options.units == "Metric") {
             drink_size = Calculate::oz_to_ml(drink_size);
 
-            // Round to nearest integer
-            drink_size = round(drink_size);
+            // Round to tenth place
+            drink_size = floor(drink_size * 10 + 0.5) / 10;
         }
         auto *size = new QTableWidgetItem(Calculate::double_to_string(drink_size).c_str());
 
@@ -1086,11 +1090,7 @@ Drink MainWindow::get_drink_at_selected_row() {
         selected_drink = Database::read_row(row_to_get, storage);
 
         if (options.units == "Metric") {
-
-            // Round to nearest whole number before adding value to drink size field.
-            double tmp_size = round(Calculate::oz_to_ml(selected_drink._size));
-            std::cout << "TMP SIZE: " << tmp_size << std::endl;
-            selected_drink._size = tmp_size;
+            selected_drink._size = Calculate::oz_to_ml(selected_drink._size);
         }
     }
     return selected_drink;
