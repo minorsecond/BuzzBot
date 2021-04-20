@@ -4,6 +4,7 @@
 
 #include <utility>
 #include "mainwindow.h"
+#include "calculate.h"
 
 // LCOV_EXCL_START
 void MainWindow::update_liquor_fields() {
@@ -14,7 +15,8 @@ void MainWindow::update_liquor_fields() {
     std::set<QString> distilleries;
     std::set<QString> types;
     std::set<QString> subtypes;
-    std::set<QString> names;
+    std::vector<std::string> names_tmp;
+    std::set<std::string> names;
 
     std::vector<Drink> all_liquor = Database::filter("Alcohol Type", "Liquor", storage);
 
@@ -37,7 +39,7 @@ void MainWindow::update_liquor_fields() {
         QString distiller_name = QString::fromStdString(liquor.producer);
         QString liquor_type = QString::fromStdString(liquor.type);
         QString liquor_subtype = QString::fromStdString(liquor.subtype);
-        QString liquor_name = QString::fromStdString(liquor.name);
+        std::string liquor_name = liquor.name;
 
         distilleries.insert(distiller_name);
         types.insert(liquor_type);
@@ -64,9 +66,17 @@ void MainWindow::update_liquor_fields() {
     }
 
     for (const auto& name : names) {
-        if (!name.isEmpty()) {
-            ui->liquorNameInput->addItem(name);
+        if (!name.empty()) {
+            if (std::find(names_tmp.begin(), names_tmp.end(), name) == names_tmp.end())
+                names_tmp.push_back(name);
         }
+    }
+
+    std::sort(names_tmp.begin(), names_tmp.end(), Calculate::compare_strings);
+
+    for (const auto& name : names_tmp) {
+        QString name_q = QString::fromStdString(name);
+        ui->liquorNameInput->addItem(name_q);
     }
 
     // Rest to first name in field
@@ -199,8 +209,12 @@ void MainWindow::update_liquor_types_producers() {
         std::string producer = selected_liquor.producer;
         double abv = selected_liquor.abv;
         double size = selected_liquor._size;
-        int rating = selected_liquor.rating;
 
+        if (options.units == "Metric") {
+            size = Calculate::oz_to_ml(size);
+        }
+
+        int rating = selected_liquor.rating;
         ui->liquorTypeInput->setCurrentText(QString::fromStdString(liquor_type));
         ui->liquorSubtypeInput->setCurrentText(QString::fromStdString(liquor_subtype));
         ui->liquorDistillerInput->setCurrentText(QString::fromStdString(producer));
@@ -223,9 +237,6 @@ Drink MainWindow::get_liquor_attrs_from_fields(std::string alcohol_type) {
 
     std::string drink_date = ui->liquorDateInput->date().toString("yyyy-MM-dd").toStdString();
     drink.date = drink_date;
-    drink.drink_year = ui->liquorDateInput->date().year();  // TODO: Remove this
-    drink.drink_month = ui->liquorDateInput->date().month();  // TODO: Remove this
-    drink.drink_day = ui->liquorDateInput->date().day();  // TODO: Remove this
     drink.name = ui->liquorNameInput->currentText().toStdString();
     drink.type = ui->liquorTypeInput->currentText().toStdString();
     drink.subtype = ui->liquorSubtypeInput->currentText().toStdString();

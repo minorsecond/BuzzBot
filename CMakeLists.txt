@@ -1,16 +1,15 @@
 cmake_minimum_required(VERSION 3.17)
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
 project(BuzzBot)
 
 set(CMAKE_CXX_STANDARD 20)
 set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libproc.h")
-set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
-
-set(Qt5_DIR "/Users/rwardrup/Qt/5.15.2/clang_64/lib/cmake/Qt5")
+#set(Qt6_DIR "/Users/rwardrup/Qt/6.0.0/clang_64/lib/cmake/Qt6")
+set(CMAKE_PREFIX_PATH "/Users/rwardrup/Qt/6.0.0/clang_64/")
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     message("Building debug")
-    add_compile_options(-Wall -g -o0 --coverage)
-    set(CMAKE_EXE_LINKER_FLAGS --coverage)
+    add_compile_options(-Wall -g -o0)
 elseif(CMAKE_BUILD_TYPE MATCHES Release)
     message(STATUS "Building release")
     add_compile_options(-Wall -gdwarf-2 -o3)
@@ -21,7 +20,7 @@ set(CMAKE_AUTOUIC ON)
 
 enable_testing()
 
-find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(Catch2 REQUIRED)
 
@@ -38,22 +37,24 @@ file(COPY ${ICON_PATH} DESTINATION "BuzzBot.app/Contents/Resources")
 add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp src/mainwindow.h src/database.h src/usersettings.cpp src/usersettings.h src/calculate.cpp src/calculate.h src/beer.cpp src/liquor.cpp src/wine.cpp src/filters.cpp  src/about.cpp src/about.h src/exporters.cpp src/exporters.h src/standard_drink_calculator.cpp src/standard_drink_calculator.h src/confirm_dialog.cpp src/confirm_dialog.h src/graphing.cpp src/graphing.h)
 add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp test/test_database_functions.cpp test/test_calculations.cpp)
 
+target_precompile_headers(BuzzBot PRIVATE include/sqlite_orm.h include/Catch2.hpp)
+
 # Copy resources to build dir
 add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/previous.png ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/previous.png)
 add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/next.png ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/next.png)
 add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/mini-icon.png ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/mini-icon.png)
 
 set_target_properties(BuzzBot PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
-target_link_libraries(BuzzBot Qt5::Core Qt5::Widgets SQLite3 "-framework CoreFoundation")
-target_link_libraries(functions_test SQLite3 Catch2::Catch2 Qt5::Core)
+target_link_libraries(BuzzBot Qt6::Core Qt6::Widgets SQLite3 "-framework CoreFoundation")
+target_link_libraries(functions_test SQLite3 Catch2::Catch2 Qt6::Core)
 
 set_target_properties(BuzzBot PROPERTIES
         MACOSX_BUNDLE_BUNDLE_NAME "BuzzBot"
-        MACOSX_BUNDLE_BUNDLE_VERSION "1.2.0"
+        MACOSX_BUNDLE_BUNDLE_VERSION "2.0.0"
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_ICON_FILE icon.icns
-        MACOSX_BUNDLE_LONG_VERSION_STRING "1.2.0"
-        MACOSX_BUNDLE_SHORT_VERSION_STRING "1.2.0"
+        MACOSX_BUNDLE_LONG_VERSION_STRING "2.0.0"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "2.0.0"
         MACOSX_BUNDLE_COPYRIGHT "2020 Ross Wardrup"
         MACOSX_BUNDLE_GUI_IDENTIFIER com.rwardrup.buzzbot
         XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"

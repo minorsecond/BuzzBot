@@ -11,6 +11,9 @@ struct Options {
     std::string date_calculation_method = "Fixed";
     std::string weekday_start = "Sunday";
     std::string limit_standard = "NIAAA";
+    std::string units = "Imperial";
+    std::string std_drink_country = "United States";
+    std::string std_drink_size = "0.6";  // Store as ounces
     int weekly_limit = -1;
 };
 
@@ -35,14 +38,14 @@ private:
     void program_options(bool write);
     void update_drinks_this_week(double standard_drinks, const std::string& weekday_name);
     void update_standard_drinks_left_this_week(double std_drinks_consumed);
-    double update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week, const std::string& weekday_name);
-    void update_oz_alcohol_remaining(double oz_alcohol_consumed);
-    void update_favorite_brewery();
-    void update_favorite_beer();
-    void update_favorite_type();
-    void update_mean_abv();
-    void update_mean_ibu();
-    void update_types_producers_on_name_change();
+    double update_vol_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week, const std::string& weekday_name);
+    void update_volume_alcohol_remaining(double volume_alcohol_consumed);
+    void update_favorite_brewery(const std::string& drink_type);
+    void update_favorite_beer(const std::string& drink_type);
+    void update_favorite_type(const std::string& drink_type);
+    void update_mean_abv(const std::string& drink_type);
+    void update_mean_ibu(const std::string& drink_type);
+    void update_types_and_producers();
     std::string get_latest_notes(const std::string& name, const std::string& alcohol_type);
     std::string get_current_tab();
     Drink get_drink_attributes_from_fields();
@@ -74,6 +77,35 @@ private:
     void clear_fields(const std::string& alcohol_type);
     [[nodiscard]] date::weekday get_filter_weekday_start() const;
     std::tuple<date::year_month_day, std::string> get_filter_date();
+    void update_std_drinks_today();
+    static std::string format_date(date::year_month_day date);
+
+    // Std drink sizes are all stored in Oz. Data are all from Wikipedia:
+    // https://en.wikipedia.org/wiki/Standard_drink
+    std::map<std::string , double> std_drink_standards = {
+            {"Australia", 0.43},
+            {"Austria", 0.86},
+            {"Canada", 0.57},
+            {"Denmark", 0.52},
+            {"Finland", 0.52},
+            {"France", 0.43},
+            {"Germany", 0.47},
+            {"Hong Kong", 0.43},
+            {"Hungary", 0.73},
+            {"Iceland", 0.34},
+            {"Ireland", 0.43},
+            {"Italy", 0.43},
+            {"Japan", 0.85},
+            {"Netherlands", 0.43},
+            {"New Zealand", 0.43},
+            {"Poland", 0.43},
+            {"Portugal", 0.47},
+            {"Spain", 0.43},
+            {"Sweden", 0.51},
+            {"Switzerland", 0.52},
+            {"United Kingdom", 0.34},
+            {"United States", 0.60}
+    };
 
 private slots:
     void submit_button_clicked();
@@ -94,4 +126,5 @@ private slots:
     void clicked_clear_button();
     void update_stats_if_new_day();
 };
+
 #endif // MAINWINDOW_H

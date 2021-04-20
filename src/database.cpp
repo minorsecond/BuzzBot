@@ -173,7 +173,6 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
 
     if (!drink_by_name_result.empty()) {
         drink_by_name = drink_by_name_result.at(0);
-        std::cout << "*** Selected size: " << drink_by_name._size << std::endl;
     } else {
         drink_by_name.id = -1;
     }
@@ -182,28 +181,47 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
 }
 
 std::vector<Drink> Database::get_beers_by_type(Storage storage, std::string beer_type) {
+    /*
+     * Get drinks by type.
+     * @param storage: A storage instance.
+     * @param beer_type: The type of drink to filter on.
+     * @return: A vector of drinks that match beer_type.
+     */
     std::vector<Drink> beers_by_type = storage.get_all<Drink>(where(c(&Drink::type) == std::move(beer_type)));
     return beers_by_type;
 }
 
 std::vector<Drink> Database::get_beers_by_brewery(Storage storage, std::string producer) {
+    /*
+     * Get drinks by producer.
+     * @param storage: A storage instance.
+     * @param producer: The producer name to filter on.
+     * @return: A vector of drinks produced by a producer.
+     */
     std::vector<Drink> beers_by_brewery = storage.get_all<Drink>(where(c(&Drink::producer) == std::move(producer)));
     return beers_by_brewery;
 }
 
 int Database::get_version(Storage storage) {
+    /*
+     * Get the current database version.
+     * @param storage: A storage instance.
+     * @return: An integer denoting the current database version.
+     */
     return storage.pragma.user_version();
 }
 
 int Database::increment_version(Storage storage, int current_version) {
     /*
      * Increment database version to current version.
+     * @param storage: A storage instance.
+     * @param current_version: The version that the DB should be incremented to.
+     * @return: An integer denoting new DB version, straight from the DB.
      */
 
     std::cout << "Using DB version " << storage.pragma.user_version() << std::endl;
 
-    if (get_version(storage) < 6 && current_version == 6) {
-        // This adds the year, month, day fields into the date field in the correct format.
+    if (get_version(storage) < 7 && current_version == 7) {
         std::cout << "*** Upgrading DB from version " << storage.pragma.user_version() <<  " to " << current_version << std::endl;
         populate_size_field();
         storage.pragma.user_version(current_version);
@@ -245,15 +263,15 @@ std::vector<Drink> Database::sort_by_date_id(std::vector<Drink> drinks) {
 
 void Database::populate_size_field() {
     /*
-     * Populate the _size field with contents of size field.
+     * Populate the size field with contents of _size field.
      * To be removed in later version of database.
      */
 
     Storage storage = initStorage(path());
     write_db_to_disk(storage);
-    std::vector all_drinks = storage.get_all<Drink>();
-    for (auto& drink : all_drinks) {
-        drink._size = (double)drink.size;
-        update(storage, drink);
-    }
+    //std::vector all_drinks = storage.get_all<Drink>();
+    //for (auto& drink : all_drinks) {
+    //    drink.size = (double)drink._size;
+    //    update(storage, drink);
+    //}
 }

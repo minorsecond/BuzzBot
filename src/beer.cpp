@@ -3,6 +3,7 @@
 //
 
 #include "mainwindow.h"
+#include "calculate.h"
 #include <iostream>
 
 // LCOV_EXCL_START
@@ -14,7 +15,8 @@ void MainWindow::update_beer_fields() {
     std::set<QString> breweries;
     std::set<QString> types;
     std::set<QString> subtypes;
-    std::set<QString> names;
+    std::set<std::string> names;
+    std::vector<std::string> names_tmp;
     std::vector<Drink> all_beers = Database::filter("Alcohol Type", "Beer", storage);
 
     // Block signals to avoid crashing
@@ -32,12 +34,12 @@ void MainWindow::update_beer_fields() {
         QString brewery_name = QString::fromStdString(beer.producer);
         QString beer_type = QString::fromStdString(beer.type);
         QString beer_subtype = QString::fromStdString(beer.subtype);
-        QString beer_name = QString::fromStdString(beer.name);
+        std::string name = beer.name;
 
         breweries.insert(brewery_name);
         types.insert(beer_type);
         subtypes.insert(beer_subtype);
-        names.insert(beer_name);
+        names.insert(name);
     }
 
     for (const auto& brewery : breweries) {
@@ -59,9 +61,18 @@ void MainWindow::update_beer_fields() {
     }
 
     for (const auto& name : names) {
-        if (!name.isEmpty()) {
-            ui->beerNameInput->addItem(name);
+        if (!name.empty()) {
+            if (std::find(names_tmp.begin(), names_tmp.end(), name) == names_tmp.end())
+                names_tmp.push_back(name);
         }
+    }
+
+    // TODO: Figure out why this sometimes causes segfaults in debug.
+    std::sort(names_tmp.begin(), names_tmp.end(), Calculate::compare_strings);
+
+    for (const auto& name : names_tmp) {
+        QString name_q = QString::fromStdString(name);
+        ui->beerNameInput->addItem(name_q);
     }
 
     // Reset to first name in field
@@ -76,8 +87,6 @@ void MainWindow::populate_beer_fields(const Drink& drink_at_row) {
      * Populate the beer entry fields if user is on the beer entry tab.
      */
 
-    std::cout << "*** Size: " << drink_at_row._size << std::endl;
-
     QDate date = format_date_for_input(drink_at_row);
     // Only update the beer fields if the user is currently on the beer tab
     std::string notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
@@ -88,9 +97,9 @@ void MainWindow::populate_beer_fields(const Drink& drink_at_row) {
     ui->beerBreweryInput->setCurrentText(drink_at_row.producer.c_str());
     ui->beerAbvInput->setValue(drink_at_row.abv);
     ui->beerIbuInput->setValue(drink_at_row.ibu);
-    ui->beerSizeInput->setValue(drink_at_row._size);
     ui->beerRatingInput->setValue(drink_at_row.rating);
     ui->beerNotesInput->setText(notes.c_str());
+    ui->beerSizeInput->setValue(drink_at_row._size);
 
     // Switch to the beer tab
     ui->tabWidget->setCurrentIndex(0);
@@ -198,7 +207,11 @@ void MainWindow::update_beer_types_producers() {
         double abv = selected_beer.abv;
         double ibu = selected_beer.ibu;
         double size = selected_beer._size;
-        std::cout << "*** Size 2: " << selected_beer._size << std::endl;
+
+        if (options.units == "Metric") {
+            size = Calculate::oz_to_ml(size);
+        }
+
         int rating = selected_beer.rating;
         ui->beerTypeInput->setCurrentText(QString::fromStdString(beer_type));
         ui->beerSubtypeInput->setCurrentText(QString::fromStdString(beer_subtype));
@@ -223,9 +236,6 @@ Drink MainWindow::get_beer_attrs_from_fields(std::string alcohol_type) {
 
     std::string drink_date = ui->beerDateInput->date().toString("yyyy-MM-dd").toStdString();
     drink.date = drink_date;
-    drink.drink_year = ui->beerDateInput->date().year();  // TODO: Remove this
-    drink.drink_month = ui->beerDateInput->date().month();  // TODO: Remove this
-    drink.drink_day = ui->beerDateInput->date().day();  // TODO: Remove this
     drink.name = ui->beerNameInput->currentText().toStdString();
     drink.type = ui->beerTypeInput->currentText().toStdString();
     drink.subtype = ui->beerSubtypeInput->currentText().toStdString();

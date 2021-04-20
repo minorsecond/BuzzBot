@@ -35,11 +35,26 @@ MainWindow::MainWindow(QWidget *parent)
     program_options(false);
     program_options(true);
 
+    // Change unit text depending on settings
+    if (options.units == "Metric") {
+        ui->volAlcoholRemainingLabel->setText("ml. Alcohol Remaining:");
+    }
+
     // Upgrade DB version
-    // TODO: Remove references to drink_year, drink_month, & drink_day in DB version 6
-    Database::increment_version(storage, 6);
+    // DB Version 7 removes extra year, month, date columns
+    Database::increment_version(storage, 7);
 
     add_menubar_items();
+
+    if (options.units == "Metric") {
+        ui->beerSizeLabel->setText("Size (ml)");
+        ui->liquorSizeLabel->setText("Size (ml)");
+        ui->wineSizeLabel->setText("Size (ml)");
+    } else {
+        ui->beerSizeLabel->setText("Size (oz)");
+        ui->liquorSizeLabel->setText("Size (oz)");
+        ui->wineSizeLabel->setText("Size (oz)");
+    }
 
     // Set size hints
     ui->beerDateInput->setProperty("sizeHint", QVariant(QSizeF(241, 22)));
@@ -170,15 +185,15 @@ void MainWindow::configure_table() {
     ui->filterTextInput->setDisabled(true);
 
     // Set column widths
-    ui->drinkLogTable->setColumnWidth(0, 75);
-    ui->drinkLogTable->setColumnWidth(1, 428);
-    ui->drinkLogTable->setColumnWidth(2, 200);
-    ui->drinkLogTable->setColumnWidth(3, 200);
-    ui->drinkLogTable->setColumnWidth(4, 428);
-    ui->drinkLogTable->setColumnWidth(5, 50);
-    ui->drinkLogTable->setColumnWidth(6, 50);
-    ui->drinkLogTable->setColumnWidth(7, 50);
-    ui->drinkLogTable->setColumnWidth(8, 55);
+    ui->drinkLogTable->setColumnWidth(0, 75); // Date
+    ui->drinkLogTable->setColumnWidth(1, 428); // Name
+    ui->drinkLogTable->setColumnWidth(2, 200); // Type
+    ui->drinkLogTable->setColumnWidth(3, 200); // Subtype
+    ui->drinkLogTable->setColumnWidth(4, 428); // Producer
+    ui->drinkLogTable->setColumnWidth(5, 50); // ABV
+    ui->drinkLogTable->setColumnWidth(6, 50); // IBU
+    ui->drinkLogTable->setColumnWidth(7, 55); // Size
+    ui->drinkLogTable->setColumnWidth(8, 55); // Rating
     ui->drinkLogTable->setColumnHidden(9, true);  // Hide ID column
     ui->drinkLogTable->setColumnHidden(10, true);  // Hide Timestamp column
     ui->drinkLogTable->setColumnHidden(11, true);  // Hide Sort column
@@ -304,6 +319,11 @@ void MainWindow::update_selected_row(QItemSelectionModel* select, Drink entered_
         // Update the variables in the beer struct
         entered_drink.id = row_to_update;
         entered_drink.timestamp = timestamp;
+
+        if (options.units == "Metric") {
+            entered_drink._size = Calculate::ml_to_oz(entered_drink._size);
+        }
+
         Database::update(storage, entered_drink);
     }
 }
@@ -317,6 +337,11 @@ void MainWindow::add_new_row(Drink entered_drink) {
     // New row. Get a new timestamp
     std::string timestamp = storage.select(sqlite_orm::datetime("now")).front();
     entered_drink.timestamp = timestamp;
+
+    // Convert ml to oz
+    if (options.units == "Metric") {
+        entered_drink._size = Calculate::ml_to_oz(entered_drink._size);
+    }
     Database::write(entered_drink, storage);
 }
 
@@ -333,21 +358,21 @@ void MainWindow::reset_fields() {
 
     if (alcohol_type == "Beer") {
         update_beer_fields();
-        update_types_producers_on_name_change();
+        update_types_and_producers();
 
         // Set datepicker to today's date
         QDate todays_date = QDate::currentDate();
         ui->beerDateInput->setDate(todays_date);
     } else if (alcohol_type == "Liquor") {
         update_liquor_fields();
-        update_types_producers_on_name_change();
+        update_types_and_producers();
 
         // Set datepicker to today's date
         QDate todays_date = QDate::currentDate();
         ui->liquorDateInput->setDate(todays_date);
     } else if (alcohol_type == "Wine") {
         update_wine_fields();
-        update_types_producers_on_name_change();
+        update_types_and_producers();
 
         // Set datepicker to today's date
         QDate todays_date = QDate::currentDate();
@@ -362,8 +387,6 @@ void MainWindow::update_table() {
 
     // Temporarily sort by database ID to fix issues with blank rows
     //ui->drinkLogTable->sortItems(9, Qt::AscendingOrder);
-
-    std::cout << "*** Updating table ***" << std::endl;
 
     std::string filter_category = ui->filterCategoryInput->currentText().toStdString();
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
@@ -382,11 +405,20 @@ void MainWindow::update_table() {
         auto *subtype = new QTableWidgetItem(drink.subtype.c_str());
         auto *producer = new QTableWidgetItem(drink.producer.c_str());
         auto *abv = new QTableWidgetItem(Calculate::double_to_string(drink.abv).c_str());
-        auto *size = new QTableWidgetItem(Calculate::double_to_string(drink._size).c_str());
         auto *rating = new QTableWidgetItem(std::to_string(drink.rating).c_str());
         auto *id = new QTableWidgetItem;
         auto *timestamp = new QTableWidgetItem(drink.timestamp.c_str());
         auto *sort_order =  new QTableWidgetItem(drink.sort_order);
+
+        // Calculate & Display size
+        double drink_size = drink._size;
+        if (options.units == "Metric") {
+            drink_size = Calculate::oz_to_ml(drink_size);
+
+            // Round to tenth place
+            drink_size = floor(drink_size * 10 + 0.5) / 10;
+        }
+        auto *size = new QTableWidgetItem(Calculate::double_to_string(drink_size).c_str());
 
         // Sort ID numerically
         id->setData(Qt::DisplayRole, drink.id);
@@ -485,19 +517,39 @@ void MainWindow::open_user_settings() {
      * Open the user settings dialog box, where users can enter their sex and the day which the week should begin on.
      */
 
-    UserSettings user_settings = UserSettings(nullptr, options);
+    UserSettings user_settings = UserSettings(nullptr, options, std_drink_standards);
     user_settings.setModal(true);
-    if (user_settings.exec() == QDialog::Accepted) {
+    std::string std_drink_size = options.std_drink_size;
+    if (user_settings.exec() == QDialog::Accepted) {  // Update settings when OK button is clicked
         options.sex = user_settings.get_sex();
         options.date_calculation_method = user_settings.get_date_calculation_method();
         options.weekday_start = user_settings.get_weekday_start();
         options.limit_standard = user_settings.get_limit_standard();
         options.weekly_limit = user_settings.get_drink_limit();
+        options.units = user_settings.get_units();
+        std_drink_size = Calculate::double_to_string(user_settings.get_std_drink_size());
+        options.std_drink_country = user_settings.get_std_drink_country();
         update_stat_panel();
     }
+
     program_options(true);
     update_table();
     update_stat_panel();
+    update_types_and_producers();
+
+    if (options.units == "Metric") {
+        ui->beerSizeLabel->setText("Size (ml)");
+        ui->liquorSizeLabel->setText("Size (ml)");
+        ui->wineSizeLabel->setText("Size (ml)");
+        options.std_drink_size = Calculate::double_to_string(Calculate::ml_to_oz(std::stod(std_drink_size)));
+    } else {
+        ui->beerSizeLabel->setText("Size (oz)");
+        ui->liquorSizeLabel->setText("Size (oz)");
+        ui->wineSizeLabel->setText("Size (oz)");
+        options.std_drink_size = std_drink_size;
+    }
+
+    std::cout << std_drink_size << std::endl;
 }
 
 std::string MainWindow::settings_path() {
@@ -508,9 +560,7 @@ std::string MainWindow::settings_path() {
     // Find path to application support directory
 
     std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
-
     std::string settings_path = directory + "/buzzbot_settings.conf";
-
     std::filesystem::create_directory(directory);
 
     return settings_path;
@@ -534,6 +584,9 @@ void MainWindow::program_options(bool write) {
         std::string date_calculation_method = "date_calculation_method:" + options.date_calculation_method;
         std::string limit_standard = "limit_standard:" + options.limit_standard;
         std::string weekly_limit = "custom_weekly_limit:" + std::to_string(options.weekly_limit);
+        std::string units = "units:" + options.units;
+        std::string std_drink_size = "std_drink_size:" + options.std_drink_size;
+        std::string std_drink_country = "std_drink_country:" + options.std_drink_country;
         std::ofstream out_data;
 
         if (!out_data) {
@@ -547,6 +600,9 @@ void MainWindow::program_options(bool write) {
         out_data << date_calculation_method + '\n';
         out_data << limit_standard + '\n';
         out_data << weekly_limit + '\n';
+        out_data << units + '\n';
+        out_data << std_drink_size + '\n';
+        out_data << std_drink_country + '\n';
         out_data.close();
     } else {
         std::cout << "Reading user settings from " << path << std::endl;
@@ -566,6 +622,12 @@ void MainWindow::program_options(bool write) {
                     options.limit_standard = line.substr(line.find(':') + 1);
                 } else if (line_counter == 4) { // Fifth line should be the weekly limit that is custom set
                     options.weekly_limit = std::stoi(line.substr(line.find(':') + 1));
+                } else if (line_counter == 5) { // Sixth line should be the selected units, either Metric or Imperial
+                    options.units = line.substr(line.find(':') + 1);
+                } else if (line_counter == 6) { // Seventh line should be the std drink size (stored in oz)
+                    options.std_drink_size = line.substr(line.find(':') + 1);
+                } else if (line_counter == 7) { // Eigth line should be the std drink country
+                    options.std_drink_country = line.substr(line.find(':') + 1);
                 }
                 line_counter += 1;
             }
@@ -581,6 +643,7 @@ void MainWindow::update_stat_panel() {
     date::year_month_day start_date{};
     double standard_drinks = 0;
     std::string weekday_name;
+    std::string current_tab = get_current_tab();
 
     // Get filter day & day of week.
     std::tuple<date::year_month_day, std::string> filter_date_results = get_filter_date();
@@ -590,31 +653,47 @@ void MainWindow::update_stat_panel() {
 
     std::cout << "Calculating stats since " << start_date << ", which is last " << weekday_name << std::endl;
 
-    // Create the date for the SQL query
-    std::string year = date::format("%Y", start_date.year());
-    std::string month = date::format("%m", start_date.month());
-    std::string day = date::format("%d", start_date.day());
-    //std::string query_date = day + "-" + month + "-" + year;
-    std::string query_date = year + "-" + month + "-" + day;
+    std::string query_date = format_date(start_date);
 
     std::cout << "Querying DB for drinks after " << query_date << std::endl;
 
     std::vector<Drink> beers_this_week = Database::filter("After Date", query_date, storage);
 
     for (const auto& beer : beers_this_week) {
-        standard_drinks += Calculate::standard_drinks(beer.abv, beer._size);
+        if (options.std_drink_country == "Custom") {
+            standard_drinks += Calculate::standard_drinks(beer.abv, beer._size, std::stod(options.std_drink_size));
+        } else {
+            double std_drink_size = std_drink_standards.find(options.std_drink_country)->second;  // This is in oz.
+
+            /*
+             * Beer._size will always be in ounces. std_drink_size should also be in ounces. The result will be
+             * independent of whichever unit the user has selected, as everything is stored as ounces.
+             */
+            standard_drinks += Calculate::standard_drinks(beer.abv, beer._size, std_drink_size);
+        }
+    }
+
+    if (options.units == "Imperial") {
+        ui->volAlcoholConsumedLabel->setText("Oz. alcohol consumed:");
+        ui->volAlcoholRemainingLabel->setText("Oz. alcohol remaining:");
+    } else {
+        ui->volAlcoholConsumedLabel->setText("ml alcohol consumed:");
+        ui->volAlcoholRemainingLabel->setText("ml alcohol remaining:");
     }
 
     // Update the individual elements of the stat pane
     update_drinks_this_week(standard_drinks, weekday_name);
     update_standard_drinks_left_this_week(standard_drinks);
-    double oz_alc_consumed = update_oz_alcohol_consumed_this_week(beers_this_week, weekday_name);
-    update_oz_alcohol_remaining(oz_alc_consumed);
-    update_favorite_brewery();
-    update_favorite_beer();
-    update_favorite_type();
-    update_mean_abv();
-    update_mean_ibu();
+
+    // update_vol_alcohol_consumed_this_week returns either ml or oz, depending on setting
+    double vol_alc_consumed = update_vol_alcohol_consumed_this_week(beers_this_week, weekday_name);
+    update_volume_alcohol_remaining(vol_alc_consumed);
+    update_favorite_brewery(current_tab);
+    update_favorite_beer(current_tab);
+    update_favorite_type(current_tab);
+    update_mean_abv(current_tab);
+    update_mean_ibu(current_tab);
+    update_std_drinks_today();
 }
 
 void MainWindow::update_drinks_this_week(double standard_drinks, const std::string& weekday_name) {
@@ -658,91 +737,134 @@ void MainWindow::reset_table_sort() {
     ui->drinkLogTable->sortItems(sort_column, Qt::DescendingOrder);
 }
 
-double MainWindow::update_oz_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week, const std::string& weekday_name) {
+double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week, const std::string& weekday_name) {
     /*
-     * Update the Oz. alcohol consumed output label to the total amount alcohol consumed this week.
+     * Update the volume alcohol consumed output label to the total amount alcohol consumed this week.
      * @param beers_this_week: A vector of Drinks containing the drinks consumed in the past week.
      * @param weekday_name: The day the week began on.
      */
 
-    double oz_consumed = 0;
+    double volume_consumed = 0;
 
-    std::string ozThisWeekLabelText = "Oz. alcohol since " + weekday_name + ":";
-    ui->ozAlcoholConsumedLabel->setText(QString::fromStdString(ozThisWeekLabelText));
+    std::string units = "Oz.";
+    if (options.units == "Metric") {
+        units = "ml";
+    }
+    std::string volumeThisWeekLabelText = units + " alcohol since " + weekday_name + ":";
+    ui->volAlcoholConsumedLabel->setText(QString::fromStdString(volumeThisWeekLabelText));
 
+    // Calculate total volume for the week
     for (const auto& beer : beers_this_week) {
-        double beer_oz_alcohol = (beer.abv/100) * beer._size;
-        oz_consumed += beer_oz_alcohol;
+        double drinks_vol_alcohol {0.0};
+        if (options.units == "Imperial") {
+            drinks_vol_alcohol = (beer.abv / 100) * beer._size;
+        } else {
+            // Everything is stored in DB as oz. Convert back to ml for display.
+            double drink_size = Calculate::oz_to_ml(beer._size);
+            drinks_vol_alcohol = (beer.abv / 100) * drink_size;
+        }
+        volume_consumed += drinks_vol_alcohol;
     }
 
-    if (oz_consumed == 0.0) {
-        ui->ozAlcoholConsumedOutput->setText("0.0");
+    if (volume_consumed == 0.0) {
+        ui->volAlcoholConsumedOutput->setText("0.0");
     } else {
-        ui->ozAlcoholConsumedOutput->setText(QString::fromStdString(Calculate::double_to_string(oz_consumed)));
+        // Round to tenth place
+        volume_consumed = floor(volume_consumed * 10 + 0.5) / 10;
+        ui->volAlcoholConsumedOutput->setText(QString::fromStdString(Calculate::double_to_string(volume_consumed)));
     }
 
-    return oz_consumed;
+    return volume_consumed;
 }
 
-void MainWindow::update_oz_alcohol_remaining(double oz_alcohol_consumed) {
+void MainWindow::update_volume_alcohol_remaining(double volume_alcohol_consumed) {
     /*
-     * Update the OZ. alcohol remaining label text to the amount of alcohol remaining.
+     * Update the volume alcohol remaining label text to the amount of alcohol remaining.
+     * @param: volume_alcohol_consumed: A double denoting the volume of alcohol consumed in the past week. This will
+     * either be in ounces or milliliters, depending on the option setting. The value is set in
+     * update_vol_alcohol_consumed_this_week().
      */
 
-    double oz_alcohol_remaining = Calculate::oz_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, oz_alcohol_consumed);
-    ui->ozAlcoholRemainingOutput->setText(QString::fromStdString(Calculate::double_to_string(oz_alcohol_remaining)));
+    double volume_alcohol_remaining {0.0};
+    double std_drink_size;
 
-    // Set oz alcohol remaining text to red if negative
-    if (oz_alcohol_remaining < 0) {
-        ui->ozAlcoholRemainingOutput->setStyleSheet("QLabel {color : red;}");
+    if (options.std_drink_country == "Custom") {
+        std_drink_size = std::stod(options.std_drink_size);
     } else {
-        ui->ozAlcoholRemainingOutput->setStyleSheet("");
+        std_drink_size = std_drink_standards.find(options.std_drink_country)->second;
+    }
+
+    if (options.units == "Imperial") {
+        volume_alcohol_remaining = Calculate::volume_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, volume_alcohol_consumed, std_drink_size);
+    } else {
+        volume_alcohol_consumed = Calculate::ml_to_oz(volume_alcohol_consumed);
+        volume_alcohol_remaining = Calculate::volume_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, volume_alcohol_consumed, std_drink_size);
+        volume_alcohol_remaining = Calculate::oz_to_ml(volume_alcohol_remaining);
+
+        // Round to tenth place
+        volume_alcohol_remaining = floor(volume_alcohol_remaining * 10 + 0.5) / 10;
+    }
+    ui->volAlcoholRemainingOutput->setText(QString::fromStdString(Calculate::double_to_string(volume_alcohol_remaining)));
+
+    // Set volume alcohol remaining text to red if negative
+    if (volume_alcohol_remaining < 0) {
+        ui->volAlcoholRemainingOutput->setStyleSheet("QLabel {color : red;}");
+    } else {
+        ui->volAlcoholRemainingOutput->setStyleSheet("");
     }
 }
 
-void MainWindow::update_favorite_brewery() {
+void MainWindow::update_favorite_brewery(const std::string& drink_type) {
     /*
      * Update the favorite brewery text label to the most common beer in the database.
      */
 
-    std::string fave_brewery = Calculate::favorite_producer(storage);
+    std::string fave_brewery = Calculate::favorite_producer(storage, drink_type);
+    if (fave_brewery.empty()) {
+        fave_brewery = "No " + drink_type + " entered";
+    }
     ui->favoriteBreweryOutput->setText(QString::fromStdString(fave_brewery));
 }
 
-void MainWindow::update_favorite_beer() {
+void MainWindow::update_favorite_beer(const std::string& drink_type) {
     /*
      * Update the favorite beer text label to the most common beer in the database.
      */
 
-    std::string fave_beer = Calculate::favorite_beer(storage);
+    std::string fave_beer = Calculate::favorite_drink(storage, drink_type);
+    if (fave_beer.empty()) {
+        fave_beer = "No " + drink_type + " entered";
+    }
     ui->favoriteBeerOutput->setText(QString::fromStdString(fave_beer));
 }
 
-void MainWindow::update_mean_abv() {
+void MainWindow::update_mean_abv(const std::string& drink_type) {
     /*
      * Update the mean ABV text label to the mean ABV of all beers in the database.
      */
 
-    std::string mean_abv = Calculate::double_to_string(Calculate::mean_abv(storage));
-    if (mean_abv == "nan") {
-        mean_abv = " ";
+    std::string mean_abv = Calculate::double_to_string(Calculate::mean_abv(storage, drink_type));
+    if (mean_abv == "nan" || mean_abv.empty()) {
+        mean_abv = "No " + drink_type + " entered";
     }
     ui->avgAbvDrinkOutput->setText(QString::fromStdString(mean_abv));
 }
 
-void MainWindow::update_mean_ibu() {
+void MainWindow::update_mean_ibu(const std::string& drink_type) {
     /*
      * Set the mean IBU text label to the mean IBU of all beers in the database.
      */
 
-    std::string mean_ibu = Calculate::double_to_string(Calculate::mean_ibu(storage));
-    if (mean_ibu == "nan") {
-        mean_ibu = " ";
+    if (drink_type == "Beer") {
+        std::string mean_ibu = Calculate::double_to_string(Calculate::mean_ibu(storage, drink_type));
+        if (mean_ibu == "nan" || mean_ibu.empty()) {
+            mean_ibu = "No " + drink_type + " entered";
+        }
+        ui->avgIbuDrinkOutput->setText(QString::fromStdString(mean_ibu));
     }
-    ui->avgIbuDrinkOutput->setText(QString::fromStdString(mean_ibu));
 }
 
-void MainWindow::update_types_producers_on_name_change() {
+void MainWindow::update_types_and_producers() {
     /*
      * Change the drink attributes based on the drink selected in the nameInput field.
      */
@@ -779,7 +901,7 @@ void MainWindow::producer_input_changed(const QString&) {
     }
 
     // Update fields based on newly selected beer
-    update_types_producers_on_name_change();
+    update_types_and_producers();
 }
 
 void MainWindow::name_input_changed(const QString&) {
@@ -787,15 +909,18 @@ void MainWindow::name_input_changed(const QString&) {
      * Update fields when a beer name is chosen.
      */
 
-    update_types_producers_on_name_change();
+    update_types_and_producers();
 }
 
-void MainWindow::update_favorite_type() {
+void MainWindow::update_favorite_type(const std::string& drink_type) {
     /*
      * Set the favoriteTypeOutput to the most common beer found in the database.
      */
 
-    std::string fave_type = Calculate::favorite_type(storage);
+    std::string fave_type = Calculate::favorite_type(storage, drink_type);
+    if (fave_type.empty()) {
+        fave_type = "No " + drink_type + " entered";
+    }
     ui->favoriteTypeOutput->setText(QString::fromStdString(fave_type));
 }
 
@@ -853,9 +978,11 @@ void MainWindow::tab_changed() {
     std::string name = selected_drink.name;
     std::string selected_drink_alc_type = selected_drink.alcohol_type;
     std::string new_tab = get_current_tab();
+    update_stat_panel();
 
     reset_fields();
     if (new_tab == "Beer") {
+        ui->averageIbuDrinkLabel->setText("Average IBU per beer:");
         if (!name.empty()) {  // If a current row is selected, update the beer name to that row and get notes
             ui->beerNameInput->setCurrentText(QString::fromStdString(name));
             // When user clicks on beer tab with a liquor or wine selected in the table, clear the selection
@@ -870,6 +997,8 @@ void MainWindow::tab_changed() {
             }
         }
     } else if (new_tab == "Liquor") {
+        ui->averageIbuDrinkLabel->setText("");
+        ui->avgIbuDrinkOutput->setText("");
         if (!name.empty()) {
             ui->liquorNameInput->setCurrentText(QString::fromStdString(name));
             if (new_tab != selected_drink_alc_type) {
@@ -882,6 +1011,8 @@ void MainWindow::tab_changed() {
             }
         }
     } else if(new_tab == "Wine") {
+        ui->averageIbuDrinkLabel->setText("");
+        ui->avgIbuDrinkOutput->setText("");
         if (!name.empty()) {
             ui->wineNameInput->setCurrentText(QString::fromStdString(name));
             if (new_tab != selected_drink_alc_type) {
@@ -907,7 +1038,7 @@ Drink MainWindow::get_drink_attributes_from_fields() {
     Drink drink;
 
     if (alcohol_type == "Beer") {
-        drink = get_beer_attrs_from_fields(alcohol_type);
+        drink = get_beer_attrs_from_fields(alcohol_type);  // TODO: This should be converted to OZ
     } else if (alcohol_type == "Liquor") {
         drink = get_liquor_attrs_from_fields(alcohol_type);
     } else if (alcohol_type == "Wine") {
@@ -957,6 +1088,10 @@ Drink MainWindow::get_drink_at_selected_row() {
             ui->deleteRowButton->setDisabled(true);
 
         selected_drink = Database::read_row(row_to_get, storage);
+
+        if (options.units == "Metric") {
+            selected_drink._size = Calculate::oz_to_ml(selected_drink._size);
+        }
     }
     return selected_drink;
 }
@@ -1016,7 +1151,7 @@ void MainWindow::open_std_drink_calculator() {
      * Open the standard drink calculator dialog box.
      */
 
-    auto * std_drink_calculator = new StandardDrinkCalc(this);
+    auto * std_drink_calculator = new StandardDrinkCalc(this, std::stod(options.std_drink_size), options.units);
     std_drink_calculator->show();
 }
 
@@ -1086,6 +1221,51 @@ void MainWindow::update_stats_if_new_day() {
     if (ui->drinksThisWeekLabel->text().toStdString().find(weekday_name) == std::string::npos) {
         update_stat_panel();
     }
+}
+
+void MainWindow::update_std_drinks_today() {
+    /*
+     * Calculate standard drinks consumed today & update the line in the stats panel.
+     */
+
+    double std_drinks_today {0.0};
+
+    auto now_time = std::chrono::system_clock::now();
+
+    // Delete the following
+    auto now_c = std::chrono::system_clock::to_time_t(now_time);
+    std::tm now_tm = *std::localtime(&now_c);
+    char query_date[70];
+    std::strftime(query_date, sizeof query_date, "%Y-%m-%d", &now_tm);
+
+    std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
+
+    for (auto& drink : drinks_today) {
+        double std_drinks {0.0};
+        if (options.std_drink_country == "Custom") {
+            std_drinks= Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size));
+        } else {
+            double std_drink_size = std_drink_standards.find(options.std_drink_country)->second;
+            std_drinks = Calculate::standard_drinks(drink.abv, drink._size, std_drink_size);
+        }
+        std_drinks_today += std_drinks;
+    }
+
+    ui->stdDrinksTodayOutput->setText(QString::fromStdString(Calculate::double_to_string(std_drinks_today)));
+}
+
+std::string MainWindow::format_date(date::year_month_day date) {
+    /*
+     * Format date for use in DB filter.
+     * @return: formated date string.
+     */
+
+    std::string year = date::format("%Y", date.year());
+    std::string month = date::format("%m", date.month());
+    std::string day = date::format("%d", date.day());
+    std::string query_date = year + "-" + month + "-" + day;
+
+    return query_date;
 }
 
 // LCOV_EXCL_STOP

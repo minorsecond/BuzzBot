@@ -227,7 +227,6 @@
       </property>
       <property name="font">
        <font>
-        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -249,7 +248,7 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="1" column="2">
-        <widget class="QLabel" name="drinksLeftOutput">
+        <widget class="QLabel" name="drinksThisWeekOutput">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -258,30 +257,62 @@
          </property>
          <property name="text">
           <string>4</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLabel" name="ozAlcoholConsumedOutput">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>4</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="favoriteTypeLabel">
-         <property name="text">
-          <string>Most frequent type:</string>
          </property>
         </widget>
        </item>
        <item row="5" column="2">
+        <widget class="QLabel" name="favoriteBreweryOutput">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Roughtail Brewing Co.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QLabel" name="volAlcoholConsumedOutput">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>4</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="3">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="favoriteBeerLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Most frequent drink:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
         <widget class="QLabel" name="favoriteBeerOutput">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -295,156 +326,6 @@
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="ozAlcoholConsumedLabel">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Oz. alcohol consumed:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QLabel" name="favoriteBreweryOutput">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Roughtail Brewing Co.</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="2">
-        <widget class="QLabel" name="avgAbvDrinkOutput">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>4</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="favoriteBreweryLabel">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Favorite producer:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="2">
-        <widget class="QLabel" name="avgIbuDrinkOutput">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>4</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="QLabel" name="favoriteTypeOutput">
-         <property name="text">
-          <string>IPA</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="avgAbvDrinkLabel">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Average ABV per drink:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="QLabel" name="ozAlcoholRemainingOutput">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>4</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="favoriteBeerLabel">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Most frequent drink:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="averageIbuDrinkLabel">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Average IBU per beer:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="drinksThisWeekOutput">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>4</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="drinksThisWeekLabel">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Std. drinks this week:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
         <widget class="QLabel" name="drinksLeftLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -457,8 +338,21 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="ozAlcoholRemainingLabel">
+       <item row="10" column="0">
+        <widget class="QLabel" name="averageIbuDrinkLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Average IBU per beer:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="volAlcoholRemainingLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -470,18 +364,137 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="3">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+       <item row="9" column="0">
+        <widget class="QLabel" name="avgAbvDrinkLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
+         <property name="text">
+          <string>Average ABV per drink:</string>
          </property>
-        </spacer>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="drinksThisWeekLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Std. drinks this week:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="2">
+        <widget class="QLabel" name="avgIbuDrinkOutput">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>4</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="QLabel" name="favoriteTypeOutput">
+         <property name="text">
+          <string>IPA</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="favoriteTypeLabel">
+         <property name="text">
+          <string>Most frequent type:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <widget class="QLabel" name="avgAbvDrinkOutput">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>4</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="favoriteBreweryLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Most frequent producer:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLabel" name="volAlcoholRemainingOutput">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>4</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="volAlcoholConsumedLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Oz. alcohol consumed:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLabel" name="drinksLeftOutput">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>4</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="stdDrinksTodayLabel">
+         <property name="text">
+          <string>Std. drinks today:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="stdDrinksTodayOutput">
+         <property name="text">
+          <string>4</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -496,7 +509,6 @@
       </property>
       <property name="font">
        <font>
-        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>

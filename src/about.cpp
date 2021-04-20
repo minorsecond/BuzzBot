@@ -16,7 +16,7 @@ About::About(QWidget *parent) {
     this->setFixedSize(237, 272);
 
     // Version text
-    std::string version = "1.2.0";
+    std::string version = "2.0.0";
     ui.versionLabel->setText(QString::fromStdString("Version " + version));
 
     // Make Qt URL clickable
@@ -29,7 +29,7 @@ About::About(QWidget *parent) {
     QString icon_path_qstring = CFStringGetCStringPtr(mac_path, CFStringGetSystemEncoding());
 
     // Set path to icon
-    std::string icon_path = icon_path_qstring.toStdString() + "/Contents/Resources/icon.icns";
+    std::string icon_path = icon_path_qstring.toStdString() + "/Contents/Resources/mini-icon.png";
     CFRelease(app_url_ref);
     CFRelease(mac_path);
 
