@@ -20,45 +20,13 @@ UserSettings::UserSettings(QWidget *parent, const Options& options, const std::m
     ui.setupUi(this);
     this->setFixedSize(675, 300);
 
-    // Add country names to std drink size combobox
-    auto country_name_iterator = country_info.begin();
-    int std_drink_cbox_index {0};
-    while (country_name_iterator != country_info.end()) {
-
-        std::string standard_drink_size;
-        if (options.units == "Metric") {
-            standard_drink_size = Calculate::double_to_string(Calculate::oz_to_ml(country_name_iterator->second));
-        } else {
-            standard_drink_size = Calculate::double_to_string(country_name_iterator->second);
-        }
-
-        std::string country_name_drinks = country_name_iterator->first;
-        ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString(country_name_drinks));
-        country_name_iterator++;
-        std_drink_cbox_index += 1;
-    }
+    int std_drink_cbox_index = populate_country_cbox(country_info, options);
     ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString("Custom"));
 
-    if (options.std_drink_country == "Custom") {
-        ui.stdDrinkDefComboBox->setCurrentIndex(ui.stdDrinkDefComboBox->count() - 1);
-        ui.stdDrinkDefInput->setEnabled(true);
-    } else {
-        std::string search_string = options.std_drink_country;
-        int index = ui.stdDrinkDefComboBox->findText(QString::fromStdString(search_string));
-        std::cout << search_string << " - " << index << std::endl;
-        ui.stdDrinkDefComboBox->setCurrentIndex(index);
-        ui.stdDrinkDefInput->setEnabled(false);
-    }
-
-    ui.stdDrinkDefInput->setSingleStep(0.1);
+    set_std_drink_input_states(options);
 
     // Rounded rect frames
-    ui.frame->setStyleSheet("QWidget#frame{ border: 1px solid grey; border-radius: 6px; }");
-    ui.frame_2->setStyleSheet("QWidget#frame_2{ border: 1px solid grey; border-radius: 6px; }");
-    ui.frame_3->setStyleSheet("QWidget#frame_3{ border: 1px solid grey; border-radius: 6px; }");
-    ui.frame_4->setStyleSheet("QWidget#frame_4{ border: 1px solid grey; border-radius: 6px; }");
-    ui.frame_5->setStyleSheet("QWidget#frame_5{ border: 1px solid grey; border-radius: 6px; }");
-    ui.weeklyLimitFrame->setStyleSheet("QWidget#weeklyLimitFrame{ border: 1px solid grey; border-radius: 6px; }");
+    set_frame_style();
 
     if (options.sex == "male") {
         ui.maleSelection->setChecked(true);
@@ -72,15 +40,7 @@ UserSettings::UserSettings(QWidget *parent, const Options& options, const std::m
         ui.customLimitSpinBox->setValue(0);
     }
 
-    if (options.limit_standard == "NIAAA") {
-        ui.niaaaStandardsRadioButton->setChecked(true);
-        ui.customLimitRadioButton->setChecked(false);
-        ui.customLimitSpinBox->setEnabled(false);
-    } else if (options.limit_standard == "Custom") {
-        ui.niaaaStandardsRadioButton->setChecked(false);
-        ui.customLimitRadioButton->setChecked(true);
-        ui.customLimitSpinBox->setEnabled(true);
-    }
+    set_limit_standard_states(options);
 
     ui.stdDrinkDefInput->setValue(std::stod(options.std_drink_size));
 
@@ -99,15 +59,7 @@ UserSettings::UserSettings(QWidget *parent, const Options& options, const std::m
     }
 
     // Set day of week calc
-    if (options.date_calculation_method == "Fixed") {
-        ui.weekdayStartInput->setEnabled(true);
-        ui.fixedDateRadioButton->setChecked(true);
-        ui.rollingDateRadioButton->setChecked(false);
-    } else {
-        ui.weekdayStartInput->setEnabled(false);
-        ui.fixedDateRadioButton->setChecked(false);
-        ui.rollingDateRadioButton->setChecked(true);
-    }
+    set_day_of_week_setting_state(options);
 
     // Set delete data button text color to red
     QPalette pal = ui.clearDataButton->palette();
@@ -288,6 +240,99 @@ void UserSettings::std_drink_country_changed() {
         ui.stdDrinkDefInput->setEnabled(false);
         //double new_std_drink_size = get_std_drink_size();
         //ui.stdDrinkDefInput->setValue(new_std_drink_size);
+    }
+}
+
+int UserSettings::populate_country_cbox(const std::map<std::string, double> &country_info, const Options& options) {
+    /*
+     * Populate the country std drink sizes combo box with country_info data
+     * @param country_info: A map containing CountryName: StdDrinkSize
+     * @param options: The options struct.
+     * @return: Int denoting next index of combobox
+     */
+
+    // Add country names to std drink size combobox
+    auto country_name_iterator = country_info.begin();
+    int std_drink_cbox_index {0};
+    while (country_name_iterator != country_info.end()) {
+        std::string standard_drink_size;
+        if (options.units == "Metric") {
+            standard_drink_size = Calculate::double_to_string(Calculate::oz_to_ml(country_name_iterator->second));
+        } else {
+            standard_drink_size = Calculate::double_to_string(country_name_iterator->second);
+        }
+
+        std::string country_name_drinks = country_name_iterator->first;
+        ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString(country_name_drinks));
+        country_name_iterator++;
+        std_drink_cbox_index += 1;
+    }
+
+    return std_drink_cbox_index;
+}
+
+void UserSettings::set_std_drink_input_states(const Options& options) {
+    /*
+     * Set the standard drinks size input field states.
+     * @param options: An options struct
+     */
+
+    if (options.std_drink_country == "Custom") {
+        ui.stdDrinkDefComboBox->setCurrentIndex(ui.stdDrinkDefComboBox->count() - 1);
+        ui.stdDrinkDefInput->setEnabled(true);
+    } else {
+        std::string search_string = options.std_drink_country;
+        int index = ui.stdDrinkDefComboBox->findText(QString::fromStdString(search_string));
+        ui.stdDrinkDefComboBox->setCurrentIndex(index);
+        ui.stdDrinkDefInput->setEnabled(false);
+    }
+    ui.stdDrinkDefInput->setSingleStep(0.1);
+}
+
+void UserSettings::set_limit_standard_states(const Options& options) {
+    /*
+     * Set the limit standard states.
+     * @param options: An options struct.
+     */
+
+    if (options.limit_standard == "NIAAA") {
+        ui.niaaaStandardsRadioButton->setChecked(true);
+        ui.customLimitRadioButton->setChecked(false);
+        ui.customLimitSpinBox->setEnabled(false);
+    } else if (options.limit_standard == "Custom") {
+        ui.niaaaStandardsRadioButton->setChecked(false);
+        ui.customLimitRadioButton->setChecked(true);
+        ui.customLimitSpinBox->setEnabled(true);
+    }
+}
+
+void UserSettings::set_frame_style() {
+    /*
+     * Set style of frames.
+     */
+
+    ui.frame->setStyleSheet("QWidget#frame{ border: 1px solid grey; border-radius: 6px; }");
+    ui.frame_2->setStyleSheet("QWidget#frame_2{ border: 1px solid grey; border-radius: 6px; }");
+    ui.frame_3->setStyleSheet("QWidget#frame_3{ border: 1px solid grey; border-radius: 6px; }");
+    ui.frame_4->setStyleSheet("QWidget#frame_4{ border: 1px solid grey; border-radius: 6px; }");
+    ui.frame_5->setStyleSheet("QWidget#frame_5{ border: 1px solid grey; border-radius: 6px; }");
+    ui.weeklyLimitFrame->setStyleSheet("QWidget#weeklyLimitFrame{ border: 1px solid grey; border-radius: 6px; }");
+}
+
+void UserSettings::set_day_of_week_setting_state(const Options& options) {
+    /*
+     * Set the states for day of week setting.
+     * @param options: An options struct.
+     */
+
+    if (options.date_calculation_method == "Fixed") {
+        ui.weekdayStartInput->setEnabled(true);
+        ui.fixedDateRadioButton->setChecked(true);
+        ui.rollingDateRadioButton->setChecked(false);
+    } else {
+        ui.weekdayStartInput->setEnabled(false);
+        ui.fixedDateRadioButton->setChecked(false);
+        ui.rollingDateRadioButton->setChecked(true);
     }
 }
 

@@ -25,6 +25,11 @@ public:
     std::string get_units();
     double get_std_drink_size();
     std::string get_std_drink_country();
+    int populate_country_cbox(const std::map<std::string, double>& country_info, const Options& options);
+    void set_std_drink_input_states(const Options& options);
+    void set_limit_standard_states(const Options& options);
+    void set_day_of_week_setting_state(const Options& options);
+    void set_frame_style();
 
 private slots:
     void changed_limit_setting();
