@@ -222,7 +222,6 @@ int Database::increment_version(Storage storage, int current_version) {
     std::cout << "Using DB version " << storage.pragma.user_version() << std::endl;
 
     if (get_version(storage) < 7 && current_version == 7) {
-
         std::cout << "*** Upgrading DB from version " << storage.pragma.user_version() <<  " to " << current_version << std::endl;
         populate_size_field();
         storage.pragma.user_version(current_version);
