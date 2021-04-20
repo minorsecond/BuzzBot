@@ -15,6 +15,7 @@ double Calculate::standard_drinks(double abv, double amount, double std_drink_si
      * roughly the same.
      * @param abv: the alcohol by volume of the beer.
      * @param amount: the amount of beer in the container.
+     * @param std_drink_size: the size of the standard drink, in the same unit as amount.
      */
 
     double alcohol_amt = alcohol_volume(abv, amount);

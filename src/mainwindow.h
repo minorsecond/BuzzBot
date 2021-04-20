@@ -12,6 +12,7 @@ struct Options {
     std::string weekday_start = "Sunday";
     std::string limit_standard = "NIAAA";
     std::string units = "Imperial";
+    std::string std_drink_country = "United States";
     std::string std_drink_size = "0.6";  // Store as ounces
     int weekly_limit = -1;
 };
@@ -79,6 +80,33 @@ private:
     void update_std_drinks_today();
     static std::string format_date(date::year_month_day date);
 
+    // Std drink sizes are all stored in Oz. Data are all from Wikipedia:
+    // https://en.wikipedia.org/wiki/Standard_drink
+    std::map<std::string , double> std_drink_standards = {
+            {"Australia", 0.43},
+            {"Austria", 0.86},
+            {"Canada", 0.57},
+            {"Denmark", 0.52},
+            {"Finland", 0.52},
+            {"France", 0.43},
+            {"Germany", 0.47},
+            {"Hong Kong", 0.43},
+            {"Hungary", 0.73},
+            {"Iceland", 0.34},
+            {"Ireland", 0.43},
+            {"Italy", 0.43},
+            {"Japan", 0.85},
+            {"Netherlands", 0.43},
+            {"New Zealand", 0.43},
+            {"Poland", 0.43},
+            {"Portugal", 0.47},
+            {"Spain", 0.43},
+            {"Sweden", 0.51},
+            {"Switzerland", 0.52},
+            {"United Kingdom", 0.34},
+            {"United States", 0.60}
+    };
+
 private slots:
     void submit_button_clicked();
     void reset_fields();
@@ -98,4 +126,5 @@ private slots:
     void clicked_clear_button();
     void update_stats_if_new_day();
 };
+
 #endif // MAINWINDOW_H
