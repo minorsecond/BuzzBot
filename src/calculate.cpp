@@ -238,23 +238,6 @@ std::string Calculate::favorite_type(const Storage& storage, const std::string& 
     return favorite_type;
 }
 
-bool Calculate::compare_date(const Drink &a, const Drink &b) {
-    /*
-     * Determine if second date is greater than the first date.
-     * @return: True if second date is more recent than the first date. Else, false.
-     */
-
-    if (a.drink_year < b.drink_year) {
-        return true;
-    } else if (a.drink_year == b.drink_year && a.drink_month < b.drink_month) {
-        return true;
-    } else if (a.drink_year == b.drink_year && a.drink_month == b.drink_month && a.drink_day < b.drink_day) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 std::string Calculate::double_to_string(double input_double) {
     /*
      * Convert a double to a string with two decimal points.

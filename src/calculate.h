@@ -20,7 +20,6 @@ public:
     static std::string favorite_type(const Storage& storage, const std::string& drink_type);
     static double mean_abv(const Storage& storage, const std::string& drink_type);
     static double mean_ibu(Storage storage, const std::string& drink_type);
-    static bool compare_date(const Drink &a, const Drink &b);
     static std::string double_to_string(double input_double);
     static double oz_to_ml(double input_oz);
     static double ml_to_oz(double input_ml);

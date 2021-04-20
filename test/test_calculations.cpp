@@ -61,15 +61,15 @@ TEST_CASE("Mean ABV", "[Drink Calculations]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Drink etrwo{-1, "2020-09-08", 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12, 12.0, 8,
+    Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
+                "Roughtail Brewing", 8.0, 60.0, 12.0, 8,
                 "Very good hazy IPA.",  -1, "Beer", "2020-01-01 00:00:00"};
-    Drink mosaic{-1, "2020-09-08", 2020, 9, 8, "Mosaic", "IPA", "",
-                 "Community Brewing", 8.4, 75.0, 12, 12.0, 8, "",
+    Drink mosaic{-1, "2020-09-08", "Mosaic", "IPA", "",
+                 "Community Brewing", 8.4, 75.0, 12.0, 8, "",
                  -1, "Beer", "2020-01-01 00:00:00"};
-    Drink etrwo2{-1, "2020-09-10", 2020, 9, 10,
+    Drink etrwo2{-1, "2020-09-10",
                  "Everything Rhymes with Orange", "IPA", "",
-                 "Roughtail Brewing", 8.0, 60.0, 12, 12.0, 8, "",
+                 "Roughtail Brewing", 8.0, 60.0, 12.0, 8, "",
                  -1, "Beer", "2020-01-01 00:00:00"};
 
     storage_1.insert(etrwo);
@@ -93,16 +93,16 @@ TEST_CASE("Mean IBU", "[Drink Calculations]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Drink etrwo{-1, "2020-09-08", 2020, 9, 8,
+    Drink etrwo{-1, "2020-09-08",
                 "Everything Rhymes with Orange", "IPA", "","Roughtail Brewing", 8.0,
-                60.0, 12, 12.0, 8, "Very good hazy IPA.",  -1, "Beer",
+                60.0, 12.0, 8, "Very good hazy IPA.",  -1, "Beer",
                 "2020-01-01 00:00:00"};
-    Drink mosaic{-1, "2020-09-08", 2020, 9, 8, "Mosaic", "IPA",
-                 "","Community Brewing", 8.4, 75.0, 12, 12.0, 8,
+    Drink mosaic{-1, "2020-09-08", "Mosaic", "IPA",
+                 "","Community Brewing", 8.4, 75.0, 12.0, 8,
                  "",  -1, "Beer", "2020-01-01 00:00:00"};
-    Drink etrwo2{-1, "2020-09-10", 2020, 9, 10,
+    Drink etrwo2{-1, "2020-09-10",
                  "Everything Rhymes with Orange", "IPA", "","Roughtail Brewing",
-                 8.0, 60.0, 12, 12.0, 8, "",  -1, "Beer",
+                 8.0, 60.0, 12.0, 8, "",  -1, "Beer",
                  "2020-01-01 00:00:00"};
 
     storage_1.insert(etrwo);
@@ -126,14 +126,14 @@ TEST_CASE("Favorite Brewery", "[Favorite Calculations]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Drink etrwo{-1, "2020-09-08", 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12, 12.0, 8, "Very good hazy IPA.",  -1, "Beer",
+    Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
+                "Roughtail Brewing", 8.0, 60.0, 12.0, 8, "Very good hazy IPA.",  -1, "Beer",
                 "2020-01-01 00:00:00"};
-    Drink mosaic{-1, "2020-09-08", 2020, 9, 8, "Mosaic", "IPA", "",
-                 "Community Brewing", 8.4, 75.0, 12, 12.0, 8, "",  -1, "Beer",
+    Drink mosaic{-1, "2020-09-08", "Mosaic", "IPA", "",
+                 "Community Brewing", 8.4, 75.0, 12.0, 8, "",  -1, "Beer",
                  "2020-01-01 00:00:00"};
-    Drink etrwo2{-1, "2020-09-10", 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
-                 "Roughtail Brewing", 8.0, 60.0, 12, 12.0, 8, "",  -1, "Beer",
+    Drink etrwo2{-1, "2020-09-10", "Everything Rhymes with Orange", "IPA", "",
+                 "Roughtail Brewing", 8.0, 60.0, 12.0, 8, "",  -1, "Beer",
                  "2020-01-01 00:00:00"};
 
     storage_1.insert(etrwo);
@@ -157,14 +157,14 @@ TEST_CASE("Favorite Drink", "[Favorite Calculations]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Drink etrwo{-1, "2020-09-08", 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12, 12.0, 8, "Very good hazy IPA.",  -1, "Beer",
+    Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
+                "Roughtail Brewing", 8.0, 60.0, 12.0, 8, "Very good hazy IPA.",  -1, "Beer",
                 "2020-01-01 00:00:00"};
-    Drink mosaic{-1, "2020-09-08", 2020, 9, 8, "Mosaic", "IPA", "",
-                 "Community Brewing", 8.4, 75.0, 12, 12.0, 8, "",  -1, "Beer",
+    Drink mosaic{-1, "2020-09-08", "Mosaic", "IPA", "",
+                 "Community Brewing", 8.4, 75.0, 12.0, 8, "",  -1, "Beer",
                  "2020-01-01 00:00:00"};
-    Drink etrwo2{-1, "2020-09-10", 2020, 9, 10, "Everything Rhymes with Orange", "IPA", "",
-                 "Roughtail Brewing", 8.0, 60.0, 12, 12.0, 8, "",  -1, "Beer",
+    Drink etrwo2{-1, "2020-09-10", "Everything Rhymes with Orange", "IPA", "",
+                 "Roughtail Brewing", 8.0, 60.0, 12.0, 8, "",  -1, "Beer",
                  "2020-01-01 00:00:00"};
 
     storage_1.insert(etrwo);
@@ -188,14 +188,14 @@ TEST_CASE("Favorite Type", "[Favorite Calculations]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    Drink etrwo{-1, "2020-09-08", 2020, 9, 8, "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12, 12.0, 8, "Very good hazy IPA.",  -1, "Beer",
+    Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
+                "Roughtail Brewing", 8.0, 60.0, 12.0, 8, "Very good hazy IPA.",  -1, "Beer",
                 "2020-01-01 00:00:00"};
-    Drink mosaic{-1, "2020-09-08", 2020, 9, 8, "Mosaic", "IPA", "",
-                 "Community Brewing", 8.4, 75.0, 12, 12.0, 8, "",  -1, "Beer",
+    Drink mosaic{-1, "2020-09-08", "Mosaic", "IPA", "",
+                 "Community Brewing", 8.4, 75.0, 12.0, 8, "",  -1, "Beer",
                  "2020-01-01 00:00:00"};
-    Drink etrwo2{-1, "2020-09-10", 2020, 9, 10, "Old Rasputin", "Russian Imperial Stout", "",
-                 "North Coast Brewing", 9.0, 75.0, 12, 12.0, 8, "",  -1, "Beer",
+    Drink etrwo2{-1, "2020-09-10", "Old Rasputin", "Russian Imperial Stout", "",
+                 "North Coast Brewing", 9.0, 75.0, 12.0, 8, "",  -1, "Beer",
                  "2020-01-01 00:00:00"};
 
     storage_1.insert(etrwo);
