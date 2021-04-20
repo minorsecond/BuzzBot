@@ -41,8 +41,8 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     // Upgrade DB version
-    // TODO: Remove references to drink_year, drink_month, & drink_day in DB version 6
-    Database::increment_version(storage, 6);
+    // DB Version 7 removes extra year, month, date columns
+    Database::increment_version(storage, 7);
 
     add_menubar_items();
 

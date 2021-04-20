@@ -22,9 +22,7 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
     std::ofstream output_csv(path);
 
     // Create the header
-    output_csv << "Year,";
-    output_csv << "Month,";
-    output_csv << "Day,";
+    output_csv << "Date";
     output_csv << "Name,";
     output_csv << "Type,";
     output_csv << "Subtype,";
@@ -43,9 +41,7 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
         std::string ibu = (drink.ibu == -1) ? "" : std::to_string(drink.ibu);
         std::string vintage = (drink.vintage == -999) ? "" : std::to_string(drink.vintage);
 
-        output_csv << std::to_string(drink.drink_year) + ",";
-        output_csv << std::to_string(drink.drink_month) + ",";
-        output_csv << std::to_string(drink.drink_day) + ",";
+        output_csv << drink.date + ",";
         output_csv << drink.name + ",";
         output_csv << drink.type + ",";
         output_csv << drink.subtype + ",";
