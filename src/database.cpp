@@ -265,7 +265,7 @@ std::vector<Drink> Database::sort_by_date_id(std::vector<Drink> drinks) {
 void Database::populate_size_field() {
     /*
      * Populate the _size field with contents of size field.
-     * To be removed in later version of database.
+     * TODO: Remove this
      */
 
     Storage storage = initStorage(path());

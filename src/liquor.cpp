@@ -209,8 +209,12 @@ void MainWindow::update_liquor_types_producers() {
         std::string producer = selected_liquor.producer;
         double abv = selected_liquor.abv;
         double size = selected_liquor._size;
-        int rating = selected_liquor.rating;
 
+        if (options.units == "Metric") {
+            size = round(Calculate::oz_to_ml(size));
+        }
+
+        int rating = selected_liquor.rating;
         ui->liquorTypeInput->setCurrentText(QString::fromStdString(liquor_type));
         ui->liquorSubtypeInput->setCurrentText(QString::fromStdString(liquor_subtype));
         ui->liquorDistillerInput->setCurrentText(QString::fromStdString(producer));
