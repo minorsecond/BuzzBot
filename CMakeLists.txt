@@ -20,7 +20,7 @@ set(CMAKE_AUTOUIC ON)
 
 enable_testing()
 
-find_package(Qt6 COMPONENTS Core Widgets REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets PrintSupport REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(Catch2 REQUIRED)
 
@@ -34,8 +34,13 @@ set(buzzbot_ICON ${ICON_PATH})
 set_source_files_properties(${buzzbot_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 file(COPY ${ICON_PATH} DESTINATION "BuzzBot.app/Contents/Resources")
 
-add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp src/mainwindow.h src/database.h src/usersettings.cpp src/usersettings.h src/calculate.cpp src/calculate.h src/beer.cpp src/liquor.cpp src/wine.cpp src/filters.cpp  src/about.cpp src/about.h src/exporters.cpp src/exporters.h src/standard_drink_calculator.cpp src/standard_drink_calculator.h src/confirm_dialog.cpp src/confirm_dialog.h src/graphing.cpp src/graphing.h)
-add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp test/test_database_functions.cpp test/test_calculations.cpp)
+add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp src/mainwindow.h
+        src/database.h src/usersettings.cpp src/usersettings.h src/calculate.cpp src/calculate.h src/beer.cpp
+        src/liquor.cpp src/wine.cpp src/filters.cpp  src/about.cpp src/about.h src/exporters.cpp src/exporters.h
+        src/standard_drink_calculator.cpp src/standard_drink_calculator.h src/confirm_dialog.cpp src/confirm_dialog.h
+        src/graphing.cpp src/graphing.h include/qcustomplot.h include/qcustomplot.cpp)
+add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp
+        test/test_database_functions.cpp test/test_calculations.cpp)
 
 target_precompile_headers(BuzzBot PRIVATE include/sqlite_orm.h include/Catch2.hpp)
 
@@ -45,7 +50,7 @@ add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${
 add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/mini-icon.png ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/mini-icon.png)
 
 set_target_properties(BuzzBot PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
-target_link_libraries(BuzzBot Qt6::Core Qt6::Widgets SQLite3 "-framework CoreFoundation")
+target_link_libraries(BuzzBot Qt6::Core Qt6::Widgets Qt6::PrintSupport SQLite3 "-framework CoreFoundation")
 target_link_libraries(functions_test SQLite3 Catch2::Catch2 Qt6::Core)
 
 set_target_properties(BuzzBot PROPERTIES
