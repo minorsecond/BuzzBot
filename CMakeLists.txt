@@ -37,7 +37,7 @@ file(COPY ${ICON_PATH} DESTINATION "BuzzBot.app/Contents/Resources")
 add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp src/mainwindow.h src/database.h src/usersettings.cpp src/usersettings.h src/calculate.cpp src/calculate.h src/beer.cpp src/liquor.cpp src/wine.cpp src/filters.cpp  src/about.cpp src/about.h src/exporters.cpp src/exporters.h src/standard_drink_calculator.cpp src/standard_drink_calculator.h src/confirm_dialog.cpp src/confirm_dialog.h)
 add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp test/test_database_functions.cpp test/test_calculations.cpp)
 
-target_precompile_headers(BuzzBot PRIVATE include/sqlite_orm.h include/Catch2.hpp)
+target_precompile_headers(BuzzBot PRIVATE include/sqlite_orm.h)
 
 # Copy resources to build dir
 add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/previous.png ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/previous.png)
