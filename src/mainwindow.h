@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "database.h"
 #include "../include/date.h"
+#include "include/qcustomplot.h"
 #include "ui_mainwindow.h"
 
 struct Options {
@@ -23,6 +24,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+
     ~MainWindow() override;
     Options options;
 
@@ -79,6 +81,7 @@ private:
     std::tuple<date::year_month_day, std::string> get_filter_date();
     void update_std_drinks_today();
     static std::string format_date(date::year_month_day date);
+    void open_graphs();
 
     // Std drink sizes are all stored in Oz. Data are all from Wikipedia:
     // https://en.wikipedia.org/wiki/Standard_drink
