@@ -2,12 +2,12 @@
 // Created by Ross Wardrup on 9/8/20.
 //
 
-#include "../include/Catch2.hpp"
 #include "../src/database.h"
 #include <cstdio>
 #include <iostream>
 #include <sys/stat.h>
 #include <filesystem>
+#include <catch2/catch.hpp>
 
 inline bool exists (const std::string& name) {
     struct stat buffer{};
