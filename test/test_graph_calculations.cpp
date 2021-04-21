@@ -3,7 +3,7 @@
 //
 
 #include "src/graphing.h"
-#include "../include/Catch2.hpp"
+#include <catch2/catch.hpp>
 #include <iostream>
 
 TEST_CASE("IBU Vector Creation", "[Graph Data Compilation]") {
@@ -60,4 +60,16 @@ TEST_CASE("ABV Vector Creation", "[Graph Data Compilation]") {
     std::vector<double> drink_abvs = Graphing::get_drink_abvs(all_drinks);
 
     REQUIRE(drink_abvs == expected_values);
+}
+
+TEST_CASE("Count Values in Vector", "[Graph Data Compilation]") {
+    std::vector<double> input_values{5.5, 5.5, 6.0, 10.0, 5.5, 4.8, 4.8, 10.0, 10.0, 10.0};
+    std::map<double, int> expected_values = {{4.8, 2},
+                                             {5.5, 3},
+                                             {6.0, 1},
+                                             {10.0, 4}};
+
+    std::map<double, int> output_values = Graphing::count_values_in_vect(input_values);
+
+    REQUIRE(output_values == expected_values);
 }
