@@ -5,6 +5,7 @@
 #include "confirm_dialog.h"
 #include "exporters.h"
 #include "calculate.h"
+#include "graphing.h"
 #include <iomanip>
 #include <filesystem>
 #include <iostream>
@@ -124,6 +125,7 @@ void MainWindow::add_menubar_items() {
     connect(preferences_action, &QAction::triggered, this, &MainWindow::open_user_settings);
     connect(about_action, &QAction::triggered, this, &MainWindow::open_about_dialog);
     connect(export_action, &QAction::triggered, this, &MainWindow::open_export_dialog);
+    connect(graphs_action, &QAction::triggered, this, &MainWindow::open_graphs);
     connect(calc_std_drinks, &QAction::triggered, this, &MainWindow::open_std_drink_calculator);
 }
 
@@ -1271,4 +1273,17 @@ std::string MainWindow::format_date(date::year_month_day date) {
     return query_date;
 }
 
+void MainWindow::open_graphs() {
+    /*
+     * Create graphs of drink data.
+     */
+
+    std::string db_path = Database::path();
+    std::vector<Drink> all_drinks = Database::read(db_path, storage);
+
+    std::vector ibus = Graphing::get_beer_ibus(all_drinks);
+    std::map<double, int> ibu_counts = Graphing::count_values_in_vect(ibus);
+    QCustomPlot *ibu_plot = Graphing::plot_ibus(ibu_counts, this);
+    ibu_plot->show();
+}
 // LCOV_EXCL_STOP

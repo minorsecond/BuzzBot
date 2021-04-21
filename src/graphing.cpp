@@ -65,14 +65,14 @@ std::map<double, int> Graphing::count_values_in_vect(const std::vector<double>& 
     return ibu_counts;
 }
 
-void Graphing::plot_ibus(const std::map<double, int>& ibu_counts) {
+QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QMainWindow *parent) {
     /*
      * Plot IBU values in QCustomPlot
      * @param parent: The window that the graph should appear in.
      * @param ibu_counts: a map<double, int> of ibu values (keys) and their counts (values).
      */
 
-    QCustomPlot ibu_plot;
+    auto *ibu_plot = new QCustomPlot(parent);
     QVector<double> ibus(ibu_counts.size());
     QVector<double> counts(ibu_counts.size());
 
@@ -91,11 +91,13 @@ void Graphing::plot_ibus(const std::map<double, int>& ibu_counts) {
     double count_max = *std::max_element(counts.begin(), counts.end());
 
     // Create the IBU graph
-    ibu_plot.addGraph();
-    ibu_plot.graph(0)->setData(ibus, counts);
-    ibu_plot.xAxis->setLabel("IBU");
-    ibu_plot.yAxis->setLabel("Count");
-    ibu_plot.xAxis->setRange(ibu_min, ibu_max);
-    ibu_plot.yAxis->setRange(count_min, count_max);
-    ibu_plot.replot();
+    ibu_plot->addGraph();
+    ibu_plot->graph(0)->setData(ibus, counts);
+    ibu_plot->xAxis->setLabel("IBU");
+    ibu_plot->yAxis->setLabel("Count");
+    ibu_plot->xAxis->setRange(ibu_min, ibu_max);
+    ibu_plot->yAxis->setRange(count_min, count_max);
+    ibu_plot->replot();
+
+    return ibu_plot;
 }
