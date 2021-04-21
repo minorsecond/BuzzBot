@@ -42,7 +42,7 @@ std::vector<double> Graphing::get_drink_abvs(const std::vector<Drink> &all_drink
 
 std::map<double, int> Graphing::count_values_in_vect(const std::vector<double>& all_values) {
     /*
-     * Create QCustomPlot of IBU distribution.
+     * Create a map of values and their counts.
      * @param all_values: a vector of doubles.
      * @return: a map<double, int> of values (keys) and their counts (values).
      */
