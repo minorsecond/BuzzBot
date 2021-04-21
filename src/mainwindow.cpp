@@ -1283,7 +1283,7 @@ void MainWindow::open_graphs() {
 
     std::vector ibus = Graphing::get_beer_ibus(all_drinks);
     std::map<double, int> ibu_counts = Graphing::count_values_in_vect(ibus);
-    QCustomPlot *ibu_plot = Graphing::plot_ibus(ibu_counts, this);
+    auto ibu_plot = Graphing::plot_ibus(ibu_counts, this);
     ibu_plot->show();
 }
 // LCOV_EXCL_STOP
