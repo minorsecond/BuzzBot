@@ -68,6 +68,7 @@ std::map<double, int> Graphing::count_values_in_vect(const std::vector<double>& 
 void Graphing::plot_ibus(const std::map<double, int>& ibu_counts) {
     /*
      * Plot IBU values in QCustomPlot
+     * @param parent: The window that the graph should appear in.
      * @param ibu_counts: a map<double, int> of ibu values (keys) and their counts (values).
      */
 
