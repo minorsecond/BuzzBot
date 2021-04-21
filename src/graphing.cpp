@@ -64,3 +64,36 @@ std::map<double, int> Graphing::count_values_in_vect(const std::vector<double>& 
 
     return ibu_counts;
 }
+
+void Graphing::plot_ibus(const std::map<double, int>& ibu_counts) {
+    /*
+     * Plot IBU values in QCustomPlot
+     * @param ibu_counts: a map<double, int> of ibu values (keys) and their counts (values).
+     */
+
+    QCustomPlot ibu_plot;
+    QVector<double> ibus(ibu_counts.size());
+    QVector<double> counts(ibu_counts.size());
+
+    // Build vectors
+    int i = 0;
+    for (auto const& [key, val] : ibu_counts) {
+        ibus[i] = key;
+        counts[i] = val;
+        i++;
+    }
+
+    // Get min/max values for axes
+    double ibu_min = *std::min_element(ibus.begin(), ibus.end());
+    double ibu_max = *std::max_element(ibus.begin(), ibus.end());
+    double count_min = *std::min_element(counts.begin(), counts.end());
+    double count_max = *std::max_element(counts.begin(), counts.end());
+
+    ibu_plot.addGraph();
+    ibu_plot.graph(0)->setData(ibus, counts);
+    ibu_plot.xAxis->setLabel("IBU");
+    ibu_plot.yAxis->setLabel("Count");
+    ibu_plot.xAxis->setRange(ibu_min, ibu_max);
+    ibu_plot.yAxis->setRange(count_min, count_max);
+    ibu_plot.replot();
+}
