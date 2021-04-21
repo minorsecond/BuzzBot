@@ -20,7 +20,7 @@ set(CMAKE_AUTOUIC ON)
 
 enable_testing()
 
-find_package(Qt6 COMPONENTS Core Widgets PrintSupport REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets PrintSupport Gui REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(Catch2 REQUIRED)
 
@@ -51,8 +51,8 @@ add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${
 add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/mini-icon.png ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/mini-icon.png)
 
 set_target_properties(BuzzBot PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
-target_link_libraries(BuzzBot Qt6::Core Qt6::Widgets Qt6::PrintSupport SQLite3 "-framework CoreFoundation")
-target_link_libraries(functions_test SQLite3 Catch2::Catch2 Qt6::Core)
+target_link_libraries(BuzzBot Qt6::Core Qt6::Widgets Qt6::PrintSupport Qt6::Gui SQLite3 "-framework CoreFoundation")
+target_link_libraries(functions_test SQLite3 Catch2::Catch2 Qt6::Core Qt6::Gui Qt6::Widgets)
 
 set_target_properties(BuzzBot PROPERTIES
         MACOSX_BUNDLE_BUNDLE_NAME "BuzzBot"

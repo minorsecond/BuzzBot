@@ -3,6 +3,7 @@
 //
 
 #include "graphing.h"
+#include "include/qcustomplot.h"
 
 std::vector<double> Graphing::get_beer_ibus(const std::vector<Drink>& all_drinks) {
     /*
@@ -37,4 +38,27 @@ std::vector<double> Graphing::get_drink_abvs(const std::vector<Drink> &all_drink
     }
 
     return abv_values;
+}
+
+std::map<double, int> Graphing::count_values_in_vect(const std::vector<double>& all_values) {
+    /*
+     * Create QCustomPlot of IBU distribution.
+     */
+
+    std::vector<double> ibu_copy = all_values;
+    std::map<double, int> ibu_counts;
+
+    // Get count (y value) of each IBU (x value).
+    // First, get unique items in vector
+    std::sort(ibu_copy.begin(), ibu_copy.end());
+    ibu_copy.erase(unique(ibu_copy.begin(), ibu_copy.end()), ibu_copy.end());
+
+    // Create map where key is the IBU value and value is the count of the IBU in all_values.
+    for (size_t i = 0; i < ibu_copy.size(); i++) {
+        double ibu_value = ibu_copy[i];
+        int ibu_count = std::count(all_values.begin(), all_values.end(), ibu_value);
+        ibu_counts[ibu_copy[i]] = ibu_count;
+    }
+
+    return ibu_counts;
 }

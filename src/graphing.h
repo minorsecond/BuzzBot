@@ -13,6 +13,7 @@ class Graphing {
 public:
     static std::vector<double> get_beer_ibus(const std::vector<Drink>& all_drinks);
     static std::vector<double> get_drink_abvs(const std::vector<Drink>& all_drinks);
+    static std::map<double, int> count_values_in_vect(const std::vector<double>& all_values);
 };
 
 
