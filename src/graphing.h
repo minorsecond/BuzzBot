@@ -8,11 +8,11 @@
 #include "database.h"
 
 
-class graphing {
+class Graphing {
 
-private:
-    std::vector<double> get_beer_ibus(const std::vector<Drink>& all_drinks);
-    std::vector<double> get_beer_abvs(const std::vector<Drink>& all_drinks);
+public:
+    static std::vector<double> get_beer_ibus(const std::vector<Drink>& all_drinks);
+    static std::vector<double> get_drink_abvs(const std::vector<Drink>& all_drinks);
 };
 
 
