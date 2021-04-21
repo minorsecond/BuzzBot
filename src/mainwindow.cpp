@@ -107,15 +107,18 @@ void MainWindow::add_menubar_items() {
     auto * preferences_action = new QAction("Preferences");
     auto * about_action = new QAction("About");
     auto * export_action = new QAction("Export...");
+    auto * graphs_action = new QAction("Graphs...");
     auto * calc_std_drinks = new QAction("Calculate Std. Drinks...");
     QMenu * app_menu = menuBar()->addMenu("App Menu");
     preferences_action->setMenuRole(QAction::PreferencesRole);
     about_action->setMenuRole(QAction::AboutRole);
     export_action->setMenuRole(QAction::ApplicationSpecificRole);
+    graphs_action->setMenuRole(QAction::ApplicationSpecificRole);
     calc_std_drinks->setMenuRole(QAction::ApplicationSpecificRole);
     app_menu->addAction(preferences_action);
     app_menu->addAction(about_action);
     app_menu->addAction(export_action);
+    app_menu->addAction(graphs_action);
     app_menu->addAction(calc_std_drinks);
 
     connect(preferences_action, &QAction::triggered, this, &MainWindow::open_user_settings);

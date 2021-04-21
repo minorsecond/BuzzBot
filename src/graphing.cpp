@@ -89,6 +89,7 @@ void Graphing::plot_ibus(const std::map<double, int>& ibu_counts) {
     double count_min = *std::min_element(counts.begin(), counts.end());
     double count_max = *std::max_element(counts.begin(), counts.end());
 
+    // Create the IBU graph
     ibu_plot.addGraph();
     ibu_plot.graph(0)->setData(ibus, counts);
     ibu_plot.xAxis->setLabel("IBU");
