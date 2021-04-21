@@ -41,7 +41,7 @@ add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cp
         src/graphing.cpp src/graphing.h include/qcustomplot.h include/qcustomplot.cpp)
 add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp
         test/test_database_functions.cpp test/test_calculations.cpp test/test_graph_calculations.cpp src/graphing.cpp
-        src/graphing.h)
+        src/graphing.h include/qcustomplot.cpp include/qcustomplot.h)
 
 target_precompile_headers(BuzzBot PRIVATE include/sqlite_orm.h)
 
@@ -52,7 +52,7 @@ add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${
 
 set_target_properties(BuzzBot PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
 target_link_libraries(BuzzBot Qt6::Core Qt6::Widgets Qt6::PrintSupport Qt6::Gui SQLite3 "-framework CoreFoundation")
-target_link_libraries(functions_test SQLite3 Catch2::Catch2 Qt6::Core Qt6::Gui Qt6::Widgets)
+target_link_libraries(functions_test SQLite3 Catch2::Catch2 Qt6::Core Qt6::Gui Qt6::Widgets Qt6::PrintSupport)
 
 set_target_properties(BuzzBot PROPERTIES
         MACOSX_BUNDLE_BUNDLE_NAME "BuzzBot"
