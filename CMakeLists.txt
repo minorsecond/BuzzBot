@@ -43,7 +43,7 @@ add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp 
         test/test_database_functions.cpp test/test_calculations.cpp test/test_graph_calculations.cpp src/graphing.cpp
         src/graphing.h)
 
-target_precompile_headers(BuzzBot PRIVATE include/sqlite_orm.h include/Catch2.hpp)
+target_precompile_headers(BuzzBot PRIVATE include/sqlite_orm.h)
 
 # Copy resources to build dir
 add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/previous.png ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/previous.png)
