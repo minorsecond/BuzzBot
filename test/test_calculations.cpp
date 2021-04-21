@@ -2,10 +2,10 @@
 // Created by Ross Wardrup on 9/10/20.
 //
 
-#include "../include/Catch2.hpp"
 #include "../src/calculate.h"
 #include <filesystem>
 #include <iostream>
+#include <catch2/catch.hpp>
 
 TEST_CASE("Standard Drinks", "[Drink Calculations]") {
     double mosaic_standard_drinks = Calculate::standard_drinks(8.6, 12, 0.6);
