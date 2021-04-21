@@ -54,10 +54,10 @@ std::map<double, int> Graphing::count_values_in_vect(const std::vector<double>& 
     ibu_copy.erase(unique(ibu_copy.begin(), ibu_copy.end()), ibu_copy.end());
 
     // Create map where key is the IBU value and value is the count of the IBU in all_values.
-    for (size_t i = 0; i < ibu_copy.size(); i++) {
-        double ibu_value = ibu_copy[i];
+    for (double & i : ibu_copy) {
+        double ibu_value = i;
         int ibu_count = std::count(all_values.begin(), all_values.end(), ibu_value);
-        ibu_counts[ibu_copy[i]] = ibu_count;
+        ibu_counts[i] = ibu_count;
     }
 
     return ibu_counts;
