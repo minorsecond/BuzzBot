@@ -199,7 +199,7 @@ double UserSettings::get_std_drink_size() {
      */
 
     std::string std_drink_cbox_value = ui.stdDrinkDefComboBox->currentText().toStdString();
-    double std_drink_size {0.0};
+    double std_drink_size;
     std_drink_size = ui.stdDrinkDefInput->value();
 
     return std_drink_size;
@@ -256,13 +256,6 @@ int UserSettings::populate_country_cbox(const std::map<std::string, double> &cou
     auto country_name_iterator = country_info.begin();
     int std_drink_cbox_index {0};
     while (country_name_iterator != country_info.end()) {
-        std::string standard_drink_size;
-        if (options.units == "Metric") {
-            standard_drink_size = Calculate::double_to_string(Calculate::oz_to_ml(country_name_iterator->second));
-        } else {
-            standard_drink_size = Calculate::double_to_string(country_name_iterator->second);
-        }
-
         std::string country_name_drinks = country_name_iterator->first;
         ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString(country_name_drinks));
         country_name_iterator++;
