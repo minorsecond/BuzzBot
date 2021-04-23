@@ -823,7 +823,7 @@ void MainWindow::update_favorite_producer(const std::string& drink_type) {
     if (favorite_producer.empty()) {
         favorite_producer = "No " + drink_type + " entered";
     }
-    ui->favoriteBreweryOutput->setText(QString::fromStdString(favorite_producer));  // TODO: rename the widget
+    ui->favoriteProducerOutput->setText(QString::fromStdString(favorite_producer));  // TODO: rename the widget
 }
 
 void MainWindow::update_favorite_drink(const std::string& drink_type) {
@@ -835,7 +835,7 @@ void MainWindow::update_favorite_drink(const std::string& drink_type) {
     if (favorite_drink.empty()) {
         favorite_drink = "No " + drink_type + " entered";
     }
-    ui->favoriteBeerOutput->setText(QString::fromStdString(favorite_drink));  // TODO: Rename the widget
+    ui->favoriteDrinkOutput->setText(QString::fromStdString(favorite_drink));  // TODO: Rename the widget
 }
 
 void MainWindow::update_mean_abv(const std::string& drink_type) {
