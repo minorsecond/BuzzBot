@@ -35,7 +35,7 @@ public:
 private slots:
     void changed_limit_setting();
     void changed_date_calc();
-    void clicked_clear_data();
+    static void clicked_clear_data();
     void update_std_drink_size_label();
     void std_drink_country_changed();
 };
