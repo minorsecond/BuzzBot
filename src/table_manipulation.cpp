@@ -175,3 +175,67 @@ void MainWindow::delete_row() {
         update_wine_fields();
     }
 }
+
+Drink MainWindow::get_drink_at_selected_row() {
+    /*
+     * Get drink at currently-selected row.
+     * @return selected_drink: A Drink object.
+     */
+
+    Drink selected_drink;
+    QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
+    int selection = ui->drinkLogTable->selectionModel()->currentIndex().row();
+
+    if (selection >= 0) {
+        std::cout << "Getting row " << selection << " from table." << std::endl;
+        int row_to_get = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
+        std::cout << "Getting row " << row_to_get << " from database." << std::endl;
+        if (select->isRowSelected(selection))
+            ui->deleteRowButton->setEnabled(true);
+        else
+            ui->deleteRowButton->setDisabled(true);
+
+        selected_drink = Database::read_row(row_to_get, storage);
+
+        if (options.units == "Metric") {
+            selected_drink._size = Calculate::oz_to_ml(selected_drink._size);
+        }
+    }
+    return selected_drink;
+}
+
+std::string MainWindow::get_latest_notes(const std::string& name, const std::string& alcohol_type) {
+    /*
+     * Get the latest entered notes for a specific drink.
+     * @param name: The name to retrieve the notes for.
+     * @return notes: String containing drink notes.
+     */
+
+    std::string notes;
+
+    // First, try to get notes at the selected row
+    Drink drink = get_drink_at_selected_row();
+    notes = drink.notes;
+
+    if (notes.empty() || drink.alcohol_type != get_current_tab()) {
+        // Get latest notes entered for the selected drink
+        if (ui->tabWidget->currentIndex() == 0) {  // Update beer notes
+            notes = Database::get_latest_notes(storage, name, "Beer");
+        } else if (ui->tabWidget->currentIndex() == 1) {  // Update liquor notes
+            notes = Database::get_latest_notes(storage, name, "Liquor");
+        } else if (ui->tabWidget->currentIndex() == 2) {  // Update wine notes
+            notes = Database::get_latest_notes(storage, name, "Wine");
+        }
+    }
+
+    return notes;
+}
+
+void MainWindow::reset_table_sort() {
+    /*
+     * Reset table sort to default, by datetime descending.
+     */
+    int sort_column = 11;
+    std::cout << "Sorting by column: " << ui->drinkLogTable->horizontalHeaderItem(sort_column)->text().toStdString() << std::endl;
+    ui->drinkLogTable->sortItems(sort_column, Qt::DescendingOrder);
+}

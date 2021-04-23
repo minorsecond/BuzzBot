@@ -462,15 +462,6 @@ void MainWindow::program_options(bool write) {
     }
 }
 
-void MainWindow::reset_table_sort() {
-    /*
-     * Reset table sort to default, by datetime descending.
-     */
-    int sort_column = 11;
-    std::cout << "Sorting by column: " << ui->drinkLogTable->horizontalHeaderItem(sort_column)->text().toStdString() << std::endl;
-    ui->drinkLogTable->sortItems(sort_column, Qt::DescendingOrder);
-}
-
 void MainWindow::update_types_and_producers() {
     /*
      * Change the drink attributes based on the drink selected in the nameInput field.
@@ -498,45 +489,6 @@ void MainWindow::name_input_changed(const QString&) {
      */
 
     update_types_and_producers();
-}
-
-void MainWindow::update_favorite_type(const std::string& drink_type) {
-    /*
-     * Set the favoriteTypeOutput to the most common drink found in the database.
-     */
-
-    std::string fave_type = Calculate::favorite_type(storage, drink_type);
-    if (fave_type.empty()) {
-        fave_type = "No " + drink_type + " entered";
-    }
-    ui->favoriteTypeOutput->setText(QString::fromStdString(fave_type));
-}
-
-std::string MainWindow::get_latest_notes(const std::string& name, const std::string& alcohol_type) {
-    /*
-     * Get the latest entered notes for a specific drink.
-     * @param name: The name to retrieve the notes for.
-     * @return notes: String containing drink notes.
-     */
-
-    std::string notes;
-
-    // First, try to get notes at the selected row
-    Drink drink = get_drink_at_selected_row();
-    notes = drink.notes;
-
-    if (notes.empty() || drink.alcohol_type != get_current_tab()) {
-        // Get latest notes entered for the selected drink
-        if (ui->tabWidget->currentIndex() == 0) {  // Update beer notes
-            notes = Database::get_latest_notes(storage, name, "Beer");
-        } else if (ui->tabWidget->currentIndex() == 1) {  // Update liquor notes
-            notes = Database::get_latest_notes(storage, name, "Liquor");
-        } else if (ui->tabWidget->currentIndex() == 2) {  // Update wine notes
-            notes = Database::get_latest_notes(storage, name, "Wine");
-        }
-    }
-
-    return notes;
 }
 
 std::string MainWindow::get_current_tab() {
@@ -655,34 +607,6 @@ void MainWindow::clicked_clear_button() {
 
     ui->drinkLogTable->clearSelection();
     reset_fields();
-}
-
-Drink MainWindow::get_drink_at_selected_row() {
-    /*
-     * Get drink at currently-selected row.
-     * @return selected_drink: A Drink object.
-     */
-
-    Drink selected_drink;
-    QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
-    int selection = ui->drinkLogTable->selectionModel()->currentIndex().row();
-
-    if (selection >= 0) {
-        std::cout << "Getting row " << selection << " from table." << std::endl;
-        int row_to_get = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
-        std::cout << "Getting row " << row_to_get << " from database." << std::endl;
-        if (select->isRowSelected(selection))
-            ui->deleteRowButton->setEnabled(true);
-        else
-            ui->deleteRowButton->setDisabled(true);
-
-        selected_drink = Database::read_row(row_to_get, storage);
-
-        if (options.units == "Metric") {
-            selected_drink._size = Calculate::oz_to_ml(selected_drink._size);
-        }
-    }
-    return selected_drink;
 }
 
 void MainWindow::clear_fields(const std::string& alcohol_type) {
@@ -810,37 +734,6 @@ void MainWindow::update_stats_if_new_day() {
     if (ui->drinksThisWeekLabel->text().toStdString().find(weekday_name) == std::string::npos) {
         update_stat_panel();
     }
-}
-
-void MainWindow::update_std_drinks_today() {
-    /*
-     * Calculate standard drinks consumed today & update the line in the stats panel.
-     */
-
-    double std_drinks_today {0.0};
-
-    auto now_time = std::chrono::system_clock::now();
-
-    // Delete the following
-    auto now_c = std::chrono::system_clock::to_time_t(now_time);
-    std::tm now_tm = *std::localtime(&now_c);
-    char query_date[70];
-    std::strftime(query_date, sizeof query_date, "%Y-%m-%d", &now_tm);
-
-    std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
-
-    for (auto& drink : drinks_today) {
-        double std_drinks;
-        if (options.std_drink_country == "Custom") {
-            std_drinks= Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size));
-        } else {
-            double std_drink_size = std_drink_standards.find(options.std_drink_country)->second;
-            std_drinks = Calculate::standard_drinks(drink.abv, drink._size, std_drink_size);
-        }
-        std_drinks_today += std_drinks;
-    }
-
-    ui->stdDrinksTodayOutput->setText(QString::fromStdString(Calculate::double_to_string(std_drinks_today)));
 }
 
 std::string MainWindow::format_date(date::year_month_day date) {
