@@ -115,7 +115,7 @@ void MainWindow::update_beer_names_producers() {
     std::set<QString> drink_names;
     std::set<QString> producer_names;
     std::string input_type = ui->beerTypeInput->currentText().toStdString();
-    std::vector<Drink> selected_beers = Database::get_beers_by_type(storage, input_type);
+    std::vector<Drink> selected_beers = Database::get_drinks_by_type(storage, input_type);
 
     // This fixes crashes when changing with rows selected.
     QSignalBlocker name_input_signal_blocker(ui->beerNameInput);
@@ -150,7 +150,7 @@ void MainWindow::update_beer_names_types() {
     // TODO: Remove this in future if necessary
 
     std::string input_brewery = ui->beerBreweryInput->currentText().toStdString();
-    std::vector<Drink> selected_beers = Database::get_beers_by_brewery(storage, input_brewery);
+    std::vector<Drink> selected_beers = Database::get_drinks_by_producer(storage, input_brewery);
     std::set<QString> beer_names;
     std::set<QString> types;
     std::set<QString> subtypes;

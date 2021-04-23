@@ -53,16 +53,16 @@ class Database
 {
 public:
     static std::vector<Drink> read(const std::string& database_path, Storage storage);
-    static Storage write(Drink beer, Storage storage);
+    static Storage write(Drink drink, Storage storage);
     static void truncate(Storage storage);
     static void delete_row(Storage storage, int row_num);
     static Drink read_row(int row_num, Storage storage);
-    static void update(Storage storage, const Drink& beer);
+    static void update(Storage storage, const Drink& drink);
     static std::vector<Drink> filter(const std::string& filter_type, const std::string& filter_text, Storage storage);
     static void write_db_to_disk(Storage storage);
-    static Drink get_drink_by_name(Storage storage, std::string alcohol_type, std::string beer_name);
-    static std::vector<Drink> get_beers_by_type(Storage storage, std::string beer_type);
-    static std::vector<Drink> get_beers_by_brewery(Storage storage, std::string brewery);
+    static Drink get_drink_by_name(Storage storage, std::string alcohol_type, std::string drink_name);
+    static std::vector<Drink> get_drinks_by_type(Storage storage, std::string drink_type);
+    static std::vector<Drink> get_drinks_by_producer(Storage storage, std::string producer);
     static int get_version(Storage storage);
     static int increment_version(Storage storage, int current_version);
     static std::vector<Drink> sort_by_date_id(std::vector<Drink> drinks);
