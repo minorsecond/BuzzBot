@@ -270,7 +270,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::submit_button_clicked() {
     /*
-     * Create a beer from user input and write it to the database.
+     * Create a drink from user input and write it to the database.
      */
 
     QItemSelectionModel *selection_model = ui->drinkLogTable->selectionModel();
@@ -316,7 +316,7 @@ void MainWindow::update_selected_row(QItemSelectionModel* select, Drink entered_
         std::string timestamp = ui->drinkLogTable->item(selection, 10)->text().toStdString();
         std::cout << "Updating row " << row_to_update << " Timestamp: " << timestamp << std::endl;
 
-        // Update the variables in the beer struct
+        // Update the variables in the drink struct
         entered_drink.id = row_to_update;
         entered_drink.timestamp = timestamp;
 
@@ -657,19 +657,19 @@ void MainWindow::update_stat_panel() {
 
     std::cout << "Querying DB for drinks after " << query_date << std::endl;
 
-    std::vector<Drink> beers_this_week = Database::filter("After Date", query_date, storage);
+    std::vector<Drink> drinks_this_week = Database::filter("After Date", query_date, storage);
 
-    for (const auto& beer : beers_this_week) {
+    for (const auto& drink : drinks_this_week) {
         if (options.std_drink_country == "Custom") {
-            standard_drinks += Calculate::standard_drinks(beer.abv, beer._size, std::stod(options.std_drink_size));
+            standard_drinks += Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size));
         } else {
             double std_drink_size = std_drink_standards.find(options.std_drink_country)->second;  // This is in oz.
 
             /*
-             * Beer._size will always be in ounces. std_drink_size should also be in ounces. The result will be
+             * Drink._size will always be in ounces. std_drink_size should also be in ounces. The result will be
              * independent of whichever unit the user has selected, as everything is stored as ounces.
              */
-            standard_drinks += Calculate::standard_drinks(beer.abv, beer._size, std_drink_size);
+            standard_drinks += Calculate::standard_drinks(drink.abv, drink._size, std_drink_size);
         }
     }
 
@@ -686,10 +686,10 @@ void MainWindow::update_stat_panel() {
     update_standard_drinks_left_this_week(standard_drinks);
 
     // update_vol_alcohol_consumed_this_week returns either ml or oz, depending on setting
-    double vol_alc_consumed = update_vol_alcohol_consumed_this_week(beers_this_week, weekday_name);
+    double vol_alc_consumed = update_vol_alcohol_consumed_this_week(drinks_this_week, weekday_name);
     update_volume_alcohol_remaining(vol_alc_consumed);
-    update_favorite_brewery(current_tab);
-    update_favorite_beer(current_tab);
+    update_favorite_producer(current_tab);
+    update_favorite_drink(current_tab);
     update_favorite_type(current_tab);
     update_mean_abv(current_tab);
     update_mean_ibu(current_tab);
@@ -737,10 +737,10 @@ void MainWindow::reset_table_sort() {
     ui->drinkLogTable->sortItems(sort_column, Qt::DescendingOrder);
 }
 
-double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week, const std::string& weekday_name) {
+double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink>& drinks_this_week, const std::string& weekday_name) {
     /*
      * Update the volume alcohol consumed output label to the total amount alcohol consumed this week.
-     * @param beers_this_week: A vector of Drinks containing the drinks consumed in the past week.
+     * @param drinks_this_week: A vector of Drinks containing the drinks consumed in the past week.
      * @param weekday_name: The day the week began on.
      */
 
@@ -754,14 +754,14 @@ double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink
     ui->volAlcoholConsumedLabel->setText(QString::fromStdString(volumeThisWeekLabelText));
 
     // Calculate total volume for the week
-    for (const auto& beer : beers_this_week) {
+    for (const auto& drink : drinks_this_week) {
         double drinks_vol_alcohol {0.0};
         if (options.units == "Imperial") {
-            drinks_vol_alcohol = (beer.abv / 100) * beer._size;
+            drinks_vol_alcohol = (drink.abv / 100) * drink._size;
         } else {
             // Everything is stored in DB as oz. Convert back to ml for display.
-            double drink_size = Calculate::oz_to_ml(beer._size);
-            drinks_vol_alcohol = (beer.abv / 100) * drink_size;
+            double drink_size = Calculate::oz_to_ml(drink._size);
+            drinks_vol_alcohol = (drink.abv / 100) * drink_size;
         }
         volume_consumed += drinks_vol_alcohol;
     }
@@ -814,33 +814,33 @@ void MainWindow::update_volume_alcohol_remaining(double volume_alcohol_consumed)
     }
 }
 
-void MainWindow::update_favorite_brewery(const std::string& drink_type) {
+void MainWindow::update_favorite_producer(const std::string& drink_type) {
     /*
-     * Update the favorite brewery text label to the most common beer in the database.
+     * Update the favorite brewery text label to the most common drink in the database.
      */
 
-    std::string fave_brewery = Calculate::favorite_producer(storage, drink_type);
-    if (fave_brewery.empty()) {
-        fave_brewery = "No " + drink_type + " entered";
+    std::string favorite_producer = Calculate::favorite_producer(storage, drink_type);
+    if (favorite_producer.empty()) {
+        favorite_producer = "No " + drink_type + " entered";
     }
-    ui->favoriteBreweryOutput->setText(QString::fromStdString(fave_brewery));
+    ui->favoriteBreweryOutput->setText(QString::fromStdString(favorite_producer));  // TODO: rename the widget
 }
 
-void MainWindow::update_favorite_beer(const std::string& drink_type) {
+void MainWindow::update_favorite_drink(const std::string& drink_type) {
     /*
      * Update the favorite beer text label to the most common beer in the database.
      */
 
-    std::string fave_beer = Calculate::favorite_drink(storage, drink_type);
-    if (fave_beer.empty()) {
-        fave_beer = "No " + drink_type + " entered";
+    std::string favorite_drink = Calculate::favorite_drink(storage, drink_type);
+    if (favorite_drink.empty()) {
+        favorite_drink = "No " + drink_type + " entered";
     }
-    ui->favoriteBeerOutput->setText(QString::fromStdString(fave_beer));
+    ui->favoriteBeerOutput->setText(QString::fromStdString(favorite_drink));  // TODO: Rename the widget
 }
 
 void MainWindow::update_mean_abv(const std::string& drink_type) {
     /*
-     * Update the mean ABV text label to the mean ABV of all beers in the database.
+     * Update the mean ABV text label to the mean ABV of all drinks in the database.
      */
 
     std::string mean_abv = Calculate::double_to_string(Calculate::mean_abv(storage, drink_type));
@@ -887,7 +887,7 @@ void MainWindow::update_types_and_producers() {
 
 void MainWindow::producer_input_changed(const QString&) {
     /*
-     *  Change the beer attributes based on the brewery selected in the breweryInput field.
+     *  Change the drink attributes based on the brewery selected in the breweryInput field.
      */
 
     std::string alcohol_type = get_current_tab();
@@ -900,13 +900,13 @@ void MainWindow::producer_input_changed(const QString&) {
         update_wine_names_types();
     }
 
-    // Update fields based on newly selected beer
+    // Update fields based on newly selected drink
     update_types_and_producers();
 }
 
 void MainWindow::name_input_changed(const QString&) {
     /*
-     * Update fields when a beer name is chosen.
+     * Update fields when a drink name is chosen.
      */
 
     update_types_and_producers();
@@ -914,7 +914,7 @@ void MainWindow::name_input_changed(const QString&) {
 
 void MainWindow::update_favorite_type(const std::string& drink_type) {
     /*
-     * Set the favoriteTypeOutput to the most common beer found in the database.
+     * Set the favoriteTypeOutput to the most common drink found in the database.
      */
 
     std::string fave_type = Calculate::favorite_type(storage, drink_type);
@@ -926,9 +926,9 @@ void MainWindow::update_favorite_type(const std::string& drink_type) {
 
 std::string MainWindow::get_latest_notes(const std::string& name, const std::string& alcohol_type) {
     /*
-     * Get the latest entered notes for a specific beer.
+     * Get the latest entered notes for a specific drink.
      * @param name: The name to retrieve the notes for.
-     * @return notes: String containing beer notes.
+     * @return notes: String containing drink notes.
      */
 
     std::string notes;
