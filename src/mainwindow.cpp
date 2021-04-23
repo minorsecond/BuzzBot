@@ -303,7 +303,7 @@ void MainWindow::update_selected_row(QItemSelectionModel* select, Drink entered_
      * @param entered_drink: A Drink containing data from the database.
      */
 
-    ConfirmDialog confirmation_dialog = ConfirmDialog(this, "Update");
+    ConfirmDialog confirmation_dialog = ConfirmDialog("Update");
     if (confirmation_dialog.exec() == QDialog::Accepted) {
         // Get the selected row
         int selection = select->selectedRows().at(0).row();
@@ -467,7 +467,7 @@ void MainWindow::delete_row() {
      * Delete the row in the database that corresponds to the row selected in the table.
      */
 
-    ConfirmDialog confirmation_dialog = ConfirmDialog(this, "Delete");
+    ConfirmDialog confirmation_dialog = ConfirmDialog("Delete");
     if (confirmation_dialog.exec() == QDialog::Accepted) {
         int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
         int row_to_delete = (ui->drinkLogTable->item(select, 9)->text().toUtf8().toInt());
