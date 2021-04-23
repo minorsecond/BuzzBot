@@ -1125,7 +1125,7 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
     }
 }
 
-void MainWindow::open_std_drink_calculator() {
+void MainWindow::open_std_drink_calculator() const {
     /*
      * Open the standard drink calculator dialog box.
      */
