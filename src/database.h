@@ -14,7 +14,7 @@ struct Drink {
     std::string producer;
     double abv;
     double ibu;
-    double _size;  // TODO: Replace size with _size
+    double _size;  // TODO: Rename to size
     double _rating; // TODO: Replace rating with _rating in future build
     int rating;
     std::string notes;
