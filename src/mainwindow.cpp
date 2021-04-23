@@ -514,7 +514,7 @@ void MainWindow::open_user_settings() {
      * Open the user settings dialog box, where users can enter their sex and the day which the week should begin on.
      */
 
-    UserSettings user_settings = UserSettings(nullptr, options, std_drink_standards);
+    UserSettings user_settings = UserSettings(options, std_drink_standards);
     user_settings.setModal(true);
     std::string std_drink_size = options.std_drink_size;
     if (user_settings.exec() == QDialog::Accepted) {  // Update settings when OK button is clicked
