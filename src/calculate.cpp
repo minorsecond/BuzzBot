@@ -78,8 +78,6 @@ double Calculate::volume_alcohol_remaining(const std::string& sex, const std::st
      * @return: The amount of volume remaining for user.
      */
 
-    // TODO: Allow using different standards and custom amounts
-
     double vol_alcohol_remaining {0};
 
     if (standard == "Custom") {
@@ -182,7 +180,7 @@ double Calculate::mean_abv(const Storage& storage, const std::string& drink_type
     return round_to_two_decimal_points(abv_sum / drink_count);
 }
 
-double Calculate::mean_ibu(Storage storage, const std::string& drink_type) {
+double Calculate::mean_ibu(const Storage& storage, const std::string& drink_type) {
     /*
      * Calculate the mean IBU of all drinks in the database.
      * @param storage: A storage instance.
