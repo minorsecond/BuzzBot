@@ -5,7 +5,7 @@
 #ifndef BEERTABS_USERSETTINGS_H
 #define BEERTABS_USERSETTINGS_H
 
-#include "ui_user_settings.h"
+#include "ui/ui_user_settings.h"
 #include "mainwindow.h"
 
 class UserSettings : public QDialog, public Ui::userSettingsDialog {
