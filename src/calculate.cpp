@@ -9,12 +9,12 @@
 
 double Calculate::standard_drinks(double abv, double amount, double std_drink_size) {
     /*
-     * Calculate the number of standard drinks in a beer.
+     * Calculate the number of standard drinks in a drink.
      * 1 Std. drink in the US is .6 oz pure alcohol. In Europe,
      * it's 17.5 ml pure alcohol. These two measurements are
      * roughly the same.
-     * @param abv: the alcohol by volume of the beer.
-     * @param amount: the amount of beer in the container.
+     * @param abv: the alcohol by volume of the drink.
+     * @param amount: the amount of drink in the container.
      * @param std_drink_size: the size of the standard drink, in the same unit as amount.
      */
 
@@ -24,9 +24,9 @@ double Calculate::standard_drinks(double abv, double amount, double std_drink_si
 
 double Calculate::alcohol_volume(double abv, double amount) {
     /*
-     * Calculate the volume of alcohol in a beer.
-     * @param abv: The alcohol by volume of the beer.
-     * @param amount: The amount of beer in the container.
+     * Calculate the volume of alcohol in a drink.
+     * @param abv: The alcohol by volume of the drink.
+     * @param amount: The amount of drink in the container.
      */
 
     return (abv/100)*amount;
@@ -131,36 +131,36 @@ std::string Calculate::favorite_producer(const Storage& storage, const std::stri
 
 std::string Calculate::favorite_drink(const Storage& storage, const std::string& drink_type) {
     /*
-     * Calculates favorite beer based on most common beer in database
+     * Calculates favorite drink based on most common drink in database
      * @param Storage: a Storage instance
-     * @return favorite_drink: The most common beer in the database.
+     * @return favorite_drink: The most common drink in the database.
      */
 
-    std::map<std::string, unsigned> beer_counts;
-    std::vector<std::string> beers;
-    std::string favorite_beer;
+    std::map<std::string, unsigned> drink_counts;
+    std::vector<std::string> drinks;
+    std::string favorite_drink;
 
     std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
-    beers.reserve(all_drinks.size());
-    for (const auto& beer: all_drinks) {
-        beers.push_back(beer.name);
+    drinks.reserve(all_drinks.size());
+    for (const auto& drink: all_drinks) {
+        drinks.push_back(drink.name);
     }
-    for (const auto& brewery : beers) {
-        int brewery_count = std::count(beers.begin(), beers.end(), brewery);
-        beer_counts[brewery] = brewery_count;
+    for (const auto& producer : drinks) {
+        int producer_count = std::count(drinks.begin(), drinks.end(), producer);
+        drink_counts[producer] = producer_count;
     }
 
     unsigned current_max = 0;
 
-    for (const auto & beer_count : beer_counts) {
-        if (beer_count.second > current_max) {
-            favorite_beer = beer_count.first;
-            current_max = beer_count.second;
+    for (const auto & producer_count : drink_counts) {
+        if (producer_count.second > current_max) {
+            favorite_drink = producer_count.first;
+            current_max = producer_count.second;
         }
     }
 
-    return favorite_beer;
+    return favorite_drink;
 }
 
 double Calculate::mean_abv(const Storage& storage, const std::string& drink_type) {
@@ -171,42 +171,42 @@ double Calculate::mean_abv(const Storage& storage, const std::string& drink_type
      */
 
     double abv_sum = 0.0;
-    unsigned beer_count = 0;
+    unsigned drink_count = 0;
     std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
-    for (const auto& beer : all_drinks) {
-        beer_count += 1;
-        abv_sum += beer.abv;
+    for (const auto& drink : all_drinks) {
+        drink_count += 1;
+        abv_sum += drink.abv;
     }
 
-    return round_to_two_decimal_points(abv_sum / beer_count);
+    return round_to_two_decimal_points(abv_sum / drink_count);
 }
 
 double Calculate::mean_ibu(Storage storage, const std::string& drink_type) {
     /*
-     * Calculate the mean IBU of all beers in the database.
+     * Calculate the mean IBU of all drinks in the database.
      * @param storage: A storage instance.
-     * @return: The average IBU per beer.
+     * @return: The average IBU per drink.
      */
 
     double ibu_sum = 0.0;
-    unsigned beer_count = 0;
+    unsigned drink_count = 0;
     std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
-    for (const auto& beer : all_drinks) {
+    for (const auto& drink : all_drinks) {
         // Ignore empty IBU values
-        if (beer.ibu > 0) {
-            beer_count += 1;
+        if (drink.ibu > 0) {
+            drink_count += 1;
         }
-        ibu_sum += beer.ibu;
+        ibu_sum += drink.ibu;
     }
 
-    return ibu_sum / beer_count;
+    return ibu_sum / drink_count;
 }
 
 std::string Calculate::favorite_type(const Storage& storage, const std::string& drink_type) {
     /*
-     * Calculates favorite beer type based on most common type in database
+     * Calculates favorite drink type based on most common type in database
      * @param Storage: a Storage instance
      * @return favorite_type: The most common type in the database.
      */
@@ -218,12 +218,12 @@ std::string Calculate::favorite_type(const Storage& storage, const std::string& 
     std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
     types.reserve(all_drinks.size());
-    for (const auto& beer: all_drinks) {
-        types.push_back(beer.type);
+    for (const auto& drink: all_drinks) {
+        types.push_back(drink.type);
     }
     for (const auto& type : types) {
-        int brewery_count = std::count(types.begin(), types.end(), type);
-        type_counts[type] = brewery_count;
+        int producer_count = std::count(types.begin(), types.end(), type);
+        type_counts[type] = producer_count;
     }
 
     unsigned current_max = 0;
