@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "usersettings.h"
 #include "about.h"
+#include "graph_window.h"
 #include "standard_drink_calculator.h"
 #include "confirm_dialog.h"
 #include "exporters.h"
@@ -1281,9 +1282,8 @@ void MainWindow::open_graphs() {
     std::string db_path = Database::path();
     std::vector<Drink> all_drinks = Database::read(db_path, storage);
 
-    std::vector ibus = Graphing::get_beer_ibus(all_drinks);
-    std::map<double, int> ibu_counts = Graphing::count_values_in_vect(ibus);
-    auto ibu_plot = Graphing::plot_ibus(ibu_counts, this);
-    ibu_plot->show();
+    auto *graphing_window = new Graphing(this, all_drinks);
+    graphing_window->setModal(false);
+    graphing_window->show();
 }
 // LCOV_EXCL_STOP

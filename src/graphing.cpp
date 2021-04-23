@@ -5,6 +5,19 @@
 #include "graphing.h"
 #include "include/qcustomplot.h"
 
+Graphing::Graphing(QWidget *parent, const std::vector<Drink>& all_drinks) {
+    /*
+     * Main graphing window.
+     */
+
+    std::vector ibus = Graphing::get_beer_ibus(all_drinks);
+    std::map<double, int> ibu_counts = Graphing::count_values_in_vect(ibus);
+    auto ibu_plot = Graphing::plot_ibus(ibu_counts, this);
+    ibu_plot->show();
+
+    ui.setupUi(this);
+}
+
 std::vector<double> Graphing::get_beer_ibus(const std::vector<Drink>& all_drinks) {
     /*
      * Create a vector containing IBU values of all beers.
@@ -65,7 +78,7 @@ std::map<double, int> Graphing::count_values_in_vect(const std::vector<double>& 
     return ibu_counts;
 }
 
-QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QMainWindow *parent) {
+QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDialog *parent) {
     /*
      * Plot IBU values in QCustomPlot
      * @param parent: The window that the graph should appear in.
