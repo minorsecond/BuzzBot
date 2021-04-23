@@ -16,7 +16,6 @@ elseif(CMAKE_BUILD_TYPE MATCHES Release)
 endif ()
 
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
 
 enable_testing()
 

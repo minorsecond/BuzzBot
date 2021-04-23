@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "database.h"
 #include "../include/date.h"
-#include "ui_mainwindow.h"
+#include "ui/ui_mainwindow.h"
 
 struct Options {
     std::string sex = "male";
