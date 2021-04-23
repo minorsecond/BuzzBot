@@ -4,7 +4,7 @@
 
 #include "confirm_dialog.h"
 
-ConfirmDialog::ConfirmDialog(QWidget *parent, const std::string& action) {
+ConfirmDialog::ConfirmDialog(const std::string& action) {
     /*
      * Delete/edit confirmation dialog.
      * @param parent: Parent QtWidget.

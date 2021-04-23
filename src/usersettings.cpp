@@ -167,7 +167,7 @@ void UserSettings::clicked_clear_data() {
      * Clear the data if user so desires.
      */
 
-    ConfirmDialog confirmation_dialog = ConfirmDialog(this, "Clear Data");
+    ConfirmDialog confirmation_dialog = ConfirmDialog("Clear Data");
     if (confirmation_dialog.exec() == QDialog::Accepted) {
         Storage storage = initStorage(Database::path());
         Database::truncate(storage);
