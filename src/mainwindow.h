@@ -56,12 +56,6 @@ private:
     void populate_beer_fields(const Drink& drink_at_row);
     void populate_liquor_fields(const Drink& drink_at_row);
     void populate_wine_fields(const Drink& drink_at_row);
-    void update_beer_names_producers();
-    void update_liquor_names_producers();
-    void update_wine_names_producers();
-    void update_beer_names_types();
-    void update_liquor_names_types();
-    void update_wine_names_types();
     void update_beer_types_producers();
     void update_liquor_types_producers();
     void update_wine_types_producers();
@@ -121,7 +115,6 @@ private slots:
     void open_std_drink_calculator();
     void reset_table_sort();
     void name_input_changed(const QString&);
-    void producer_input_changed(const QString&);
     void tab_changed();
     void clicked_clear_button();
     void update_stats_if_new_day();
