@@ -6,7 +6,6 @@
 #include <QDir>
 #include <CoreFoundation/CFBundle.h>
 
-// LCOV_EXCL_START
 About::About() {
     /*
      * About app dialog
@@ -38,4 +37,4 @@ About::About() {
     ui.miniIcon->setPixmap(pixmap);
     ui.miniIcon->repaint();
 }
-// LCOV_EXCL_STOP
+

@@ -6,7 +6,6 @@
 #include "mainwindow.h"
 #include "calculate.h"
 
-// LCOV_EXCL_START
 void MainWindow::update_liquor_fields() {
     /*
      * Read rows in the DB and populate the distiller, type, subtype, and name dropdowns with unique values.
@@ -169,4 +168,3 @@ Drink MainWindow::get_liquor_attrs_from_fields(std::string alcohol_type) {
 
     return drink;
 }
-// LCOV_EXCL_STOP
