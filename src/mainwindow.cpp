@@ -489,7 +489,7 @@ void MainWindow::open_about_dialog() {
      * Open the about dialog which contains author and license information.
      */
 
-    auto *about_dialog = new About(this);
+    auto *about_dialog = new About();
     about_dialog->setModal(false);
     about_dialog->show();
 }

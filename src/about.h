@@ -16,7 +16,7 @@ class About : public QDialog, public Ui::aboutDialog {
     Q_OBJECT
     Ui::aboutDialog ui{};
 public:
-    explicit About(QWidget *parent);
+    explicit About();
 };
 
 #endif //BEERTABS_ABOUT_H
