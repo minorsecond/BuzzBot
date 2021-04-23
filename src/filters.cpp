@@ -25,13 +25,13 @@ std::vector<std::set<QString>> MainWindow::generate_filter_item_sets() {
     QSignalBlocker filterTextInputSignalBlocker(ui->filterTextInput);
 
     // Add items to the sets
-    std::vector<Drink> all_beers = Database::read(Database::path(), storage);
-    for (const auto& beer : all_beers) {
-        QString drink_name = QString::fromStdString(beer.name);
-        QString drink_type = QString::fromStdString(beer.type);
-        QString drink_subtype = QString::fromStdString(beer.subtype);
-        QString producer = QString::fromStdString(beer.producer);
-        QString rating = QString::fromStdString(std::to_string(beer.rating));
+    std::vector<Drink> all_drinks = Database::read(Database::path(), storage);
+    for (const auto& drink : all_drinks) {
+        QString drink_name = QString::fromStdString(drink.name);
+        QString drink_type = QString::fromStdString(drink.type);
+        QString drink_subtype = QString::fromStdString(drink.subtype);
+        QString producer = QString::fromStdString(drink.producer);
+        QString rating = QString::fromStdString(std::to_string(drink.rating));
 
         drink_names.insert(drink_name);
         drink_types.insert(drink_type);
@@ -51,7 +51,7 @@ std::vector<std::set<QString>> MainWindow::generate_filter_item_sets() {
 void MainWindow::populate_filter_menus(const std::string& filter_type) {
     /*
      * Populate the filter menus depending on user selection.
-     * @param filter type: Type of filter to use. Options in beer name (name), beer type (type) and brewery.
+     * @param filter type: Type of filter to use. Options in drink name (name), drink type (type) and producer.
      */
 
     std::vector<std::set<QString>> filter_values = generate_filter_item_sets();
