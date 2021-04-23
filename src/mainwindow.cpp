@@ -31,7 +31,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->drinkLogTable->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     // Read options and create if the file doesn't exist
-    // TODO: Create the settings file within program_options()
     program_options(false);
     program_options(true);
 
@@ -214,8 +213,6 @@ void MainWindow::add_slot_connections() {
     if (corner_button) {
         corner_button->disconnect();
     }
-
-    // TODO: Remove connections for type and producer inputs later if decided they won't be needed
 
     // Slot connections
     connect(corner_button, &QAbstractButton::clicked, this, &MainWindow::reset_table_sort);
@@ -755,7 +752,7 @@ double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink
 
     // Calculate total volume for the week
     for (const auto& drink : drinks_this_week) {
-        double drinks_vol_alcohol {0.0};
+        double drinks_vol_alcohol;
         if (options.units == "Imperial") {
             drinks_vol_alcohol = (drink.abv / 100) * drink._size;
         } else {
@@ -785,7 +782,7 @@ void MainWindow::update_volume_alcohol_remaining(double volume_alcohol_consumed)
      * update_vol_alcohol_consumed_this_week().
      */
 
-    double volume_alcohol_remaining {0.0};
+    double volume_alcohol_remaining;
     double std_drink_size;
 
     if (options.std_drink_country == "Custom") {
@@ -823,7 +820,7 @@ void MainWindow::update_favorite_producer(const std::string& drink_type) {
     if (favorite_producer.empty()) {
         favorite_producer = "No " + drink_type + " entered";
     }
-    ui->favoriteProducerOutput->setText(QString::fromStdString(favorite_producer));  // TODO: rename the widget
+    ui->favoriteProducerOutput->setText(QString::fromStdString(favorite_producer));
 }
 
 void MainWindow::update_favorite_drink(const std::string& drink_type) {
@@ -835,7 +832,7 @@ void MainWindow::update_favorite_drink(const std::string& drink_type) {
     if (favorite_drink.empty()) {
         favorite_drink = "No " + drink_type + " entered";
     }
-    ui->favoriteDrinkOutput->setText(QString::fromStdString(favorite_drink));  // TODO: Rename the widget
+    ui->favoriteDrinkOutput->setText(QString::fromStdString(favorite_drink));
 }
 
 void MainWindow::update_mean_abv(const std::string& drink_type) {
@@ -883,25 +880,6 @@ void MainWindow::update_types_and_producers() {
             update_wine_types_producers();
         }
     }
-}
-
-void MainWindow::producer_input_changed(const QString&) {
-    /*
-     *  Change the drink attributes based on the brewery selected in the breweryInput field.
-     */
-
-    std::string alcohol_type = get_current_tab();
-
-    if (alcohol_type == "Beer") {
-        update_beer_names_types();
-    } else if (alcohol_type == "Liquor") {
-        update_liquor_names_types();
-    } else if (alcohol_type == "Wine") {
-        update_wine_names_types();
-    }
-
-    // Update fields based on newly selected drink
-    update_types_and_producers();
 }
 
 void MainWindow::name_input_changed(const QString&) {
@@ -1037,8 +1015,9 @@ Drink MainWindow::get_drink_attributes_from_fields() {
 
     Drink drink;
 
+    // Size values are converted to/from ml and oz in add_new_row()
     if (alcohol_type == "Beer") {
-        drink = get_beer_attrs_from_fields(alcohol_type);  // TODO: This should be converted to OZ
+        drink = get_beer_attrs_from_fields(alcohol_type);
     } else if (alcohol_type == "Liquor") {
         drink = get_liquor_attrs_from_fields(alcohol_type);
     } else if (alcohol_type == "Wine") {
@@ -1241,7 +1220,7 @@ void MainWindow::update_std_drinks_today() {
     std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
 
     for (auto& drink : drinks_today) {
-        double std_drinks {0.0};
+        double std_drinks;
         if (options.std_drink_country == "Custom") {
             std_drinks= Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size));
         } else {
