@@ -15,6 +15,7 @@ struct Drink {
     double abv;
     double ibu;
     double _size;  // TODO: Replace size with _size
+    double _rating; // TODO: Replace rating with _rating in future build
     int rating;
     std::string notes;
     int vintage;
@@ -40,6 +41,7 @@ inline auto initStorage(const std::string& file_name) {
                                                           sqlite_orm::make_column("ibu", &Drink::ibu),
                                                           sqlite_orm::make_column("_size", &Drink::_size, sqlite_orm::default_value(0.0)),
                                                           sqlite_orm::make_column("rating", &Drink::rating),
+                                                          sqlite_orm::make_column("_rating", &Drink::_rating, sqlite_orm::default_value(-1.1)),
                                                           sqlite_orm::make_column("notes", &Drink::notes),
                                                           sqlite_orm::make_column("vintage", &Drink::vintage, sqlite_orm::default_value(-999)),
                                                           sqlite_orm::make_column("alcohol_type", &Drink::alcohol_type, sqlite_orm::default_value("Beer")),
