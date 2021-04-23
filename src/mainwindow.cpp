@@ -16,7 +16,6 @@
 #include <QFileDialog>
 #include <QTimer>
 
-// LCOV_EXCL_START
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -1246,5 +1245,3 @@ std::string MainWindow::format_date(date::year_month_day date) {
 
     return query_date;
 }
-
-// LCOV_EXCL_STOP
