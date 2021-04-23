@@ -165,7 +165,6 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
      * @return drink_by_name: A Drink matching the name.
      */
 
-    // TODO: Filter by alcohol_type that should be passed in by selected tab widget tab
     std::vector<Drink> drink_by_name_result = storage.get_all<Drink>(where(c(&Drink::name) == std::move(drink_name) && c(&Drink::alcohol_type) == std::move(alcohol_type)));
     Drink drink_by_name;
 
@@ -202,7 +201,7 @@ std::vector<Drink> Database::get_drinks_by_producer(Storage storage, std::string
     return drinks_by_producer;
 }
 
-int Database::get_version(Storage storage) {
+int Database::get_version(Storage storage) { // NOLINT(performance-unnecessary-value-param)
     /*
      * Get the current database version.
      * @param storage: A storage instance.
@@ -253,7 +252,7 @@ std::vector<Drink> Database::sort_by_date_id(std::vector<Drink> drinks) {
 
     // Now add sort order value
     int sort_order = 1;
-    for (int i = 0; i < drinks.size(); ++i) {
+    for (int i = 0; i < drinks.size(); ++i) { // NOLINT(modernize-loop-convert)
         drinks[i].sort_order = sort_order;
         sort_order++;
     }
