@@ -83,7 +83,7 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
         }
 
         // Sort ratings in descending order
-        std::sort(ratings_tmp.begin(), ratings_tmp.end(), std::greater<int>());
+        std::sort(ratings_tmp.begin(), ratings_tmp.end(), std::greater<>());
 
         for (const auto& rating : ratings_tmp) {
             QString rating_qstring = QString::fromStdString(std::to_string(rating));
