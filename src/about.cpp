@@ -37,4 +37,3 @@ About::About() {
     ui.miniIcon->setPixmap(pixmap);
     ui.miniIcon->repaint();
 }
-
