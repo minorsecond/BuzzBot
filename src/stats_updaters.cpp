@@ -225,3 +225,46 @@ void MainWindow::update_mean_ibu(const std::string& drink_type) {
         ui->avgIbuDrinkOutput->setText(QString::fromStdString(mean_ibu));
     }
 }
+
+void MainWindow::update_std_drinks_today() {
+    /*
+     * Calculate standard drinks consumed today & update the line in the stats panel.
+     */
+
+    double std_drinks_today {0.0};
+
+    auto now_time = std::chrono::system_clock::now();
+
+    // Delete the following
+    auto now_c = std::chrono::system_clock::to_time_t(now_time);
+    std::tm now_tm = *std::localtime(&now_c);
+    char query_date[70];
+    std::strftime(query_date, sizeof query_date, "%Y-%m-%d", &now_tm);
+
+    std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
+
+    for (auto& drink : drinks_today) {
+        double std_drinks;
+        if (options.std_drink_country == "Custom") {
+            std_drinks= Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size));
+        } else {
+            double std_drink_size = std_drink_standards.find(options.std_drink_country)->second;
+            std_drinks = Calculate::standard_drinks(drink.abv, drink._size, std_drink_size);
+        }
+        std_drinks_today += std_drinks;
+    }
+
+    ui->stdDrinksTodayOutput->setText(QString::fromStdString(Calculate::double_to_string(std_drinks_today)));
+}
+
+void MainWindow::update_favorite_type(const std::string& drink_type) {
+    /*
+     * Set the favoriteTypeOutput to the most common drink found in the database.
+     */
+
+    std::string fave_type = Calculate::favorite_type(storage, drink_type);
+    if (fave_type.empty()) {
+        fave_type = "No " + drink_type + " entered";
+    }
+    ui->favoriteTypeOutput->setText(QString::fromStdString(fave_type));
+}
