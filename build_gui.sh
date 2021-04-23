@@ -3,3 +3,4 @@
 /Users/rwardrup/Qt/6.0.0/clang_64/bin/uic src/mainwindow.ui -o src/ui_mainwindow.h
 /Users/rwardrup/Qt/6.0.0/clang_64/bin/uic src/standard_drink_calc.ui -o src/ui_standard_drink_calc.h
 /Users/rwardrup/Qt/6.0.0/clang_64/bin/uic src/user_settings.ui -o src/ui_user_settings.h
+/Users/rwardrup/Qt/6.0.0/clang_64/bin/uic src/graph_window.ui -o src/graph_window.h
