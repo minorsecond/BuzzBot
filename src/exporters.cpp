@@ -41,7 +41,6 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
         std::string ibu = (drink.ibu == -1) ? "" : std::to_string(drink.ibu);
         std::string vintage = (drink.vintage == -999) ? "" : std::to_string(drink.vintage);
 
-        // TODO: sanitize string formatting, deal with commas, tabs, etc.
         std::string drink_name = '"' + drink.name + '"';
         std::string drink_type = '"' + drink.type + '"';
         std::string drink_subtype = '"' + drink.subtype + '"';
