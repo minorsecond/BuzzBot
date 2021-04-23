@@ -292,6 +292,7 @@ void MainWindow::submit_button_clicked() {
 void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &) {
     /*
      * Populate user entry fields when user clicks on a row in the table.
+     * @param QItemSelection: A QItemSelection.
      */
 
     Drink drink_at_row = get_drink_at_selected_row();
