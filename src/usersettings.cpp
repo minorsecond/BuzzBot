@@ -10,7 +10,7 @@
 #include <regex>
 
 // LCOV_EXCL_START
-UserSettings::UserSettings(QWidget *parent, const Options& options, const std::map<std::string, double>& country_info) {
+UserSettings::UserSettings(const Options& options, const std::map<std::string, double>& country_info) {
     /*
      * Dialog box for user settings.
      * @param parent: parent widget.

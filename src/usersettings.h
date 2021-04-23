@@ -17,7 +17,7 @@ class UserSettings : public QDialog, public Ui::userSettingsDialog {
     Ui::userSettingsDialog ui{};
 
 public:
-    explicit UserSettings(QWidget *parent, const Options &options, const std::map<std::string, double>& country_info);
+    explicit UserSettings(const Options &options, const std::map<std::string, double>& country_info);
     std::string get_sex();
     std::string get_weekday_start();
     std::string get_date_calculation_method();
