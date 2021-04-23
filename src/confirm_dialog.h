@@ -6,7 +6,7 @@
 #define BUZZBOT_CONFIRM_DIALOG_H
 
 #include <QDialog>
-#include "ui_delete_confirm.h"
+#include "ui/ui_delete_confirm.h"
 
 class ConfirmDialog : public QDialog, public Ui::confirmationDialog {
     /*
