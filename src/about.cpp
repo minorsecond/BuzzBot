@@ -7,7 +7,7 @@
 #include <CoreFoundation/CFBundle.h>
 
 // LCOV_EXCL_START
-About::About(QWidget *parent) {
+About::About() {
     /*
      * About app dialog
      */
