@@ -67,7 +67,6 @@ void MainWindow::update_beer_fields() {
         }
     }
 
-    // TODO: Figure out why this sometimes causes segfaults in debug.
     std::sort(names_tmp.begin(), names_tmp.end(), Calculate::compare_strings);
 
     for (const auto& name : names_tmp) {
@@ -103,87 +102,6 @@ void MainWindow::populate_beer_fields(const Drink& drink_at_row) {
 
     // Switch to the beer tab
     ui->tabWidget->setCurrentIndex(0);
-}
-
-void MainWindow::update_beer_names_producers() {
-    /*
-     * Update the names and breweries fields of the beer tab if type changes.
-     */
-
-    // TODO: Remove this in future if necessary
-
-    std::set<QString> drink_names;
-    std::set<QString> producer_names;
-    std::string input_type = ui->beerTypeInput->currentText().toStdString();
-    std::vector<Drink> selected_beers = Database::get_drinks_by_type(storage, input_type);
-
-    // This fixes crashes when changing with rows selected.
-    QSignalBlocker name_input_signal_blocker(ui->beerNameInput);
-    QSignalBlocker brewery_input_signal_blocker(ui->beerBreweryInput);
-
-    ui->beerAbvInput->setValue(0.0);
-    ui->beerIbuInput->setValue(0.0);
-    ui->beerSizeInput->setValue(0);
-    ui->beerRatingInput->setValue(0);
-    //ui->beerNameInput->clear();
-    ui->beerBreweryInput->clear();
-
-    for (const auto& selected_beer : selected_beers) {
-        drink_names.insert(QString::fromStdString(selected_beer.name));
-        producer_names.insert(QString::fromStdString(selected_beer.producer));
-    }
-
-    for (const auto& brewery : producer_names) {
-        ui->beerBreweryInput->addItem(brewery);
-    }
-
-    //for (const auto& beer : drink_names) {
-    //    ui->beerNameInput->addItem(beer);
-    //}
-}
-
-void MainWindow::update_beer_names_types() {
-    /*
-     * Update the name and type on the beer tab if brewery changes.
-     */
-
-    // TODO: Remove this in future if necessary
-
-    std::string input_brewery = ui->beerBreweryInput->currentText().toStdString();
-    std::vector<Drink> selected_beers = Database::get_drinks_by_producer(storage, input_brewery);
-    std::set<QString> beer_names;
-    std::set<QString> types;
-    std::set<QString> subtypes;
-
-    // This fixes crashes when changing with rows selected.
-    QSignalBlocker name_input_signal_blocker(ui->beerNameInput);
-    QSignalBlocker type_input_signal_blocker(ui->beerTypeInput);
-    QSignalBlocker subtype_input_signal_blocker(ui->beerSubtypeInput);
-
-    ui->beerAbvInput->setValue(0.0);
-    ui->beerIbuInput->setValue(0.0);
-    ui->beerSizeInput->setValue(0);
-    ui->beerRatingInput->setValue(0);
-    //ui->beerNameInput->clear();
-    ui->beerTypeInput->clear();
-    ui->beerSubtypeInput->clear();
-
-    for (const auto& selected_beer : selected_beers) {
-        beer_names.insert(QString::fromStdString(selected_beer.name));
-        types.insert(QString::fromStdString(selected_beer.type));
-    }
-
-    //for (const auto& name : beer_names) {
-    //    ui->beerNameInput->addItem(name);
-    //}
-
-    for (const auto& beer_type : types) {
-        ui->beerTypeInput->addItem(beer_type);
-    }
-
-    for (const auto& subtype : subtypes) {
-        ui->beerSubtypeInput->addItem(subtype);
-    }
 }
 
 void MainWindow::update_beer_types_producers() {
