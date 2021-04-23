@@ -6,7 +6,7 @@
 #define BUZZBOT_STANDARD_DRINK_CALCULATOR_H
 
 #include <QDialog>
-#include "ui_standard_drink_calc.h"
+#include "ui/ui_standard_drink_calc.h"
 
 class StandardDrinkCalc : public QDialog, public Ui::stdDrinkDialog {
     /*
