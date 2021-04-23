@@ -223,16 +223,10 @@ void MainWindow::add_slot_connections() {
     connect(ui->deleteRowButton, &QPushButton::clicked, this, &MainWindow::delete_row);
     connect(ui->beerNameInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::name_input_changed);
     connect(ui->beerNameInput, &QComboBox::editTextChanged, this, &MainWindow::name_input_changed);
-    //connect(ui->beerTypeInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::type_input_changed);
-    //connect(ui->beerBreweryInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::producer_input_changed);
     connect(ui->liquorNameInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::name_input_changed);
     connect(ui->liquorNameInput, &QComboBox::editTextChanged, this, &MainWindow::name_input_changed);
-    //connect(ui->liquorTypeInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::type_input_changed);
-    //connect(ui->liquorDistillerInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::producer_input_changed);
     connect(ui->wineNameInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::name_input_changed);
     connect(ui->wineNameInput, &QComboBox::editTextChanged, this, &MainWindow::name_input_changed);
-    //connect(ui->wineTypeInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::type_input_changed);
-    //connect(ui->wineryInput, QOverload<const QString &>::of(&QComboBox::textActivated), this, &MainWindow::producer_input_changed);
     connect(ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::tab_changed);
 }
 
@@ -384,8 +378,8 @@ std::string MainWindow::settings_path() {
      * Find database path and create it if it doesn't exist.
      * @return full_path Path where database file should be stored.
      */
-    // Find path to application support directory
 
+    // Find path to application support directory
     std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
     std::string settings_path = directory + "/buzzbot_settings.conf";
     std::filesystem::create_directory(directory);
@@ -621,35 +615,17 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
 
     if (selected_rows.empty()) {
         if (alcohol_type == "Beer") {
-            //ui->beerBreweryInput->clear();
-            //ui->beerBreweryInput->setCurrentText("");
-            //ui->beerTypeInput->clear();
-            //ui->beerTypeInput->setCurrentText("");
-            //ui->beerSubtypeInput->clear();
-            //ui->beerSubtypeInput->setCurrentText("");
             ui->beerAbvInput->clear();
             ui->beerIbuInput->clear();
             ui->beerSizeInput->clear();
             ui->beerRatingInput->clear();
             ui->beerNotesInput->clear();
         } else if (alcohol_type == "Liquor") {
-            //ui->liquorDistillerInput->clear();
-            //ui->liquorDistillerInput->setCurrentText("");
-            //ui->liquorTypeInput->clear();
-            //ui->liquorTypeInput->setCurrentText("");
-            //ui->liquorSubtypeInput->clear();
-            //ui->liquorSubtypeInput->setCurrentText("");
             ui->liquorAbvInput->clear();
             ui->liquorSizeInput->clear();
             ui->liquorRatingInput->clear();
             ui->liquorNotesInput->clear();
         } else if (alcohol_type == "Wine") {
-            //ui->wineryInput->clear();
-            //ui->wineryInput->setCurrentText("");
-            //ui->wineTypeInput->clear();
-            //ui->wineTypeInput->setCurrentText("");
-            //ui->wineSubtypeInput->clear();
-            //ui->wineSubtypeInput->setCurrentText("");
             ui->wineVintage->clear();
             ui->wineAbvInput->clear();
             ui->wineRatingInput->clear();
