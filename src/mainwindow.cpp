@@ -1130,7 +1130,7 @@ void MainWindow::open_std_drink_calculator() {
      * Open the standard drink calculator dialog box.
      */
 
-    auto * std_drink_calculator = new StandardDrinkCalc(this, std::stod(options.std_drink_size), options.units);
+    auto * std_drink_calculator = new StandardDrinkCalc(std::stod(options.std_drink_size), options.units);
     std_drink_calculator->show();
 }
 
