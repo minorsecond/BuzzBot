@@ -682,6 +682,7 @@ std::tuple<date::year_month_day, std::string> MainWindow::get_filter_date() {
 
     date::weekday filter_day = get_filter_weekday_start();
 
+    // get_local_date returns a string in the form of YYYY-MM-DD
     std::string query_date = get_local_date();
 
     // Back to date object
@@ -690,7 +691,7 @@ std::tuple<date::year_month_day, std::string> MainWindow::get_filter_date() {
     ss >> std::get_time(&tm,"%Y-%m-%d");
     auto tp = date::floor<date::days>(std::chrono::system_clock::from_time_t(std::mktime(&tm)));
 
-    std::cout << "The system time is: " << date::format("%Y-%m-%d %H-%M-%S", tp) << std::endl;
+    std::cout << "The system time is: " << date::format("%Y-%m-%d", tp) << std::endl;
 
     // Get date of last filter_day
     if (options.date_calculation_method == "Fixed") {
@@ -753,7 +754,6 @@ std::string MainWindow::get_local_date() {
 
     for (char i : query_date) {
         output += std::string(1, i);
-        std::cout << i << std::endl;
     }
 
     std::cout << "The time is " << output << std::endl;
