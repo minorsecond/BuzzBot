@@ -681,18 +681,31 @@ std::tuple<date::year_month_day, std::string> MainWindow::get_filter_date() {
     std::string weekday_name;
 
     date::weekday filter_day = get_filter_weekday_start();
-    auto todays_date = date::floor<date::days>(std::chrono::system_clock::now());
+
+    // Get today's date in local time.
+    auto todays_date = std::chrono::system_clock::now();
+    auto now_c = std::chrono::system_clock::to_time_t(todays_date);
+    std::tm now_tm = *std::localtime(&now_c);
+    char query_date[70];
+    std::strftime(query_date, sizeof query_date, "%Y-%m-%d", &now_tm);
+    std::cout << "The time is " << query_date << std::endl;
+
+    // Back to date object
+    std::tm tm = {};
+    std::stringstream ss(query_date);
+    ss >> std::get_time(&tm,"%Y-%m-%d");
+    auto tp = date::floor<date::days>(std::chrono::system_clock::from_time_t(std::mktime(&tm)));
 
     // Get date of last filter_day
     if (options.date_calculation_method == "Fixed") {
         std::cout << "Using fixed date method" << std::endl;
-        start_date = todays_date - (date::weekday{todays_date} - filter_day);
+        start_date = tp - (date::weekday{tp} - filter_day);
         weekday_name = options.weekday_start;
     } else {  // Don't include day 7 days ago.
         std::cout << "Using rolling date method" << std::endl;
-        start_date = todays_date - date::days{6};
+        start_date = tp - date::days{6};
         // Get weekday name
-        weekday_name = date::format("%A", date::weekday(todays_date - date::days{7}));
+        weekday_name = date::format("%A", date::weekday(tp - date::days{7}));
     }
 
     return std::make_tuple(start_date, weekday_name);
