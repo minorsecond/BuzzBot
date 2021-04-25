@@ -11,24 +11,24 @@ void MainWindow::update_stat_panel() {
      * Calculate number of standard drinks consumed since Sunday.
      */
 
-    date::year_month_day start_date{};
+    std::chrono::year_month_day start_date{};
     double standard_drinks = 0;
     std::string weekday_name;
     std::string current_tab = get_current_tab();
 
     // Get filter day & day of week.
-    std::tuple<date::year_month_day, std::string> filter_date_results = get_filter_date();
+    std::tuple<std::chrono::year_month_day, std::string> filter_date_results = get_filter_date();
 
     start_date = std::get<0>(filter_date_results);
     weekday_name = std::get<1>(filter_date_results);
 
-    std::cout << "Calculating stats since " << start_date << ", which is last " << weekday_name << std::endl;
-
     std::string query_date = format_date(start_date);
 
-    std::cout << "Querying DB for drinks after " << query_date << std::endl;
+    std::cout << "Calculating stats since " << query_date << ", which is last " << weekday_name << std::endl;
 
     std::vector<Drink> drinks_this_week = Database::filter("After Date", query_date, storage);
+
+    std::cout << "The results contain: " << drinks_this_week.size() << " drinks." << std::endl;
 
     for (const auto& drink : drinks_this_week) {
         if (options.std_drink_country == "Custom") {
@@ -261,4 +261,52 @@ void MainWindow::update_favorite_type(const std::string& drink_type) {
         fave_type = "No " + drink_type + " entered";
     }
     ui->favoriteTypeOutput->setText(QString::fromStdString(fave_type));
+}
+
+std::string MainWindow::get_weekday_name(unsigned int weekday_number) {
+    /*
+     * Get the name of the day of the week from the weekday number.
+     * @param weekday_number: An unsigned integer denoting weekday number (1-7).
+     * @return: The name of the day of the week.
+     */
+
+    std::string day_name;
+    if (weekday_number == 1) {
+        day_name = "Monday";
+    } else if (weekday_number == 2) {
+        day_name = "Tuesday";
+    } else if (weekday_number == 3) {
+        day_name = "Wednesday";
+    } else if (weekday_number == 4) {
+        day_name = "Thursday";
+    } else if (weekday_number == 5) {
+        day_name = "Friday";
+    } else if (weekday_number == 6) {
+        day_name = "Saturday";
+    } else {
+        day_name = "Sunday";
+    }
+
+    return day_name;
+}
+
+std::string MainWindow::zero_pad_string(unsigned integer) {
+    /*
+     * Add a leading zero to a string.
+     * @param integer: The input integer which should be padded.
+     * @return: A 0-padded string.
+     */
+
+    std::stringstream ss;
+
+    // the number is converted to string with the help of stringstream
+    ss << integer;
+    std::string ret;
+    ss >> ret;
+
+    // Append zero chars
+    int str_length = ret.length();
+    for (int i = 0; i < 2 - str_length; i++)
+        ret = "0" + ret;
+    return ret;
 }

@@ -1,4 +1,4 @@
-cppcheck --enable=all --suppress=missingIncludeSystem --check-config --suppress='*:include/date.h*' src/mainwindow.cpp
+cppcheck --enable=all --suppress=missingIncludeSystem --check-config src/mainwindow.cpp
 cppcheck --enable=all --suppress=missingIncludeSystem --check-config src/database.cpp
 cppcheck --enable=all --suppress=missingIncludeSystem --check-config src/calculate.cpp
 cppcheck --enable=all --suppress=missingIncludeSystem --check-config src/table_manipulation.cpp

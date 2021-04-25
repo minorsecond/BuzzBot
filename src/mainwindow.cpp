@@ -15,6 +15,7 @@
 #include <CoreFoundation/CFBundle.h>
 #include <QFileDialog>
 #include <QTimer>
+#include <chrono>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -671,16 +672,16 @@ std::chrono::weekday MainWindow::get_filter_weekday_start() const {
     return filter_day;
 }
 
-std::tuple<date::year_month_day, std::string> MainWindow::get_filter_date() {
+std::tuple<std::chrono::year_month_day, std::string> MainWindow::get_filter_date() {
     /*
      * Get the date and day of week for the filter date specified in the options.
      * @return: Tuple containing the start date (a date::year_month_day object) and weekday name (string).
      */
 
-    date::year_month_day start_date{};
+    std::chrono::year_month_day start_date{};
     std::string weekday_name;
 
-    date::weekday filter_day = get_filter_weekday_start();
+    std::chrono::weekday filter_day = get_filter_weekday_start();
 
     // get_local_date returns a string in the form of YYYY-MM-DD
     std::string query_date = get_local_date();
@@ -689,20 +690,22 @@ std::tuple<date::year_month_day, std::string> MainWindow::get_filter_date() {
     std::tm tm = {};
     std::stringstream ss(query_date);
     ss >> std::get_time(&tm,"%Y-%m-%d");
-    auto tp = date::floor<date::days>(std::chrono::system_clock::from_time_t(std::mktime(&tm)));
-
-    std::cout << "The system time is: " << date::format("%Y-%m-%d", tp) << std::endl;
+    auto tp = std::chrono::floor<std::chrono::days>(std::chrono::system_clock::from_time_t(std::mktime(&tm)));
 
     // Get date of last filter_day
     if (options.date_calculation_method == "Fixed") {
         std::cout << "Using fixed date method" << std::endl;
-        start_date = tp - (date::weekday{tp} - filter_day);
+        start_date = tp - (std::chrono::weekday{tp} - filter_day);
         weekday_name = options.weekday_start;
     } else {  // Don't include day 7 days ago.
         std::cout << "Using rolling date method" << std::endl;
-        start_date = tp - date::days{6};
+        start_date = tp - std::chrono::days{6};
         // Get weekday name
-        weekday_name = date::format("%A", date::weekday(tp - date::days{7}));
+        std::chrono::weekday one_week = std::chrono::weekday(tp - std::chrono::days{7});
+        unsigned weekday = one_week.iso_encoding();
+        weekday_name = get_weekday_name(weekday);
+        std::cout << "The weekday value is: " << weekday_name << std::endl;
+        //weekday_name = date::format("%A", one_week);
     }
 
     return std::make_tuple(start_date, weekday_name);
@@ -723,15 +726,17 @@ void MainWindow::update_stats_if_new_day() {
     }
 }
 
-std::string MainWindow::format_date(date::year_month_day date) {
+std::string MainWindow::format_date(std::chrono::year_month_day date) {
     /*
      * Format date for use in DB filter.
-     * @return: formated date string.
+     * @return: formatted date string.
      */
 
-    std::string year = date::format("%Y", date.year());
-    std::string month = date::format("%m", date.month());
-    std::string day = date::format("%d", date.day());
+    std::string year = std::to_string((int)date.year());
+
+    std::string month = zero_pad_string((unsigned)date.month());
+    std::string day = zero_pad_string((unsigned)date.day());
+
     std::string query_date = year + "-" + month + "-" + day;
 
     return query_date;
