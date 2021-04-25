@@ -52,7 +52,7 @@ using Storage = decltype (initStorage(""));
 class Database
 {
 public:
-    static std::vector<Drink> read(const std::string& database_path, Storage storage);
+    static std::vector<Drink> read(Storage storage);
     static Storage write(Drink drink, Storage storage);
     static void truncate(Storage storage);
     static void delete_row(Storage storage, int row_num);

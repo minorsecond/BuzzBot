@@ -527,7 +527,7 @@ void MainWindow::tab_changed() {
                 ui->tabWidget->setCurrentIndex(0);  // Go to the beer tab
                 reset_fields();  // Reset fields to the first beer name, alphabetically
             } else {  // If new tab is the same as the selected drink (E.G. If browsing among beers in table).
-                std::string beer_notes_text = get_latest_notes(name, new_tab);
+                std::string beer_notes_text = get_latest_notes(name);
                 ui->beerNotesInput->setText(QString::fromStdString(beer_notes_text));
             }
         }
@@ -541,7 +541,7 @@ void MainWindow::tab_changed() {
                 ui->tabWidget->setCurrentIndex(1);
                 reset_fields();
             } else {
-                std::string liquor_notes_text = get_latest_notes(name, new_tab);
+                std::string liquor_notes_text = get_latest_notes(name);
                 ui->liquorNotesInput->setText(QString::fromStdString(liquor_notes_text));
             }
         }
@@ -555,7 +555,7 @@ void MainWindow::tab_changed() {
                 ui->tabWidget->setCurrentIndex(2);
                 reset_fields();
             } else {
-                std::string wine_notes_text = get_latest_notes(name, new_tab);
+                std::string wine_notes_text = get_latest_notes(name);
                 ui->wineNotesInput->setText(QString::fromStdString(wine_notes_text));
             }
         }

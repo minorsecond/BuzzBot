@@ -21,7 +21,7 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
     ui.setupUi(this);
     this->setFixedSize(675, 300);
 
-    int std_drink_cbox_index = populate_country_cbox(country_info, options);
+    int std_drink_cbox_index = populate_country_cbox(country_info);
     ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString("Custom"));
 
     set_std_drink_input_states(options);
@@ -244,7 +244,7 @@ void UserSettings::std_drink_country_changed() {
     }
 }
 
-int UserSettings::populate_country_cbox(const std::map<std::string, double> &country_info, const Options& options) {
+int UserSettings::populate_country_cbox(const std::map<std::string, double> &country_info) {
     /*
      * Populate the country std drink sizes combo box with country_info data
      * @param country_info: A map containing CountryName: StdDrinkSize
