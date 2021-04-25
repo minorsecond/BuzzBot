@@ -5,7 +5,6 @@
 #include "usersettings.h"
 #include "confirm_dialog.h"
 #include "database.h"
-#include "calculate.h"
 #include <iostream>
 #include <regex>
 

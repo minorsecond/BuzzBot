@@ -55,8 +55,8 @@ TEST_CASE("DB IO", "[DB Functions]") {
 
     Storage storage_2 = initStorage(db_path);
 
-    Drink etrwo_read = storage_2.get<Drink>(1);
-    Drink mosaic_read = storage_2.get<Drink>(2);
+    auto etrwo_read = storage_2.get<Drink>(1);
+    auto mosaic_read = storage_2.get<Drink>(2);
 
     REQUIRE(etrwo_read.abv == 8.0);
     REQUIRE(etrwo_read.ibu == 60.0);
