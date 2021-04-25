@@ -5,7 +5,7 @@
 #include "standard_drink_calculator.h"
 #include "calculate.h"
 
-StandardDrinkCalc::StandardDrinkCalc(QWidget *parent,  const double std_drink_size, const std::string& units) {
+StandardDrinkCalc::StandardDrinkCalc(const double std_drink_size, const std::string& units) {
     /*
      * UI for calculating standard drinks based on ABV & drink volume.
      */

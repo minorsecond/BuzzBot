@@ -5,12 +5,11 @@
 #include "usersettings.h"
 #include "confirm_dialog.h"
 #include "database.h"
-#include "calculate.h"
 #include <iostream>
 #include <regex>
 
 // LCOV_EXCL_START
-UserSettings::UserSettings(QWidget *parent, const Options& options, const std::map<std::string, double>& country_info) {
+UserSettings::UserSettings(const Options& options, const std::map<std::string, double>& country_info) {
     /*
      * Dialog box for user settings.
      * @param parent: parent widget.
@@ -21,7 +20,7 @@ UserSettings::UserSettings(QWidget *parent, const Options& options, const std::m
     ui.setupUi(this);
     this->setFixedSize(675, 300);
 
-    int std_drink_cbox_index = populate_country_cbox(country_info, options);
+    int std_drink_cbox_index = populate_country_cbox(country_info);
     ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString("Custom"));
 
     set_std_drink_input_states(options);
@@ -167,7 +166,7 @@ void UserSettings::clicked_clear_data() {
      * Clear the data if user so desires.
      */
 
-    ConfirmDialog confirmation_dialog = ConfirmDialog(this, "Clear Data");
+    ConfirmDialog confirmation_dialog = ConfirmDialog("Clear Data");
     if (confirmation_dialog.exec() == QDialog::Accepted) {
         Storage storage = initStorage(Database::path());
         Database::truncate(storage);
@@ -199,7 +198,7 @@ double UserSettings::get_std_drink_size() {
      */
 
     std::string std_drink_cbox_value = ui.stdDrinkDefComboBox->currentText().toStdString();
-    double std_drink_size {0.0};
+    double std_drink_size;
     std_drink_size = ui.stdDrinkDefInput->value();
 
     return std_drink_size;
@@ -244,7 +243,7 @@ void UserSettings::std_drink_country_changed() {
     }
 }
 
-int UserSettings::populate_country_cbox(const std::map<std::string, double> &country_info, const Options& options) {
+int UserSettings::populate_country_cbox(const std::map<std::string, double> &country_info) {
     /*
      * Populate the country std drink sizes combo box with country_info data
      * @param country_info: A map containing CountryName: StdDrinkSize
@@ -256,13 +255,6 @@ int UserSettings::populate_country_cbox(const std::map<std::string, double> &cou
     auto country_name_iterator = country_info.begin();
     int std_drink_cbox_index {0};
     while (country_name_iterator != country_info.end()) {
-        std::string standard_drink_size;
-        if (options.units == "Metric") {
-            standard_drink_size = Calculate::double_to_string(Calculate::oz_to_ml(country_name_iterator->second));
-        } else {
-            standard_drink_size = Calculate::double_to_string(country_name_iterator->second);
-        }
-
         std::string country_name_drinks = country_name_iterator->first;
         ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString(country_name_drinks));
         country_name_iterator++;
