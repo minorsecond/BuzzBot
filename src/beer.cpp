@@ -76,7 +76,7 @@ void MainWindow::update_beer_fields() {
     // Reset to first name in field
     ui->beerNameInput->setCurrentIndex(0);
     update_beer_types_producers();
-    std::string beer_notes_text = get_latest_notes(ui->beerNameInput->currentText().toStdString(), "Beer");
+    std::string beer_notes_text = get_latest_notes(ui->beerNameInput->currentText().toStdString());
     ui->beerNotesInput->setText(QString::fromStdString(beer_notes_text));
 }
 
@@ -87,7 +87,7 @@ void MainWindow::populate_beer_fields(const Drink& drink_at_row) {
 
     QDate date = format_date_for_input(drink_at_row);
     // Only update the beer fields if the user is currently on the beer tab
-    std::string notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
+    std::string notes = get_latest_notes(drink_at_row.name);
     ui->beerDateInput->setDate(date);
     ui->beerNameInput->setCurrentText(drink_at_row.name.c_str());
     ui->beerTypeInput->setCurrentText(drink_at_row.type.c_str());
@@ -139,7 +139,7 @@ void MainWindow::update_beer_types_producers() {
         ui->beerRatingInput->setValue(rating);
 
         // Set notes to the notes for beer in the name input
-        std::string notes = get_latest_notes(ui->beerNameInput->currentText().toStdString(), get_current_tab());
+        std::string notes = get_latest_notes(ui->beerNameInput->currentText().toStdString());
         ui->beerNotesInput->setText(QString::fromStdString(notes));
     }
 }

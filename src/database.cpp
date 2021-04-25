@@ -21,7 +21,7 @@ std::string Database::path() {
     return full_path;
 }
 
-std::vector<Drink> Database::read(const std::string& database_path, Storage storage) {
+std::vector<Drink> Database::read(Storage storage) {
     /*
      * Read all rows from the database.
      * @return all_drinks A vector containing Drink, storing all rows in the database.
@@ -108,7 +108,7 @@ std::string Database::get_latest_notes(Storage storage, const std::string& name,
 
     std::vector<Drink> drinks = storage.get_all<Drink>(where(c(&Drink::name) == name && c(&Drink::alcohol_type) == alcohol_type));
     std::string notes;
-    unsigned temp_id = 0;
+    int temp_id = 0;
     for (const auto& drink_for_notes : drinks) {
         if (drink_for_notes.id > temp_id && drink_for_notes.alcohol_type == alcohol_type) {
             temp_id = drink_for_notes.id;
@@ -252,7 +252,7 @@ std::vector<Drink> Database::sort_by_date_id(std::vector<Drink> drinks) {
 
     // Now add sort order value
     int sort_order = 1;
-    for (int i = 0; i < drinks.size(); ++i) { // NOLINT(modernize-loop-convert)
+    for (unsigned i = 0; i < drinks.size(); ++i) { // NOLINT(modernize-loop-convert)
         drinks[i].sort_order = sort_order;
         sort_order++;
     }

@@ -204,7 +204,7 @@ Drink MainWindow::get_drink_at_selected_row() {
     return selected_drink;
 }
 
-std::string MainWindow::get_latest_notes(const std::string& name, const std::string& alcohol_type) {
+std::string MainWindow::get_latest_notes(const std::string& name) {
     /*
      * Get the latest entered notes for a specific drink.
      * @param name: The name to retrieve the notes for.
@@ -217,6 +217,7 @@ std::string MainWindow::get_latest_notes(const std::string& name, const std::str
     Drink drink = get_drink_at_selected_row();
     notes = drink.notes;
 
+    // Only run if notes are empty, or if the selected drink's alcohol type doesn't match that of the current tab
     if (notes.empty() || drink.alcohol_type != get_current_tab()) {
         // Get latest notes entered for the selected drink
         if (ui->tabWidget->currentIndex() == 0) {  // Update beer notes
