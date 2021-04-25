@@ -14,10 +14,10 @@ set(CMAKE_PREFIX_PATH "/Users/rwardrup/Qt/6.0.0/clang_64/")
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     message("Building debug")
-    add_compile_options(-Wall -g -o0 -pedantic)
+    add_compile_options(-Wall -Werror -Wextra -g -o0 -pedantic)
 elseif(CMAKE_BUILD_TYPE MATCHES Release)
     message(STATUS "Building release")
-    add_compile_options(-Wall -gdwarf-2 -o3 -pedantic)
+    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -o3 -pedantic)
 endif ()
 
 enable_testing()
