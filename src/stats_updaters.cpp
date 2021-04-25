@@ -233,13 +233,7 @@ void MainWindow::update_std_drinks_today() {
 
     double std_drinks_today {0.0};
 
-    auto now_time = std::chrono::system_clock::now();
-
-    // Delete the following
-    auto now_c = std::chrono::system_clock::to_time_t(now_time);
-    std::tm now_tm = *std::localtime(&now_c);
-    char query_date[70];
-    std::strftime(query_date, sizeof query_date, "%Y-%m-%d", &now_tm);
+    std::string query_date = get_local_date();
 
     std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
 

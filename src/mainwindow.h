@@ -73,6 +73,7 @@ private:
     std::tuple<date::year_month_day, std::string> get_filter_date();
     void update_std_drinks_today();
     static std::string format_date(date::year_month_day date);
+    static std::string get_local_date();
 
     // Std drink sizes are all stored in Oz. Data are all from Wikipedia:
     // https://en.wikipedia.org/wiki/Standard_drink
