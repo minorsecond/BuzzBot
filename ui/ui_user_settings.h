@@ -367,7 +367,7 @@ public:
         weeklyLimitGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Weekly Limit Standard", nullptr));
         customLimitRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Custom", nullptr));
         niaaaStandardsRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "CDC/NIAAA", nullptr));
-        customLimitLabel->setText(QCoreApplication::translate("userSettingsDialog", "Custom Limit *:", nullptr));
+        customLimitLabel->setText(QCoreApplication::translate("userSettingsDialog", "Custom Limit* :", nullptr));
         label->setText(QCoreApplication::translate("userSettingsDialog", "* Standard drinks", nullptr));
         unitsGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Units", nullptr));
         metricRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Metric (ml)", nullptr));

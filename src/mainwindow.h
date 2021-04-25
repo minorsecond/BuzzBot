@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "database.h"
 //#include "../include/date.h"
-#include "ui_mainwindow.h"
+#include "../ui/ui_mainwindow.h"
 
 struct Options {
     std::string sex = "male";
@@ -38,15 +38,15 @@ private:
     void program_options(bool write);
     void update_drinks_this_week(double standard_drinks, const std::string& weekday_name);
     void update_standard_drinks_left_this_week(double std_drinks_consumed);
-    double update_vol_alcohol_consumed_this_week(const std::vector<Drink>& beers_this_week, const std::string& weekday_name);
+    double update_vol_alcohol_consumed_this_week(const std::vector<Drink>& drinks_this_week, const std::string& weekday_name);
     void update_volume_alcohol_remaining(double volume_alcohol_consumed);
-    void update_favorite_brewery(const std::string& drink_type);
-    void update_favorite_beer(const std::string& drink_type);
+    void update_favorite_producer(const std::string& drink_type);
+    void update_favorite_drink(const std::string& drink_type);
     void update_favorite_type(const std::string& drink_type);
     void update_mean_abv(const std::string& drink_type);
     void update_mean_ibu(const std::string& drink_type);
     void update_types_and_producers();
-    std::string get_latest_notes(const std::string& name, const std::string& alcohol_type);
+    std::string get_latest_notes(const std::string& name);
     std::string get_current_tab();
     Drink get_drink_attributes_from_fields();
     void update_selected_row(QItemSelectionModel* select, Drink entered_drink);
@@ -56,12 +56,6 @@ private:
     void populate_beer_fields(const Drink& drink_at_row);
     void populate_liquor_fields(const Drink& drink_at_row);
     void populate_wine_fields(const Drink& drink_at_row);
-    void update_beer_names_producers();
-    void update_liquor_names_producers();
-    void update_wine_names_producers();
-    void update_beer_names_types();
-    void update_liquor_names_types();
-    void update_wine_names_types();
     void update_beer_types_producers();
     void update_liquor_types_producers();
     void update_wine_types_producers();
@@ -79,6 +73,7 @@ private:
     std::tuple<date::year_month_day, std::string> get_filter_date();
     void update_std_drinks_today();
     static std::string format_date(date::year_month_day date);
+    static std::string get_local_date();
 
     // Std drink sizes are all stored in Oz. Data are all from Wikipedia:
     // https://en.wikipedia.org/wiki/Standard_drink
@@ -116,12 +111,11 @@ private slots:
     void enable_filter_text(const QString&);
     void changed_filter_text(const QString&);
     void open_user_settings();
-    void open_about_dialog();
+    static void open_about_dialog();
     void open_export_dialog();
-    void open_std_drink_calculator();
+    void open_std_drink_calculator() const;
     void reset_table_sort();
     void name_input_changed(const QString&);
-    void producer_input_changed(const QString&);
     void tab_changed();
     void clicked_clear_button();
     void update_stats_if_new_day();
