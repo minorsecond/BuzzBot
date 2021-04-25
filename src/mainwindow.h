@@ -69,7 +69,7 @@ private:
     void set_input_states();
     Drink get_drink_at_selected_row();
     void clear_fields(const std::string& alcohol_type);
-    [[nodiscard]] date::weekday get_filter_weekday_start() const;
+    [[nodiscard]] std::chrono::weekday get_filter_weekday_start() const;
     std::tuple<date::year_month_day, std::string> get_filter_date();
     void update_std_drinks_today();
     static std::string format_date(date::year_month_day date);

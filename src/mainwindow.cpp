@@ -645,27 +645,27 @@ void MainWindow::open_std_drink_calculator() const {
     std_drink_calculator->show();
 }
 
-date::weekday MainWindow::get_filter_weekday_start() const {
+std::chrono::weekday MainWindow::get_filter_weekday_start() const {
     /*
      * Get filter day from options.
      * @return filter_day: a date object for the filter day.
      */
 
-    date::weekday filter_day{};
+    std::chrono::weekday filter_day{};
 
     // Get date to filter on
     if (options.weekday_start == "Monday") {
-        filter_day = date::Monday;
+        filter_day = std::chrono::Monday;
     } else if (options.weekday_start == "Tuesday") {
-        filter_day = date::Tuesday;
+        filter_day = std::chrono::Tuesday;
     } else if (options.weekday_start == "Wednesday") {
-        filter_day = date::Wednesday;
+        filter_day = std::chrono::Wednesday;
     } else if (options.weekday_start == "Thursday") {
-        filter_day = date::Thursday;
+        filter_day = std::chrono::Thursday;
     } else if (options.weekday_start == "Friday") {
-        filter_day = date::Friday;
+        filter_day = std::chrono::Friday;
     } else {
-        filter_day = date::Sunday;
+        filter_day = std::chrono::Sunday;
     }
 
     return filter_day;
