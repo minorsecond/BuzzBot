@@ -700,12 +700,11 @@ std::tuple<std::chrono::year_month_day, std::string> MainWindow::get_filter_date
     } else {  // Don't include day 7 days ago.
         std::cout << "Using rolling date method" << std::endl;
         start_date = tp - std::chrono::days{6};
+
         // Get weekday name
         std::chrono::weekday one_week = std::chrono::weekday(tp - std::chrono::days{7});
         unsigned weekday = one_week.iso_encoding();
         weekday_name = get_weekday_name(weekday);
-        std::cout << "The weekday value is: " << weekday_name << std::endl;
-        //weekday_name = date::format("%A", one_week);
     }
 
     return std::make_tuple(start_date, weekday_name);
@@ -760,8 +759,6 @@ std::string MainWindow::get_local_date() {
     for (char i : query_date) {
         output += std::string(1, i);
     }
-
-    std::cout << "The time is " << output << std::endl;
 
     return output;
 }
