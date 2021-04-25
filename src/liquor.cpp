@@ -81,7 +81,7 @@ void MainWindow::update_liquor_fields() {
     // Rest to first name in field
     ui->liquorNameInput->setCurrentIndex(0);
     update_liquor_types_producers();
-    std::string liquor_notes_text = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), "Liquor");
+    std::string liquor_notes_text = get_latest_notes(ui->liquorNameInput->currentText().toStdString());
     ui->liquorNotesInput->setText(QString::fromStdString(liquor_notes_text));
 }
 
@@ -91,7 +91,7 @@ void MainWindow::populate_liquor_fields(const Drink& drink_at_row) {
      */
 
     QDate date = format_date_for_input(drink_at_row);
-    std::string notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
+    std::string notes = get_latest_notes(drink_at_row.name);
     ui->liquorDateInput->setDate(date);
     ui->liquorNameInput->setCurrentText(drink_at_row.name.c_str());
     ui->liquorTypeInput->setCurrentText(drink_at_row.type.c_str());
@@ -140,7 +140,7 @@ void MainWindow::update_liquor_types_producers() {
         ui->liquorRatingInput->setValue(rating);
 
         // Set notes to the notes for liquor in the name input
-        std::string notes = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), get_current_tab());
+        std::string notes = get_latest_notes(ui->liquorNameInput->currentText().toStdString());
         ui->liquorNotesInput->setText(QString::fromStdString(notes));
     }
 }

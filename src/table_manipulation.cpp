@@ -204,7 +204,7 @@ Drink MainWindow::get_drink_at_selected_row() {
     return selected_drink;
 }
 
-std::string MainWindow::get_latest_notes(const std::string& name, const std::string& alcohol_type) {
+std::string MainWindow::get_latest_notes(const std::string& name) {
     /*
      * Get the latest entered notes for a specific drink.
      * @param name: The name to retrieve the notes for.
