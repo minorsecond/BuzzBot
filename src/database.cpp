@@ -21,15 +21,15 @@ std::string Database::path() {
     return full_path;
 }
 
-std::vector<Drink> Database::read(const std::string& database_path, Storage storage) {
+std::vector<Drink> Database::read(Storage storage) {
     /*
      * Read all rows from the database.
-     * @return all_beers A vector containing Drink, storing all rows in the database.
+     * @return all_drinks A vector containing Drink, storing all rows in the database.
      */
 
-    std::vector<Drink> all_beers = storage.get_all<Drink>();
+    std::vector<Drink> all_drinks = storage.get_all<Drink>();
 
-    return all_beers;
+    return all_drinks;
 }
 
 void Database::write_db_to_disk(Storage storage) {
@@ -40,16 +40,16 @@ void Database::write_db_to_disk(Storage storage) {
     storage.sync_schema(true);
 }
 
-Storage Database::write(Drink beer, Storage storage) {
+Storage Database::write(Drink drink, Storage storage) {
     /*
      * Write a row to the SQLite database.
-     * @param beer: a beer
+     * @param drink: a drink
      * @return Storage: The storage instance
      */
 
     std::string database_path = path();
-    int inserted_id = storage.insert(beer);
-    beer.id = inserted_id;
+    int inserted_id = storage.insert(drink);
+    drink.id = inserted_id;
     write_db_to_disk(storage);
 
     return storage;
@@ -80,21 +80,21 @@ Drink Database::read_row(int row_num, Storage storage) {
      * Read a specific row from the database.
      * @param storage: A storage instance.
      * @param row_num: The row number that should be read.
-     * @return beer: The results of the database query.
+     * @return drink: The results of the database query.
      */
     
-    auto beer = storage.get<Drink>(row_num);
-    return beer;
+    auto drink = storage.get<Drink>(row_num);
+    return drink;
 }
 
-void Database::update(Storage storage, const Drink& beer) {
+void Database::update(Storage storage, const Drink& drink) {
     /*
      * Update a specific database row.
      * @param storage: A storage instance.
-     * @param beer: The row to update. The ID of the beer must match the internal primary key on the DB.
+     * @param drink: The row to update. The ID of the drink must match the internal primary key on the DB.
      */
 
-    storage.update(beer);
+    storage.update(drink);
 }
 
 std::string Database::get_latest_notes(Storage storage, const std::string& name, const std::string& alcohol_type) {
@@ -108,7 +108,7 @@ std::string Database::get_latest_notes(Storage storage, const std::string& name,
 
     std::vector<Drink> drinks = storage.get_all<Drink>(where(c(&Drink::name) == name && c(&Drink::alcohol_type) == alcohol_type));
     std::string notes;
-    unsigned temp_id = 0;
+    int temp_id = 0;
     for (const auto& drink_for_notes : drinks) {
         if (drink_for_notes.id > temp_id && drink_for_notes.alcohol_type == alcohol_type) {
             temp_id = drink_for_notes.id;
@@ -157,7 +157,7 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
     return filtered_drinks;
 }
 
-Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std::string beer_name) {
+Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std::string drink_name) {
     /*
      * Get a drink by its name.
      * @param storage: A Storage instance
@@ -165,8 +165,7 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
      * @return drink_by_name: A Drink matching the name.
      */
 
-    // TODO: Filter by alcohol_type that should be passed in by selected tab widget tab
-    std::vector<Drink> drink_by_name_result = storage.get_all<Drink>(where(c(&Drink::name) == std::move(beer_name) && c(&Drink::alcohol_type) == std::move(alcohol_type)));
+    std::vector<Drink> drink_by_name_result = storage.get_all<Drink>(where(c(&Drink::name) == std::move(drink_name) && c(&Drink::alcohol_type) == std::move(alcohol_type)));
     Drink drink_by_name;
 
     std::sort(drink_by_name_result.begin(), drink_by_name_result.end(), compare_date);
@@ -180,29 +179,29 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
     return drink_by_name;
 }
 
-std::vector<Drink> Database::get_beers_by_type(Storage storage, std::string beer_type) {
+std::vector<Drink> Database::get_drinks_by_type(Storage storage, std::string drink_type) {
     /*
      * Get drinks by type.
      * @param storage: A storage instance.
-     * @param beer_type: The type of drink to filter on.
-     * @return: A vector of drinks that match beer_type.
+     * @param drink_type: The type of drink to filter on.
+     * @return: A vector of drinks that match drink_type.
      */
-    std::vector<Drink> beers_by_type = storage.get_all<Drink>(where(c(&Drink::type) == std::move(beer_type)));
-    return beers_by_type;
+    std::vector<Drink> drinks_by_type = storage.get_all<Drink>(where(c(&Drink::type) == std::move(drink_type)));
+    return drinks_by_type;
 }
 
-std::vector<Drink> Database::get_beers_by_brewery(Storage storage, std::string producer) {
+std::vector<Drink> Database::get_drinks_by_producer(Storage storage, std::string producer) {
     /*
      * Get drinks by producer.
      * @param storage: A storage instance.
      * @param producer: The producer name to filter on.
      * @return: A vector of drinks produced by a producer.
      */
-    std::vector<Drink> beers_by_brewery = storage.get_all<Drink>(where(c(&Drink::producer) == std::move(producer)));
-    return beers_by_brewery;
+    std::vector<Drink> drinks_by_producer = storage.get_all<Drink>(where(c(&Drink::producer) == std::move(producer)));
+    return drinks_by_producer;
 }
 
-int Database::get_version(Storage storage) {
+int Database::get_version(Storage storage) { // NOLINT(performance-unnecessary-value-param)
     /*
      * Get the current database version.
      * @param storage: A storage instance.
@@ -253,7 +252,7 @@ std::vector<Drink> Database::sort_by_date_id(std::vector<Drink> drinks) {
 
     // Now add sort order value
     int sort_order = 1;
-    for (int i = 0; i < drinks.size(); ++i) {
+    for (unsigned i = 0; i < drinks.size(); ++i) { // NOLINT(modernize-loop-convert)
         drinks[i].sort_order = sort_order;
         sort_order++;
     }

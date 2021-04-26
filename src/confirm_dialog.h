@@ -6,7 +6,7 @@
 #define BUZZBOT_CONFIRM_DIALOG_H
 
 #include <QDialog>
-#include "ui_delete_confirm.h"
+#include "../ui/ui_delete_confirm.h"
 
 class ConfirmDialog : public QDialog, public Ui::confirmationDialog {
     /*
@@ -17,7 +17,7 @@ class ConfirmDialog : public QDialog, public Ui::confirmationDialog {
     Ui::confirmationDialog ui {};
 
 public:
-    explicit ConfirmDialog(QWidget *parent, const std::string& action);
+    explicit ConfirmDialog(const std::string& action);
 };
 
 #endif //BUZZBOT_CONFIRM_DIALOG_H
