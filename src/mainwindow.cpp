@@ -772,7 +772,7 @@ void MainWindow::open_graphs() {
      */
 
     std::string db_path = Database::path();
-    std::vector<Drink> all_drinks = Database::read(db_path, storage);
+    std::vector<Drink> all_drinks = Database::read(storage);
 
     std::vector ibus = Graphing::get_beer_ibus(all_drinks);
     std::map<double, int> ibu_counts = Graphing::count_values_in_vect(ibus);
