@@ -5,7 +5,7 @@
 #include "graphing.h"
 #include "include/qcustomplot.h"
 
-Graphing::Graphing(QWidget *parent, const std::vector<Drink>& all_drinks) {
+Graphing::Graphing(const std::vector<Drink>& all_drinks) {
     /*
      * Main graphing window.
      */

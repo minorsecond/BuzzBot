@@ -7,7 +7,7 @@
 
 #include "include/qcustomplot.h"
 #include "database.h"
-#include "graph_window.h"
+#include "../ui/ui_graph_window.h"
 
 
 class Graphing : public QDialog, public Ui::GraphWindow {
@@ -19,7 +19,7 @@ Q_OBJECT
     Ui::GraphWindow ui{};
 
 public:
-    explicit Graphing(QWidget *parent, const std::vector<Drink>& all_drinks);
+    explicit Graphing(const std::vector<Drink>& all_drinks);
     static std::vector<double> get_beer_ibus(const std::vector<Drink>& all_drinks);
     static std::vector<double> get_drink_abvs(const std::vector<Drink>& all_drinks);
     static std::map<double, int> count_values_in_vect(const std::vector<double>& all_values);

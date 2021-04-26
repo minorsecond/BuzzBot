@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "usersettings.h"
 #include "about.h"
-#include "graph_window.h"
+#include "../ui/ui_graph_window.h"
 #include "standard_drink_calculator.h"
 #include "confirm_dialog.h"
 #include "exporters.h"
@@ -775,7 +775,7 @@ void MainWindow::open_graphs() {
     std::string db_path = Database::path();
     std::vector<Drink> all_drinks = Database::read(storage);
 
-    auto *graphing_window = new Graphing(this, all_drinks);
+    auto *graphing_window = new Graphing(all_drinks);
     graphing_window->setModal(false);
     graphing_window->show();
 }
