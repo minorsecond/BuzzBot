@@ -6,7 +6,7 @@
 #define BUZZBOT_STANDARD_DRINK_CALCULATOR_H
 
 #include <QDialog>
-#include "ui_standard_drink_calc.h"
+#include "../ui/ui_standard_drink_calc.h"
 
 class StandardDrinkCalc : public QDialog, public Ui::stdDrinkDialog {
     /*
@@ -17,7 +17,7 @@ class StandardDrinkCalc : public QDialog, public Ui::stdDrinkDialog {
     Ui::stdDrinkDialog ui{};
 
 public:
-    explicit StandardDrinkCalc(QWidget *parent = nullptr, const double std_drink_size = 0.6, const std::string& units = "Imperial");
+    explicit StandardDrinkCalc(double std_drink_size = 0.6, const std::string& units = "Imperial");
 
 private slots:
     void volume_changed();

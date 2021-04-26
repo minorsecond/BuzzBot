@@ -5,7 +5,7 @@
 #ifndef BEERTABS_USERSETTINGS_H
 #define BEERTABS_USERSETTINGS_H
 
-#include "ui_user_settings.h"
+#include "../ui/ui_user_settings.h"
 #include "mainwindow.h"
 
 class UserSettings : public QDialog, public Ui::userSettingsDialog {
@@ -17,7 +17,7 @@ class UserSettings : public QDialog, public Ui::userSettingsDialog {
     Ui::userSettingsDialog ui{};
 
 public:
-    explicit UserSettings(QWidget *parent, const Options &options, const std::map<std::string, double>& country_info);
+    explicit UserSettings(const Options &options, const std::map<std::string, double>& country_info);
     std::string get_sex();
     std::string get_weekday_start();
     std::string get_date_calculation_method();
@@ -26,7 +26,7 @@ public:
     std::string get_units();
     double get_std_drink_size();
     std::string get_std_drink_country();
-    int populate_country_cbox(const std::map<std::string, double>& country_info, const Options& options);
+    int populate_country_cbox(const std::map<std::string, double>& country_info);
     void set_std_drink_input_states(const Options& options);
     void set_limit_standard_states(const Options& options);
     void set_day_of_week_setting_state(const Options& options);
@@ -35,7 +35,7 @@ public:
 private slots:
     void changed_limit_setting();
     void changed_date_calc();
-    void clicked_clear_data();
+    static void clicked_clear_data();
     void update_std_drink_size_label();
     void std_drink_country_changed();
 };
