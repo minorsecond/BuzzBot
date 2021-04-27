@@ -86,7 +86,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
      */
 
     auto *ibu_plot = new QCustomPlot(parent);
-    ibu_plot->resize(parent->width(), parent->height());
+    ibu_plot->resize(parent->width(), parent->height() / 4);
     QVector<double> ibus(ibu_counts.size());
     QVector<double> counts(ibu_counts.size());
 
