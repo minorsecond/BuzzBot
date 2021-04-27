@@ -125,9 +125,16 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     double perc_min = *std::min_element(percentages.begin(), percentages.end());
     double perc_max = *std::max_element(percentages.begin(), percentages.end());
 
+    // Graph style
+    QPen drawPen;
+    drawPen.setColor(Qt::black);
+    drawPen.setStyle(Qt::PenStyle::SolidLine);
+    drawPen.setWidth(2);
+
     // Create the IBU graph
     ibu_plot->addGraph();
     ibu_plot->graph(0)->setData(ibus, percentages);
+    ibu_plot->graph()->setPen(drawPen);
     ibu_plot->xAxis->setLabel("IBU");
     ibu_plot->yAxis->setLabel("%");
     ibu_plot->xAxis->setRange(ibu_min, ibu_max);
