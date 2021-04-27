@@ -13,10 +13,17 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks) {
 
     ui.setupUi(this);
     this->setWindowTitle("Alcohol Habits");
+
+    //Plot the IBU plot
     std::vector ibus = Graphing::get_beer_ibus(all_drinks);
     std::map<double, int> ibu_counts = Graphing::count_values_in_vect(ibus);
     auto ibu_plot = Graphing::plot_ibus(ibu_counts, this);
     ibu_plot->show();
+
+    // Plot the ABV plot
+    QVector<QCPGraphData> time_data = time_data_aggregator(all_drinks);
+    auto abv_plot = Graphing::plot_abvs(time_data, this);
+    abv_plot->show();
 }
 
 std::vector<double> Graphing::get_beer_ibus(const std::vector<Drink>& all_drinks) {
@@ -142,4 +149,128 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     ibu_plot->replot();
 
     return ibu_plot;
+}
+
+QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &all_drinks) {
+    /*
+     * Creates a QVector of QCPGraphData from a vector of Drinks.
+     * @param all_drinks: a vector of Drinks.
+     */
+
+    std::map<int, double> date_std_drinks;
+    int date_tmp {0};
+    double std_drinks {0.0};
+
+    // Sort by date
+    //std::sort(all_drinks.begin(), all_drinks.end(), compare_by_date);
+
+    for (auto & all_drink : all_drinks) {
+        date_tmp = parse_date(all_drink.date);
+        std_drinks = (all_drink._size*all_drink.abv) / 0.6;  // TODO Change this to use user setting
+        if (date_std_drinks.find(date_tmp) != date_std_drinks.end()) {
+            // Date not in date_std_drinks
+            date_std_drinks[date_tmp] = std_drinks;
+        } else {
+            // Date already processed
+            auto it = date_std_drinks.find(date_tmp);
+            it->second += std_drinks;
+        }
+    }
+
+    // Create the QVectof of QCPGraphData objects
+    QVector<QCPGraphData> time_data(date_std_drinks.size());
+    auto it = date_std_drinks.begin();
+    int it_value {0};
+    for (it = date_std_drinks.begin(); it != date_std_drinks.end(); it++) {
+        time_data[it_value].key = it->first;
+        time_data[it_value].value = it->second;
+        it_value += 1;
+    }
+
+    return time_data;
+}
+
+bool Graphing::compare_by_date(const Drink &a, const Drink &b) {
+    /*
+     * Compares dates between two drinks.
+     * @return: True if drink a is earlier than drink b. Else, false.
+     */
+
+    int date_a = parse_date(a.date);
+    int date_b = parse_date(b.date);
+
+    return date_a < date_b;
+}
+
+int Graphing::parse_date(const std::string &date) {
+    /*
+     * Convert date string to integer date.
+     * @param date: A date in the format YYYY-MM-DD
+     * @return: an integer in the format YYYYMMDD
+     */
+
+    int month {0};
+    int day {0};
+    int year {0};
+    struct tm tm{};
+
+    char date_array[11];
+    strcpy(date_array, date.c_str());
+
+    strptime(date_array, "%Y-%m-%d", &tm);
+    year = tm.tm_year + 1900;
+    month = tm.tm_mon + 1;
+    day = tm.tm_mday;
+
+    std::string const date_string = std::to_string(year) + std::to_string(month) + std::to_string(day);
+    int const date_int = std::stoi(date_string);
+
+    return date_int;
+}
+
+QCustomPlot *Graphing::plot_abvs(const Storage storage, QDialog *parent) {
+    /*
+     * Plot the ABV over time graph.
+     * @param time_data: A QVector of QCPGraphData objects.
+     */
+
+    auto *abv_plot = new QCustomPlot(parent);
+    auto aggregated_data = storage.group
+
+    // Get min and max values
+    int min_year = std::numeric_limits<int>::max(); // Everything is <= this
+    int max_year = std::numeric_limits<int>::min(); // Everything is >= this
+    double min_drinks = std::numeric_limits<int>::max();
+    double max_drinks = std::numeric_limits<int>::min();
+    for (auto data : time_data) {
+        int year = data.key;
+        double std_drinks = data.value;
+        if (year < min_year) {
+            min_year = year;
+        }
+
+        if (year > max_year) {
+            max_year = year;
+        }
+
+        if (std_drinks < min_drinks) {
+            min_drinks = std_drinks;
+        }
+
+        if (std_drinks > max_drinks) {
+            max_drinks = std_drinks;
+        }
+    }
+
+    // Create the ABV graph
+    abv_plot->addGraph();
+    abv_plot->graph(0)->data()->set(time_data);
+    abv_plot->xAxis->setLabel("Date");
+    abv_plot->yAxis->setLabel("ABV Value");
+    abv_plot->xAxis->setRange(min_year, max_year);
+    abv_plot->yAxis->setRange(min_drinks, max_drinks);
+    abv_plot->resize(parent->width(), parent->height() / 4);
+    abv_plot->replot();
+
+    return abv_plot;
 }
