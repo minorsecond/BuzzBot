@@ -113,9 +113,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     for (auto const& [key, val] : ibu_counts) {
         ibus[i] = key;
         //counts[i] = val;
-        double perc = ((double)val / total_drinks) * 100;
-        percentages[i] = perc;
-        std::cout << perc << std::endl;
+        percentages[i] = ((double)val / total_drinks) * 100;
         i++;
     }
 
