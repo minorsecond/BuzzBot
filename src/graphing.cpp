@@ -87,6 +87,14 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
 
     auto *ibu_plot = new QCustomPlot(parent);
     ibu_plot->resize(parent->width(), parent->height() / 4);
+
+    // Add title
+    // add title layout element:
+    ibu_plot->plotLayout()->insertRow(0);
+    ibu_plot->plotLayout()->addElement(0, 0,
+                                       new QCPTextElement(ibu_plot, "Beer IBU Distribution",
+                                                          QFont(".AppleSystemUIFont", 12, QFont::Bold)));
+
     QVector<double> ibus(ibu_counts.size());
     QVector<double> counts(ibu_counts.size());
 
