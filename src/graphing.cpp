@@ -4,6 +4,7 @@
 
 #include "graphing.h"
 #include "include/qcustomplot.h"
+#include <iostream>
 
 Graphing::Graphing(const std::vector<Drink>& all_drinks) {
     /*
@@ -29,7 +30,7 @@ std::vector<double> Graphing::get_beer_ibus(const std::vector<Drink>& all_drinks
 
     for (const auto& drink : all_drinks) {
         double ibu = drink.ibu;
-        if (ibu > 0)
+        if (ibu > 0)  // Exclude non-beer drinks
         ibu_values.push_back(ibu);
     }
 
@@ -93,32 +94,46 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     ibu_plot->plotLayout()->insertRow(0);
     ibu_plot->plotLayout()->addElement(0, 0,
                                        new QCPTextElement(ibu_plot, "Beer IBU Distribution",
-                                                          QFont(".AppleSystemUIFont", 12, QFont::Bold)));
+                                                          QFont(".AppleSystemUIFont", 12,
+                                                                QFont::Bold)));
 
     QVector<double> ibus(ibu_counts.size());
-    QVector<double> counts(ibu_counts.size());
+    //QVector<double> counts(ibu_counts.size());
+    QVector<double> percentages(ibu_counts.size());
+    double total_drinks {0};
 
     // Build vectors
+
+    // Get total count of drinks
+    for (auto const& [key, val] : ibu_counts) {
+        total_drinks += val;
+    }
+
     int i = 0;
     for (auto const& [key, val] : ibu_counts) {
         ibus[i] = key;
-        counts[i] = val;
+        //counts[i] = val;
+        double perc = ((double)val / total_drinks) * 100;
+        percentages[i] = perc;
+        std::cout << perc << std::endl;
         i++;
     }
 
     // Get min/max values for axes
     double ibu_min = *std::min_element(ibus.begin(), ibus.end());
     double ibu_max = *std::max_element(ibus.begin(), ibus.end());
-    double count_min = *std::min_element(counts.begin(), counts.end());
-    double count_max = *std::max_element(counts.begin(), counts.end());
+    //double count_min = *std::min_element(counts.begin(), counts.end());
+    //double count_max = *std::max_element(counts.begin(), counts.end());
+    double perc_min = *std::min_element(percentages.begin(), percentages.end());
+    double perc_max = *std::max_element(percentages.begin(), percentages.end());
 
     // Create the IBU graph
     ibu_plot->addGraph();
-    ibu_plot->graph(0)->setData(ibus, counts);
+    ibu_plot->graph(0)->setData(ibus, percentages);
     ibu_plot->xAxis->setLabel("IBU");
-    ibu_plot->yAxis->setLabel("Count");
+    ibu_plot->yAxis->setLabel("%");
     ibu_plot->xAxis->setRange(ibu_min, ibu_max);
-    ibu_plot->yAxis->setRange(count_min, count_max);
+    ibu_plot->yAxis->setRange(perc_min, perc_max);
     ibu_plot->replot();
 
     return ibu_plot;
