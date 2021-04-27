@@ -143,7 +143,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     ibu_plot->graph(0)->setData(ibus, percentages);
     ibu_plot->graph()->setPen(drawPen);
     ibu_plot->xAxis->setLabel("IBU");
-    ibu_plot->yAxis->setLabel("%");
+    ibu_plot->yAxis->setLabel("% of All Drinks");
     ibu_plot->xAxis->setRange(ibu_min, ibu_max);
     ibu_plot->yAxis->setRange(perc_min, perc_max);
     ibu_plot->replot();

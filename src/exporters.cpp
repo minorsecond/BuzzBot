@@ -3,6 +3,7 @@
 //
 
 #include "exporters.h"
+#include "calculate.h"
 #include <fstream>
 
 /*
@@ -12,7 +13,7 @@
  *
 */
 
-void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path) {
+void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path, const std::string& units) {
     /*
      * Creates a CSV file containing the current DB contents.
      * @param drinks: A vector of Drinks.
@@ -30,7 +31,11 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
     output_csv << "Vintage,";
     output_csv << "ABV,";
     output_csv << "IBU,";
-    output_csv << "Size,";
+    if (units == "Metric") {
+        output_csv << "Size (ml),";
+    } else {
+        output_csv << "Size (oz),";
+    }
     output_csv << "Rating,";
     output_csv << "Notes,";
     output_csv << "Alcohol Type,";
@@ -47,6 +52,10 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
         std::string drink_producer = '"' + drink.producer + '"';
         std::string drink_notes = '"' + drink.notes + '"';
 
+        // Convert size to ml if metric option is selected
+        std::string size = (units == "Metric") ? std::to_string(Calculate::oz_to_ml(drink._size)) :
+                std::to_string(drink._size);
+
         output_csv << drink.date + ",";
         output_csv << drink_name + ",";
         output_csv << drink_type + ",";
@@ -55,7 +64,7 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
         output_csv << vintage + ",";
         output_csv << std::to_string(drink.abv) + ",";
         output_csv << ibu + ",";
-        output_csv << std::to_string(drink._size) + ",";
+        output_csv << size + ",";
         output_csv << std::to_string(drink.rating) + ",";
         output_csv << drink_notes + ",";
         output_csv << drink.alcohol_type + ",";
