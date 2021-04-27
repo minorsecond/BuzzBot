@@ -10,12 +10,12 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks) {
      * Main graphing window.
      */
 
+    ui.setupUi(this);
+    this->setWindowTitle("Alcohol Habits");
     std::vector ibus = Graphing::get_beer_ibus(all_drinks);
     std::map<double, int> ibu_counts = Graphing::count_values_in_vect(ibus);
     auto ibu_plot = Graphing::plot_ibus(ibu_counts, this);
     ibu_plot->show();
-
-    ui.setupUi(this);
 }
 
 std::vector<double> Graphing::get_beer_ibus(const std::vector<Drink>& all_drinks) {
@@ -86,6 +86,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
      */
 
     auto *ibu_plot = new QCustomPlot(parent);
+    ibu_plot->resize(parent->width(), parent->height());
     QVector<double> ibus(ibu_counts.size());
     QVector<double> counts(ibu_counts.size());
 
