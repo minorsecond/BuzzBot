@@ -331,7 +331,7 @@ void MainWindow::open_export_dialog() {
     QString filepath_qstring = QFileDialog::getSaveFileName(this, "Save File", preferred_path, filter, &filter);
 
     std::vector<Drink> all_drinks = storage.get_all<Drink>();
-    exporters::to_csv(all_drinks, filepath_qstring.toStdString());
+    exporters::to_csv(all_drinks, filepath_qstring.toStdString(), options.units);
 }
 
 void MainWindow::open_user_settings() {
