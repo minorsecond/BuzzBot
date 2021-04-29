@@ -169,7 +169,7 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
     for (auto & all_drink : all_drinks) {
         std::string date = all_drink.date;
         date_tmp = parse_date(date);
-        std_drinks = (all_drink._size*all_drink.abv) / 0.6;  // TODO Change this to use user setting
+        std_drinks = (all_drink._size * (all_drink.abv/100)) / 0.6;  // TODO Change this to use user setting
         if (date_std_drinks.find(date_tmp) == date_std_drinks.end()) {
             // Date not in date_std_drinks
             date_std_drinks[date_tmp] = std_drinks;
@@ -269,9 +269,8 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, QDialog
     drawPen.setWidth(2);
 
     QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
-    dateTicker->setDateTimeFormat("d. MMMM\nyyyy");
+    dateTicker->setDateTimeFormat("MMMM\nyyyy");
     dateTicker->setTickCount(5);
-    dateTicker->
     dateTicker->setTickStepStrategy(QCPAxisTickerDateTime::tssMeetTickCount);
     abv_plot->xAxis->setTicker(dateTicker);
     abv_plot->addGraph();
