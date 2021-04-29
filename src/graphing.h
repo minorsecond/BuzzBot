@@ -26,8 +26,8 @@ public:
     static QCustomPlot * plot_ibus(const std::map<double, int>& ibu_counts, QDialog *parent = nullptr);
     static QVector<QCPGraphData> time_data_aggregator(const std::vector<Drink>& all_drinks);
     static bool compare_by_date(const Drink &a, const Drink &b);
-    static int parse_date(const std::string &date);
-    static QCustomPlot * plot_abvs(const Storage storage, QDialog *parent);
+    static int parse_date(std::string &date);
+    static QCustomPlot * plot_abvs(const QVector<QCPGraphData>& time_data, QDialog *parent);
 };
 
 

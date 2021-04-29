@@ -5,6 +5,8 @@
 #include "graphing.h"
 #include "include/qcustomplot.h"
 #include <iostream>
+#include <iomanip>
+#include <chrono>
 
 Graphing::Graphing(const std::vector<Drink>& all_drinks) {
     /*
@@ -165,13 +167,15 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
     //std::sort(all_drinks.begin(), all_drinks.end(), compare_by_date);
 
     for (auto & all_drink : all_drinks) {
-        date_tmp = parse_date(all_drink.date);
+        std::string date = all_drink.date;
+        date_tmp = parse_date(date);
         std_drinks = (all_drink._size*all_drink.abv) / 0.6;  // TODO Change this to use user setting
-        if (date_std_drinks.find(date_tmp) != date_std_drinks.end()) {
+        if (date_std_drinks.find(date_tmp) == date_std_drinks.end()) {
             // Date not in date_std_drinks
             date_std_drinks[date_tmp] = std_drinks;
         } else {
             // Date already processed
+            std::cout << "Date already processed" << std::endl;
             auto it = date_std_drinks.find(date_tmp);
             it->second += std_drinks;
         }
@@ -196,46 +200,41 @@ bool Graphing::compare_by_date(const Drink &a, const Drink &b) {
      * @return: True if drink a is earlier than drink b. Else, false.
      */
 
-    int date_a = parse_date(a.date);
-    int date_b = parse_date(b.date);
+    std::string date_a_cpy = a.date;
+    std::string date_b_cpy = b.date;
+
+    int date_a = parse_date(date_a_cpy);
+    int date_b = parse_date(date_b_cpy);
 
     return date_a < date_b;
 }
 
-int Graphing::parse_date(const std::string &date) {
+int Graphing::parse_date(std::string &date) {
     /*
      * Convert date string to integer date.
      * @param date: A date in the format YYYY-MM-DD
      * @return: an integer in the format YYYYMMDD
      */
 
-    int month {0};
-    int day {0};
-    int year {0};
-    struct tm tm{};
+    std::tm t = {};
+    std::stringstream date_str;
+    date_str.str(date);
+    std::stringstream new_date;
 
-    char date_array[11];
-    strcpy(date_array, date.c_str());
+    date_str >> std::get_time(&t, "%Y-%m-%d");
+    std::put_time(&t, "%c");
+    auto timet = (int)std::mktime(&t);
 
-    strptime(date_array, "%Y-%m-%d", &tm);
-    year = tm.tm_year + 1900;
-    month = tm.tm_mon + 1;
-    day = tm.tm_mday;
-
-    std::string const date_string = std::to_string(year) + std::to_string(month) + std::to_string(day);
-    int const date_int = std::stoi(date_string);
-
-    return date_int;
+    return timet;
 }
 
-QCustomPlot *Graphing::plot_abvs(const Storage storage, QDialog *parent) {
+QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, QDialog *parent) {
     /*
      * Plot the ABV over time graph.
      * @param time_data: A QVector of QCPGraphData objects.
      */
 
     auto *abv_plot = new QCustomPlot(parent);
-    auto aggregated_data = storage.group
 
     // Get min and max values
     int min_year = std::numeric_limits<int>::max(); // Everything is <= this
@@ -262,7 +261,13 @@ QCustomPlot *Graphing::plot_abvs(const Storage storage, QDialog *parent) {
         }
     }
 
+    std::cout << max_year << std::endl;
+
     // Create the ABV graph
+
+    QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
+    dateTicker->setDateTimeFormat("d. MMMM\nyyyy");
+    abv_plot->xAxis->setTicker(dateTicker);
     abv_plot->addGraph();
     abv_plot->graph(0)->data()->set(time_data);
     abv_plot->xAxis->setLabel("Date");
