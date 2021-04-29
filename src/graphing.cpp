@@ -175,7 +175,6 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
             date_std_drinks[date_tmp] = std_drinks;
         } else {
             // Date already processed
-            std::cout << "Date already processed" << std::endl;
             auto it = date_std_drinks.find(date_tmp);
             it->second += std_drinks;
         }
@@ -261,20 +260,29 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, QDialog
         }
     }
 
-    std::cout << max_year << std::endl;
-
     // Create the ABV graph
+
+    // Graph style
+    QPen drawPen;
+    drawPen.setColor(Qt::black);
+    drawPen.setStyle(Qt::PenStyle::SolidLine);
+    drawPen.setWidth(2);
 
     QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
     dateTicker->setDateTimeFormat("d. MMMM\nyyyy");
+    dateTicker->setTickCount(5);
+    dateTicker->
+    dateTicker->setTickStepStrategy(QCPAxisTickerDateTime::tssMeetTickCount);
     abv_plot->xAxis->setTicker(dateTicker);
     abv_plot->addGraph();
+    abv_plot->graph()->setPen(drawPen);
     abv_plot->graph(0)->data()->set(time_data);
     abv_plot->xAxis->setLabel("Date");
-    abv_plot->yAxis->setLabel("ABV Value");
+    abv_plot->yAxis->setLabel("Std. Drinks Consumed");
     abv_plot->xAxis->setRange(min_year, max_year);
     abv_plot->yAxis->setRange(min_drinks, max_drinks);
     abv_plot->resize(parent->width(), parent->height() / 4);
+    abv_plot->graph(0)->rescaleAxes();
     abv_plot->replot();
 
     return abv_plot;
