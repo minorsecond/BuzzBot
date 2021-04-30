@@ -160,13 +160,14 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
      */
 
     std::map<int, double> date_std_drinks;
+    std::vector<Drink> drinks = all_drinks;
     int date_tmp {0};
     double std_drinks {0.0};
 
     // Sort by date
-    //std::sort(all_drinks.begin(), all_drinks.end(), compare_by_date);
+    std::sort(drinks.begin(), drinks.end(), compare_by_date);
 
-    for (auto & all_drink : all_drinks) {
+    for (auto & all_drink : drinks) {
         std::string date = all_drink.date;
         date_tmp = parse_date(date);
         std_drinks = (all_drink._size * (all_drink.abv/100)) / 0.6;  // TODO Change this to use user setting
