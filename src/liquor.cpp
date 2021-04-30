@@ -4,8 +4,8 @@
 
 #include <utility>
 #include "mainwindow.h"
+#include "calculate.h"
 
-// LCOV_EXCL_START
 void MainWindow::update_liquor_fields() {
     /*
      * Read rows in the DB and populate the distiller, type, subtype, and name dropdowns with unique values.
@@ -14,7 +14,8 @@ void MainWindow::update_liquor_fields() {
     std::set<QString> distilleries;
     std::set<QString> types;
     std::set<QString> subtypes;
-    std::set<QString> names;
+    std::vector<std::string> names_tmp;
+    std::set<std::string> names;
 
     std::vector<Drink> all_liquor = Database::filter("Alcohol Type", "Liquor", storage);
 
@@ -37,7 +38,7 @@ void MainWindow::update_liquor_fields() {
         QString distiller_name = QString::fromStdString(liquor.producer);
         QString liquor_type = QString::fromStdString(liquor.type);
         QString liquor_subtype = QString::fromStdString(liquor.subtype);
-        QString liquor_name = QString::fromStdString(liquor.name);
+        std::string liquor_name = liquor.name;
 
         distilleries.insert(distiller_name);
         types.insert(liquor_type);
@@ -64,15 +65,23 @@ void MainWindow::update_liquor_fields() {
     }
 
     for (const auto& name : names) {
-        if (!name.isEmpty()) {
-            ui->liquorNameInput->addItem(name);
+        if (!name.empty()) {
+            if (std::find(names_tmp.begin(), names_tmp.end(), name) == names_tmp.end())
+                names_tmp.push_back(name);
         }
+    }
+
+    std::sort(names_tmp.begin(), names_tmp.end(), Calculate::compare_strings);
+
+    for (const auto& name : names_tmp) {
+        QString name_q = QString::fromStdString(name);
+        ui->liquorNameInput->addItem(name_q);
     }
 
     // Rest to first name in field
     ui->liquorNameInput->setCurrentIndex(0);
     update_liquor_types_producers();
-    std::string liquor_notes_text = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), "Liquor");
+    std::string liquor_notes_text = get_latest_notes(ui->liquorNameInput->currentText().toStdString());
     ui->liquorNotesInput->setText(QString::fromStdString(liquor_notes_text));
 }
 
@@ -82,7 +91,7 @@ void MainWindow::populate_liquor_fields(const Drink& drink_at_row) {
      */
 
     QDate date = format_date_for_input(drink_at_row);
-    std::string notes = get_latest_notes(drink_at_row.name, drink_at_row.alcohol_type);
+    std::string notes = get_latest_notes(drink_at_row.name);
     ui->liquorDateInput->setDate(date);
     ui->liquorNameInput->setCurrentText(drink_at_row.name.c_str());
     ui->liquorTypeInput->setCurrentText(drink_at_row.type.c_str());
@@ -95,88 +104,6 @@ void MainWindow::populate_liquor_fields(const Drink& drink_at_row) {
 
     // Switch to the liquor tab
     ui->tabWidget->setCurrentIndex(1);
-}
-
-void MainWindow::update_liquor_names_producers() {
-    /*
-     * Update the names and distillery fields of the liquor tab when the type changes.
-     */
-
-    // TODO: Remove this in future if necessary
-
-    std::string alcohol_type = get_current_tab();
-    std::set<QString> drink_names;
-    std::set<QString> producer_names;
-
-    std::string input_type = ui->liquorTypeInput->currentText().toStdString();
-    std::vector<Drink> selected_drinks = Database::get_beers_by_type(storage, input_type);
-
-    // This fixes crashes when changing with rows selected.
-    QSignalBlocker name_input_signal_blocker(ui->liquorNameInput);
-    QSignalBlocker brewery_input_signal_blocker(ui->liquorDistillerInput);
-
-    ui->liquorAbvInput->setValue(0.0);
-    ui->liquorSizeInput->setValue(0);
-    ui->liquorRatingInput->setValue(0);
-    //ui->liquorNameInput->clear();
-    ui->liquorDistillerInput->clear();
-
-    for (const auto& selected_drink : selected_drinks) {
-        drink_names.insert(QString::fromStdString(selected_drink.name));
-        producer_names.insert(QString::fromStdString(selected_drink.producer));
-    }
-
-    for (const auto& distillery : producer_names) {
-        ui->liquorDistillerInput->addItem(distillery);
-    }
-
-    //for (const auto& drink_name : drink_names) {
-    //    ui->liquorNameInput->addItem(drink_name);
-    //}
-}
-
-void MainWindow::update_liquor_names_types() {
-    /*
-     * Update the name and type on the liquor tab when the distillery changes.
-     */
-
-    // TODO: Remove this in future if necessary
-
-    std::string input_distillery = ui->liquorDistillerInput->currentText().toStdString();
-    std::vector<Drink> selected_drinks = Database::get_beers_by_brewery(storage, input_distillery);
-    std::set<QString> liquor_names;
-    std::set<QString> types;
-    std::set<QString> subtypes;
-
-    // This fixes crashes when changing with rows selected.
-    QSignalBlocker name_input_signal_blocker(ui->liquorNameInput);
-    QSignalBlocker type_input_signal_blocker(ui->liquorTypeInput);
-    QSignalBlocker subtype_input_signal_blocker(ui->liquorSubtypeInput);
-
-    ui->liquorAbvInput->setValue(0.0);
-    ui->liquorSizeInput->setValue(0);
-    ui->liquorRatingInput->setValue(0);
-    //ui->liquorNameInput->clear();
-    ui->liquorTypeInput->clear();
-    ui->liquorSubtypeInput->clear();
-
-    for (const auto& selected_drink : selected_drinks) {
-        liquor_names.insert(QString::fromStdString(selected_drink.name));
-        types.insert(QString::fromStdString(selected_drink.type));
-        subtypes.insert(QString::fromStdString(selected_drink.subtype));
-    }
-
-    //for (const auto& name : liquor_names) {
-    //    ui->liquorNameInput->addItem(name);
-    //}
-
-    for (const auto& liquor_type : types) {
-        ui->liquorTypeInput->addItem(liquor_type);
-    }
-
-    for (const auto& subtype : subtypes) {
-        ui->liquorSubtypeInput->addItem(subtype);
-    }
 }
 
 void MainWindow::update_liquor_types_producers() {
@@ -199,8 +126,12 @@ void MainWindow::update_liquor_types_producers() {
         std::string producer = selected_liquor.producer;
         double abv = selected_liquor.abv;
         double size = selected_liquor._size;
-        int rating = selected_liquor.rating;
 
+        if (options.units == "Metric") {
+            size = Calculate::oz_to_ml(size);
+        }
+
+        int rating = selected_liquor.rating;
         ui->liquorTypeInput->setCurrentText(QString::fromStdString(liquor_type));
         ui->liquorSubtypeInput->setCurrentText(QString::fromStdString(liquor_subtype));
         ui->liquorDistillerInput->setCurrentText(QString::fromStdString(producer));
@@ -209,7 +140,7 @@ void MainWindow::update_liquor_types_producers() {
         ui->liquorRatingInput->setValue(rating);
 
         // Set notes to the notes for liquor in the name input
-        std::string notes = get_latest_notes(ui->liquorNameInput->currentText().toStdString(), get_current_tab());
+        std::string notes = get_latest_notes(ui->liquorNameInput->currentText().toStdString());
         ui->liquorNotesInput->setText(QString::fromStdString(notes));
     }
 }
@@ -223,9 +154,6 @@ Drink MainWindow::get_liquor_attrs_from_fields(std::string alcohol_type) {
 
     std::string drink_date = ui->liquorDateInput->date().toString("yyyy-MM-dd").toStdString();
     drink.date = drink_date;
-    drink.drink_year = ui->liquorDateInput->date().year();  // TODO: Remove this
-    drink.drink_month = ui->liquorDateInput->date().month();  // TODO: Remove this
-    drink.drink_day = ui->liquorDateInput->date().day();  // TODO: Remove this
     drink.name = ui->liquorNameInput->currentText().toStdString();
     drink.type = ui->liquorTypeInput->currentText().toStdString();
     drink.subtype = ui->liquorSubtypeInput->currentText().toStdString();
@@ -240,4 +168,3 @@ Drink MainWindow::get_liquor_attrs_from_fields(std::string alcohol_type) {
 
     return drink;
 }
-// LCOV_EXCL_STOP
