@@ -9,10 +9,7 @@
 
 class exporters {
 public:
-    static void to_csv(const std::vector<Drink>& drinks, const std::string& path);
-
-private:
-    static std::vector<std::string> pad_month_day(int month, int day);
+    static void to_csv(const std::vector<Drink>& drinks, const std::string& path, const std::string& units);
 };
 
 

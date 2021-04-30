@@ -5,7 +5,7 @@
 #ifndef BEERTABS_ABOUT_H
 #define BEERTABS_ABOUT_H
 
-#include "ui_about.h"
+#include "../ui/ui_about.h"
 
 
 class About : public QDialog, public Ui::aboutDialog {
@@ -16,7 +16,7 @@ class About : public QDialog, public Ui::aboutDialog {
     Q_OBJECT
     Ui::aboutDialog ui{};
 public:
-    explicit About(QWidget *parent);
+    explicit About();
 };
 
 #endif //BEERTABS_ABOUT_H

@@ -8,17 +8,14 @@
 struct Drink {
     int id;
     std::string date;
-    int drink_year;  // TODO: Remove this in DB version 4
-    int drink_month;  // TODO: Remove this
-    int drink_day;  // TODO: Remove this
     std::string name;
     std::string type;
     std::string subtype;
     std::string producer;
     double abv;
     double ibu;
-    int size;
-    double _size;  // TODO: Replace size with _size
+    double _size;  // TODO: Rename to size
+    double _rating; // TODO: Replace rating with _rating in future build
     int rating;
     std::string notes;
     int vintage;
@@ -36,18 +33,15 @@ inline auto initStorage(const std::string& file_name) {
                                     sqlite_orm::make_table("beers",
                                                           sqlite_orm::make_column("id", &Drink::id, sqlite_orm::autoincrement(), sqlite_orm::primary_key()),
                                                           sqlite_orm::make_column("date", &Drink::date, sqlite_orm::default_value("2020-01-01")),
-                                                          sqlite_orm::make_column("drink_year", &Drink::drink_year),
-                                                          sqlite_orm::make_column("drink_month", &Drink::drink_month),
-                                                          sqlite_orm::make_column("drink_day", &Drink::drink_day),
                                                           sqlite_orm::make_column("drink_name", &Drink::name),
                                                           sqlite_orm::make_column("drink_type", &Drink::type),
                                                           sqlite_orm::make_column("drink_subtype", &Drink::subtype, sqlite_orm::default_value("")),
                                                           sqlite_orm::make_column("producer", &Drink::producer, sqlite_orm::default_value("")),
                                                           sqlite_orm::make_column("abv", &Drink::abv),
                                                           sqlite_orm::make_column("ibu", &Drink::ibu),
-                                                          sqlite_orm::make_column("size", &Drink::size),
                                                           sqlite_orm::make_column("_size", &Drink::_size, sqlite_orm::default_value(0.0)),
                                                           sqlite_orm::make_column("rating", &Drink::rating),
+                                                          sqlite_orm::make_column("_rating", &Drink::_rating, sqlite_orm::default_value(-1.1)),
                                                           sqlite_orm::make_column("notes", &Drink::notes),
                                                           sqlite_orm::make_column("vintage", &Drink::vintage, sqlite_orm::default_value(-999)),
                                                           sqlite_orm::make_column("alcohol_type", &Drink::alcohol_type, sqlite_orm::default_value("Beer")),
@@ -58,17 +52,17 @@ using Storage = decltype (initStorage(""));
 class Database
 {
 public:
-    static std::vector<Drink> read(const std::string& database_path, Storage storage);
-    static Storage write(Drink beer, Storage storage);
+    static std::vector<Drink> read(Storage storage);
+    static Storage write(Drink drink, Storage storage);
     static void truncate(Storage storage);
     static void delete_row(Storage storage, int row_num);
     static Drink read_row(int row_num, Storage storage);
-    static void update(Storage storage, const Drink& beer);
+    static void update(Storage storage, const Drink& drink);
     static std::vector<Drink> filter(const std::string& filter_type, const std::string& filter_text, Storage storage);
     static void write_db_to_disk(Storage storage);
-    static Drink get_drink_by_name(Storage storage, std::string alcohol_type, std::string beer_name);
-    static std::vector<Drink> get_beers_by_type(Storage storage, std::string beer_type);
-    static std::vector<Drink> get_beers_by_brewery(Storage storage, std::string brewery);
+    static Drink get_drink_by_name(Storage storage, std::string alcohol_type, std::string drink_name);
+    static std::vector<Drink> get_drinks_by_type(Storage storage, std::string drink_type);
+    static std::vector<Drink> get_drinks_by_producer(Storage storage, std::string producer);
     static int get_version(Storage storage);
     static int increment_version(Storage storage, int current_version);
     static std::vector<Drink> sort_by_date_id(std::vector<Drink> drinks);
