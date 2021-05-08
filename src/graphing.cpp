@@ -16,15 +16,20 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks) {
     ui.setupUi(this);
     this->setWindowTitle("Alcohol Habits");
 
+    int window_width = this->width();
+    int window_height = this->height();
+
     //Plot the IBU plot
     std::vector ibus = Graphing::get_beer_ibus(all_drinks);
     std::map<double, int> ibu_counts = Graphing::count_values_in_vect(ibus);
     auto ibu_plot = Graphing::plot_ibus(ibu_counts, this);
+    ibu_plot->setGeometry(0, 0, window_width, window_height/4);
     ibu_plot->show();
 
     // Plot the ABV plot
     QVector<QCPGraphData> time_data = time_data_aggregator(all_drinks);
     auto abv_plot = Graphing::plot_abvs(time_data, this);
+    abv_plot->setGeometry(0, (window_height/4+2), window_width, window_height/4);
     abv_plot->show();
 }
 
