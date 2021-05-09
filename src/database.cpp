@@ -106,6 +106,7 @@ std::string Database::get_latest_notes(Storage storage, const std::string& name,
      * @return notes: A string containing notes entered for the name and alcohol type.
      */
 
+    // TODO: Get notes based on primary key
     std::vector<Drink> drinks = storage.get_all<Drink>(where(c(&Drink::name) == name && c(&Drink::alcohol_type) == alcohol_type));
     std::string notes;
     int temp_id = 0;
