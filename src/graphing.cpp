@@ -7,6 +7,7 @@
 #include <iostream>
 #include <iomanip>
 #include <chrono>
+#include <time.h>
 
 Graphing::Graphing(const std::vector<Drink>& all_drinks) {
     /*
@@ -164,6 +165,11 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
      * @param all_drinks: a vector of Drinks.
      */
 
+    // TODO: Make this aggregate by week
+    // Get week number for date
+    // Then, get the date for that week number
+    // Finally, aggregate all drinks that have that date
+
     std::map<int, double> date_std_drinks;
     std::vector<Drink> drinks = all_drinks;
     int date_tmp {0};
@@ -291,4 +297,20 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, QDialog
     abv_plot->replot();
 
     return abv_plot;
+}
+
+int Graphing::week_number(const int date) {
+    /*
+     * Get the week number for a date
+     * @param date: An integer of date, e.g. 20210405
+     */
+
+    constexpr int DAYS_PER_WEEK {7};
+    struct tm tm{};
+    std::strptime(std::to_string(date), "%Y%m%d", &tm);
+
+    const int wday = tm.tm_wday;
+    const int delta = wday ? wday - 1 : DAYS_PER_WEEK - 1;
+
+    return (tm.tm_yday + DAYS_PER_WEEK - delta) / DAYS_PER_WEEK;
 }
