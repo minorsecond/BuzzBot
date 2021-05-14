@@ -28,6 +28,7 @@ public:
     static bool compare_by_date(const Drink &a, const Drink &b);
     static int parse_date(std::string &date);
     static QCustomPlot * plot_abvs(const QVector<QCPGraphData>& time_data, QDialog *parent);
+    static int week_number(const int date);
 };
 
 
