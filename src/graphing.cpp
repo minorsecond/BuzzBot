@@ -147,6 +147,8 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     drawPen.setStyle(Qt::PenStyle::SolidLine);
     drawPen.setWidth(2);
 
+    QColor color(20+200/4.0*2,70*(1.6-2/4.0), 150, 150);
+
     // Create the IBU graph
     ibu_plot->addGraph();
     ibu_plot->graph(0)->setData(ibus, percentages);
@@ -155,6 +157,9 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     ibu_plot->yAxis->setLabel("% of All Drinks");
     ibu_plot->xAxis->setRange(ibu_min, ibu_max);
     ibu_plot->yAxis->setRange(perc_min, perc_max);
+    ibu_plot->graph()->setLineStyle(QCPGraph::lsLine);
+    ibu_plot->graph()->setPen(QPen(color.darker(200)));
+    ibu_plot->graph()->setBrush(QBrush(color));
     ibu_plot->replot();
 
     return ibu_plot;
@@ -286,6 +291,8 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, QDialog
     drawPen.setStyle(Qt::PenStyle::SolidLine);
     drawPen.setWidth(2);
 
+    QColor color(20+200/4.0*1,70*(1.6-1/4.0), 150, 150);
+
     QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
     dateTicker->setDateTimeFormat("MMM\nyyyy");
     dateTicker->setTickOrigin(min_year);
@@ -299,6 +306,9 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, QDialog
     abv_plot->yAxis->setRange(min_drinks, max_drinks);
     abv_plot->resize(parent->width(), parent->height() / 4);
     abv_plot->graph(0)->rescaleAxes();
+    abv_plot->graph()->setLineStyle(QCPGraph::lsLine);
+    abv_plot->graph()->setPen(QPen(color.darker(200)));
+    abv_plot->graph()->setBrush(QBrush(color));
     abv_plot->replot();
 
     return abv_plot;
