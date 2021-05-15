@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <chrono>
 #include <time.h>
+#include <algorithm>
 
 Graphing::Graphing(const std::vector<Drink>& all_drinks) {
     /*
@@ -172,22 +173,29 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
 
     std::map<int, double> date_std_drinks;
     std::vector<Drink> drinks = all_drinks;
-    int date_tmp {0};
+    //int date_tmp {0};
     double std_drinks {0.0};
 
     // Sort by date
     std::sort(drinks.begin(), drinks.end(), compare_by_date);
 
     for (auto & all_drink : drinks) {
-        std::string date = all_drink.date;
-        date_tmp = parse_date(date);
+        //date_tmp = parse_date(all_drink.date);
+        std::string date_tmp = all_drink.date;
+        date_tmp.erase(std::remove(date_tmp.begin(), date_tmp.end(), '-'), date_tmp.end());
+
+        std::string week_num = week_number(std::stoi(date_tmp));
+        std::string date_str = std::to_string(date_from_week_num(week_num));
+        int date = parse_date(date_str);
         std_drinks = (all_drink._size * (all_drink.abv/100)) / 0.6;  // TODO Change this to use user setting
-        if (date_std_drinks.find(date_tmp) == date_std_drinks.end()) {
+        if (date_std_drinks.find(date) == date_std_drinks.end()) {
             // Date not in date_std_drinks
-            date_std_drinks[date_tmp] = std_drinks;
+            date_std_drinks[date] = std_drinks;
         } else {
             // Date already processed
-            auto it = date_std_drinks.find(date_tmp);
+            // TODO: Figure out why this isn't being applied per date.
+            // It's simply adding up the total across all dates.
+            auto it = date_std_drinks.find(date);
             it->second += std_drinks;
         }
     }
@@ -223,8 +231,8 @@ bool Graphing::compare_by_date(const Drink &a, const Drink &b) {
 int Graphing::parse_date(std::string &date) {
     /*
      * Convert date string to integer date.
-     * @param date: A date in the format YYYY-MM-DD
-     * @return: an integer in the format YYYYMMDD
+     * @param date: A date in the format YYYYMMDD
+     * @return: an integer in UNIX epoch time
      */
 
     std::tm t = {};
@@ -232,7 +240,7 @@ int Graphing::parse_date(std::string &date) {
     date_str.str(date);
     std::stringstream new_date;
 
-    date_str >> std::get_time(&t, "%Y-%m-%d");
+    date_str >> std::get_time(&t, "%Y%m%d");
     std::put_time(&t, "%c");
     auto timet = (int)std::mktime(&t);
 
@@ -299,18 +307,47 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, QDialog
     return abv_plot;
 }
 
-int Graphing::week_number(const int date) {
+std::string Graphing::week_number(const int date) {
     /*
      * Get the week number for a date
      * @param date: An integer of date, e.g. 20210405
+     * @return: year and week number, e.g. 2021-05
      */
 
     constexpr int DAYS_PER_WEEK {7};
     struct tm tm{};
-    std::strptime(std::to_string(date), "%Y%m%d", &tm);
+    strptime(std::to_string(date).c_str(), "%Y%m%d", &tm);
 
     const int wday = tm.tm_wday;
     const int delta = wday ? wday - 1 : DAYS_PER_WEEK - 1;
 
-    return (tm.tm_yday + DAYS_PER_WEEK - delta) / DAYS_PER_WEEK;
+    int week_num = (tm.tm_yday + DAYS_PER_WEEK - delta) / DAYS_PER_WEEK;
+
+    return std::to_string(date).substr(0, 4) + '-' + std::to_string(week_num);
+}
+
+int Graphing::date_from_week_num(const std::string& week_num) {
+    /*
+     * Calculates the date from a week number.
+     * @param week_num: theweek number to calculate the date for.
+     * @return an integer denoting date, in YYYYMMDD format.
+     */
+
+    struct tm tm{};
+    std::string week_num_tmp = week_num + "-1";
+    char* week_char = new char[week_num_tmp.length() + 1];
+    strcpy(week_char, week_num_tmp.c_str());
+    strptime(week_char, "%Y-%W-%w", &tm);
+
+    std::string year = std::to_string(tm.tm_year +1900);
+    std::string month = std::to_string(tm.tm_mon + 1);
+    std::string day = std::to_string(tm.tm_mday);
+
+    month = (month.length() == 1) ? '0' + month : month; // Zero pad if single digit month
+    day = (day.length() == 1) ? '0' + day : day;  // Zero pad if single digit day
+
+    std::string date_str = year + month + day;
+    int date = std::stoi(date_str);
+
+    return date;
 }
