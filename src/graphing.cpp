@@ -287,9 +287,8 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, QDialog
     drawPen.setWidth(2);
 
     QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
-    dateTicker->setDateTimeFormat("MMMM\nyyyy");
-    dateTicker->setTickCount(5);
-    dateTicker->setTickStepStrategy(QCPAxisTickerDateTime::tssMeetTickCount);
+    dateTicker->setDateTimeFormat("MMM\nyyyy");
+    dateTicker->setTickOrigin(min_year);
     abv_plot->xAxis->setTicker(dateTicker);
     abv_plot->addGraph();
     abv_plot->graph()->setPen(drawPen);
