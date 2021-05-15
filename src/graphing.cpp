@@ -103,7 +103,6 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
      */
 
     auto *ibu_plot = new QCustomPlot(parent);
-    ibu_plot->resize(parent->width(), parent->height() / 4);
 
     // Add title
     // add title layout element:
@@ -253,6 +252,11 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, QDialog
 
     auto *abv_plot = new QCustomPlot(parent);
 
+    abv_plot->plotLayout()->insertRow(0);
+    abv_plot->plotLayout()->addElement(0, 0,
+                                       new QCPTextElement(abv_plot, "Alcohol Consumption Over Time",
+                                                          QFont("sans", 12, QFont::Bold)));
+
     // Get min and max values
     int min_year = std::numeric_limits<int>::max(); // Everything is <= this
     int max_year = std::numeric_limits<int>::min(); // Everything is >= this
@@ -296,10 +300,9 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, QDialog
     abv_plot->graph()->setPen(drawPen);
     abv_plot->graph(0)->data()->set(time_data);
     abv_plot->xAxis->setLabel("Date");
-    abv_plot->yAxis->setLabel("Std. Drinks Consumed");
+    abv_plot->yAxis->setLabel("Std. Drinks");
     abv_plot->xAxis->setRange(min_year, max_year);
     abv_plot->yAxis->setRange(min_drinks, max_drinks);
-    abv_plot->resize(parent->width(), parent->height() / 4);
     abv_plot->graph(0)->rescaleAxes();
     abv_plot->graph()->setLineStyle(QCPGraph::lsLine);
     abv_plot->graph()->setPen(QPen(color.darker(200)));
