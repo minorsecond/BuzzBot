@@ -171,11 +171,6 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
      * @param all_drinks: a vector of Drinks.
      */
 
-    // TODO: Make this aggregate by week
-    // Get week number for date
-    // Then, get the date for that week number
-    // Finally, aggregate all drinks that have that date
-
     std::map<int, double> date_std_drinks;
     std::vector<Drink> drinks = all_drinks;
     //int date_tmp {0};
