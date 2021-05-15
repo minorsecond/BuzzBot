@@ -776,8 +776,8 @@ void MainWindow::open_graphs() {
 
     std::string db_path = Database::path();
     std::vector<Drink> all_drinks = Database::read(storage);
-
-    auto *graphing_window = new Graphing(all_drinks);
+    double std_drink_size = get_std_drink_size();
+    auto *graphing_window = new Graphing(all_drinks, std_drink_size);
     graphing_window->setModal(false);
     graphing_window->show();
 }

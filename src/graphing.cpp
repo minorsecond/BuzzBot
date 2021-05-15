@@ -10,7 +10,7 @@
 #include <time.h>
 #include <algorithm>
 
-Graphing::Graphing(const std::vector<Drink>& all_drinks) {
+Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size) {
     /*
      * Main graphing window.
      */
@@ -29,7 +29,7 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks) {
     ibu_plot->show();
 
     // Plot the ABV plot
-    QVector<QCPGraphData> time_data = time_data_aggregator(all_drinks);
+    QVector<QCPGraphData> time_data = time_data_aggregator(all_drinks, std_drink_size);
     auto abv_plot = Graphing::plot_abvs(time_data, this);
     abv_plot->setGeometry(0, (window_height/4+2), window_width, window_height/4);
     abv_plot->show();
@@ -160,7 +160,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     return ibu_plot;
 }
 
-QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &all_drinks) {
+QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &all_drinks, double std_drink_size) {
     /*
      * Creates a QVector of QCPGraphData from a vector of Drinks.
      * @param all_drinks: a vector of Drinks.
@@ -187,14 +187,12 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
         std::string week_num = week_number(std::stoi(date_tmp));
         std::string date_str = std::to_string(date_from_week_num(week_num));
         int date = parse_date(date_str);
-        std_drinks = (all_drink._size * (all_drink.abv/100)) / 0.6;  // TODO Change this to use user setting
+        std_drinks = (all_drink._size * (all_drink.abv/100)) / std_drink_size;
         if (date_std_drinks.find(date) == date_std_drinks.end()) {
             // Date not in date_std_drinks
             date_std_drinks[date] = std_drinks;
         } else {
             // Date already processed
-            // TODO: Figure out why this isn't being applied per date.
-            // It's simply adding up the total across all dates.
             auto it = date_std_drinks.find(date);
             it->second += std_drinks;
         }
