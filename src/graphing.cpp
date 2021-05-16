@@ -4,6 +4,7 @@
 
 #include "graphing.h"
 #include "include/qcustomplot.h"
+#include "calculate.h"
 #include <iostream>
 #include <iomanip>
 #include <chrono>
@@ -247,16 +248,14 @@ int Graphing::parse_date(std::string &date) {
     return timet;
 }
 
-QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, Options options, QDialog *parent) {
+QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const Options& options, QDialog *parent) {
     /*
      * Plot the ABV over time graph.
      * @param time_data: A QVector of QCPGraphData objects.
      */
 
     auto *abv_plot = new QCustomPlot(parent);
-
-    //int limit = options.weekly_limit;
-    std::string standard = options.limit_standard;
+    int limit = Calculate::weekly_imit(options);
 
     abv_plot->plotLayout()->insertRow(0);
     abv_plot->plotLayout()->addElement(0, 0,
@@ -297,6 +296,12 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, Options
     drawPen.setWidth(2);
 
     QColor color(20+200/4.0*1,70*(1.6-1/4.0), 150, 150);
+
+    // Set up limit line
+    auto* limit_line = new QCPItemStraightLine(abv_plot);
+    limit_line->point1->setCoords(min_year, limit);
+    limit_line->point2->setCoords(max_year, limit);
+    limit_line->setPen(QPen(QColor(255, 0, 0)));
 
     QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
     dateTicker->setDateTimeFormat("MMM\nyyyy");
