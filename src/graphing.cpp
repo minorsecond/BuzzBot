@@ -273,38 +273,6 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
                                        new QCPTextElement(abv_plot, "Alcohol Consumption Over Time",
                                                           QFont("sans", 12, QFont::Bold)));
 
-    // Get min and max values
-    int min_year = std::numeric_limits<int>::max(); // Everything is <= this
-    int max_year = std::numeric_limits<int>::min(); // Everything is >= this
-    double min_drinks = std::numeric_limits<int>::max();
-    double max_drinks = std::numeric_limits<int>::min();
-    for (auto data : time_data) {
-        int year = data.key;
-        double std_drinks = data.value;
-        if (year < min_year) {
-            min_year = year;
-        }
-
-        if (year > max_year) {
-            max_year = year;
-        }
-
-        if (std_drinks < min_drinks) {
-            min_drinks = std_drinks;
-        }
-
-        if (std_drinks > max_drinks) {
-            max_drinks = std_drinks;
-        }
-    }
-
-    // Set min drinks to just below limit line if limit is below min drinks
-    if (limit <= min_drinks) {
-        min_drinks = limit - 3;
-        std::cout << "Limit below minimum drinks consumed. "\
-                     "Resetting graph Y-axis to a min of " << min_drinks << std::endl;
-    }
-
     // Create the ABV graph
 
     // Graph style
@@ -313,29 +281,73 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
     drawPen.setStyle(Qt::PenStyle::SolidLine);
     drawPen.setWidth(2);
 
-    QColor color(20+200/4.0*1,70*(1.6-1/4.0), 150, 150);
+    if (time_data.size() > 1) {
+        // Get min and max values
+        int min_year = std::numeric_limits<int>::max(); // Everything is <= this
+        int max_year = std::numeric_limits<int>::min(); // Everything is >= this
+        double min_drinks = std::numeric_limits<int>::max();
+        double max_drinks = std::numeric_limits<int>::min();
+        for (auto data : time_data) {
+            int year = data.key;
+            double std_drinks = data.value;
+            if (year < min_year) {
+                min_year = year;
+            }
 
-    // Set up limit line
-    auto* limit_line = new QCPItemStraightLine(abv_plot);
-    limit_line->point1->setCoords(min_year, limit);
-    limit_line->point2->setCoords(max_year, limit);
-    limit_line->setPen(QPen(QColor(255, 0, 0)));
+            if (year > max_year) {
+                max_year = year;
+            }
 
-    QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
-    dateTicker->setDateTimeFormat("MMM\nyyyy");
-    dateTicker->setTickOrigin(min_year);
-    abv_plot->xAxis->setTicker(dateTicker);
-    abv_plot->addGraph();
-    abv_plot->graph()->setPen(drawPen);
-    abv_plot->graph(0)->data()->set(time_data);
-    abv_plot->xAxis->setLabel("Date");
-    abv_plot->yAxis->setLabel("Std. Drinks");
-    abv_plot->xAxis->setRange(min_year, max_year);
-    abv_plot->yAxis->setRange(min_drinks, max_drinks);
-    //abv_plot->graph(0)->rescaleAxes();
-    abv_plot->graph()->setLineStyle(QCPGraph::lsLine);
-    abv_plot->graph()->setPen(QPen(color.darker(200)));
-    abv_plot->graph()->setBrush(QBrush(color));
+            if (std_drinks < min_drinks) {
+                min_drinks = std_drinks;
+            }
+
+            if (std_drinks > max_drinks) {
+                max_drinks = std_drinks;
+            }
+        }
+
+        // Set min drinks to just below limit line if limit is below min drinks
+        if (limit <= min_drinks) {
+            min_drinks = limit - 3;
+            std::cout << "Limit below minimum drinks consumed. "\
+                     "Resetting graph Y-axis to a min of " << min_drinks << std::endl;
+        }
+
+        QColor color(20+200/4.0*1,70*(1.6-1/4.0), 150, 150);
+        // Set up limit line
+        auto* limit_line = new QCPItemStraightLine(abv_plot);
+        limit_line->point1->setCoords(min_year, limit);
+        limit_line->point2->setCoords(max_year, limit);
+        limit_line->setPen(QPen(QColor(255, 0, 0)));
+
+        QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
+        dateTicker->setDateTimeFormat("MMM\nyyyy");
+        dateTicker->setTickOrigin(min_year);
+        abv_plot->xAxis->setTicker(dateTicker);
+        abv_plot->addGraph();
+        abv_plot->graph()->setPen(drawPen);
+        abv_plot->graph(0)->data()->set(time_data);
+        abv_plot->xAxis->setLabel("Date");
+        abv_plot->yAxis->setLabel("Std. Drinks");
+        abv_plot->xAxis->setRange(min_year, max_year);
+        abv_plot->yAxis->setRange(min_drinks, max_drinks);
+        //abv_plot->graph(0)->rescaleAxes();
+        abv_plot->graph()->setLineStyle(QCPGraph::lsLine);
+        abv_plot->graph()->setPen(QPen(color.darker(200)));
+        abv_plot->graph()->setBrush(QBrush(color));
+    } else {
+        auto *no_data_label = new QCPItemText(abv_plot);
+        no_data_label->setPositionAlignment(Qt::AlignTop|Qt::AlignHCenter);
+        no_data_label->position->setType(QCPItemPosition::ptAxisRectRatio);
+        no_data_label->position->setCoords(0.5, .5);
+        no_data_label->setText("Not enough data to plot");
+        no_data_label->setPen(QPen(Qt::black));
+        no_data_label->setPadding(QMargins(2, 2, 2, 2));
+        abv_plot->xAxis->setVisible(false);
+        abv_plot->yAxis->setVisible(false);
+    }
+
     abv_plot->replot();
 
     return abv_plot;
