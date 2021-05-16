@@ -22,6 +22,8 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
 
     std::ofstream output_csv(path);
 
+    std::string size_header = (units == "Metric") ? "Size (ml)," : "Size (oz),";
+
     // Create the header
     output_csv << "Date,";
     output_csv << "Name,";
@@ -31,11 +33,7 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
     output_csv << "Vintage,";
     output_csv << "ABV,";
     output_csv << "IBU,";
-    if (units == "Metric") {
-        output_csv << "Size (ml),";
-    } else {
-        output_csv << "Size (oz),";
-    }
+    output_csv << size_header;
     output_csv << "Rating,";
     output_csv << "Notes,";
     output_csv << "Alcohol Type,";

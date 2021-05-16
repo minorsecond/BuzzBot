@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include "database.h"
-#include "../include/date.h"
 #include "../ui/ui_mainwindow.h"
 
 struct Options {
@@ -69,11 +68,13 @@ private:
     void set_input_states();
     Drink get_drink_at_selected_row();
     void clear_fields(const std::string& alcohol_type);
-    [[nodiscard]] date::weekday get_filter_weekday_start() const;
-    std::tuple<date::year_month_day, std::string> get_filter_date();
+    [[nodiscard]] std::chrono::weekday get_filter_weekday_start() const;
+    std::tuple<std::chrono::year_month_day, std::string> get_filter_date();
     void update_std_drinks_today();
-    static std::string format_date(date::year_month_day date);
+    static std::string format_date(std::chrono::year_month_day date);
     static std::string get_local_date();
+    static std::string get_weekday_name(unsigned weekday_number);
+    static std::string zero_pad_string(unsigned integer);
 
     // Std drink sizes are all stored in Oz. Data are all from Wikipedia:
     // https://en.wikipedia.org/wiki/Standard_drink
