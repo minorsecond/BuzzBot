@@ -20,7 +20,7 @@ Q_OBJECT
     Ui::GraphWindow ui{};
 
 public:
-    explicit Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, Options options);
+    explicit Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, const Options& options);
     static std::vector<double> get_beer_ibus(const std::vector<Drink>& all_drinks);
     static std::vector<double> get_drink_abvs(const std::vector<Drink>& all_drinks);
     static std::map<double, int> count_values_in_vect(const std::vector<double>& all_values);
