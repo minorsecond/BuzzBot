@@ -11,17 +11,17 @@ TEST_CASE("IBU Vector Creation", "[Graph Data Compilation]") {
     std::vector<double> expected_values{60.0, 75.0, 60.0};
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12.0, 8.0, 8,
+                "Roughtail Brewing", 8.0, 60.0, 12.0, 8,
                 "Very good hazy IPA.",  -1, "Beer", "2020-01-01 00:00:00", 1};
     Drink mosaic{-1, "2020-09-08", "Mosaic", "IPA", "",
-                 "Community Brewing", 8.4, 75.0, 12.0, 8.0, 8, "",
+                 "Community Brewing", 8.4, 75.0, 12.0, 8, "",
                  -1, "Beer", "2020-01-01 00:00:00", 1};
     Drink etrwo2{-1, "2020-09-10",
                  "Everything Rhymes with Orange", "IPA", "",
-                 "Roughtail Brewing", 8.0, 60.0, 12.0, 8.0, 8, "",
+                 "Roughtail Brewing", 8.0, 60.0, 12.0, 8, "",
                  -1, "Beer", "2020-01-01 00:00:00", 1};
     Drink titos{-1, "2021-04-21", "Tito's Vodka", "Vodka", "", "Tito's",
-                40.0, -1, 2, 9.0, 9, "", -1, "Liquor",
+                40.0, -1, 2, 9, "", -1, "Liquor",
                 "2021-04-21 04:38:00", 1};
 
     all_drinks.push_back(etrwo2);
@@ -39,17 +39,17 @@ TEST_CASE("ABV Vector Creation", "[Graph Data Compilation]") {
     std::vector<double> expected_values{8.0, 8.4, 8.0, 40.0};
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12.0, 8.0, 8,
+                "Roughtail Brewing", 8.0, 60.0, 12.0, 8,
                 "Very good hazy IPA.",  -1, "Beer", "2020-01-01 00:00:00", 1};
     Drink mosaic{-1, "2020-09-08", "Mosaic", "IPA", "",
-                 "Community Brewing", 8.4, 75.0, 12.0, 8.0, 8, "",
+                 "Community Brewing", 8.4, 75.0, 12.0, 8, "",
                  -1, "Beer", "2020-01-01 00:00:00", 1};
     Drink etrwo2{-1, "2020-09-10",
                  "Everything Rhymes with Orange", "IPA", "",
-                 "Roughtail Brewing", 8.0, 60.0, 12.0, 8.0, 8, "",
+                 "Roughtail Brewing", 8.0, 60.0, 12.0, 8, "",
                  -1, "Beer", "2020-01-01 00:00:00", 1};
     Drink titos{-1, "2021-04-21", "Tito's Vodka", "Vodka", "", "Tito's",
-                40.0, -1, 2, 9.0, 9, "", -1, "Liquor",
+                40.0, -1, 2, 9, "", -1, "Liquor",
                 "2021-04-21 04:38:00", 1};
 
     all_drinks.push_back(etrwo2);
