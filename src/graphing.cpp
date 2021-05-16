@@ -10,7 +10,7 @@
 #include <time.h>
 #include <algorithm>
 
-Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size) {
+Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, Options options) {
     /*
      * Main graphing window.
      */
@@ -33,7 +33,7 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size) 
 
     // Plot the ABV plot
     QVector<QCPGraphData> time_data = time_data_aggregator(all_drinks, std_drink_size);
-    auto abv_plot = Graphing::plot_abvs(time_data, this);
+    auto abv_plot = Graphing::plot_abvs(time_data, options, this);
     abv_plot->setGeometry(0, (window_height/2+2), window_width, window_height/2);
     abv_plot->show();
 }
@@ -247,13 +247,16 @@ int Graphing::parse_date(std::string &date) {
     return timet;
 }
 
-QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, QDialog *parent) {
+QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, Options options, QDialog *parent) {
     /*
      * Plot the ABV over time graph.
      * @param time_data: A QVector of QCPGraphData objects.
      */
 
     auto *abv_plot = new QCustomPlot(parent);
+
+    //int limit = options.weekly_limit;
+    std::string standard = options.limit_standard;
 
     abv_plot->plotLayout()->insertRow(0);
     abv_plot->plotLayout()->addElement(0, 0,
