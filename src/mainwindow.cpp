@@ -378,7 +378,7 @@ void MainWindow::open_user_settings() {
         options.std_drink_size = std_drink_size;
     }
 
-    std::cout << std_drink_size << std::endl;
+    std::cout << "Custom standard drink size: " << std_drink_size << std::endl;
 }
 
 std::string MainWindow::settings_path() {
@@ -776,7 +776,7 @@ void MainWindow::open_graphs() {
 
     std::string db_path = Database::path();
     std::vector<Drink> all_drinks = Database::read(storage);
-    double std_drink_size = get_std_drink_size();
+    double std_drink_size = get_std_drink_size_from_options();
     auto *graphing_window = new Graphing(all_drinks, std_drink_size, options);
     graphing_window->setModal(false);
     graphing_window->show();
