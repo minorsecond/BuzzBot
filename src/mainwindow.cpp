@@ -355,11 +355,6 @@ void MainWindow::open_user_settings() {
         update_stat_panel();
     }
 
-    program_options(true);
-    update_table();
-    update_stat_panel();
-    update_types_and_producers();
-
     if (options.units == "Metric") {
         ui->beerSizeLabel->setText("Size (ml)");
         ui->liquorSizeLabel->setText("Size (ml)");
@@ -372,6 +367,10 @@ void MainWindow::open_user_settings() {
         options.std_drink_size = std_drink_size;
     }
 
+    program_options(true);
+    update_table();
+    update_stat_panel();
+    update_types_and_producers();
     std::cout << std_drink_size << std::endl;
 }
 
