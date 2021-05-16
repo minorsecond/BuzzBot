@@ -11,7 +11,7 @@
 #include <time.h>
 #include <algorithm>
 
-Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, Options options) {
+Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, const Options& options) {
     /*
      * Main graphing window.
      */
