@@ -30,6 +30,7 @@ void MainWindow::update_stat_panel() {
 
     std::cout << "The results contain: " << drinks_this_week.size() << " drinks." << std::endl;
 
+    std::cout << "Using std drink size of " << options.std_drink_size << " in stats calculation" << std::endl;
     for (const auto& drink : drinks_this_week) {
         if (options.std_drink_country == "Custom") {
             standard_drinks += Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size));
