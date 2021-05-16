@@ -77,7 +77,7 @@ private:
     static std::string get_weekday_name(unsigned weekday_number);
     static std::string zero_pad_string(unsigned integer);
     void open_graphs();
-    double get_std_drink_size();
+    double get_std_drink_size_from_options();
 
     // Std drink sizes are all stored in Oz. Data are all from Wikipedia:
     // https://en.wikipedia.org/wiki/Standard_drink
