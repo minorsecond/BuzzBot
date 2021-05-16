@@ -217,7 +217,6 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
     auto it = date_std_drinks.begin();
     int it_value {0};
     for (it = date_std_drinks.begin(); it != date_std_drinks.end(); it++) {
-
         std::cout << "Date: " << it->first << " drinks: " << it->second << std::endl;
         time_data[it_value].key = it->first;
         time_data[it_value].value = it->second;
