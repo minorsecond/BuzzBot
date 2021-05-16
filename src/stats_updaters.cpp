@@ -326,7 +326,5 @@ double MainWindow::get_std_drink_size_from_options() {
         std_drink_size = std_drink_standards.find(options.std_drink_country)->second;
     }
 
-    std::cout << "Standard drink size: " << std_drink_size << std::endl;
-
     return std_drink_size;
 }
