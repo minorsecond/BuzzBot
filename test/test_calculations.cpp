@@ -3,6 +3,7 @@
 //
 
 #include "../src/calculate.h"
+#include "../src/mainwindow.h"
 #include <filesystem>
 #include <iostream>
 #include <catch2/catch.hpp>
@@ -29,15 +30,45 @@ TEST_CASE("Oz Alcohol", "[Drink Calculations]") {
     REQUIRE(old_rasputin_oz_alcohol == 1.08);
 }
 
-TEST_CASE("Std Drinks Remaining", "[Drink Calculations]") {
-    double male_drinks_remaining = Calculate::standard_drinks_remaining("male", "NIAAA", 0, 4.6);
-    double female_drinks_remaining = Calculate::standard_drinks_remaining("female", "Custom", 5, 8);
-    double female_drinks_remaining_2 = Calculate::standard_drinks_remaining("female", "NIAAA", 0,4);
-    double female_drinks_remaining_3 = Calculate::standard_drinks_remaining("female", "NIAAA", 0,12);
+TEST_CASE("Std Drinks Remaining - male, NIAAA", "[Drink Calculations]") {
+    Options options;
+    options.sex = "male";
+    options.limit_standard = "NIAAA";
+    options.weekly_limit = 0;
+
+    double male_drinks_remaining = Calculate::standard_drinks_remaining(options, 4.6);
 
     REQUIRE(male_drinks_remaining == 9.4);
+}
+
+TEST_CASE("Std Drinks Remaining - female, Custom", "[Drink Calculations]") {
+    Options options;
+    options.sex = "female";
+    options.limit_standard = "Custom";
+    options.weekly_limit = 5;
+
+    double female_drinks_remaining = Calculate::standard_drinks_remaining(options, 8);
     REQUIRE(female_drinks_remaining == -3.0);
+}
+
+TEST_CASE("Std Drinks Remaining - female, NIAAA 1", "[Drink Calculations]") {
+    Options options;
+    options.sex = "female";
+    options.limit_standard = "NIAAA";
+    options.weekly_limit = 0;
+
+    double female_drinks_remaining_2 = Calculate::standard_drinks_remaining(options, 4);
     REQUIRE(female_drinks_remaining_2 == 3);
+}
+
+TEST_CASE("Std Drinks Remaining - female, NIAAA 2", "[Drink Calculations]") {
+    Options options;
+    options.sex = "female";
+    options.limit_standard = "NIAAA";
+    options.weekly_limit = 0;
+
+    double female_drinks_remaining_3 = Calculate::standard_drinks_remaining(options, 12);
+
     REQUIRE(female_drinks_remaining_3 == -5);
 }
 
