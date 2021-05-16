@@ -325,8 +325,8 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
 
         QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
 
-        // Show dates if fewer than 2 months of data
-        if (time_data.size() < 8) {
+        // Show dates if fewer than 15 weeks of data
+        if (time_data.size() < 15) {
             dateTicker->setDateTimeFormat("d. MMM\nyyyy");
         } else {
             dateTicker->setDateTimeFormat("MMM\nyyyy");
