@@ -238,7 +238,7 @@ void UserSettings::std_drink_country_changed() {
         ui.stdDrinkDefInput->setEnabled(true);
     } else {
         ui.stdDrinkDefInput->setEnabled(false);
-        //double new_std_drink_size = get_std_drink_size();
+        //double new_std_drink_size = get_std_drink_size_from_options();
         //ui.stdDrinkDefInput->setValue(new_std_drink_size);
     }
 }
