@@ -287,6 +287,13 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
         }
     }
 
+    // Set min drinks to just below limit line if limit is below min drinks
+    if (limit <= min_drinks) {
+        min_drinks = limit - 3;
+        std::cout << "Limit below minimum drinks consumed. "\
+                     "Resetting graph Y-axis to a min of " << min_drinks << std::endl;
+    }
+
     // Create the ABV graph
 
     // Graph style
@@ -314,7 +321,7 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
     abv_plot->yAxis->setLabel("Std. Drinks");
     abv_plot->xAxis->setRange(min_year, max_year);
     abv_plot->yAxis->setRange(min_drinks, max_drinks);
-    abv_plot->graph(0)->rescaleAxes();
+    //abv_plot->graph(0)->rescaleAxes();
     abv_plot->graph()->setLineStyle(QCPGraph::lsLine);
     abv_plot->graph()->setPen(QPen(color.darker(200)));
     abv_plot->graph()->setBrush(QBrush(color));
