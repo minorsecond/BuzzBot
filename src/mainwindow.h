@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "database.h"
+#include "../include/qcustomplot.h"
 #include "../ui/ui_mainwindow.h"
 
 struct Options {
@@ -75,6 +76,8 @@ private:
     static std::string get_local_date();
     static std::string get_weekday_name(unsigned weekday_number);
     static std::string zero_pad_string(unsigned integer);
+    void open_graphs();
+    double get_std_drink_size_from_options();
 
     // Std drink sizes are all stored in Oz. Data are all from Wikipedia:
     // https://en.wikipedia.org/wiki/Standard_drink

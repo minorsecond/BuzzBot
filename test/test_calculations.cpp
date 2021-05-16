@@ -3,6 +3,7 @@
 //
 
 #include "../src/calculate.h"
+#include "../src/mainwindow.h"
 #include <filesystem>
 #include <iostream>
 #include <catch2/catch.hpp>
@@ -29,15 +30,45 @@ TEST_CASE("Oz Alcohol", "[Drink Calculations]") {
     REQUIRE(old_rasputin_oz_alcohol == 1.08);
 }
 
-TEST_CASE("Std Drinks Remaining", "[Drink Calculations]") {
-    double male_drinks_remaining = Calculate::standard_drinks_remaining("male", "NIAAA", 0, 4.6);
-    double female_drinks_remaining = Calculate::standard_drinks_remaining("female", "Custom", 5, 8);
-    double female_drinks_remaining_2 = Calculate::standard_drinks_remaining("female", "NIAAA", 0,4);
-    double female_drinks_remaining_3 = Calculate::standard_drinks_remaining("female", "NIAAA", 0,12);
+TEST_CASE("Std Drinks Remaining - male, NIAAA", "[Drink Calculations]") {
+    Options options;
+    options.sex = "male";
+    options.limit_standard = "NIAAA";
+    options.weekly_limit = 0;
+
+    double male_drinks_remaining = Calculate::standard_drinks_remaining(options, 4.6);
 
     REQUIRE(male_drinks_remaining == 9.4);
+}
+
+TEST_CASE("Std Drinks Remaining - female, Custom", "[Drink Calculations]") {
+    Options options;
+    options.sex = "female";
+    options.limit_standard = "Custom";
+    options.weekly_limit = 5;
+
+    double female_drinks_remaining = Calculate::standard_drinks_remaining(options, 8);
     REQUIRE(female_drinks_remaining == -3.0);
+}
+
+TEST_CASE("Std Drinks Remaining - female, NIAAA 1", "[Drink Calculations]") {
+    Options options;
+    options.sex = "female";
+    options.limit_standard = "NIAAA";
+    options.weekly_limit = 0;
+
+    double female_drinks_remaining_2 = Calculate::standard_drinks_remaining(options, 4);
     REQUIRE(female_drinks_remaining_2 == 3);
+}
+
+TEST_CASE("Std Drinks Remaining - female, NIAAA 2", "[Drink Calculations]") {
+    Options options;
+    options.sex = "female";
+    options.limit_standard = "NIAAA";
+    options.weekly_limit = 0;
+
+    double female_drinks_remaining_3 = Calculate::standard_drinks_remaining(options, 12);
+
     REQUIRE(female_drinks_remaining_3 == -5);
 }
 
@@ -62,14 +93,14 @@ TEST_CASE("Mean ABV", "[Drink Calculations]") {
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12.0, 8.0, 8,
+                "Roughtail Brewing", 8.0, 60.0, 12.0, 8,
                 "Very good hazy IPA.",  -1, "Beer", "2020-01-01 00:00:00", 1};
     Drink mosaic{-1, "2020-09-08", "Mosaic", "IPA", "",
-                 "Community Brewing", 8.4, 75.0, 12.0, 8.0, 8, "",
+                 "Community Brewing", 8.4, 75.0, 12.0, 8, "",
                  -1, "Beer", "2020-01-01 00:00:00", 1};
     Drink etrwo2{-1, "2020-09-10",
                  "Everything Rhymes with Orange", "IPA", "",
-                 "Roughtail Brewing", 8.0, 60.0, 12.0, 8.0, 8, "",
+                 "Roughtail Brewing", 8.0, 60.0, 12.0, 8, "",
                  -1, "Beer", "2020-01-01 00:00:00", 1};
 
     storage_1.insert(etrwo);
@@ -95,14 +126,14 @@ TEST_CASE("Mean IBU", "[Drink Calculations]") {
 
     Drink etrwo{-1, "2020-09-08",
                 "Everything Rhymes with Orange", "IPA", "","Roughtail Brewing", 8.0,
-                60.0, 12.0, 8.0, 8, "Very good hazy IPA.",  -1, "Beer",
+                60.0, 12.0, 8, "Very good hazy IPA.",  -1, "Beer",
                 "2020-01-01 00:00:00", 1};
     Drink mosaic{-1, "2020-09-08", "Mosaic", "IPA",
-                 "","Community Brewing", 8.4, 75.0, 12.0, 8.0, 8,
+                 "","Community Brewing", 8.4, 75.0, 12.0, 8,
                  "",  -1, "Beer", "2020-01-01 00:00:00", 1};
     Drink etrwo2{-1, "2020-09-10",
                  "Everything Rhymes with Orange", "IPA", "","Roughtail Brewing",
-                 8.0, 60.0, 12.0, 8.0, 8, "",  -1, "Beer",
+                 8.0, 60.0, 12.0, 8, "",  -1, "Beer",
                  "2020-01-01 00:00:00", 1};
 
     storage_1.insert(etrwo);
@@ -127,13 +158,13 @@ TEST_CASE("Favorite Brewery", "[Favorite Calculations]") {
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12.0, 8.0, 8, "Very good hazy IPA.",  -1, "Beer",
+                "Roughtail Brewing", 8.0, 60.0, 12.0, 8, "Very good hazy IPA.",  -1, "Beer",
                 "2020-01-01 00:00:00", 1};
     Drink mosaic{-1, "2020-09-08", "Mosaic", "IPA", "",
-                 "Community Brewing", 8.4, 75.0, 12.0, 8.0, 8, "",  -1, "Beer",
+                 "Community Brewing", 8.4, 75.0, 12.0, 8, "",  -1, "Beer",
                  "2020-01-01 00:00:00", 1};
     Drink etrwo2{-1, "2020-09-10", "Everything Rhymes with Orange", "IPA", "",
-                 "Roughtail Brewing", 8.0, 60.0, 12.0, 8.0, 8, "",  -1, "Beer",
+                 "Roughtail Brewing", 8.0, 60.0, 12.0, 8, "",  -1, "Beer",
                  "2020-01-01 00:00:00", 1};
 
     storage_1.insert(etrwo);
@@ -158,13 +189,13 @@ TEST_CASE("Favorite Drink", "[Favorite Calculations]") {
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12.0, 8.0, 8, "Very good hazy IPA.",  -1, "Beer",
+                "Roughtail Brewing", 8.0, 60.0, 12.0, 8, "Very good hazy IPA.",  -1, "Beer",
                 "2020-01-01 00:00:00", 1};
     Drink mosaic{-1, "2020-09-08", "Mosaic", "IPA", "",
-                 "Community Brewing", 8.4, 75.0, 12.0, 8.0, 8, "",  -1, "Beer",
+                 "Community Brewing", 8.4, 75.0, 12.0, 8, "",  -1, "Beer",
                  "2020-01-01 00:00:00", 1};
     Drink etrwo2{-1, "2020-09-10", "Everything Rhymes with Orange", "IPA", "",
-                 "Roughtail Brewing", 8.0, 60.0, 12.0, 8.0, 8, "",  -1, "Beer",
+                 "Roughtail Brewing", 8.0, 60.0, 12.0, 8, "",  -1, "Beer",
                  "2020-01-01 00:00:00", 1};
 
     storage_1.insert(etrwo);
@@ -189,13 +220,13 @@ TEST_CASE("Favorite Type", "[Favorite Calculations]") {
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
-                "Roughtail Brewing", 8.0, 60.0, 12.0, 8.0, 8, "Very good hazy IPA.",  -1, "Beer",
+                "Roughtail Brewing", 8.0, 60.0, 12.0, 8, "Very good hazy IPA.",  -1, "Beer",
                 "2020-01-01 00:00:00", 1};
     Drink mosaic{-1, "2020-09-08", "Mosaic", "IPA", "",
-                 "Community Brewing", 8.4, 75.0, 12.0, 8.0, 8, "",  -1, "Beer",
+                 "Community Brewing", 8.4, 75.0, 12.0, 8, "",  -1, "Beer",
                  "2020-01-01 00:00:00", 1};
     Drink etrwo2{-1, "2020-09-10", "Old Rasputin", "Russian Imperial Stout", "",
-                 "North Coast Brewing", 9.0, 75.0, 12.0, 8.0, 8, "",  -1, "Beer",
+                 "North Coast Brewing", 9.0, 75.0, 12.0, 8, "",  -1, "Beer",
                  "2020-01-01 00:00:00", 1};
 
     storage_1.insert(etrwo);
