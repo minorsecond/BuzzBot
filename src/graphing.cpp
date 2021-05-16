@@ -217,6 +217,8 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
     auto it = date_std_drinks.begin();
     int it_value {0};
     for (it = date_std_drinks.begin(); it != date_std_drinks.end(); it++) {
+
+        std::cout << "Date: " << it->first << " drinks: " << it->second << std::endl;
         time_data[it_value].key = it->first;
         time_data[it_value].value = it->second;
         it_value += 1;
@@ -338,7 +340,7 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
         abv_plot->xAxis->setLabel("Date");
         abv_plot->yAxis->setLabel("Std. Drinks");
         abv_plot->xAxis->setRange(min_year, max_year);
-        abv_plot->yAxis->setRange(min_drinks, max_drinks);
+        abv_plot->yAxis->setRange(min_drinks-0.5, max_drinks);
         //abv_plot->graph(0)->rescaleAxes();
         abv_plot->graph()->setLineStyle(QCPGraph::lsLine);
         abv_plot->graph()->setPen(QPen(color.darker(200)));
