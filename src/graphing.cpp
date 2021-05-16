@@ -322,7 +322,14 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
         limit_line->setPen(QPen(QColor(255, 0, 0)));
 
         QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
-        dateTicker->setDateTimeFormat("MMM\nyyyy");
+
+        // Show dates if fewer than 2 months of data
+        if (time_data.size() < 8) {
+            dateTicker->setDateTimeFormat("d. MMM\nyyyy");
+        } else {
+            dateTicker->setDateTimeFormat("MMM\nyyyy");
+        }
+
         dateTicker->setTickOrigin(min_year);
         abv_plot->xAxis->setTicker(dateTicker);
         abv_plot->addGraph();
