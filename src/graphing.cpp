@@ -22,20 +22,31 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
     int window_width = 512;
     int window_height = 512;
 
+    bool no_beers = true;
+
     this->setFixedWidth(window_width);
     this->setFixedHeight(window_height);
 
     //Plot the IBU plot
     std::vector ibus = Graphing::get_beer_ibus(all_drinks);
-    std::map<double, int> ibu_counts = Graphing::count_values_in_vect(ibus);
-    auto ibu_plot = Graphing::plot_ibus(ibu_counts, this);
-    ibu_plot->setGeometry(0, 0, window_width, window_height/2);
-    ibu_plot->show();
+
+    if (!ibus.empty()) {
+        no_beers = false;
+        std::map<double, int> ibu_counts = Graphing::count_values_in_vect(ibus);
+        auto ibu_plot = Graphing::plot_ibus(ibu_counts, this);
+        ibu_plot->setGeometry(0, 0, window_width, window_height/2);
+        ibu_plot->show();
+    }
 
     // Plot the ABV plot
     QVector<QCPGraphData> time_data = time_data_aggregator(all_drinks, std_drink_size);
     auto abv_plot = Graphing::plot_abvs(time_data, options, this);
-    abv_plot->setGeometry(0, (window_height/2+2), window_width, window_height/2);
+
+    if (no_beers) {  // Full size plot if beer data is empty
+        abv_plot->setGeometry(0, 0, window_width, window_height);
+    } else {
+        abv_plot->setGeometry(0, (window_height/2+2), window_width, window_height/2);
+    }
     abv_plot->show();
 }
 
