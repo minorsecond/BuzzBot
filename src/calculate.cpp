@@ -288,7 +288,7 @@ bool Calculate::compare_strings(std::string lhs, std::string rhs) {
     return lhs < rhs;
 }
 
-int Calculate::weekly_imit(Options options) {
+int Calculate::weekly_imit(const Options& options) {
     /*
      * Get the weekly limit.
      * @param options: an options struct.
