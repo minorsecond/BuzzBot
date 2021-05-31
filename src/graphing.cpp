@@ -19,16 +19,16 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
     ui.setupUi(this);
     this->setWindowTitle("Alcohol Habits");
 
-    int window_width = 512;
-    int window_height = 512;
+    int window_width {512};
+    int window_height {512};
 
-    bool no_beers = true;
+    bool no_beers {true};
 
     this->setFixedWidth(window_width);
     this->setFixedHeight(window_height);
 
     //Plot the IBU plot
-    std::vector ibus = Graphing::get_beer_ibus(all_drinks);
+    std::vector ibus {Graphing::get_beer_ibus(all_drinks)};
 
     if (!ibus.empty()) {
         no_beers = false;
@@ -92,7 +92,7 @@ std::map<double, int> Graphing::count_values_in_vect(const std::vector<double>& 
      * @return: a map<double, int> of values (keys) and their counts (values).
      */
 
-    std::vector<double> ibu_copy = all_values;
+    std::vector<double> ibu_copy {all_values};
     std::map<double, int> ibu_counts;
 
     // Get count (y value) of each IBU (x value).
@@ -117,7 +117,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
      * @param ibu_counts: a map<double, int> of ibu values (keys) and their counts (values).
      */
 
-    auto *ibu_plot = new QCustomPlot(parent);
+    auto *ibu_plot {new QCustomPlot(parent)};
 
     // Add title
     // add title layout element:
@@ -148,12 +148,12 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     }
 
     // Get min/max values for axes
-    double ibu_min = *std::min_element(ibus.begin(), ibus.end());
-    double ibu_max = *std::max_element(ibus.begin(), ibus.end());
+    double ibu_min {*std::min_element(ibus.begin(), ibus.end())};
+    double ibu_max {*std::max_element(ibus.begin(), ibus.end())};
     //double count_min = *std::min_element(counts.begin(), counts.end());
     //double count_max = *std::max_element(counts.begin(), counts.end());
-    double perc_min = *std::min_element(percentages.begin(), percentages.end());
-    double perc_max = *std::max_element(percentages.begin(), percentages.end());
+    double perc_min {*std::min_element(percentages.begin(), percentages.end())};
+    double perc_max {*std::max_element(percentages.begin(), percentages.end())};
 
     // Graph style
     QPen drawPen;
@@ -186,13 +186,13 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
      */
 
     std::map<int, double> date_std_drinks;
-    std::vector<Drink> drinks = all_drinks;
-    std::string first_week_string = week_number(std::stoi(drinks.at(0).date));
-    std::string last_week_string = week_number(std::stoi(drinks[drinks.size()-1].date));
-    int min_date = std::numeric_limits<int>::max(); // Everything is <= this
-    int max_date = std::numeric_limits<int>::min(); // Everything is >= this
-    int first_year = std::stoi(first_week_string.substr(0, first_week_string.find('-')));
-    int last_year = std::stoi(last_week_string.substr(0, last_week_string.find('-')));
+    std::vector<Drink> drinks {all_drinks};
+    std::string first_week_string {week_number(std::stoi(drinks.at(0).date))};
+    std::string last_week_string {week_number(std::stoi(drinks[drinks.size()-1].date))};
+    int min_date {std::numeric_limits<int>::max()}; // Everything is <= this
+    int max_date {std::numeric_limits<int>::min()}; // Everything is >= this
+    const int first_year {std::stoi(first_week_string.substr(0, first_week_string.find('-')))};
+    const int last_year {std::stoi(last_week_string.substr(0, last_week_string.find('-')))};
     double std_drinks {0.0};
 
     // Sort by date
@@ -263,8 +263,8 @@ bool Graphing::compare_by_date(const Drink &a, const Drink &b) {
     std::string date_a_cpy = a.date;
     std::string date_b_cpy = b.date;
 
-    int date_a = parse_date(date_a_cpy);
-    int date_b = parse_date(date_b_cpy);
+    int date_a {parse_date(date_a_cpy)};
+    int date_b {parse_date(date_b_cpy)};
 
     return date_a < date_b;
 }
