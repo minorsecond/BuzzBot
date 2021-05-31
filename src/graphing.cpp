@@ -193,8 +193,6 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
     int max_date = std::numeric_limits<int>::min(); // Everything is >= this
     int first_year = std::stoi(first_week_string.substr(0, first_week_string.find('-')));
     int last_year = std::stoi(last_week_string.substr(0, last_week_string.find('-')));
-    //int first_week_num = std::stoi(first_week_string.substr(first_week_string.find('-')+1));
-    //int last_week_num = std::stoi(last_week_string.substr(last_week_string.find('-')+1));
     double std_drinks {0.0};
 
     // Sort by date
@@ -228,21 +226,16 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
         }
     }
 
-    std::cout << "Max date: " << max_date << " Min date: " << min_date << std::endl;
-
     // Add empty drinks to fix graph where no drinks were entered
     for (int year = first_year; year <= last_year; year++) {
         for (int week_num = 0; week_num <= 51; week_num++) {
             std::string year_week_num = std::to_string(year) + '-' + std::to_string(week_num);
             std::string date_str = std::to_string(date_from_week_num(year_week_num));
-            std::cout << "Date string: " << date_str << std::endl;
             int date = parse_date(date_str);
 
             // Add to vector
-            std::cout << "Date to check: " << date << std::endl;
             if (date_std_drinks.find(date) == date_std_drinks.end() && date <= max_date && date >= min_date) {
                 // Date not in date_std_drinks
-                std::cout << "Adding date: " << date << std::endl;
                 date_std_drinks[date] = 0;
             }
         }
