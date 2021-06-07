@@ -32,7 +32,7 @@ double Calculate::alcohol_volume(double abv, double amount) {
     return (abv/100)*amount;
 }
 
-double Calculate::standard_drinks_remaining(const std::string& sex, const std::string& standard, int drink_limit, double standard_drinks_consumed) {
+double Calculate::standard_drinks_remaining(const Options& options, double standard_drinks_consumed) {
     /*
      * Calculate the number of standard drinks remaining for the user this week.
      *
@@ -48,15 +48,7 @@ double Calculate::standard_drinks_remaining(const std::string& sex, const std::s
 
     double weekly_drinks_remaining;
 
-    if (standard == "NIAAA") {
-        if (sex == "male") {
-            drink_limit = 14;
-        } else if (sex == "female") {
-            drink_limit = 7;
-        } else {
-            std::cout << "Sex is incorrectly set: " << sex << std::endl;
-        }
-    }
+    int drink_limit = Calculate::weekly_imit(options);
 
     weekly_drinks_remaining = drink_limit - standard_drinks_consumed;
 
@@ -294,4 +286,28 @@ bool Calculate::compare_strings(std::string lhs, std::string rhs) {
     }
 
     return lhs < rhs;
+}
+
+int Calculate::weekly_imit(const Options& options) {
+    /*
+     * Get the weekly limit.
+     * @param options: an options struct.
+     * @return: the weekly standard drink limit.
+     */
+
+    std::string standard = options.limit_standard;
+    std::string sex = options.sex;
+    int drink_limit = options.weekly_limit;
+
+    if (standard == "NIAAA") {
+        if (sex == "male") {
+            drink_limit = 14;
+        } else if (sex == "female") {
+            drink_limit = 7;
+        } else {
+            std::cout << "Sex is incorrectly set: " << sex << std::endl;
+        }
+    }
+
+    return drink_limit;
 }

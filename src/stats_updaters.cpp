@@ -35,7 +35,7 @@ void MainWindow::update_stat_panel() {
         if (options.std_drink_country == "Custom") {
             standard_drinks += Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size));
         } else {
-            double std_drink_size = std_drink_standards.find(options.std_drink_country)->second;  // This is in oz.
+            double std_drink_size = get_std_drink_size_from_options();  // This is in oz.
 
             /*
              * Drink._size will always be in ounces. std_drink_size should also be in ounces. The result will be
@@ -89,7 +89,7 @@ void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consume
      * Update the std. drinks left this week to the amount of std. drinks left this week.
      */
 
-    double std_drinks_left = Calculate::standard_drinks_remaining(options.sex, options.limit_standard, options.weekly_limit, std_drinks_consumed);
+    double std_drinks_left = Calculate::standard_drinks_remaining(options, std_drinks_consumed);
     ui->drinksLeftOutput->setText(QString::fromStdString(Calculate::double_to_string(std_drinks_left)));
 
     // Set standard drinks remaining text to red if negative
@@ -154,7 +154,7 @@ void MainWindow::update_volume_alcohol_remaining(double volume_alcohol_consumed)
     if (options.std_drink_country == "Custom") {
         std_drink_size = std::stod(options.std_drink_size);
     } else {
-        std_drink_size = std_drink_standards.find(options.std_drink_country)->second;
+        std_drink_size = get_std_drink_size_from_options();
     }
 
     if (options.units == "Imperial") {
@@ -243,7 +243,7 @@ void MainWindow::update_std_drinks_today() {
         if (options.std_drink_country == "Custom") {
             std_drinks= Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size));
         } else {
-            double std_drink_size = std_drink_standards.find(options.std_drink_country)->second;
+            double std_drink_size = get_std_drink_size_from_options();
             std_drinks = Calculate::standard_drinks(drink.abv, drink._size, std_drink_size);
         }
         std_drinks_today += std_drinks;
@@ -310,4 +310,21 @@ std::string MainWindow::zero_pad_string(unsigned integer) {
     for (int i = 0; i < 2 - str_length; i++)
         ret = "0" + ret;
     return ret;
+}
+
+double MainWindow::get_std_drink_size_from_options() {
+    /*
+     * Get the std drink size for the selected country.
+     * @param country: The country for which to retrieve the size.
+     * @return: a double denoting the size of a standard drink.
+     */
+
+    double std_drink_size {0.6}; // Default to US
+    if (options.std_drink_country == "Custom") {
+        std_drink_size = std::stod(options.std_drink_size);
+    } else {
+        std_drink_size = std_drink_standards.find(options.std_drink_country)->second;
+    }
+
+    return std_drink_size;
 }

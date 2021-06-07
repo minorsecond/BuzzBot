@@ -1,10 +1,12 @@
 #include "mainwindow.h"
 #include "usersettings.h"
 #include "about.h"
+#include "../ui/ui_graph_window.h"
 #include "standard_drink_calculator.h"
 #include "confirm_dialog.h"
 #include "exporters.h"
 #include "calculate.h"
+#include "graphing.h"
 #include <iomanip>
 #include <filesystem>
 #include <iostream>
@@ -106,20 +108,24 @@ void MainWindow::add_menubar_items() {
     auto * preferences_action = new QAction("Preferences");
     auto * about_action = new QAction("About");
     auto * export_action = new QAction("Export...");
+    auto * graphs_action = new QAction("Graphs...");
     auto * calc_std_drinks = new QAction("Calculate Std. Drinks...");
     QMenu * app_menu = menuBar()->addMenu("App Menu");
     preferences_action->setMenuRole(QAction::PreferencesRole);
     about_action->setMenuRole(QAction::AboutRole);
     export_action->setMenuRole(QAction::ApplicationSpecificRole);
+    graphs_action->setMenuRole(QAction::ApplicationSpecificRole);
     calc_std_drinks->setMenuRole(QAction::ApplicationSpecificRole);
     app_menu->addAction(preferences_action);
     app_menu->addAction(about_action);
     app_menu->addAction(export_action);
+    app_menu->addAction(graphs_action);
     app_menu->addAction(calc_std_drinks);
 
     connect(preferences_action, &QAction::triggered, this, &MainWindow::open_user_settings);
     connect(about_action, &QAction::triggered, this, &MainWindow::open_about_dialog);
     connect(export_action, &QAction::triggered, this, &MainWindow::open_export_dialog);
+    connect(graphs_action, &QAction::triggered, this, &MainWindow::open_graphs);
     connect(calc_std_drinks, &QAction::triggered, this, &MainWindow::open_std_drink_calculator);
 }
 
@@ -371,7 +377,7 @@ void MainWindow::open_user_settings() {
     update_table();
     update_stat_panel();
     update_types_and_producers();
-    std::cout << std_drink_size << std::endl;
+    std::cout << "Custom standard drink size: " << std_drink_size << std::endl;
 }
 
 std::string MainWindow::settings_path() {
@@ -761,3 +767,17 @@ std::string MainWindow::get_local_date() {
 
     return output;
 }
+
+void MainWindow::open_graphs() {
+    /*
+     * Create graphs of drink data.
+     */
+
+    std::string db_path = Database::path();
+    std::vector<Drink> all_drinks = Database::read(storage);
+    double std_drink_size = get_std_drink_size_from_options();
+    auto *graphing_window = new Graphing(all_drinks, std_drink_size, options);
+    graphing_window->setModal(false);
+    graphing_window->show();
+}
+// LCOV_EXCL_STOP
