@@ -166,7 +166,8 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
      * @return drink_by_name: A Drink matching the name.
      */
 
-    std::vector<Drink> drink_by_name_result = storage.get_all<Drink>(where(c(&Drink::name) == std::move(drink_name) && c(&Drink::alcohol_type) == std::move(alcohol_type)));
+    std::vector<Drink> drink_by_name_result = storage.get_all<Drink>(where(c(&Drink::name) ==
+            std::move(drink_name) && c(&Drink::alcohol_type) == std::move(alcohol_type)));
     Drink drink_by_name;
 
     std::sort(drink_by_name_result.begin(), drink_by_name_result.end(), compare_date);
@@ -177,6 +178,7 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
         drink_by_name.id = -1;
     }
 
+    std::cout << "Date: " << drink_by_name.id << std::endl;
     return drink_by_name;
 }
 
@@ -235,6 +237,14 @@ bool Database::compare_date(const Drink &a, const Drink &b) {
      * Determine if second date is greater than the first date.
      * @return: True if second date is more recent than the first date. Else, false.
      */
+
+    std::cout << "Full date: " << a.date << std::endl;
+    int a_year = std::stoi(a.date.substr(0, 4));
+    int a_month = std::stoi(a.date.substr(5, 7));
+    int a_day = std::stoi(a.date.substr(8, 9));
+    int b_year = std::stoi(b.date.substr(0, 3));
+    int b_month = std::stoi(b.date.substr(5, 6));
+    int b_day = std::stoi(b.date.substr(8, 9));
 
     if (a.date < b.date || (a.date == b.date && a.id < b.id)) {
         return true;
