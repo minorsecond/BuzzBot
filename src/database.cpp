@@ -172,13 +172,14 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
 
     std::sort(drink_by_name_result.begin(), drink_by_name_result.end(), compare_date);
 
+    std::cout << "Latest date in get_drink_by_name:" << drink_by_name_result.at(0).date << std::endl;
+
     if (!drink_by_name_result.empty()) {
         drink_by_name = drink_by_name_result.at(0);
     } else {
         drink_by_name.id = -1;
     }
 
-    std::cout << "Date: " << drink_by_name.id << std::endl;
     return drink_by_name;
 }
 
@@ -238,19 +239,26 @@ bool Database::compare_date(const Drink &a, const Drink &b) {
      * @return: True if second date is more recent than the first date. Else, false.
      */
 
-    std::cout << "Full date: " << a.date << std::endl;
     int a_year = std::stoi(a.date.substr(0, 4));
     int a_month = std::stoi(a.date.substr(5, 7));
     int a_day = std::stoi(a.date.substr(8, 9));
-    int b_year = std::stoi(b.date.substr(0, 3));
-    int b_month = std::stoi(b.date.substr(5, 6));
+    int b_year = std::stoi(b.date.substr(0, 4));
+    int b_month = std::stoi(b.date.substr(5, 7));
     int b_day = std::stoi(b.date.substr(8, 9));
-
-    if (a.date < b.date || (a.date == b.date && a.id < b.id)) {
-        return true;
-    } else {
-        return false;
+    
+    if (a_year <= b_year) {
+        if (a_month <= b_month) {
+            if (a_day <= b_day) {
+                if (a.id < b.id) {
+                    std::cout << "B is greater than A" << std::endl;
+                    return true;
+                }
+            }
+        }
     }
+    // Else:
+    std::cout << "B is less than A" << std::endl;
+    return false;
 }
 
 std::vector<Drink> Database::sort_by_date_id(std::vector<Drink> drinks) {
