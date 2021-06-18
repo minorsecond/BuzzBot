@@ -172,10 +172,8 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
 
     std::sort(drink_by_name_result.begin(), drink_by_name_result.end(), compare_date);
 
-    std::cout << "Latest date in get_drink_by_name:" << drink_by_name_result.at(0).date << std::endl;
-
     if (!drink_by_name_result.empty()) {
-        drink_by_name = drink_by_name_result.at(0);
+        drink_by_name = drink_by_name_result.at(drink_by_name_result.size() - 1);
     } else {
         drink_by_name.id = -1;
     }
@@ -245,19 +243,19 @@ bool Database::compare_date(const Drink &a, const Drink &b) {
     int b_year = std::stoi(b.date.substr(0, 4));
     int b_month = std::stoi(b.date.substr(5, 7));
     int b_day = std::stoi(b.date.substr(8, 9));
-    
-    if (a_year <= b_year) {
-        if (a_month <= b_month) {
-            if (a_day <= b_day) {
-                if (a.id < b.id) {
-                    std::cout << "B is greater than A" << std::endl;
-                    return true;
-                }
-            }
+
+    if (a_year < b_year) {
+        return true;
+    } else if (a_year == b_year) {
+        if (a_month < b_month) {
+            return true;
+        } else if (a_month == b_month && a_day < b_day) {
+            return true;
+        } else if (a_month == b_month && a_day == b_day && a.id < b.id) {
+            return true;
         }
     }
     // Else:
-    std::cout << "B is less than A" << std::endl;
     return false;
 }
 
