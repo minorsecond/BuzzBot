@@ -326,11 +326,12 @@ TEST_CASE("Get Drink By Name", "[DB Functions]") {
     storage_1.insert(etrwo2);
     Database::write_db_to_disk(storage_1);
 
+    // Get last entered beer
     Drink selected_beer = Database::get_drink_by_name(storage_1,"Beer", "Everything Rhymes with Orange");
 
-    REQUIRE(selected_beer.id == 1);
+    REQUIRE(selected_beer.id == 3);
     REQUIRE(selected_beer.name == "Everything Rhymes with Orange");
-    REQUIRE(selected_beer.notes == "Very good hazy IPA.");
+    REQUIRE(selected_beer.notes.empty() == true);
 }
 
 TEST_CASE("Get Beers By Type", "[DB Functions]") {
