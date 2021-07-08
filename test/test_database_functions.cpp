@@ -23,7 +23,7 @@ TEST_CASE("Init DB", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage = initStorage(db_path);
+    Storage storage = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage);
     REQUIRE( exists(db_path) == true);
     std::remove(file_name);
@@ -38,7 +38,7 @@ TEST_CASE("DB IO", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
@@ -53,7 +53,7 @@ TEST_CASE("DB IO", "[DB Functions]") {
 
     Database::write_db_to_disk(storage_1);
 
-    Storage storage_2 = initStorage(db_path);
+    Storage storage_2 = initStorage(db_path, Database::db_version);
 
     auto etrwo_read = storage_2.get<Drink>(1);
     auto mosaic_read = storage_2.get<Drink>(2);
@@ -76,7 +76,7 @@ TEST_CASE("Truncate DB", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
@@ -110,7 +110,7 @@ TEST_CASE("Delete Row", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
@@ -151,7 +151,7 @@ TEST_CASE("Read Row", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
@@ -185,7 +185,7 @@ TEST_CASE("Write Row", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
@@ -209,7 +209,7 @@ TEST_CASE("Update Row", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
@@ -244,11 +244,11 @@ TEST_CASE("Increment Version", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version - 1);
     Database::write_db_to_disk(storage_1);
 
-    int base_version = Database::increment_version(storage_1, 7);
-    REQUIRE(base_version == 7);
+    int base_version = Database::increment_version(storage_1, 8);
+    REQUIRE(base_version == 8);
 }
 
 TEST_CASE("Filter DB", "[DB Functions]") {
@@ -260,7 +260,7 @@ TEST_CASE("Filter DB", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "Hazy IPA",
@@ -308,7 +308,7 @@ TEST_CASE("Get Drink By Name", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
@@ -343,7 +343,7 @@ TEST_CASE("Get Beers By Type", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
@@ -380,7 +380,7 @@ TEST_CASE("Get Beers By Brewery", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
@@ -417,7 +417,7 @@ TEST_CASE("DB Sort", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
