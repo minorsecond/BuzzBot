@@ -23,13 +23,19 @@ struct Drink {
     int sort_order;
 };
 
-inline auto initStorage(const std::string& file_name) {
+inline auto initStorage(const std::string& file_name, int db_version) {
     /*
      * Initialize the DB
      */
 
+    std::string table_name = "beers";
+    // Set table name based on DB version
+    if (db_version > 7) {
+        table_name = "drinks";
+    }
+
     return sqlite_orm::make_storage(file_name,
-                                    sqlite_orm::make_table("beers",
+                                    sqlite_orm::make_table(table_name,
                                                           sqlite_orm::make_column("id", &Drink::id, sqlite_orm::autoincrement(), sqlite_orm::primary_key()),
                                                           sqlite_orm::make_column("date", &Drink::date, sqlite_orm::default_value("2020-01-01")),
                                                           sqlite_orm::make_column("drink_name", &Drink::name),
@@ -45,11 +51,12 @@ inline auto initStorage(const std::string& file_name) {
                                                           sqlite_orm::make_column("alcohol_type", &Drink::alcohol_type, sqlite_orm::default_value("Beer")),
                                                           sqlite_orm::make_column("timestamp", &Drink::timestamp, sqlite_orm::default_value(sqlite_orm::datetime("now", "localtime")))));
 }
-using Storage = decltype (initStorage(""));
+using Storage = decltype (initStorage("", -1));
 
 class Database
 {
 public:
+    static const int db_version {8};
     static std::vector<Drink> read(Storage storage);
     static Storage write(Drink drink, Storage storage);
     static void truncate(Storage storage);

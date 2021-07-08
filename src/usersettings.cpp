@@ -168,7 +168,7 @@ void UserSettings::clicked_clear_data() {
 
     ConfirmDialog confirmation_dialog = ConfirmDialog("Clear Data");
     if (confirmation_dialog.exec() == QDialog::Accepted) {
-        Storage storage = initStorage(Database::path());
+        Storage storage = initStorage(Database::path(), Database::db_version);
         Database::truncate(storage);
         std::cout << "*** Truncated the database ***" << std::endl;
     }
