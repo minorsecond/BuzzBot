@@ -28,7 +28,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    Storage storage = initStorage(Database::path());
+    Storage storage = initStorage(Database::path(), Database::db_version);
     void populate_filter_menus(const std::string& filter_type);
     void update_beer_fields();
     void update_stat_panel();
