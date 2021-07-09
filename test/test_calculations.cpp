@@ -89,7 +89,7 @@ TEST_CASE("Mean ABV", "[Drink Calculations]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
@@ -121,7 +121,7 @@ TEST_CASE("Mean IBU", "[Drink Calculations]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08",
@@ -154,7 +154,7 @@ TEST_CASE("Favorite Brewery", "[Favorite Calculations]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
@@ -185,7 +185,7 @@ TEST_CASE("Favorite Drink", "[Favorite Calculations]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
@@ -216,7 +216,7 @@ TEST_CASE("Favorite Type", "[Favorite Calculations]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path);
+    Storage storage_1 = initStorage(db_path, Database::db_version);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo{-1, "2020-09-08", "Everything Rhymes with Orange", "IPA", "",
