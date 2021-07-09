@@ -221,11 +221,13 @@ int Database::increment_version(Storage storage, int current_version) {
      */
 
     std::cout << "Using DB version " << storage.pragma.user_version() << std::endl;
-
-    if (get_version(storage) < 8 && current_version == 8) {
+    int version = get_version(storage);
+    if (version < 8 && current_version == 8) {
         std::cout << "*** Upgrading DB from version " << storage.pragma.user_version() <<  " to " << current_version << std::endl;
 
-        storage.rename_table("beers", "drinks");
+        if (version != 0) {  // DB will be version 0 if app is a new install, so table will not be called beers.
+            storage.rename_table("beers", "drinks");
+        }
         // Set to new version number
         storage.pragma.user_version(current_version);
         storage.sync_schema(true);
@@ -268,7 +270,6 @@ std::vector<Drink> Database::sort_by_date_id(std::vector<Drink> drinks) {
 
     // First sort by entered date
     std::sort(drinks.begin(), drinks.end(), compare_date);
-
     // Now add sort order value
     int sort_order = 1;
     for (unsigned i = 0; i < drinks.size(); ++i) { // NOLINT(modernize-loop-convert)
