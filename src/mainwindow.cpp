@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Upgrade DB version
     // DB Version 7 removes extra year, month, date columns
-    Database::increment_version(storage, 7);
+    Database::increment_version(storage, Database::db_version);
 
     add_menubar_items();
 
