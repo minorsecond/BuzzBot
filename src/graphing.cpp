@@ -39,7 +39,11 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
     }
 
     // Plot the ABV plot
-    QVector<QCPGraphData> time_data = time_data_aggregator(all_drinks, std_drink_size);
+    QVector<QCPGraphData> time_data;
+    if (!all_drinks.empty()) {
+        time_data = time_data_aggregator(all_drinks, std_drink_size);
+    }
+
     auto abv_plot = Graphing::plot_abvs(time_data, options, this);
 
     if (no_beers) {  // Full size plot if beer data is empty
