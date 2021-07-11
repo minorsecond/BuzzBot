@@ -152,12 +152,10 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     }
 
     // Get min/max values for axes
-    double ibu_min {*std::min_element(ibus.begin(), ibus.end())};
-    double ibu_max {*std::max_element(ibus.begin(), ibus.end())};
-    //double count_min = *std::min_element(counts.begin(), counts.end());
-    //double count_max = *std::max_element(counts.begin(), counts.end());
-    double perc_min {*std::min_element(percentages.begin(), percentages.end())};
     double perc_max {*std::max_element(percentages.begin(), percentages.end())};
+    double perc_min {*std::min_element(percentages.begin(), percentages.end())};
+    double ibu_max {*std::max_element(ibus.begin(), ibus.end())};
+    double ibu_min {*std::min_element(ibus.begin(), ibus.end())};
 
     // Graph style
     QPen drawPen;
@@ -168,16 +166,36 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     QColor color(20+200/4.0*2,70*(1.6-2/4.0), 150, 150);
 
     // Create the IBU graph
-    ibu_plot->addGraph();
-    ibu_plot->graph(0)->setData(ibus, percentages);
-    ibu_plot->graph()->setPen(drawPen);
-    ibu_plot->xAxis->setLabel("IBU");
-    ibu_plot->yAxis->setLabel("% of All Drinks");
+    auto *ibuBars = new QCPBars(ibu_plot->xAxis, ibu_plot->yAxis);
+    ibuBars->setAntialiased(false);
+    ibuBars->setBrush(QBrush(color));
+
+    // Generate ticks every 10 IBU values
+    QVector <QString> ibu_strings;
+    QVector <double> ibu_label_numbers;
+    for (int ibu_val : ibus) {
+        if ( ibu_val % 10 == 0) {
+            ibu_strings.push_back(QString::fromStdString(std::to_string((int)ibu_val)));
+            ibu_label_numbers.push_back(ibu_val);
+        }
+    }
+    QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
+    textTicker->addTicks(ibu_label_numbers, ibu_strings);
+    ibu_plot->xAxis->setTicker(textTicker);
+
+    // Set axis range & label
+    if (ibus.size() == 1) {
+        std::cout << "Single value IBU list" << std::endl;
+        ibu_min -= 5;
+        ibu_max += 5;
+    }
     ibu_plot->xAxis->setRange(ibu_min, ibu_max);
-    ibu_plot->yAxis->setRange(perc_min, perc_max);
-    ibu_plot->graph()->setLineStyle(QCPGraph::lsLine);
-    ibu_plot->graph()->setPen(QPen(color.darker(200)));
-    ibu_plot->graph()->setBrush(QBrush(color));
+    ibu_plot->xAxis->setLabel("IBU");
+    ibu_plot->yAxis->setRange(perc_min-5, perc_max);
+    ibu_plot->yAxis->setLabel("% of All Drinks");
+
+    // Set data
+    ibuBars->setData(ibus, percentages);
     ibu_plot->replot();
 
     return ibu_plot;
