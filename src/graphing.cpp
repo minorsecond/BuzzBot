@@ -157,6 +157,10 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     double ibu_max {*std::max_element(ibus.begin(), ibus.end())};
     double ibu_min {*std::min_element(ibus.begin(), ibus.end())};
 
+    if (perc_min >= 5) {
+        perc_min -= 5;
+    }
+
     // Graph style
     QPen drawPen;
     drawPen.setColor(Qt::black);
@@ -168,6 +172,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     // Create the IBU graph
     auto *ibuBars = new QCPBars(ibu_plot->xAxis, ibu_plot->yAxis);
     ibuBars->setAntialiased(false);
+    ibuBars->setPen(QPen(color));
     ibuBars->setBrush(QBrush(color));
 
     // Generate ticks every 10 IBU values
@@ -189,10 +194,11 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
         ibu_min -= 5;
         ibu_max += 5;
     }
-    ibu_plot->xAxis->setRange(ibu_min, ibu_max);
+    ibu_plot->xAxis->setRange(ibu_min-2, ibu_max+2);
     ibu_plot->xAxis->setLabel("IBU");
-    ibu_plot->yAxis->setRange(perc_min-5, perc_max);
+    ibu_plot->yAxis->setRange(perc_min, perc_max);
     ibu_plot->yAxis->setLabel("% of All Drinks");
+    ibu_plot->yAxis->setPadding(5);
 
     // Set data
     ibuBars->setData(ibus, percentages);
