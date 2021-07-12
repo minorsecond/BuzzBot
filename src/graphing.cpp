@@ -134,7 +134,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     QVector<double> ibus(ibu_counts.size());
     std::map<double, int> binned_ibus;
     //QVector<double> counts(ibu_counts.size());
-    QVector<double> percentages(ibu_counts.size());
+    QVector<double> percentages(11);
     double total_drinks {0};
 
     // Build vectors
@@ -171,6 +171,15 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
             it->second += val;
         } else {
             binned_ibus.insert(std::pair<double, int>(min_ibu, val));
+        }
+    }
+
+    // Populate binned_ibu map with 0's for IBU ranges with no entries
+    // This makes the bar graph place the bar in correct places when preceding IBU ranges have no entries.
+    for (int range_beginning : {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100}) {
+        auto it = binned_ibus.find(range_beginning);
+        if (it == binned_ibus.end()) {  // Range beginning value doesn't exist in map
+            binned_ibus.insert(std::pair<double, int>(range_beginning, 0));
         }
     }
 
@@ -222,12 +231,15 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     // Set axis range & label
     ibu_plot->xAxis->setRange(-2, 102);
     ibu_plot->xAxis->setLabel("IBU");
-    ibu_plot->yAxis->setRange(perc_min, perc_max);
+    ibu_plot->yAxis->setRange(perc_min, perc_max + 2);
     ibu_plot->yAxis->setLabel("% of All Drinks");
     ibu_plot->yAxis->setPadding(5);
 
+    // Set x-axis ticks
+    ibu_plot->xAxis->setTickLength(2, 4);
+
     // Set data
-    ibuBars->setData(ibus, percentages);
+    ibuBars->setData(ticks, percentages);
     ibu_plot->replot();
 
     return ibu_plot;
