@@ -36,6 +36,7 @@ private:
     static std::map<double, int> build_ibu_map(const std::map<double, int>& ibu_counts);
     static void get_ibu_values(std::map<double, int> &binned_ibus, QVector<double> &percentages, double &total_drinks,
                                QVector<double> &ibus);
+    static int get_min_ibu_range(const int ibu);
 };
 
 

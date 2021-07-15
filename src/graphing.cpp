@@ -453,29 +453,7 @@ std::map<double, int> Graphing::build_ibu_map(const std::map<double, int> &ibu_c
     std::map<double, int> binned_ibus;
     // Bin ibus
     for (auto const& [key, val] : ibu_counts) {
-        int min_ibu {0};  // Default for IBUs ranged 0-10
-
-        if (key > 10 && key <= 20) {
-            min_ibu = 10;
-        } else if (key > 20 && key <= 30) {
-            min_ibu = 20;
-        } else if (key > 30 && key <= 40) {
-            min_ibu = 30;
-        } else if (key > 40 && key <= 50) {
-            min_ibu = 40;
-        } else if (key > 50 && key <= 60) {
-            min_ibu = 50;
-        } else if (key > 60 && key <= 70) {
-            min_ibu = 60;
-        } else if (key > 70 && key <= 80) {
-            min_ibu = 70;
-        } else if (key > 80 && key <= 90) {
-            min_ibu = 80;
-        } else if (key > 90 && key <= 100) {
-            min_ibu = 90;
-        } else if (key > 100) {
-            min_ibu = 100;
-        }
+        int min_ibu {get_min_ibu_range(key)};
 
         // Add to the new map
         auto it = binned_ibus.find(min_ibu);
@@ -517,4 +495,38 @@ void Graphing::get_ibu_values(std::map<double, int> &binned_ibus, QVector<double
         percentages[i] = ((double)val / total_drinks) * 100;
         i++;
     }
+}
+
+int Graphing::get_min_ibu_range(const int ibu) {
+    /*
+     * Put input IBU value into range for graphing.
+     * @param ibu: input IBU.
+     * @return min_ibu: Min IBU for range it falls into.
+     */
+
+    int min_ibu {0};  // Default for IBUs ranged 0-10
+
+    if (ibu > 10 && ibu <= 20) {
+        min_ibu = 10;
+    } else if (ibu > 20 && ibu <= 30) {
+        min_ibu = 20;
+    } else if (ibu > 30 && ibu <= 40) {
+        min_ibu = 30;
+    } else if (ibu > 40 && ibu <= 50) {
+        min_ibu = 40;
+    } else if (ibu > 50 && ibu <= 60) {
+        min_ibu = 50;
+    } else if (ibu > 60 && ibu <= 70) {
+        min_ibu = 60;
+    } else if (ibu > 70 && ibu <= 80) {
+        min_ibu = 70;
+    } else if (ibu > 80 && ibu <= 90) {
+        min_ibu = 80;
+    } else if (ibu > 90 && ibu <= 100) {
+        min_ibu = 90;
+    } else if (ibu > 100) {
+        min_ibu = 100;
+    }
+
+    return min_ibu;
 }
