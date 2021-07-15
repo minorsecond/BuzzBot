@@ -504,29 +504,14 @@ int Graphing::get_min_ibu_range(const int ibu) {
      * @return min_ibu: Min IBU for range it falls into.
      */
 
-    int min_ibu {0};  // Default for IBUs ranged 0-10
+    //int min_ibu {0};  // Default for IBUs ranged 0-10
 
-    if (ibu > 10 && ibu <= 20) {
-        min_ibu = 10;
-    } else if (ibu > 20 && ibu <= 30) {
-        min_ibu = 20;
-    } else if (ibu > 30 && ibu <= 40) {
-        min_ibu = 30;
-    } else if (ibu > 40 && ibu <= 50) {
-        min_ibu = 40;
-    } else if (ibu > 50 && ibu <= 60) {
-        min_ibu = 50;
-    } else if (ibu > 60 && ibu <= 70) {
-        min_ibu = 60;
-    } else if (ibu > 70 && ibu <= 80) {
-        min_ibu = 70;
-    } else if (ibu > 80 && ibu <= 90) {
-        min_ibu = 80;
-    } else if (ibu > 90 && ibu <= 100) {
-        min_ibu = 90;
-    } else if (ibu > 100) {
-        min_ibu = 100;
+    for (int min_ibu = 0; min_ibu < 100; min_ibu += 10) {
+        int ceil {min_ibu + 10};
+        if (ibu > min_ibu && ibu <= ceil) {
+            return min_ibu;
+        }
     }
 
-    return min_ibu;
+    return 100;
 }
