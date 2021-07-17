@@ -39,7 +39,11 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
     }
 
     // Plot the ABV plot
-    QVector<QCPGraphData> time_data = time_data_aggregator(all_drinks, std_drink_size);
+    QVector<QCPGraphData> time_data;
+    if (!all_drinks.empty()) {
+        time_data = time_data_aggregator(all_drinks, std_drink_size);
+    }
+
     auto abv_plot = Graphing::plot_abvs(time_data, options, this);
 
     if (no_beers) {  // Full size plot if beer data is empty
@@ -128,32 +132,21 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
                                                                 QFont::Bold)));
 
     QVector<double> ibus(ibu_counts.size());
+    std::map<double, int> binned_ibus {build_ibu_map(ibu_counts)};
     //QVector<double> counts(ibu_counts.size());
-    QVector<double> percentages(ibu_counts.size());
+    QVector<double> percentages(11);
     double total_drinks {0};
 
-    // Build vectors
-
-    // Get total count of drinks
-    for (auto const& [key, val] : ibu_counts) {
-        total_drinks += val;
-    }
-
-    int i = 0;
-    for (auto const& [key, val] : ibu_counts) {
-        ibus[i] = key;
-        //counts[i] = val;
-        percentages[i] = ((double)val / total_drinks) * 100;
-        i++;
-    }
+    // Populate values. This relies on pass by reference and populates the values using that technique
+    get_ibu_values(binned_ibus, percentages, total_drinks, ibus);
 
     // Get min/max values for axes
-    double ibu_min {*std::min_element(ibus.begin(), ibus.end())};
-    double ibu_max {*std::max_element(ibus.begin(), ibus.end())};
-    //double count_min = *std::min_element(counts.begin(), counts.end());
-    //double count_max = *std::max_element(counts.begin(), counts.end());
-    double perc_min {*std::min_element(percentages.begin(), percentages.end())};
     double perc_max {*std::max_element(percentages.begin(), percentages.end())};
+    double perc_min {*std::min_element(percentages.begin(), percentages.end())};
+
+    if (perc_min >= 5) {
+        perc_min -= 5;
+    }
 
     // Graph style
     QPen drawPen;
@@ -164,16 +157,32 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     QColor color(20+200/4.0*2,70*(1.6-2/4.0), 150, 150);
 
     // Create the IBU graph
-    ibu_plot->addGraph();
-    ibu_plot->graph(0)->setData(ibus, percentages);
-    ibu_plot->graph()->setPen(drawPen);
+    auto *ibuBars = new QCPBars(ibu_plot->xAxis, ibu_plot->yAxis);
+    ibuBars->setAntialiased(false);
+    ibuBars->setPen(QPen(color));
+    ibuBars->setBrush(QBrush(color));
+    ibuBars->setWidth(5);
+
+    // Generate ticks every 10 IBU values
+    QVector<double> ticks {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    QVector<QString> labels {"0-10", "11-20", "21-30", "31-40", "41-50", "51-60", "61-70", "71-80", "81-90", "91-100",
+                             "100+"};
+    QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
+    textTicker->addTicks(ticks, labels);
+    ibu_plot->xAxis->setTicker(textTicker);
+
+    // Set axis range & label
+    ibu_plot->xAxis->setRange(-2, 102);
     ibu_plot->xAxis->setLabel("IBU");
-    ibu_plot->yAxis->setLabel("% of All Drinks");
-    ibu_plot->xAxis->setRange(ibu_min, ibu_max);
-    ibu_plot->yAxis->setRange(perc_min, perc_max);
-    ibu_plot->graph()->setLineStyle(QCPGraph::lsLine);
-    ibu_plot->graph()->setPen(QPen(color.darker(200)));
-    ibu_plot->graph()->setBrush(QBrush(color));
+    ibu_plot->yAxis->setRange(perc_min, perc_max + 2);
+    ibu_plot->yAxis->setLabel("% of All Beers");
+    ibu_plot->yAxis->setPadding(5);
+
+    // Set x-axis ticks
+    ibu_plot->xAxis->setTickLength(2, 4);
+
+    // Set data
+    ibuBars->setData(ticks, percentages);
     ibu_plot->replot();
 
     return ibu_plot;
@@ -432,4 +441,77 @@ int Graphing::date_from_week_num(const std::string& week_num) {
     int date = std::stoi(date_str);
 
     return date;
+}
+
+std::map<double, int> Graphing::build_ibu_map(const std::map<double, int> &ibu_counts) {
+    /*
+     * Take map of IBU counts and bin them into ranges.
+     * @param ibu_counts: a map of IBU counts where key is IBU and value is the count.
+     * @return binned_ibus: a map of IBU counts where key is bottom of range and value is the count.
+     */
+
+    std::map<double, int> binned_ibus;
+    // Bin ibus
+    for (auto const& [key, val] : ibu_counts) {
+        int min_ibu {get_min_ibu_range(key)};
+
+        // Add to the new map
+        auto it = binned_ibus.find(min_ibu);
+        if (it != binned_ibus.end()) {  // min_ibu exists in map
+            it->second += val;
+        } else {
+            binned_ibus.insert(std::pair<double, int>(min_ibu, val));
+        }
+    }
+
+    return binned_ibus;
+}
+
+void Graphing::get_ibu_values(std::map<double, int> &binned_ibus, QVector<double> &percentages, double &total_drinks,
+                              QVector<double> &ibus) {
+    /*
+     * Manipulate binned_ibus, percentages, and total drinks to contain the correct values
+     * @param binned_ibus: a std::map object where keys are IBUs and values are the count.
+     */
+
+    // Populate binned_ibu map with 0's for IBU ranges with no entries
+    // This makes the bar graph place the bar in correct places when preceding IBU ranges have no entries.
+    for (int range_beginning : {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100}) {
+        auto it = binned_ibus.find(range_beginning);
+        if (it == binned_ibus.end()) {  // Range beginning value doesn't exist in map
+            binned_ibus.insert(std::pair<double, int>(range_beginning, 0));
+        }
+    }
+
+    // Get total count of drinks
+    for (auto const& [key, val] : binned_ibus) {
+        total_drinks += val;
+    }
+
+    int i = 0;
+    for (auto const& [key, val] : binned_ibus) {
+        ibus[i] = key;
+        //counts[i] = val;
+        percentages[i] = ((double)val / total_drinks) * 100;
+        i++;
+    }
+}
+
+int Graphing::get_min_ibu_range(const int ibu) {
+    /*
+     * Put input IBU value into range for graphing.
+     * @param ibu: input IBU.
+     * @return min_ibu: Min IBU for range it falls into.
+     */
+
+    //int min_ibu {0};  // Default for IBUs ranged 0-10
+
+    for (int min_ibu = 0; min_ibu < 100; min_ibu += 10) {
+        int ceil {min_ibu + 10};
+        if (ibu > min_ibu && ibu <= ceil) {
+            return min_ibu;
+        }
+    }
+
+    return 100;
 }
