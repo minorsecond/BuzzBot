@@ -132,12 +132,47 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
                                                                 QFont::Bold)));
 
     QVector<double> ibus(ibu_counts.size());
-    std::map<double, int> binned_ibus {build_ibu_map(ibu_counts)};
+    std::map<double, int> binned_ibus;
     //QVector<double> counts(ibu_counts.size());
     QVector<double> percentages(11);
     double total_drinks {0};
 
     // Build vectors
+
+    // Bin ibus
+    for (auto const& [key, val] : ibu_counts) {
+        int min_ibu {0};  // Default for IBUs ranged 0-10
+
+        if (key > 10 && key <= 20) {
+            min_ibu = 10;
+        } else if (key > 20 && key <= 30) {
+            min_ibu = 20;
+        } else if (key > 30 && key <= 40) {
+            min_ibu = 30;
+        } else if (key > 40 && key <= 50) {
+            min_ibu = 40;
+        } else if (key > 50 && key <= 60) {
+            min_ibu = 50;
+        } else if (key > 60 && key <= 70) {
+            min_ibu = 60;
+        } else if (key > 70 && key <= 80) {
+            min_ibu = 70;
+        } else if (key > 80 && key <= 90) {
+            min_ibu = 80;
+        } else if (key > 90 && key <= 100) {
+            min_ibu = 90;
+        } else if (key > 100) {
+            min_ibu = 100;
+        }
+
+        // Add to the new map
+        auto it = binned_ibus.find(min_ibu);
+        if (it != binned_ibus.end()) {  // min_ibu exists in map
+            it->second += val;
+        } else {
+            binned_ibus.insert(std::pair<double, int>(min_ibu, val));
+        }
+    }
 
     // Populate binned_ibu map with 0's for IBU ranges with no entries
     // This makes the bar graph place the bar in correct places when preceding IBU ranges have no entries.
@@ -464,50 +499,4 @@ int Graphing::date_from_week_num(const std::string& week_num) {
     int date = std::stoi(date_str);
 
     return date;
-}
-
-std::map<double, int> Graphing::build_ibu_map(const std::map<double, int> &ibu_counts) {
-    /*
-     * Take map of IBU counts and bin them into ranges.
-     * @param ibu_counts: a map of IBU counts where key is IBU and value is the count.
-     * @return binned_ibus: a map of IBU counts where key is bottom of range and value is the count.
-     */
-
-    std::map<double, int> binned_ibus;
-    // Bin ibus
-    for (auto const& [key, val] : ibu_counts) {
-        int min_ibu {0};  // Default for IBUs ranged 0-10
-
-        if (key > 10 && key <= 20) {
-            min_ibu = 10;
-        } else if (key > 20 && key <= 30) {
-            min_ibu = 20;
-        } else if (key > 30 && key <= 40) {
-            min_ibu = 30;
-        } else if (key > 40 && key <= 50) {
-            min_ibu = 40;
-        } else if (key > 50 && key <= 60) {
-            min_ibu = 50;
-        } else if (key > 60 && key <= 70) {
-            min_ibu = 60;
-        } else if (key > 70 && key <= 80) {
-            min_ibu = 70;
-        } else if (key > 80 && key <= 90) {
-            min_ibu = 80;
-        } else if (key > 90 && key <= 100) {
-            min_ibu = 90;
-        } else if (key > 100) {
-            min_ibu = 100;
-        }
-
-        // Add to the new map
-        auto it = binned_ibus.find(min_ibu);
-        if (it != binned_ibus.end()) {  // min_ibu exists in map
-            it->second += val;
-        } else {
-            binned_ibus.insert(std::pair<double, int>(min_ibu, val));
-        }
-    }
-
-    return binned_ibus;
 }
