@@ -137,12 +137,35 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     QVector<double> percentages(11);
     double total_drinks {0};
 
-    // Populate values. This relies on pass by reference and populates the values using that technique
-    get_ibu_values(binned_ibus, percentages, total_drinks, ibus);
+    // Build vectors
+
+    // Populate binned_ibu map with 0's for IBU ranges with no entries
+    // This makes the bar graph place the bar in correct places when preceding IBU ranges have no entries.
+    for (int range_beginning : {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100}) {
+        auto it = binned_ibus.find(range_beginning);
+        if (it == binned_ibus.end()) {  // Range beginning value doesn't exist in map
+            binned_ibus.insert(std::pair<double, int>(range_beginning, 0));
+        }
+    }
+
+    // Get total count of drinks
+    for (auto const& [key, val] : binned_ibus) {
+        total_drinks += val;
+    }
+
+    int i = 0;
+    for (auto const& [key, val] : binned_ibus) {
+        ibus[i] = key;
+        //counts[i] = val;
+        percentages[i] = ((double)val / total_drinks) * 100;
+        i++;
+    }
 
     // Get min/max values for axes
     double perc_max {*std::max_element(percentages.begin(), percentages.end())};
     double perc_min {*std::min_element(percentages.begin(), percentages.end())};
+    //double ibu_max {*std::max_element(ibus.begin(), ibus.end())};
+    //double ibu_min {*std::min_element(ibus.begin(), ibus.end())};
 
     if (perc_min >= 5) {
         perc_min -= 5;
@@ -487,34 +510,4 @@ std::map<double, int> Graphing::build_ibu_map(const std::map<double, int> &ibu_c
     }
 
     return binned_ibus;
-}
-
-void Graphing::get_ibu_values(std::map<double, int> &binned_ibus, QVector<double> &percentages, double &total_drinks,
-                              QVector<double> &ibus) {
-    /*
-     * Manipulate binned_ibus, percentages, and total drinks to contain the correct values
-     * @param binned_ibus: a std::map object where keys are IBUs and values are the count.
-     */
-
-    // Populate binned_ibu map with 0's for IBU ranges with no entries
-    // This makes the bar graph place the bar in correct places when preceding IBU ranges have no entries.
-    for (int range_beginning : {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100}) {
-        auto it = binned_ibus.find(range_beginning);
-        if (it == binned_ibus.end()) {  // Range beginning value doesn't exist in map
-            binned_ibus.insert(std::pair<double, int>(range_beginning, 0));
-        }
-    }
-
-    // Get total count of drinks
-    for (auto const& [key, val] : binned_ibus) {
-        total_drinks += val;
-    }
-
-    int i = 0;
-    for (auto const& [key, val] : binned_ibus) {
-        ibus[i] = key;
-        //counts[i] = val;
-        percentages[i] = ((double)val / total_drinks) * 100;
-        i++;
-    }
 }
