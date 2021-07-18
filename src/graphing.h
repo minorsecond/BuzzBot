@@ -31,12 +31,6 @@ public:
     static QCustomPlot * plot_abvs(const QVector<QCPGraphData>& time_data, const Options& options, QDialog *parent);
     static std::string week_number(const int date);
     static int date_from_week_num(const std::string& week_num);
-
-private:
-    static std::map<double, int> build_ibu_map(const std::map<double, int>& ibu_counts);
-    static void get_ibu_values(std::map<double, int> &binned_ibus, QVector<double> &percentages, double &total_drinks,
-                               QVector<double> &ibus);
-    static int get_min_ibu_range(const int ibu);
 };
 
 
