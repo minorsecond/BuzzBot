@@ -219,7 +219,6 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     ibuBars->setAntialiased(false);
     ibuBars->setPen(QPen(color));
     ibuBars->setBrush(QBrush(color));
-    ibuBars->setWidth(5);
 
     // Generate ticks every 10 IBU values
     QVector<double> ticks {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
