@@ -232,7 +232,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     ibu_plot->xAxis->setRange(-2, 102);
     ibu_plot->xAxis->setLabel("IBU");
     ibu_plot->yAxis->setRange(perc_min, perc_max + 2);
-    ibu_plot->yAxis->setLabel("% of All Beers");
+    ibu_plot->yAxis->setLabel("% of All Drinks");
     ibu_plot->yAxis->setPadding(5);
 
     // Set x-axis ticks
