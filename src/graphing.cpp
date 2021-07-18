@@ -179,12 +179,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     QVector <QString> ibu_strings;
     QVector <double> ibu_label_numbers;
     for (int ibu_val : ibus) {
-        if (ibus.size() >= 12) {
-            if ( ibu_val % 10 == 0) {
-                ibu_strings.push_back(QString::fromStdString(std::to_string((int)ibu_val)));
-                ibu_label_numbers.push_back(ibu_val);
-            }
-        } else {
+        if ( ibu_val % 10 == 0) {
             ibu_strings.push_back(QString::fromStdString(std::to_string((int)ibu_val)));
             ibu_label_numbers.push_back(ibu_val);
         }
