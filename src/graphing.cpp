@@ -132,55 +132,19 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
                                                                 QFont::Bold)));
 
     QVector<double> ibus(ibu_counts.size());
-    std::map<double, int> binned_ibus;
     //QVector<double> counts(ibu_counts.size());
     QVector<double> percentages(ibu_counts.size());
     double total_drinks {0};
 
     // Build vectors
 
-    // Bin ibus
-    for (auto const& [key, val] : ibu_counts) {
-        int min_ibu {0};  // Default for IBUs ranged 0-10
-
-        if (key > 10 && key <= 20) {
-            min_ibu = 10;
-        } else if (key > 20 && key <= 30) {
-            min_ibu = 20;
-        } else if (key > 30 && key <= 40) {
-            min_ibu = 30;
-        } else if (key > 40 && key <= 50) {
-            min_ibu = 40;
-        } else if (key > 50 && key <= 60) {
-            min_ibu = 50;
-        } else if (key > 60 && key <= 70) {
-            min_ibu = 60;
-        } else if (key > 70 && key <= 80) {
-            min_ibu = 70;
-        } else if (key > 80 && key <= 90) {
-            min_ibu = 80;
-        } else if (key > 90 && key <= 100) {
-            min_ibu = 90;
-        } else if (key > 100) {
-            min_ibu = 100;
-        }
-
-        // Add to the new map
-        auto it = binned_ibus.find(min_ibu);
-        if (it != binned_ibus.end()) {  // min_ibu exists in map
-            it->second += val;
-        } else {
-            binned_ibus.insert(std::pair<double, int>(min_ibu, val));
-        }
-    }
-
     // Get total count of drinks
-    for (auto const& [key, val] : binned_ibus) {
+    for (auto const& [key, val] : ibu_counts) {
         total_drinks += val;
     }
 
     int i = 0;
-    for (auto const& [key, val] : binned_ibus) {
+    for (auto const& [key, val] : ibu_counts) {
         ibus[i] = key;
         //counts[i] = val;
         percentages[i] = ((double)val / total_drinks) * 100;
@@ -190,8 +154,8 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     // Get min/max values for axes
     double perc_max {*std::max_element(percentages.begin(), percentages.end())};
     double perc_min {*std::min_element(percentages.begin(), percentages.end())};
-    //double ibu_max {*std::max_element(ibus.begin(), ibus.end())};
-    //double ibu_min {*std::min_element(ibus.begin(), ibus.end())};
+    double ibu_max {*std::max_element(ibus.begin(), ibus.end())};
+    double ibu_min {*std::min_element(ibus.begin(), ibus.end())};
 
     if (perc_min >= 5) {
         perc_min -= 5;
@@ -212,15 +176,30 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     ibuBars->setBrush(QBrush(color));
 
     // Generate ticks every 10 IBU values
-    QVector<double> ticks {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    QVector<QString> labels {"0-10", "11-20", "21-30", "31-40", "41-50", "51-60", "61-70", "71-80", "81-90", "91-100",
-                             "100+"};
+    QVector <QString> ibu_strings;
+    QVector <double> ibu_label_numbers;
+    for (int ibu_val : ibus) {
+        if (ibus.size() >= 12) {
+            if ( ibu_val % 10 == 0) {
+                ibu_strings.push_back(QString::fromStdString(std::to_string((int)ibu_val)));
+                ibu_label_numbers.push_back(ibu_val);
+            }
+        } else {
+            ibu_strings.push_back(QString::fromStdString(std::to_string((int)ibu_val)));
+            ibu_label_numbers.push_back(ibu_val);
+        }
+    }
     QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
-    textTicker->addTicks(ticks, labels);
+    textTicker->addTicks(ibu_label_numbers, ibu_strings);
     ibu_plot->xAxis->setTicker(textTicker);
 
     // Set axis range & label
-    ibu_plot->xAxis->setRange(-2, 102);
+    if (ibus.size() == 1) {
+        std::cout << "Single value IBU list" << std::endl;
+        ibu_min -= 5;
+        ibu_max += 5;
+    }
+    ibu_plot->xAxis->setRange(ibu_min-2, ibu_max+2);
     ibu_plot->xAxis->setLabel("IBU");
     ibu_plot->yAxis->setRange(perc_min, perc_max);
     ibu_plot->yAxis->setLabel("% of All Drinks");
