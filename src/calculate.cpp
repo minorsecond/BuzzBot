@@ -22,7 +22,7 @@ double Calculate::standard_drinks(double abv, double amount, double std_drink_si
     return round_to_two_decimal_points(alcohol_amt / std_drink_size);
 }
 
-double Calculate::alcohol_volume(double abv, double amount) {
+constexpr double Calculate::alcohol_volume(double abv, double amount) {
     /*
      * Calculate the volume of alcohol in a drink.
      * @param abv: The alcohol by volume of the drink.
