@@ -70,7 +70,7 @@ public:
     static std::vector<Drink> get_drinks_by_producer(Storage storage, std::string producer);
     static int get_version(Storage storage);
     static int increment_version(Storage storage, int current_version);
-    static std::vector<Drink> sort_by_date_id(std::vector<Drink> drinks);
+    static void sort_by_date_id(std::vector<Drink> &drinks);
     static std::string get_latest_notes(Storage storage, const std::string& name, const std::string& alcohol_type);
 
 private:

@@ -100,7 +100,7 @@ void MainWindow::update_table() {
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
 
     std::vector<Drink> drinks = Database::filter(filter_category, filter_text, storage);
-    drinks = Database::sort_by_date_id(drinks);
+    Database::sort_by_date_id(drinks);
 
     ui->drinkLogTable->setRowCount(0);
     for (const auto& drink : drinks) {
