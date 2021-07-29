@@ -263,7 +263,7 @@ bool Database::compare_date(const Drink &a, const Drink &b) {
     return false;
 }
 
-std::vector<Drink> Database::sort_by_date_id(std::vector<Drink> drinks) {
+void Database::sort_by_date_id(std::vector<Drink> &drinks) {
     /*
      * Adds a sort column integer to database.
      */
@@ -276,6 +276,4 @@ std::vector<Drink> Database::sort_by_date_id(std::vector<Drink> drinks) {
         drinks[i].sort_order = sort_order;
         sort_order++;
     }
-
-    return drinks;
 }
