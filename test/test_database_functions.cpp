@@ -438,14 +438,14 @@ TEST_CASE("DB Sort", "[DB Functions]") {
     storage_1.insert(mosaic2);
     storage_1.insert(old_rasputin);
     Database::write_db_to_disk(storage_1);
-    std::vector<Drink> unsorted_drinks = storage_1.get_all<Drink>();
-    std::vector<Drink> sorted_drinks = Database::sort_by_date_id(unsorted_drinks);
+    std::vector<Drink> drinks = storage_1.get_all<Drink>();
+    Database::sort_by_date_id(drinks);
 
-    for (const auto& drink : sorted_drinks)
+    for (const auto& drink : drinks)
         std::cout << drink.name << std::endl;
 
-    REQUIRE(sorted_drinks.at(0).name == "Old Rasputin");
-    REQUIRE(sorted_drinks.at(1).name == "Mosaic");
-    REQUIRE(sorted_drinks.at(2).name == "Mosaic");
-    REQUIRE(sorted_drinks.at(3).name == "Everything Rhymes with Orange");
+    REQUIRE(drinks.at(0).name == "Old Rasputin");
+    REQUIRE(drinks.at(1).name == "Mosaic");
+    REQUIRE(drinks.at(2).name == "Mosaic");
+    REQUIRE(drinks.at(3).name == "Everything Rhymes with Orange");
 }

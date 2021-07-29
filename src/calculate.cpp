@@ -110,9 +110,9 @@ std::string Calculate::favorite_producer(const Storage& storage, const std::stri
 
     unsigned current_max = 0;
     for (const auto & brewery_count : producer_counts) {
-        if (brewery_count.second > current_max) {
+        if (const unsigned second_count {brewery_count.second}; second_count > current_max) {
             favorite_producer = brewery_count.first;
-            current_max = brewery_count.second;
+            current_max = second_count;
         }
     }
 
@@ -144,9 +144,9 @@ std::string Calculate::favorite_drink(const Storage& storage, const std::string&
     unsigned current_max = 0;
 
     for (const auto & producer_count : drink_counts) {
-        if (producer_count.second > current_max) {
+        if (const unsigned second_count {producer_count.second}; second_count > current_max) {
             favorite_drink = producer_count.first;
-            current_max = producer_count.second;
+            current_max = second_count;
         }
     }
 
@@ -219,9 +219,9 @@ std::string Calculate::favorite_type(const Storage& storage, const std::string& 
     unsigned current_max = 0;
 
     for (const auto & type_count : type_counts) {
-        if (type_count.second > current_max) {
+        if (const unsigned second_count {type_count.second}; second_count > current_max) {
             favorite_type = type_count.first;
-            current_max = type_count.second;
+            current_max = second_count;
         }
     }
 
