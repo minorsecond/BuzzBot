@@ -468,16 +468,15 @@ void MainWindow::update_types_and_producers() {
      * Change the drink attributes based on the drink selected in the nameInput field.
      */
 
-    std::string alcohol_type = get_current_tab();
-    if (alcohol_type == "Beer") {
+    if (get_current_tab() == "Beer") {
         if (!ui->beerNameInput->currentText().toStdString().empty()) {
             update_beer_types_producers();
         }
-    } else if(alcohol_type == "Liquor") {
+    } else if(get_current_tab() == "Liquor") {
         if (!ui->liquorNameInput->currentText().toStdString().empty()) {
             update_liquor_types_producers();
         }
-    } else if (alcohol_type == "Wine") {
+    } else if (get_current_tab() == "Wine") {
         if (!ui->wineNameInput->currentText().toStdString().empty()) {
             update_wine_types_producers();
         }
@@ -574,12 +573,10 @@ Drink MainWindow::get_drink_attributes_from_fields() {
      * @return drink: A Drink instance containing user-input data.
      */
 
-    std::string alcohol_type = get_current_tab();
-
     Drink drink;
 
     // Size values are converted to/from ml and oz in add_new_row()
-    if (alcohol_type == "Beer") {
+    if (const std::string alcohol_type {get_current_tab()}; alcohol_type == "Beer") {
         drink = get_beer_attrs_from_fields(alcohol_type);
     } else if (alcohol_type == "Liquor") {
         drink = get_liquor_attrs_from_fields(alcohol_type);
