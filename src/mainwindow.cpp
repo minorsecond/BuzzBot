@@ -198,10 +198,11 @@ void MainWindow::configure_table() {
     ui->drinkLogTable->setColumnWidth(5, 50); // ABV
     ui->drinkLogTable->setColumnWidth(6, 50); // IBU
     ui->drinkLogTable->setColumnWidth(7, 55); // Size
-    ui->drinkLogTable->setColumnWidth(8, 55); // Rating
-    ui->drinkLogTable->setColumnHidden(9, true);  // Hide ID column
-    ui->drinkLogTable->setColumnHidden(10, true);  // Hide Timestamp column
-    ui->drinkLogTable->setColumnHidden(11, true);  // Hide Sort column
+    ui->drinkLogTable->setColumnWidth(8, 55); // Standard Drinks
+    ui->drinkLogTable->setColumnWidth(9, 55); // Rating
+    ui->drinkLogTable->setColumnHidden(10, true);  // Hide ID column
+    ui->drinkLogTable->setColumnHidden(11, true);  // Hide Timestamp column
+    ui->drinkLogTable->setColumnHidden(12, true);  // Hide Sort column
     QHeaderView* drink_log_header = ui->drinkLogTable->horizontalHeader();
     drink_log_header->setSectionResizeMode(1, QHeaderView::Stretch);
     drink_log_header->setSectionResizeMode(2, QHeaderView::Stretch);
