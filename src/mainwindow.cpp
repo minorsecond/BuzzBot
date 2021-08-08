@@ -198,10 +198,11 @@ void MainWindow::configure_table() {
     ui->drinkLogTable->setColumnWidth(5, 50); // ABV
     ui->drinkLogTable->setColumnWidth(6, 50); // IBU
     ui->drinkLogTable->setColumnWidth(7, 55); // Size
-    ui->drinkLogTable->setColumnWidth(8, 55); // Rating
-    ui->drinkLogTable->setColumnHidden(9, true);  // Hide ID column
-    ui->drinkLogTable->setColumnHidden(10, true);  // Hide Timestamp column
-    ui->drinkLogTable->setColumnHidden(11, true);  // Hide Sort column
+    ui->drinkLogTable->setColumnWidth(8, 55); // Standard Drinks
+    ui->drinkLogTable->setColumnWidth(9, 55); // Rating
+    ui->drinkLogTable->setColumnHidden(10, true);  // Hide ID column
+    ui->drinkLogTable->setColumnHidden(11, true);  // Hide Timestamp column
+    ui->drinkLogTable->setColumnHidden(12, true);  // Hide Sort column
     QHeaderView* drink_log_header = ui->drinkLogTable->horizontalHeader();
     drink_log_header->setSectionResizeMode(1, QHeaderView::Stretch);
     drink_log_header->setSectionResizeMode(2, QHeaderView::Stretch);
@@ -468,16 +469,15 @@ void MainWindow::update_types_and_producers() {
      * Change the drink attributes based on the drink selected in the nameInput field.
      */
 
-    std::string alcohol_type = get_current_tab();
-    if (alcohol_type == "Beer") {
+    if (get_current_tab() == "Beer") {
         if (!ui->beerNameInput->currentText().toStdString().empty()) {
             update_beer_types_producers();
         }
-    } else if(alcohol_type == "Liquor") {
+    } else if(get_current_tab() == "Liquor") {
         if (!ui->liquorNameInput->currentText().toStdString().empty()) {
             update_liquor_types_producers();
         }
-    } else if (alcohol_type == "Wine") {
+    } else if (get_current_tab() == "Wine") {
         if (!ui->wineNameInput->currentText().toStdString().empty()) {
             update_wine_types_producers();
         }
@@ -574,12 +574,10 @@ Drink MainWindow::get_drink_attributes_from_fields() {
      * @return drink: A Drink instance containing user-input data.
      */
 
-    std::string alcohol_type = get_current_tab();
-
     Drink drink;
 
     // Size values are converted to/from ml and oz in add_new_row()
-    if (alcohol_type == "Beer") {
+    if (const std::string alcohol_type {get_current_tab()}; alcohol_type == "Beer") {
         drink = get_beer_attrs_from_fields(alcohol_type);
     } else if (alcohol_type == "Liquor") {
         drink = get_liquor_attrs_from_fields(alcohol_type);

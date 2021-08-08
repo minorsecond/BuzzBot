@@ -162,6 +162,11 @@
       </column>
       <column>
        <property name="text">
+        <string>S. Drinks</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
         <string>Rating</string>
        </property>
       </column>
