@@ -104,6 +104,8 @@ void MainWindow::update_table() {
 
     ui->drinkLogTable->setRowCount(0);
     for (const auto& drink : drinks) {
+        // These don't need to be deleted. The table widget takes ownership of these pointers and
+        // will delete them as needed.
         const double std_drinks {Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size))};
         std::cout << "Standard drinks: " << std_drinks << std::endl;
         int table_row_num = ui->drinkLogTable->rowCount();
@@ -154,6 +156,20 @@ void MainWindow::update_table() {
         ui->drinkLogTable->setItem(table_row_num, 10, id);
         ui->drinkLogTable->setItem(table_row_num, 11, timestamp);
         ui->drinkLogTable->setItem(table_row_num, 12, sort_order);
+
+        delete date_qtw;
+        delete name;
+        delete type;
+        delete subtype;
+        delete producer;
+        delete abv;
+        delete standard_drinks;
+        delete rating;
+        delete id;
+        delete timestamp;
+        delete sort_order;
+        delete size;
+        delete ibu;
     }
     reset_table_sort();
 }
