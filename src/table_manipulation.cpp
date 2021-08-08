@@ -156,20 +156,6 @@ void MainWindow::update_table() {
         ui->drinkLogTable->setItem(table_row_num, 10, id);
         ui->drinkLogTable->setItem(table_row_num, 11, timestamp);
         ui->drinkLogTable->setItem(table_row_num, 12, sort_order);
-
-        delete date_qtw;
-        delete name;
-        delete type;
-        delete subtype;
-        delete producer;
-        delete abv;
-        delete standard_drinks;
-        delete rating;
-        delete id;
-        delete timestamp;
-        delete sort_order;
-        delete size;
-        delete ibu;
     }
     reset_table_sort();
 }
