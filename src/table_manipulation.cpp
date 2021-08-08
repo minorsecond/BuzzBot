@@ -168,7 +168,7 @@ void MainWindow::delete_row() {
     ConfirmDialog confirmation_dialog = ConfirmDialog("Delete");
     if (confirmation_dialog.exec() == QDialog::Accepted) {
         int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
-        int row_to_delete = (ui->drinkLogTable->item(select, 9)->text().toUtf8().toInt());
+        int row_to_delete = (ui->drinkLogTable->item(select, 10)->text().toUtf8().toInt());
         std::cout << "Deleting row " << row_to_delete << std::endl;
         Database::delete_row(storage, row_to_delete);
         update_table();
@@ -194,7 +194,7 @@ Drink MainWindow::get_drink_at_selected_row() {
 
     if (selection >= 0) {
         std::cout << "Getting row " << selection << " from table." << std::endl;
-        int row_to_get = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
+        int row_to_get = ui->drinkLogTable->item(selection, 10)->text().toUtf8().toInt();
         std::cout << "Getting row " << row_to_get << " from database." << std::endl;
         if (select->isRowSelected(selection))
             ui->deleteRowButton->setEnabled(true);
