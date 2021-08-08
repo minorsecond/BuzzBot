@@ -194,7 +194,7 @@ Drink MainWindow::get_drink_at_selected_row() {
 
     if (selection >= 0) {
         std::cout << "Getting row " << selection << " from table." << std::endl;
-        int row_to_get = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
+        int row_to_get = ui->drinkLogTable->item(selection, 10)->text().toUtf8().toInt();
         std::cout << "Getting row " << row_to_get << " from database." << std::endl;
         if (select->isRowSelected(selection))
             ui->deleteRowButton->setEnabled(true);
