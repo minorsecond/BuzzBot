@@ -168,7 +168,7 @@ void MainWindow::delete_row() {
     ConfirmDialog confirmation_dialog = ConfirmDialog("Delete");
     if (confirmation_dialog.exec() == QDialog::Accepted) {
         int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
-        int row_to_delete = (ui->drinkLogTable->item(select, 9)->text().toUtf8().toInt());
+        int row_to_delete = (ui->drinkLogTable->item(select, 10)->text().toUtf8().toInt());
         std::cout << "Deleting row " << row_to_delete << std::endl;
         Database::delete_row(storage, row_to_delete);
         update_table();
