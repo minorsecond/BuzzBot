@@ -104,6 +104,8 @@ void MainWindow::update_table() {
 
     ui->drinkLogTable->setRowCount(0);
     for (const auto& drink : drinks) {
+        const double std_drinks {Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size))};
+        std::cout << "Standard drinks: " << std_drinks << std::endl;
         int table_row_num = ui->drinkLogTable->rowCount();
         ui->drinkLogTable->insertRow(table_row_num);
         QDate date = QDate::fromString(QString::fromStdString(drink.date), "yyyy-MM-dd");
@@ -113,6 +115,7 @@ void MainWindow::update_table() {
         auto *subtype = new QTableWidgetItem(drink.subtype.c_str());
         auto *producer = new QTableWidgetItem(drink.producer.c_str());
         auto *abv = new QTableWidgetItem(Calculate::double_to_string(drink.abv).c_str());
+        auto *standard_drinks = new QTableWidgetItem(Calculate::double_to_string(std_drinks).c_str());
         auto *rating = new QTableWidgetItem(std::to_string(drink.rating).c_str());
         auto *id = new QTableWidgetItem;
         auto *timestamp = new QTableWidgetItem(drink.timestamp.c_str());
@@ -146,10 +149,11 @@ void MainWindow::update_table() {
         ui->drinkLogTable->setItem(table_row_num, 5, abv);
         ui->drinkLogTable->setItem(table_row_num, 6, ibu);
         ui->drinkLogTable->setItem(table_row_num, 7, size);
-        ui->drinkLogTable->setItem(table_row_num, 8, rating);
-        ui->drinkLogTable->setItem(table_row_num, 9, id);
-        ui->drinkLogTable->setItem(table_row_num, 10, timestamp);
-        ui->drinkLogTable->setItem(table_row_num, 11, sort_order);
+        ui->drinkLogTable->setItem(table_row_num, 8, standard_drinks);
+        ui->drinkLogTable->setItem(table_row_num, 9, rating);
+        ui->drinkLogTable->setItem(table_row_num, 10, id);
+        ui->drinkLogTable->setItem(table_row_num, 11, timestamp);
+        ui->drinkLogTable->setItem(table_row_num, 12, sort_order);
     }
     reset_table_sort();
 }
