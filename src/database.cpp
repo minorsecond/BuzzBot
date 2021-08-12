@@ -180,6 +180,30 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
 
     return drink_by_name;
 }
+Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std::string drink_name, std::string producer) {
+    /*
+     * Overloaded get_drink_by_name method that gets a drink by name and producer, if provided.
+     * @param storage: a Storage instance
+     * @param drink_name: name of drink to query
+     * @param alcohol_type: The alcohol type to query
+     * @param producer: The drink producer
+     */
+
+    std::vector<Drink> drink_by_name_result = storage.get_all<Drink>(where(c(&Drink::name)
+            == std::move(drink_name) && c(&Drink::alcohol_type) == std::move(alcohol_type) &&
+            c(&Drink::producer) == std::move(producer)));
+    Drink drink_by_name;
+
+    std::sort(drink_by_name_result.begin(), drink_by_name_result.end(), compare_date);
+
+    if (!drink_by_name_result.empty()) {
+        drink_by_name = drink_by_name_result.at(drink_by_name_result.size() - 1);
+    } else {
+        drink_by_name.id = -1;
+    }
+
+    return drink_by_name;
+}
 
 std::vector<Drink> Database::get_drinks_by_type(Storage storage, std::string drink_type) {
     /*

@@ -49,7 +49,7 @@ void MainWindow::update_beer_fields() {
             //count_map.erase(count_map.find(elem.first));  // Erase drinks with only one name entry
             for (Drink &beer : all_beers) {
                 if (beer.name == elem.first) {
-                    beer.name += " - " + beer.producer;
+                    beer.name += " -- (" + beer.producer + ")";
                 }
             }
         }
@@ -138,8 +138,17 @@ void MainWindow::update_beer_types_producers() {
     QSignalBlocker type_input_signal_blocker(ui->beerTypeInput);
     QSignalBlocker brewery_input_signal_blocker(ui->beerBreweryInput);
 
+    Drink selected_beer;
     std::string input_beer = ui->beerNameInput->currentText().toStdString();
-    Drink selected_beer = Database::get_drink_by_name(storage, "Beer", input_beer);
+    if (input_beer.find(" -- (") != std::string::npos) {  // This is a beer with a name that matches another beer, and contains the producer name in the dropdown
+        std::string producer_name {input_beer.substr(input_beer.find(" -- (") + 5)};
+        producer_name = producer_name.substr(0, producer_name.size() - 1);
+        std::string beer_name {input_beer.substr(0, input_beer.find(" -- ("))};
+        selected_beer = Database::get_drink_by_name(storage, "Beer", beer_name, producer_name);
+        std::cout << selected_beer.id << std::endl;
+    } else {
+        selected_beer = Database::get_drink_by_name(storage, "Beer", input_beer);
+    }
 
     if (!selected_beer.id || selected_beer.id == -1) {  // Clear fields if new name
         clear_fields("Beer");
