@@ -144,7 +144,15 @@ void MainWindow::update_wine_types_producers() {
     QSignalBlocker brewery_input_signal_blocker(ui->wineryInput);
 
     std::string input_wine = ui->wineNameInput->currentText().toStdString();
-    Drink selected_wine = Database::get_drink_by_name(storage, "Wine",input_wine);
+    Drink selected_wine;
+    if (input_wine.find(" -- (") != std::string::npos) {  // This is a drink with a name that matches another beer, and contains the producer name in the dropdown
+        std::string producer_name {input_wine.substr(input_wine.find(" -- (") + 5)};
+        producer_name = producer_name.substr(0, producer_name.size() - 1);
+        std::string wine_name {input_wine.substr(0, input_wine.find(" -- ("))};
+        selected_wine = Database::get_drink_by_name(storage, "Wine", wine_name, producer_name);
+    } else {
+        selected_wine = Database::get_drink_by_name(storage, "Wine", input_wine);
+    }
 
     if (!selected_wine.id || selected_wine.id == -1) {
         clear_fields("Wine");
