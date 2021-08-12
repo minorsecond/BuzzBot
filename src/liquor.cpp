@@ -54,7 +54,9 @@ void MainWindow::update_liquor_fields() {
             //count_map.erase(count_map.find(elem.first));  // Erase drinks with only one name entry
             for (Drink &liquor : all_liquor) {
                 if (liquor.name == elem.first) {
-                    liquor.name += " -- (" + liquor.producer + ")";
+                    if (!liquor.producer.empty()) {
+                        liquor.name += " -- (" + liquor.producer + ")";
+                    }
                 }
             }
         }
