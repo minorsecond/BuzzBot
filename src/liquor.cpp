@@ -142,7 +142,15 @@ void MainWindow::update_liquor_types_producers() {
     QSignalBlocker brewery_input_signal_blocker(ui->liquorDistillerInput);
 
     std::string input_liquor = ui->liquorNameInput->currentText().toStdString();
-    Drink selected_liquor = Database::get_drink_by_name(storage, "Liquor",input_liquor);
+    Drink selected_liquor;
+    if (input_liquor.find(" -- (") != std::string::npos) {  // This is a drink with a name that matches another beer, and contains the producer name in the dropdown
+        std::string producer_name {input_liquor.substr(input_liquor.find(" -- (") + 5)};
+        producer_name = producer_name.substr(0, producer_name.size() - 1);
+        std::string liquor_name {input_liquor.substr(0, input_liquor.find(" -- ("))};
+        selected_liquor = Database::get_drink_by_name(storage, "Liquor", liquor_name, producer_name);
+    } else {
+        selected_liquor = Database::get_drink_by_name(storage, "Liquor", input_liquor);
+    }
 
     if (!selected_liquor.id || selected_liquor.id == -1) {
         clear_fields("Liquor");
