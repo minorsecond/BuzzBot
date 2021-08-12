@@ -162,6 +162,7 @@ void MainWindow::update_wine_types_producers() {
         std::string producer = selected_wine.producer;
         double abv = selected_wine.abv;
         double size = selected_wine._size;
+        int vintage {selected_wine.vintage};
 
         if (options.units == "Metric") {
             size = Calculate::oz_to_ml(size);
@@ -174,6 +175,7 @@ void MainWindow::update_wine_types_producers() {
         ui->wineAbvInput->setValue(abv);
         ui->wineSizeInput->setValue(size);
         ui->wineRatingInput->setValue(rating);
+        ui->wineVintage->setValue(vintage);
 
         // Set notes to the notes for liquor in the name input
         std::string notes = get_latest_notes(ui->wineNameInput->currentText().toStdString());
