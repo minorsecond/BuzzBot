@@ -29,6 +29,34 @@ void MainWindow::update_beer_fields() {
     ui->beerSubtypeInput->clear();
     ui->beerNameInput->clear();
 
+    std::map<std::string, int> count_map {};
+    std::set<std::string> names_producers {};
+
+    for (const Drink &beer : all_beers) {
+        names_producers.insert(beer.name + "-" + beer.producer);
+    }
+
+    for (const auto &name_prod_pair : names_producers) {
+        const std::string beer_name {name_prod_pair.substr(0, name_prod_pair.find("-"))};
+        auto result {count_map.insert(std::pair<std::string, int>(beer_name, 1))};
+        if (result.second == false) {
+            result.first->second++;
+        }
+    }
+
+    for (const auto &elem : count_map) {
+        if (elem.second > 1) {
+            //count_map.erase(count_map.find(elem.first));  // Erase drinks with only one name entry
+            for (Drink &beer : all_beers) {
+                if (beer.name == elem.first) {
+                    if (!beer.producer.empty()) {
+                        beer.name += " -- (" + beer.producer + ")";
+                    }
+                }
+            }
+        }
+    }
+
     for (const auto& beer : all_beers) {
         QString brewery_name = QString::fromStdString(beer.producer);
         QString beer_type = QString::fromStdString(beer.type);
@@ -112,8 +140,17 @@ void MainWindow::update_beer_types_producers() {
     QSignalBlocker type_input_signal_blocker(ui->beerTypeInput);
     QSignalBlocker brewery_input_signal_blocker(ui->beerBreweryInput);
 
+    Drink selected_beer;
     std::string input_beer = ui->beerNameInput->currentText().toStdString();
-    Drink selected_beer = Database::get_drink_by_name(storage, "Beer", input_beer);
+    if (input_beer.find(" -- (") != std::string::npos) {  // This is a beer with a name that matches another beer, and contains the producer name in the dropdown
+        std::string producer_name {input_beer.substr(input_beer.find(" -- (") + 5)};
+        producer_name = producer_name.substr(0, producer_name.size() - 1);
+        std::string beer_name {input_beer.substr(0, input_beer.find(" -- ("))};
+        selected_beer = Database::get_drink_by_name(storage, "Beer", beer_name, producer_name);
+        std::cout << selected_beer.id << std::endl;
+    } else {
+        selected_beer = Database::get_drink_by_name(storage, "Beer", input_beer);
+    }
 
     if (!selected_beer.id || selected_beer.id == -1) {  // Clear fields if new name
         clear_fields("Beer");
