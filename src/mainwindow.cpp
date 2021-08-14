@@ -279,8 +279,8 @@ void MainWindow::submit_button_clicked() {
     Drink entered_drink = get_drink_attributes_from_fields();
 
     // Prevent blank submissions
-    if (entered_drink.name.empty() || entered_drink.abv == 0.0 || entered_drink._size == 0.0) {
-        QMessageBox::critical(nullptr, "Error", "Please enter drink name, ABV, and size.");
+    if (entered_drink.name.empty() || entered_drink.abv == 0.0 || entered_drink._size == 0.0 || entered_drink.producer.empty()) {
+        QMessageBox::critical(nullptr, "Error", "Please enter drink name, ABV, producer, and size.");
     } else {
         // Handle updating existing rows
         QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
@@ -614,30 +614,41 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
      */
 
     // Do not clear names!
-
     QItemSelectionModel *selection_model = ui->drinkLogTable->selectionModel();
     QModelIndexList selected_rows = selection_model->selectedRows();
 
     if (selected_rows.empty()) {
         if (alcohol_type == "Beer") {
+            ui->beerAbvInput->setValue(0.0);
             ui->beerAbvInput->clear();
+            ui->beerIbuInput->setValue(0);
             ui->beerIbuInput->clear();
+            ui->beerSizeInput->setValue(0.0);
             ui->beerSizeInput->clear();
+            ui->beerRatingInput->setValue(0);
             ui->beerRatingInput->clear();
             ui->beerNotesInput->clear();
         } else if (alcohol_type == "Liquor") {
+            ui->liquorAbvInput->setValue(0.0);
             ui->liquorAbvInput->clear();
+            ui->liquorSizeInput->setValue(0.0);
             ui->liquorSizeInput->clear();
+            ui->liquorRatingInput->setValue(0);
             ui->liquorRatingInput->clear();
             ui->liquorNotesInput->clear();
         } else if (alcohol_type == "Wine") {
+            ui->wineVintage->setValue(0);
             ui->wineVintage->clear();
+            ui->wineAbvInput->setValue(0.0);
             ui->wineAbvInput->clear();
+            ui->wineRatingInput->setValue(0);
             ui->wineRatingInput->clear();
+            ui->wineSizeInput->setValue(0.0);
             ui->wineSizeInput->clear();
             ui->wineNotesInput->clear();
         }
     }
+
 }
 
 void MainWindow::open_std_drink_calculator() const {
