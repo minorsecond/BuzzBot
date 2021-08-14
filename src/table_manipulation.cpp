@@ -241,7 +241,7 @@ void MainWindow::reset_table_sort() {
     /*
      * Reset table sort to default, by datetime descending.
      */
-    int sort_column = 11;
+    int sort_column = 12;
     std::cout << "Sorting by column: " << ui->drinkLogTable->horizontalHeaderItem(sort_column)->text().toStdString() << std::endl;
     ui->drinkLogTable->sortItems(sort_column, Qt::DescendingOrder);
 }
