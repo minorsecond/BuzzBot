@@ -95,8 +95,8 @@ MainWindow::MainWindow(QWidget *parent)
     reset_fields();
 
     // Start the stat pane update stat_update_timer
-    auto *stats_timer = new QTimer(this);
-    connect(stats_timer, &QTimer::timeout, this, &MainWindow::update_stats_if_new_day);
+    auto stats_timer = std::make_unique<QTimer>(this);
+    connect(stats_timer.get(), &QTimer::timeout, this, &MainWindow::update_stats_if_new_day);
     stats_timer->start(5000);
 }
 
@@ -105,12 +105,12 @@ void MainWindow::add_menubar_items() {
      * Add items to the system menubar.
      */
 
-    auto * preferences_action = new QAction("Preferences");
-    auto * about_action = new QAction("About");
-    auto * export_action = new QAction("Export...");
-    auto * graphs_action = new QAction("Graphs...");
-    auto * calc_std_drinks = new QAction("Calculate Std. Drinks...");
     QMenu * app_menu = menuBar()->addMenu("App Menu");
+    auto * preferences_action = new QAction("Preferences", this);
+    auto * about_action = new QAction("About", this);
+    auto * export_action = new QAction("Export...", this);
+    auto * graphs_action = new QAction("Graphs...", this);
+    auto * calc_std_drinks = new QAction("Calculate Std. Drinks...", this);
     preferences_action->setMenuRole(QAction::PreferencesRole);
     about_action->setMenuRole(QAction::AboutRole);
     export_action->setMenuRole(QAction::ApplicationSpecificRole);
@@ -323,6 +323,7 @@ void MainWindow::open_about_dialog() {
      */
 
     auto *about_dialog = new About();
+    about_dialog->setAttribute(Qt::WA_DeleteOnClose); // Delete pointer on window close
     about_dialog->setModal(false);
     about_dialog->show();
 }
@@ -657,6 +658,7 @@ void MainWindow::open_std_drink_calculator() const {
      */
 
     auto * std_drink_calculator = new StandardDrinkCalc(std::stod(options.std_drink_size), options.units);
+    std_drink_calculator->setAttribute(Qt::WA_DeleteOnClose);  // Delete pointer on window close
     std_drink_calculator->show();
 }
 
@@ -786,6 +788,7 @@ void MainWindow::open_graphs() {
     std::vector<Drink> all_drinks = Database::read(storage);
     double std_drink_size = get_std_drink_size_from_options();
     auto *graphing_window = new Graphing(all_drinks, std_drink_size, options);
+    graphing_window->setAttribute(Qt::WA_DeleteOnClose); // Delete pointer on window close
     graphing_window->setModal(false);
     graphing_window->show();
 }
