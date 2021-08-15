@@ -4,6 +4,7 @@
 
 #include "standard_drink_calculator.h"
 #include "calculate.h"
+#include <iostream>
 
 StandardDrinkCalc::StandardDrinkCalc(const double std_drink_size, const std::string& units) {
     /*
@@ -77,6 +78,10 @@ void StandardDrinkCalc::std_drinks_changed() {
     } else {
         ui.standardDrinksOutput->setText(QString::fromStdString("Std. Drinks = 0"));
     }
+}
+
+StandardDrinkCalc::~StandardDrinkCalc() {
+    std::cout << "Deleted StandardDrinkCalc" << std::endl;
 }
 
 
