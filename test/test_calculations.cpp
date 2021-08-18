@@ -73,8 +73,16 @@ TEST_CASE("Std Drinks Remaining - female, NIAAA 2", "[Drink Calculations]") {
 }
 
 TEST_CASE("Oz Alcohol Remaining", "[Drink Calculations]") {
-    double male_oz_remaining = Calculate::volume_alcohol_remaining("male", "NIAAA", 0, 4.3, 0.6);
-    double female_oz_remaining = Calculate::volume_alcohol_remaining("female", "Custom", 10, 5.5, 0.6);
+    Options options;
+    options.sex = "male";
+    options.limit_standard = "NIAA";
+    options.weekly_limit = 14;
+    double male_oz_remaining = Calculate::volume_alcohol_remaining(options, 4.3);
+
+    options.sex = "female";
+    options.limit_standard = "Custom";
+    options.weekly_limit = 10;
+    double female_oz_remaining = Calculate::volume_alcohol_remaining(options, 5.5);
 
     REQUIRE(male_oz_remaining == 4.1);
     REQUIRE(female_oz_remaining == 0.5);

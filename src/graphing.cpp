@@ -34,6 +34,7 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
         no_beers = false;
         std::map<double, int> ibu_counts = Graphing::count_values_in_vect(ibus);
         auto ibu_plot = Graphing::plot_ibus(ibu_counts, this);
+        ibu_plot->setAttribute(Qt::WA_DeleteOnClose);  // Delete pointer on window close
         ibu_plot->setGeometry(0, 0, window_width, window_height/2);
         ibu_plot->show();
     }
@@ -122,6 +123,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
      */
 
     auto *ibu_plot {new QCustomPlot(parent)};
+    ibu_plot->setAttribute(Qt::WA_DeleteOnClose);
 
     // Add title
     // add title layout element:
@@ -299,6 +301,7 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
      */
 
     auto *abv_plot = new QCustomPlot(parent);
+    abv_plot->setAttribute(Qt::WA_DeleteOnClose);
     int limit = Calculate::weekly_imit(options);
 
     abv_plot->plotLayout()->insertRow(0);
@@ -424,6 +427,7 @@ int Graphing::date_from_week_num(const std::string& week_num) {
     char* week_char = new char[week_num_tmp.length() + 1];
     strcpy(week_char, week_num_tmp.c_str());
     strptime(week_char, "%Y-%W-%w", &tm);
+    delete [] week_char;
 
     std::string year = std::to_string(tm.tm_year +1900);
     std::string month = std::to_string(tm.tm_mon + 1);

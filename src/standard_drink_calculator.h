@@ -18,6 +18,7 @@ class StandardDrinkCalc : public QDialog, public Ui::stdDrinkDialog {
 
 public:
     explicit StandardDrinkCalc(double std_drink_size = 0.6, const std::string& units = "Imperial");
+    ~StandardDrinkCalc();
 
 private slots:
     void volume_changed();

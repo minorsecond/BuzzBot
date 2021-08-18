@@ -34,6 +34,34 @@ void MainWindow::update_wine_fields() {
     ui->wineNameInput->clear();
     ui->wineNameInput->setCurrentText("");
 
+    std::map<std::string, int> count_map {};
+    std::set<std::string> names_producers {};
+
+    for (const Drink &wine : all_wine) {
+        names_producers.insert(wine.name + "-" + wine.producer);
+    }
+
+    for (const auto &name_prod_pair : names_producers) {
+        const std::string wine_name {name_prod_pair.substr(0, name_prod_pair.find("-"))};
+        auto result {count_map.insert(std::pair<std::string, int>(wine_name, 1))};
+        if (result.second == false) {
+            result.first->second++;
+        }
+    }
+
+    for (const auto &elem : count_map) {
+        if (elem.second > 1) {
+            //count_map.erase(count_map.find(elem.first));  // Erase drinks with only one name entry
+            for (Drink &wine : all_wine) {
+                if (wine.name == elem.first) {
+                    if (!wine.producer.empty()) {
+                        wine.name += " -- (" + wine.producer + ")";
+                    }
+                }
+            }
+        }
+    }
+
     for (const auto& wine : all_wine) {
         QString winery_name = QString::fromStdString(wine.producer);
         QString wine_type = QString::fromStdString(wine.type);
@@ -118,7 +146,15 @@ void MainWindow::update_wine_types_producers() {
     QSignalBlocker brewery_input_signal_blocker(ui->wineryInput);
 
     std::string input_wine = ui->wineNameInput->currentText().toStdString();
-    Drink selected_wine = Database::get_drink_by_name(storage, "Wine",input_wine);
+    Drink selected_wine;
+    if (input_wine.find(" -- (") != std::string::npos) {  // This is a drink with a name that matches another beer, and contains the producer name in the dropdown
+        std::string producer_name {input_wine.substr(input_wine.find(" -- (") + 5)};
+        producer_name = producer_name.substr(0, producer_name.size() - 1);
+        std::string wine_name {input_wine.substr(0, input_wine.find(" -- ("))};
+        selected_wine = Database::get_drink_by_name(storage, "Wine", wine_name, producer_name);
+    } else {
+        selected_wine = Database::get_drink_by_name(storage, "Wine", input_wine);
+    }
 
     if (!selected_wine.id || selected_wine.id == -1) {
         clear_fields("Wine");
@@ -128,6 +164,7 @@ void MainWindow::update_wine_types_producers() {
         std::string producer = selected_wine.producer;
         double abv = selected_wine.abv;
         double size = selected_wine._size;
+        int vintage {selected_wine.vintage};
 
         if (options.units == "Metric") {
             size = Calculate::oz_to_ml(size);
@@ -140,6 +177,7 @@ void MainWindow::update_wine_types_producers() {
         ui->wineAbvInput->setValue(abv);
         ui->wineSizeInput->setValue(size);
         ui->wineRatingInput->setValue(rating);
+        ui->wineVintage->setValue(vintage);
 
         // Set notes to the notes for liquor in the name input
         std::string notes = get_latest_notes(ui->wineNameInput->currentText().toStdString());

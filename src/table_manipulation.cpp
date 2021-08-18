@@ -107,7 +107,6 @@ void MainWindow::update_table() {
         // These don't need to be deleted. The table widget takes ownership of these pointers and
         // will delete them as needed.
         const double std_drinks {Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size))};
-        std::cout << "Standard drinks: " << std_drinks << std::endl;
         int table_row_num = ui->drinkLogTable->rowCount();
         ui->drinkLogTable->insertRow(table_row_num);
         QDate date = QDate::fromString(QString::fromStdString(drink.date), "yyyy-MM-dd");
