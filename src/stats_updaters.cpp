@@ -158,10 +158,10 @@ void MainWindow::update_volume_alcohol_remaining(double volume_alcohol_consumed)
     }
 
     if (options.units == "Imperial") {
-        volume_alcohol_remaining = Calculate::volume_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, volume_alcohol_consumed, std_drink_size);
+        volume_alcohol_remaining = Calculate::volume_alcohol_remaining(options, volume_alcohol_consumed);
     } else {
         volume_alcohol_consumed = Calculate::ml_to_oz(volume_alcohol_consumed);
-        volume_alcohol_remaining = Calculate::volume_alcohol_remaining(options.sex, options.limit_standard, options.weekly_limit, volume_alcohol_consumed, std_drink_size);
+        volume_alcohol_remaining = Calculate::volume_alcohol_remaining(options, volume_alcohol_consumed);
         volume_alcohol_remaining = Calculate::oz_to_ml(volume_alcohol_remaining);
 
         // Round to tenth place

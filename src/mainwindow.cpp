@@ -105,12 +105,12 @@ void MainWindow::add_menubar_items() {
      * Add items to the system menubar.
      */
 
-    auto * preferences_action = new QAction("Preferences");
-    auto * about_action = new QAction("About");
-    auto * export_action = new QAction("Export...");
-    auto * graphs_action = new QAction("Graphs...");
-    auto * calc_std_drinks = new QAction("Calculate Std. Drinks...");
     QMenu * app_menu = menuBar()->addMenu("App Menu");
+    auto * preferences_action = new QAction("Preferences", this);
+    auto * about_action = new QAction("About", this);
+    auto * export_action = new QAction("Export...", this);
+    auto * graphs_action = new QAction("Graphs...", this);
+    auto * calc_std_drinks = new QAction("Calculate Std. Drinks...", this);
     preferences_action->setMenuRole(QAction::PreferencesRole);
     about_action->setMenuRole(QAction::AboutRole);
     export_action->setMenuRole(QAction::ApplicationSpecificRole);
@@ -279,8 +279,8 @@ void MainWindow::submit_button_clicked() {
     Drink entered_drink = get_drink_attributes_from_fields();
 
     // Prevent blank submissions
-    if (entered_drink.name.empty() || entered_drink.abv == 0.0 || entered_drink._size == 0.0) {
-        QMessageBox::critical(nullptr, "Error", "Please enter drink name, ABV, and size.");
+    if (entered_drink.name.empty() || entered_drink.abv == 0.0 || entered_drink._size == 0.0 || entered_drink.producer.empty()) {
+        QMessageBox::critical(nullptr, "Error", "Please enter drink name, ABV, producer, and size.");
     } else {
         // Handle updating existing rows
         QItemSelectionModel *select = ui->drinkLogTable->selectionModel();
@@ -323,6 +323,7 @@ void MainWindow::open_about_dialog() {
      */
 
     auto *about_dialog = new About();
+    about_dialog->setAttribute(Qt::WA_DeleteOnClose); // Delete pointer on window close
     about_dialog->setModal(false);
     about_dialog->show();
 }
@@ -614,30 +615,41 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
      */
 
     // Do not clear names!
-
     QItemSelectionModel *selection_model = ui->drinkLogTable->selectionModel();
     QModelIndexList selected_rows = selection_model->selectedRows();
 
     if (selected_rows.empty()) {
         if (alcohol_type == "Beer") {
+            ui->beerAbvInput->setValue(0.0);
             ui->beerAbvInput->clear();
+            ui->beerIbuInput->setValue(0);
             ui->beerIbuInput->clear();
+            ui->beerSizeInput->setValue(0.0);
             ui->beerSizeInput->clear();
+            ui->beerRatingInput->setValue(0);
             ui->beerRatingInput->clear();
             ui->beerNotesInput->clear();
         } else if (alcohol_type == "Liquor") {
+            ui->liquorAbvInput->setValue(0.0);
             ui->liquorAbvInput->clear();
+            ui->liquorSizeInput->setValue(0.0);
             ui->liquorSizeInput->clear();
+            ui->liquorRatingInput->setValue(0);
             ui->liquorRatingInput->clear();
             ui->liquorNotesInput->clear();
         } else if (alcohol_type == "Wine") {
+            ui->wineVintage->setValue(0);
             ui->wineVintage->clear();
+            ui->wineAbvInput->setValue(0.0);
             ui->wineAbvInput->clear();
+            ui->wineRatingInput->setValue(0);
             ui->wineRatingInput->clear();
+            ui->wineSizeInput->setValue(0.0);
             ui->wineSizeInput->clear();
             ui->wineNotesInput->clear();
         }
     }
+
 }
 
 void MainWindow::open_std_drink_calculator() const {
@@ -646,6 +658,7 @@ void MainWindow::open_std_drink_calculator() const {
      */
 
     auto * std_drink_calculator = new StandardDrinkCalc(std::stod(options.std_drink_size), options.units);
+    std_drink_calculator->setAttribute(Qt::WA_DeleteOnClose);  // Delete pointer on window close
     std_drink_calculator->show();
 }
 
@@ -775,6 +788,7 @@ void MainWindow::open_graphs() {
     std::vector<Drink> all_drinks = Database::read(storage);
     double std_drink_size = get_std_drink_size_from_options();
     auto *graphing_window = new Graphing(all_drinks, std_drink_size, options);
+    graphing_window->setAttribute(Qt::WA_DeleteOnClose); // Delete pointer on window close
     graphing_window->setModal(false);
     graphing_window->show();
 }
