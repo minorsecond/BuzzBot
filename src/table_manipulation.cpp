@@ -18,10 +18,10 @@ void MainWindow::update_selected_row(QItemSelectionModel* select, Drink entered_
     if (confirmation_dialog.exec() == QDialog::Accepted) {
         // Get the selected row
         int selection = select->selectedRows().at(0).row();
-        int row_to_update = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
+        int row_to_update = ui->drinkLogTable->item(selection, 10)->text().toUtf8().toInt();
 
         // Get the existing timestamp
-        std::string timestamp = ui->drinkLogTable->item(selection, 10)->text().toStdString();
+        std::string timestamp = ui->drinkLogTable->item(selection, 11)->text().toStdString();
         std::cout << "Updating row " << row_to_update << " Timestamp: " << timestamp << std::endl;
 
         // Update the variables in the drink struct
