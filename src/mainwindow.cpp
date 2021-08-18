@@ -95,8 +95,8 @@ MainWindow::MainWindow(QWidget *parent)
     reset_fields();
 
     // Start the stat pane update stat_update_timer
-    auto stats_timer = std::make_unique<QTimer>(this);
-    connect(stats_timer.get(), &QTimer::timeout, this, &MainWindow::update_stats_if_new_day);
+    auto *stats_timer = new QTimer(this);
+    connect(stats_timer, &QTimer::timeout, this, &MainWindow::update_stats_if_new_day);
     stats_timer->start(5000);
 }
 
