@@ -18,10 +18,10 @@ void MainWindow::update_selected_row(QItemSelectionModel* select, Drink entered_
     if (confirmation_dialog.exec() == QDialog::Accepted) {
         // Get the selected row
         int selection = select->selectedRows().at(0).row();
-        int row_to_update = ui->drinkLogTable->item(selection, 9)->text().toUtf8().toInt();
+        int row_to_update = ui->drinkLogTable->item(selection, 10)->text().toUtf8().toInt();
 
         // Get the existing timestamp
-        std::string timestamp = ui->drinkLogTable->item(selection, 10)->text().toStdString();
+        std::string timestamp = ui->drinkLogTable->item(selection, 11)->text().toStdString();
         std::cout << "Updating row " << row_to_update << " Timestamp: " << timestamp << std::endl;
 
         // Update the variables in the drink struct
@@ -107,7 +107,6 @@ void MainWindow::update_table() {
         // These don't need to be deleted. The table widget takes ownership of these pointers and
         // will delete them as needed.
         const double std_drinks {Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size))};
-        std::cout << "Standard drinks: " << std_drinks << std::endl;
         int table_row_num = ui->drinkLogTable->rowCount();
         ui->drinkLogTable->insertRow(table_row_num);
         QDate date = QDate::fromString(QString::fromStdString(drink.date), "yyyy-MM-dd");
