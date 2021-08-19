@@ -65,7 +65,7 @@ void Database::truncate(Storage storage) {
     write_db_to_disk(storage);
 }
 
-void Database::delete_row(Storage storage, int row_num) {
+void Database::delete_row(Storage &storage, const int &row_num) {
     /*
      * Delete a specific row from the database.
      * @param storage: A storage instance

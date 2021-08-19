@@ -60,7 +60,7 @@ public:
     static std::vector<Drink> read(Storage storage);
     static Storage write(Drink drink, Storage storage);
     static void truncate(Storage storage);
-    static void delete_row(Storage storage, int row_num);
+    static void delete_row(Storage &storage, const int &row_num);
     static Drink read_row(int row_num, Storage storage);
     static void update(Storage storage, const Drink& drink);
     static std::vector<Drink> filter(const std::string& filter_type, const std::string& filter_text, Storage storage);
