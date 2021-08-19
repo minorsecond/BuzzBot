@@ -649,7 +649,6 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
             ui->wineNotesInput->clear();
         }
     }
-
 }
 
 void MainWindow::open_std_drink_calculator() const {
@@ -791,5 +790,41 @@ void MainWindow::open_graphs() {
     graphing_window->setAttribute(Qt::WA_DeleteOnClose); // Delete pointer on window close
     graphing_window->setModal(false);
     graphing_window->show();
+}
+
+void MainWindow::rename_duplicate_drink_names(std::vector<Drink> &drinks) {
+    /*
+     * Rename drink name to DRINK NAME -- (Producer name) if there
+     * are multiple drinks with the same name.
+     * @param drinks: A reference to a vector of Drinks.
+     */
+
+    std::map<std::string, int> count_map {};
+    std::set<std::string> names_producers {};
+
+    for (const Drink &drink : drinks) {
+        names_producers.insert(drink.name + "-" + drink.producer);
+    }
+
+    for (const auto &name_prod_pair : names_producers) {
+        const std::string drink_name {name_prod_pair.substr(0, name_prod_pair.find("-"))};
+        auto result {count_map.insert(std::pair<std::string, int>(drink_name, 1))};
+        if (result.second == false) {
+            result.first->second++;
+        }
+    }
+
+    for (const auto &elem : count_map) {
+        if (elem.second > 1) {
+            //count_map.erase(count_map.find(elem.first));  // Erase drinks with only one name entry
+            for (Drink &drink : drinks) {
+                if (drink.name == elem.first) {
+                    if (!drink.producer.empty()) {
+                        drink.name += " -- (" + drink.producer + ")";
+                    }
+                }
+            }
+        }
+    }
 }
 // LCOV_EXCL_STOP

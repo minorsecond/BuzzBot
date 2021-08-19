@@ -29,33 +29,7 @@ void MainWindow::update_beer_fields() {
     ui->beerSubtypeInput->clear();
     ui->beerNameInput->clear();
 
-    std::map<std::string, int> count_map {};
-    std::set<std::string> names_producers {};
-
-    for (const Drink &beer : all_beers) {
-        names_producers.insert(beer.name + "-" + beer.producer);
-    }
-
-    for (const auto &name_prod_pair : names_producers) {
-        const std::string beer_name {name_prod_pair.substr(0, name_prod_pair.find("-"))};
-        auto result {count_map.insert(std::pair<std::string, int>(beer_name, 1))};
-        if (result.second == false) {
-            result.first->second++;
-        }
-    }
-
-    for (const auto &elem : count_map) {
-        if (elem.second > 1) {
-            //count_map.erase(count_map.find(elem.first));  // Erase drinks with only one name entry
-            for (Drink &beer : all_beers) {
-                if (beer.name == elem.first) {
-                    if (!beer.producer.empty()) {
-                        beer.name += " -- (" + beer.producer + ")";
-                    }
-                }
-            }
-        }
-    }
+    rename_duplicate_drink_names(all_beers);
 
     for (const auto& beer : all_beers) {
         QString brewery_name = QString::fromStdString(beer.producer);

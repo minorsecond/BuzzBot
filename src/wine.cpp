@@ -34,33 +34,7 @@ void MainWindow::update_wine_fields() {
     ui->wineNameInput->clear();
     ui->wineNameInput->setCurrentText("");
 
-    std::map<std::string, int> count_map {};
-    std::set<std::string> names_producers {};
-
-    for (const Drink &wine : all_wine) {
-        names_producers.insert(wine.name + "-" + wine.producer);
-    }
-
-    for (const auto &name_prod_pair : names_producers) {
-        const std::string wine_name {name_prod_pair.substr(0, name_prod_pair.find("-"))};
-        auto result {count_map.insert(std::pair<std::string, int>(wine_name, 1))};
-        if (result.second == false) {
-            result.first->second++;
-        }
-    }
-
-    for (const auto &elem : count_map) {
-        if (elem.second > 1) {
-            //count_map.erase(count_map.find(elem.first));  // Erase drinks with only one name entry
-            for (Drink &wine : all_wine) {
-                if (wine.name == elem.first) {
-                    if (!wine.producer.empty()) {
-                        wine.name += " -- (" + wine.producer + ")";
-                    }
-                }
-            }
-        }
-    }
+    rename_duplicate_drink_names(all_wine);
 
     for (const auto& wine : all_wine) {
         QString winery_name = QString::fromStdString(wine.producer);
