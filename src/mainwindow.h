@@ -34,6 +34,7 @@ private:
     void update_stat_panel();
     void update_liquor_fields();
     void update_wine_fields();
+    void rename_duplicate_drink_names(std::vector<Drink> &drinks);
     static std::string settings_path();
     void program_options(bool write);
     void update_drinks_this_week(double standard_drinks, const std::string& weekday_name);
