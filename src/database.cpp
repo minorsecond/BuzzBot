@@ -32,7 +32,7 @@ std::vector<Drink> Database::read(Storage storage) {
     return all_drinks;
 }
 
-void Database::write_db_to_disk(Storage storage) {
+void Database::write_db_to_disk(Storage &storage) {
     /*
      * Flush in-memory database data to disk.
      */
