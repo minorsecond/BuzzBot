@@ -151,6 +151,13 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
 
     } else if (filter_type == "Rating") {
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::rating) == filter_text));
+    } else if (filter_type == "Name & Producer") {
+        // Parse the -- (PRODUCER) text to strip out drink name and producer.
+        std::string producer_name {filter_text.substr(filter_text.find(" -- (") + 5)};
+        producer_name = producer_name.substr(0, producer_name.size() - 1);
+        std::string drink_name {filter_text.substr(0, filter_text.find(" -- ("))};
+        std::cout << drink_name << " " << producer_name << std::endl;
+        filtered_drinks = storage.get_all<Drink>(where(c(&Drink::name) == drink_name and c(&Drink::producer) == producer_name));
     } else {
         filtered_drinks = storage.get_all<Drink>();
     }

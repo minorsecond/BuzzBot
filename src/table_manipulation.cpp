@@ -99,7 +99,12 @@ void MainWindow::update_table() {
     std::string filter_category = ui->filterCategoryInput->currentText().toStdString();
     std::string filter_text = ui->filterTextInput->currentText().toStdString();
 
-    std::vector<Drink> drinks = Database::filter(filter_category, filter_text, storage);
+    std::vector<Drink> drinks {};
+    if (filter_text.find(" -- (") != std::string::npos) {
+        drinks = Database::filter("Name & Producer", filter_text, storage);
+    } else {
+        drinks = Database::filter(filter_category, filter_text, storage);
+    }
     Database::sort_by_date_id(drinks);
 
     ui->drinkLogTable->setRowCount(0);
