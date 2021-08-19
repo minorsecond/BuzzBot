@@ -25,7 +25,7 @@ public:
     static double oz_to_ml(double input_oz);
     static double ml_to_oz(double input_ml);
     static bool compare_strings(std::string lhs, std::string rhs);
-    static int weekly_imit(const Options& options);
+    static int weekly_limit(const Options& options);
 };
 
 

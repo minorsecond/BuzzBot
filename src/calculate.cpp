@@ -48,7 +48,7 @@ double Calculate::standard_drinks_remaining(const Options& options, double stand
 
     double weekly_drinks_remaining;
 
-    int drink_limit = Calculate::weekly_imit(options);
+    int drink_limit = Calculate::weekly_limit(options);
 
     weekly_drinks_remaining = drink_limit - standard_drinks_consumed;
 
@@ -288,7 +288,7 @@ bool Calculate::compare_strings(std::string lhs, std::string rhs) {
     return lhs < rhs;
 }
 
-int Calculate::weekly_imit(const Options& options) {
+int Calculate::weekly_limit(const Options& options) {
     /*
      * Get the weekly limit.
      * @param options: an options struct.
