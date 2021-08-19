@@ -165,7 +165,7 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
     return filtered_drinks;
 }
 
-Drink Database::get_drink_by_name(Storage storage, const std::string &alcohol_type, const std::string &drink_name) {
+Drink Database::get_drink_by_name(Storage &storage, const std::string &alcohol_type, const std::string &drink_name) {
     /*
      * Get a drink by its name.
      * @param storage: A Storage instance
@@ -187,7 +187,7 @@ Drink Database::get_drink_by_name(Storage storage, const std::string &alcohol_ty
 
     return drink_by_name;
 }
-Drink Database::get_drink_by_name(Storage storage, const std::string &alcohol_type, const std::string &drink_name, const std::string &producer) {
+Drink Database::get_drink_by_name(Storage &storage, const std::string &alcohol_type, const std::string &drink_name, const std::string &producer) {
     /*
      * Overloaded get_drink_by_name method that gets a drink by name and producer, if provided.
      * @param storage: a Storage instance
