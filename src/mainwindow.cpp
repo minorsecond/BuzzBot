@@ -649,7 +649,6 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
             ui->wineNotesInput->clear();
         }
     }
-
 }
 
 void MainWindow::open_std_drink_calculator() const {
