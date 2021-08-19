@@ -212,7 +212,7 @@ Drink Database::get_drink_by_name(Storage &storage, const std::string &alcohol_t
     return drink_by_name;
 }
 
-std::vector<Drink> Database::get_drinks_by_type(Storage storage, std::string drink_type) {
+std::vector<Drink> Database::get_drinks_by_type(Storage &storage, std::string drink_type) {
     /*
      * Get drinks by type.
      * @param storage: A storage instance.
@@ -223,7 +223,7 @@ std::vector<Drink> Database::get_drinks_by_type(Storage storage, std::string dri
     return drinks_by_type;
 }
 
-std::vector<Drink> Database::get_drinks_by_producer(Storage storage, std::string producer) {
+std::vector<Drink> Database::get_drinks_by_producer(Storage &storage, std::string producer) {
     /*
      * Get drinks by producer.
      * @param storage: A storage instance.

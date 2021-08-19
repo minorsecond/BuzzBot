@@ -67,8 +67,8 @@ public:
     static void write_db_to_disk(Storage &storage);
     static Drink get_drink_by_name(Storage &storage, const std::string &alcohol_type, const std::string &drink_name);
     static Drink get_drink_by_name(Storage &storage, const std::string &alcohol_type, const std::string &drink_name, const std::string &producer);
-    static std::vector<Drink> get_drinks_by_type(Storage storage, std::string drink_type);
-    static std::vector<Drink> get_drinks_by_producer(Storage storage, std::string producer);
+    static std::vector<Drink> get_drinks_by_type(Storage &storage, std::string drink_type);
+    static std::vector<Drink> get_drinks_by_producer(Storage &storage, std::string producer);
     static int get_version(Storage storage);
     static int increment_version(Storage storage, int current_version);
     static void sort_by_date_id(std::vector<Drink> &drinks);
