@@ -75,7 +75,7 @@ void Database::delete_row(Storage &storage, const int &row_num) {
     storage.remove<Drink>(row_num);
 }
 
-Drink Database::read_row(int row_num, Storage storage) {
+Drink Database::read_row(const int &row_num, Storage &storage) {
     /*
      * Read a specific row from the database.
      * @param storage: A storage instance.
@@ -97,7 +97,7 @@ void Database::update(Storage storage, const Drink& drink) {
     storage.update(drink);
 }
 
-std::string Database::get_latest_notes(Storage storage, const std::string& name, const std::string& alcohol_type) {
+std::string Database::get_latest_notes(Storage &storage, const std::string& name, const std::string& alcohol_type) {
     /*
      * Get the last notes entered for a drink.
      * @param storage: A Storage instance.
