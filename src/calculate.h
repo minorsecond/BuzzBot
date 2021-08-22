@@ -11,21 +11,21 @@
 
 class Calculate {
 public:
-    static double alcohol_volume(double abv, double amount);
-    static double standard_drinks(double abv, double amount, double std_drink_size);
-    static double standard_drinks_remaining(const Options& options, double standard_drinks_consumed);
-    static double volume_alcohol_remaining(const Options& options, double volume_consumed);
-    static double round_to_two_decimal_points(double val);
+    static double alcohol_volume(const double &abv, const double &amount);
+    static double standard_drinks(const double &abv, const double &amount, const double &std_drink_size);
+    static double standard_drinks_remaining(const Options& options, const double &standard_drinks_consumed);
+    static double volume_alcohol_remaining(const Options& options, const double &volume_consumed);
+    static double round_to_two_decimal_points(const double &val);
     static std::string favorite_producer(const Storage& storage, const std::string& drink_type);
     static std::string favorite_drink(const Storage& storage, const std::string& drink_type);
     static std::string favorite_type(const Storage& storage, const std::string& drink_type);
     static double mean_abv(const Storage& storage, const std::string& drink_type);
     static double mean_ibu(const Storage& storage, const std::string& drink_type);
-    static std::string double_to_string(double input_double);
-    static double oz_to_ml(double input_oz);
-    static double ml_to_oz(double input_ml);
+    static std::string double_to_string(const double &input_double);
+    static double oz_to_ml(const double &input_oz);
+    static double ml_to_oz(const double &input_ml);
     static bool compare_strings(std::string lhs, std::string rhs);
-    static int weekly_imit(const Options& options);
+    static int weekly_limit(const Options& options);
 };
 
 

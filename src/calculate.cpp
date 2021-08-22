@@ -7,7 +7,7 @@
 #include <iostream>
 #include <algorithm>
 
-double Calculate::standard_drinks(double abv, double amount, double std_drink_size) {
+double Calculate::standard_drinks(const double &abv, const double &amount, const double &std_drink_size) {
     /*
      * Calculate the number of standard drinks in a drink.
      * 1 Std. drink in the US is .6 oz pure alcohol. In Europe,
@@ -22,7 +22,7 @@ double Calculate::standard_drinks(double abv, double amount, double std_drink_si
     return round_to_two_decimal_points(alcohol_amt / std_drink_size);
 }
 
-double Calculate::alcohol_volume(double abv, double amount) {
+double Calculate::alcohol_volume(const double &abv, const double &amount) {
     /*
      * Calculate the volume of alcohol in a drink.
      * @param abv: The alcohol by volume of the drink.
@@ -32,7 +32,7 @@ double Calculate::alcohol_volume(double abv, double amount) {
     return (abv/100)*amount;
 }
 
-double Calculate::standard_drinks_remaining(const Options& options, double standard_drinks_consumed) {
+double Calculate::standard_drinks_remaining(const Options& options, const double &standard_drinks_consumed) {
     /*
      * Calculate the number of standard drinks remaining for the user this week.
      *
@@ -48,14 +48,14 @@ double Calculate::standard_drinks_remaining(const Options& options, double stand
 
     double weekly_drinks_remaining;
 
-    int drink_limit = Calculate::weekly_imit(options);
+    int drink_limit = Calculate::weekly_limit(options);
 
     weekly_drinks_remaining = drink_limit - standard_drinks_consumed;
 
     return weekly_drinks_remaining;
 }
 
-double Calculate::round_to_two_decimal_points(double val) {
+double Calculate::round_to_two_decimal_points(const double &val) {
     /*
      * Round a double to two decimal points.
      * @param val: The value that should be rounded.
@@ -64,7 +64,7 @@ double Calculate::round_to_two_decimal_points(double val) {
     return floor((val * 100) + .5)/100;
 }
 
-double Calculate::volume_alcohol_remaining(const Options& options, double volume_consumed) {
+double Calculate::volume_alcohol_remaining(const Options& options, const double &volume_consumed) {
     /*
      * Calculate the amount of alcohol the user has remaining based on their sex.
      * @return: The amount of volume remaining for user.
@@ -228,7 +228,7 @@ std::string Calculate::favorite_type(const Storage& storage, const std::string& 
     return favorite_type;
 }
 
-std::string Calculate::double_to_string(double input_double) {
+std::string Calculate::double_to_string(const double &input_double) {
     /*
      * Convert a double to a string with two decimal points.
      * @param input_double: Input double to be converted
@@ -244,7 +244,7 @@ std::string Calculate::double_to_string(double input_double) {
     return output_string.str();
 }
 
-double Calculate::oz_to_ml(double input_oz) {
+double Calculate::oz_to_ml(const double &input_oz) {
     /*
      * Convert oz to ml for metric support. 1 oz = 29.5735 ml.
      * @param input_oz: A double denoting drink volume in ounces.
@@ -255,7 +255,7 @@ double Calculate::oz_to_ml(double input_oz) {
     return ml;
 }
 
-double Calculate::ml_to_oz(double input_ml) {
+double Calculate::ml_to_oz(const double &input_ml) {
     /*
      * Convert ml to oz for metric support. 29.5735 ml = 1 lz.
      * @param input_ml: A double denoting drink volume in milliliters.
@@ -288,7 +288,7 @@ bool Calculate::compare_strings(std::string lhs, std::string rhs) {
     return lhs < rhs;
 }
 
-int Calculate::weekly_imit(const Options& options) {
+int Calculate::weekly_limit(const Options& options) {
     /*
      * Get the weekly limit.
      * @param options: an options struct.

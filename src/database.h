@@ -60,19 +60,19 @@ public:
     static std::vector<Drink> read(Storage storage);
     static Storage write(Drink drink, Storage storage);
     static void truncate(Storage storage);
-    static void delete_row(Storage storage, int row_num);
-    static Drink read_row(int row_num, Storage storage);
+    static void delete_row(Storage &storage, const int &row_num);
+    static Drink read_row(const int &row_num, Storage &storage);
     static void update(Storage storage, const Drink& drink);
     static std::vector<Drink> filter(const std::string& filter_type, const std::string& filter_text, Storage storage);
-    static void write_db_to_disk(Storage storage);
-    static Drink get_drink_by_name(Storage storage, std::string alcohol_type, std::string drink_name);
-    static Drink get_drink_by_name(Storage storage, std::string alcohol_type, std::string drink_name, std::string producer);
-    static std::vector<Drink> get_drinks_by_type(Storage storage, std::string drink_type);
-    static std::vector<Drink> get_drinks_by_producer(Storage storage, std::string producer);
+    static void write_db_to_disk(Storage &storage);
+    static Drink get_drink_by_name(Storage &storage, const std::string &alcohol_type, const std::string &drink_name);
+    static Drink get_drink_by_name(Storage &storage, const std::string &alcohol_type, const std::string &drink_name, const std::string &producer);
+    static std::vector<Drink> get_drinks_by_type(Storage &storage, std::string drink_type);
+    static std::vector<Drink> get_drinks_by_producer(Storage &storage, std::string producer);
     static int get_version(Storage storage);
     static int increment_version(Storage storage, int current_version);
     static void sort_by_date_id(std::vector<Drink> &drinks);
-    static std::string get_latest_notes(Storage storage, const std::string& name, const std::string& alcohol_type);
+    static std::string get_latest_notes(Storage &storage, const std::string& name, const std::string& alcohol_type);
 
 private:
     static bool compare_date(const Drink &a, const Drink &b);

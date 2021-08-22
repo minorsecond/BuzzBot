@@ -32,7 +32,7 @@ std::vector<Drink> Database::read(Storage storage) {
     return all_drinks;
 }
 
-void Database::write_db_to_disk(Storage storage) {
+void Database::write_db_to_disk(Storage &storage) {
     /*
      * Flush in-memory database data to disk.
      */
@@ -65,7 +65,7 @@ void Database::truncate(Storage storage) {
     write_db_to_disk(storage);
 }
 
-void Database::delete_row(Storage storage, int row_num) {
+void Database::delete_row(Storage &storage, const int &row_num) {
     /*
      * Delete a specific row from the database.
      * @param storage: A storage instance
@@ -75,7 +75,7 @@ void Database::delete_row(Storage storage, int row_num) {
     storage.remove<Drink>(row_num);
 }
 
-Drink Database::read_row(int row_num, Storage storage) {
+Drink Database::read_row(const int &row_num, Storage &storage) {
     /*
      * Read a specific row from the database.
      * @param storage: A storage instance.
@@ -97,7 +97,7 @@ void Database::update(Storage storage, const Drink& drink) {
     storage.update(drink);
 }
 
-std::string Database::get_latest_notes(Storage storage, const std::string& name, const std::string& alcohol_type) {
+std::string Database::get_latest_notes(Storage &storage, const std::string& name, const std::string& alcohol_type) {
     /*
      * Get the last notes entered for a drink.
      * @param storage: A Storage instance.
@@ -151,6 +151,13 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
 
     } else if (filter_type == "Rating") {
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::rating) == filter_text));
+    } else if (filter_type == "Name & Producer") {
+        // Parse the -- (PRODUCER) text to strip out drink name and producer.
+        std::string producer_name {filter_text.substr(filter_text.find(" -- (") + 5)};
+        producer_name = producer_name.substr(0, producer_name.size() - 1);
+        std::string drink_name {filter_text.substr(0, filter_text.find(" -- ("))};
+        std::cout << drink_name << " " << producer_name << std::endl;
+        filtered_drinks = storage.get_all<Drink>(where(c(&Drink::name) == drink_name and c(&Drink::producer) == producer_name));
     } else {
         filtered_drinks = storage.get_all<Drink>();
     }
@@ -158,7 +165,7 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
     return filtered_drinks;
 }
 
-Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std::string drink_name) {
+Drink Database::get_drink_by_name(Storage &storage, const std::string &alcohol_type, const std::string &drink_name) {
     /*
      * Get a drink by its name.
      * @param storage: A Storage instance
@@ -167,7 +174,7 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
      */
 
     std::vector<Drink> drink_by_name_result = storage.get_all<Drink>(where(c(&Drink::name) ==
-            std::move(drink_name) && c(&Drink::alcohol_type) == std::move(alcohol_type)));
+            drink_name && c(&Drink::alcohol_type) == alcohol_type));
     Drink drink_by_name;
 
     std::sort(drink_by_name_result.begin(), drink_by_name_result.end(), compare_date);
@@ -180,7 +187,7 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
 
     return drink_by_name;
 }
-Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std::string drink_name, std::string producer) {
+Drink Database::get_drink_by_name(Storage &storage, const std::string &alcohol_type, const std::string &drink_name, const std::string &producer) {
     /*
      * Overloaded get_drink_by_name method that gets a drink by name and producer, if provided.
      * @param storage: a Storage instance
@@ -190,8 +197,8 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
      */
 
     std::vector<Drink> drink_by_name_result = storage.get_all<Drink>(where(c(&Drink::name)
-            == std::move(drink_name) && c(&Drink::alcohol_type) == std::move(alcohol_type) &&
-            c(&Drink::producer) == std::move(producer)));
+            == drink_name && c(&Drink::alcohol_type) == alcohol_type &&
+            c(&Drink::producer) == producer));
     Drink drink_by_name;
 
     std::sort(drink_by_name_result.begin(), drink_by_name_result.end(), compare_date);
@@ -205,7 +212,7 @@ Drink Database::get_drink_by_name(Storage storage, std::string alcohol_type, std
     return drink_by_name;
 }
 
-std::vector<Drink> Database::get_drinks_by_type(Storage storage, std::string drink_type) {
+std::vector<Drink> Database::get_drinks_by_type(Storage &storage, std::string drink_type) {
     /*
      * Get drinks by type.
      * @param storage: A storage instance.
@@ -216,7 +223,7 @@ std::vector<Drink> Database::get_drinks_by_type(Storage storage, std::string dri
     return drinks_by_type;
 }
 
-std::vector<Drink> Database::get_drinks_by_producer(Storage storage, std::string producer) {
+std::vector<Drink> Database::get_drinks_by_producer(Storage &storage, std::string producer) {
     /*
      * Get drinks by producer.
      * @param storage: A storage instance.
