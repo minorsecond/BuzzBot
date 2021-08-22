@@ -161,10 +161,16 @@ Drink MainWindow::get_beer_attrs_from_fields(std::string alcohol_type) {
      */
 
     Drink drink;
+    std::string drink_name {ui->beerNameInput->currentText().toStdString()};
+
+    if (drink_name.find(" -- (") != std::string::npos) {  // This is a beer with a name that matches another beer, and contains the producer name in the dropdown
+        std::string producer_name {drink_name.substr(drink_name.find(" -- (") + 5)};
+        drink_name = drink_name.substr(0, drink_name.find(" -- ("));
+    }
 
     std::string drink_date = ui->beerDateInput->date().toString("yyyy-MM-dd").toStdString();
     drink.date = drink_date;
-    drink.name = ui->beerNameInput->currentText().toStdString();
+    drink.name = drink_name;
     drink.type = ui->beerTypeInput->currentText().toStdString();
     drink.subtype = ui->beerSubtypeInput->currentText().toStdString();
     drink.producer = ui->beerBreweryInput->currentText().toStdString();

@@ -302,7 +302,7 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
 
     auto *abv_plot = new QCustomPlot(parent);
     abv_plot->setAttribute(Qt::WA_DeleteOnClose);
-    int limit = Calculate::weekly_imit(options);
+    int limit = Calculate::weekly_limit(options);
 
     abv_plot->plotLayout()->insertRow(0);
     abv_plot->plotLayout()->addElement(0, 0,

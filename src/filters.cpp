@@ -26,6 +26,7 @@ std::vector<std::set<QString>> MainWindow::generate_filter_item_sets() {
 
     // Add items to the sets
     std::vector<Drink> all_drinks = Database::read(storage);
+    rename_duplicate_drink_names(all_drinks);
     for (const auto& drink : all_drinks) {
         QString drink_name = QString::fromStdString(drink.name);
         QString drink_type = QString::fromStdString(drink.type);
