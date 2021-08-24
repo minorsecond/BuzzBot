@@ -28,6 +28,7 @@ public:
     static QVector<QCPGraphData> time_data_aggregator(const std::vector<Drink>& all_drinks, double std_drink_size);
     static bool compare_by_date(const Drink &a, const Drink &b);
     static int parse_date(std::string &date);
+    static QCustomPlot * plot_abv_dist(const QVector<QCPGraphData>& abv_data);
     static QCustomPlot * plot_abv_time(const QVector<QCPGraphData>& time_data, const Options& options, QDialog *parent);
     static std::string week_number(const int date);
     static int date_from_week_num(const std::string& week_num);

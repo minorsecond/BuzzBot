@@ -441,3 +441,9 @@ int Graphing::date_from_week_num(const std::string& week_num) {
 
     return date;
 }
+
+QCustomPlot *Graphing::plot_abv_dist(const QVector<QCPGraphData> &abv_data) {
+    /*
+     * Plot ABV distribution
+     */
+}
