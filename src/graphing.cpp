@@ -45,7 +45,7 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
         time_data = time_data_aggregator(all_drinks, std_drink_size);
     }
 
-    auto abv_plot = Graphing::plot_abvs(time_data, options, this);
+    auto abv_plot = Graphing::plot_abv_time(time_data, options, this);
 
     if (no_beers) {  // Full size plot if beer data is empty
         abv_plot->setGeometry(0, 0, window_width, window_height);
@@ -294,7 +294,7 @@ int Graphing::parse_date(std::string &date) {
     return timet;
 }
 
-QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const Options& options, QDialog *parent) {
+QCustomPlot *Graphing::plot_abv_time(const QVector<QCPGraphData>& time_data, const Options& options, QDialog *parent) {
     /*
      * Plot the ABV over time graph.
      * @param time_data: A QVector of QCPGraphData objects.
