@@ -350,7 +350,7 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
                      "Resetting graph Y-axis to a min of " << min_drinks << std::endl;
         }
 
-        QColor color(20+200/4.0*1,70*(1.6-1/4.0), 150, 150);
+        QColor color(70,95, 150, 150);
         // Set up limit line
         auto* limit_line = new QCPItemStraightLine(abv_plot);
         limit_line->point1->setCoords(min_year, limit);
