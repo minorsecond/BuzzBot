@@ -167,7 +167,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     drawPen.setStyle(Qt::PenStyle::SolidLine);
     drawPen.setWidth(2);
 
-    QColor color(20+200/4.0*2,70*(1.6-2/4.0), 150, 150);
+    QColor color(120,77, 150, 150);
 
     // Create the IBU graph
     ibu_plot->addGraph();
