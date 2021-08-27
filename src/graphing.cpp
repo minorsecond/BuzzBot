@@ -191,10 +191,11 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
      * @param all_drinks: a vector of Drinks.
      */
 
+    // TODO: Refactor this method
     std::map<int, double> date_std_drinks;
-    std::vector<Drink> drinks {all_drinks};
-    std::string first_week_string {week_number(std::stoi(drinks.at(0).date))};
-    std::string last_week_string {week_number(std::stoi(drinks[drinks.size()-1].date))};
+    std::vector<Drink> drinks {all_drinks};  // TODO: Get rid of const ref all_drinks, instead of making copy here
+    const std::string first_week_string {week_number(std::stoi(drinks.at(0).date))};
+    const std::string last_week_string {week_number(std::stoi(drinks[drinks.size()-1].date))};
     int min_date {std::numeric_limits<int>::max()}; // Everything is <= this
     int max_date {std::numeric_limits<int>::min()}; // Everything is >= this
     const int first_year {std::stoi(first_week_string.substr(0, first_week_string.find('-')))};
@@ -207,12 +208,14 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
     for (auto & all_drink : drinks) {
         //date_tmp = parse_date(all_drink.date);
         std::string date_tmp = all_drink.date;
-        date_tmp.erase(std::remove(date_tmp.begin(), date_tmp.end(), '-'), date_tmp.end());
 
+        // Get week number & integer date value from DB date
+        date_tmp.erase(std::remove(date_tmp.begin(), date_tmp.end(), '-'), date_tmp.end());
         std::string week_num = week_number(std::stoi(date_tmp));
         std::string date_str = std::to_string(date_from_week_num(week_num));
         int date = parse_date(date_str);
 
+        // Get min & max dates for graph
         if (date > max_date) {
             max_date = date;
         }
@@ -221,7 +224,8 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
             min_date = date;
         }
 
-        std_drinks = (all_drink._size * (all_drink.abv/100)) / std_drink_size;
+        // Add to the map of dates & std drinks
+        std_drinks = (all_drink._size * (all_drink.abv/100)) / std_drink_size;  //TODO: Use method in calculate for this
         if (date_std_drinks.find(date) == date_std_drinks.end()) {
             // Date not in date_std_drinks
             date_std_drinks[date] = std_drinks;
@@ -403,14 +407,14 @@ std::string Graphing::week_number(const int date) {
      * @return: year and week number, e.g. 2021-05
      */
 
-    constexpr int DAYS_PER_WEEK {7};
+    constexpr int days_per_week {7};
     struct tm tm{};
     strptime(std::to_string(date).c_str(), "%Y%m%d", &tm);
 
     const int wday = tm.tm_wday;
-    const int delta = wday ? wday - 1 : DAYS_PER_WEEK - 1;
+    const int delta = wday ? wday - 1 : days_per_week - 1;
 
-    int week_num = (tm.tm_yday + DAYS_PER_WEEK - delta) / DAYS_PER_WEEK;
+    int week_num = (tm.tm_yday + days_per_week - delta) / days_per_week;
 
     return std::to_string(date).substr(0, 4) + '-' + std::to_string(week_num);
 }
@@ -424,10 +428,9 @@ int Graphing::date_from_week_num(const std::string& week_num) {
 
     struct tm tm{};
     std::string week_num_tmp = week_num + "-1";
-    char* week_char = new char[week_num_tmp.length() + 1];
-    strcpy(week_char, week_num_tmp.c_str());
-    strptime(week_char, "%Y-%W-%w", &tm);
-    delete [] week_char;
+    auto week_char = std::make_unique<char>(week_num_tmp.length() + 1);
+    strcpy(week_char.get(), week_num_tmp.c_str());
+    strptime(week_char.get(), "%Y-%W-%w", &tm);
 
     std::string year = std::to_string(tm.tm_year +1900);
     std::string month = std::to_string(tm.tm_mon + 1);
