@@ -97,7 +97,7 @@ std::map<double, int> Graphing::count_values_in_vect(const std::vector<double>& 
      * @return: a map<double, int> of values (keys) and their counts (values).
      */
 
-    std::vector<double> ibu_copy {all_values};  // TODO: Remove const ref and don't manually copy
+    std::vector<double> ibu_copy {all_values};
     std::map<double, int> ibu_counts;
 
     // Get count (y value) of each IBU (x value).
