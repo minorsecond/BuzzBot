@@ -97,7 +97,7 @@ std::map<double, int> Graphing::count_values_in_vect(const std::vector<double>& 
      * @return: a map<double, int> of values (keys) and their counts (values).
      */
 
-    std::vector<double> ibu_copy {all_values};
+    std::vector<double> ibu_copy {all_values};  // TODO: Remove const ref and don't manually copy
     std::map<double, int> ibu_counts;
 
     // Get count (y value) of each IBU (x value).
@@ -106,7 +106,7 @@ std::map<double, int> Graphing::count_values_in_vect(const std::vector<double>& 
     ibu_copy.erase(unique(ibu_copy.begin(), ibu_copy.end()), ibu_copy.end());
 
     // Create map where key is the IBU value and value is the count of the IBU in all_values.
-    for (double & i : ibu_copy) {
+    for (const double &i : ibu_copy) {
         double ibu_value = i;
         int ibu_count = std::count(all_values.begin(), all_values.end(), ibu_value);
         ibu_counts[i] = ibu_count;
@@ -225,7 +225,7 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
         }
 
         // Add to the map of dates & std drinks
-        std_drinks = (all_drink._size * (all_drink.abv/100)) / std_drink_size;  //TODO: Use method in calculate for this
+        std_drinks = Calculate::standard_drinks(all_drink.abv, all_drink._size, std_drink_size);
         if (date_std_drinks.find(date) == date_std_drinks.end()) {
             // Date not in date_std_drinks
             date_std_drinks[date] = std_drinks;
