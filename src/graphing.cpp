@@ -185,7 +185,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDial
     return ibu_plot;
 }
 
-QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &all_drinks, double std_drink_size) {
+QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drinks, double std_drink_size) {
     /*
      * Creates a QVector of QCPGraphData from a vector of Drinks.
      * @param all_drinks: a vector of Drinks.
@@ -193,9 +193,8 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
 
     // TODO: Refactor this method
     std::map<int, double> date_std_drinks;
-    std::vector<Drink> drinks {all_drinks};  // TODO: Get rid of const ref all_drinks, instead of making copy here
-    const std::string first_week_string {week_number(std::stoi(drinks.at(0).date))};
-    const std::string last_week_string {week_number(std::stoi(drinks[drinks.size()-1].date))};
+    const std::string first_week_string {week_number(std::stoi(all_drinks.at(0).date))};
+    const std::string last_week_string {week_number(std::stoi(all_drinks[all_drinks.size()-1].date))};
     int min_date {std::numeric_limits<int>::max()}; // Everything is <= this
     int max_date {std::numeric_limits<int>::min()}; // Everything is >= this
     const int first_year {std::stoi(first_week_string.substr(0, first_week_string.find('-')))};
@@ -203,9 +202,9 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(const std::vector<Drink> &a
     double std_drinks {0.0};
 
     // Sort by date
-    std::sort(drinks.begin(), drinks.end(), compare_by_date);
+    std::sort(all_drinks.begin(), all_drinks.end(), compare_by_date);
 
-    for (auto & all_drink : drinks) {
+    for (auto & all_drink : all_drinks) {
         //date_tmp = parse_date(all_drink.date);
         std::string date_tmp = all_drink.date;
 
