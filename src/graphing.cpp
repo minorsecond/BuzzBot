@@ -32,7 +32,7 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
 
     if (!ibus.empty()) {
         no_beers = false;
-        std::map<double, int> ibu_counts = Graphing::count_values_in_vect(ibus);
+        std::map<double, size_t> ibu_counts = Graphing::count_values_in_vect(ibus);
         auto ibu_plot = Graphing::plot_ibus(ibu_counts, this);
         ibu_plot->setAttribute(Qt::WA_DeleteOnClose);  // Delete pointer on window close
         ibu_plot->setGeometry(0, 0, window_width, window_height/2);
@@ -90,7 +90,7 @@ std::vector<double> Graphing::get_drink_abvs(const std::vector<Drink> &all_drink
     return abv_values;
 }
 
-std::map<double, int> Graphing::count_values_in_vect(const std::vector<double>& all_values) {
+std::map<double, size_t> Graphing::count_values_in_vect(const std::vector<double>& all_values) {
     /*
      * Create a map of values and their counts.
      * @param all_values: a vector of doubles.
@@ -98,7 +98,7 @@ std::map<double, int> Graphing::count_values_in_vect(const std::vector<double>& 
      */
 
     std::vector<double> ibu_copy {all_values};
-    std::map<double, int> ibu_counts;
+    std::map<double, size_t> ibu_counts;
 
     // Get count (y value) of each IBU (x value).
     // First, get unique items in vector
@@ -108,14 +108,14 @@ std::map<double, int> Graphing::count_values_in_vect(const std::vector<double>& 
     // Create map where key is the IBU value and value is the count of the IBU in all_values.
     for (const double &i : ibu_copy) {
         double ibu_value = i;
-        int ibu_count = std::count(all_values.begin(), all_values.end(), ibu_value);
+        size_t ibu_count = std::count(all_values.begin(), all_values.end(), ibu_value);
         ibu_counts[i] = ibu_count;
     }
 
     return ibu_counts;
 }
 
-QCustomPlot * Graphing::plot_ibus(const std::map<double, int>& ibu_counts, QDialog *parent) {
+QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QDialog *parent) {
     /*
      * Plot IBU values in QCustomPlot
      * @param parent: The window that the graph should appear in.
