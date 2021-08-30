@@ -133,10 +133,10 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QD
                                                           QFont(".AppleSystemUIFont", 12,
                                                                 QFont::Bold)));
 
-    QVector<double> ibus(ibu_counts.size());
+    QVector<double> ibus(static_cast<qsizetype>(ibu_counts.size()));
     //QVector<double> counts(ibu_counts.size());
-    QVector<double> percentages(ibu_counts.size());
-    double total_drinks {0};
+    QVector<double> percentages(static_cast<qsizetype>(ibu_counts.size()));
+    size_t total_drinks {0};
 
     // Build vectors
 
@@ -149,7 +149,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QD
     for (auto const& [key, val] : ibu_counts) {
         ibus[i] = key;
         //counts[i] = val;
-        percentages[i] = ((double)val / total_drinks) * 100;
+        percentages[i] = (static_cast<double>(val) / static_cast<double>(total_drinks)) * 100;
         i++;
     }
 
