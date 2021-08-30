@@ -327,7 +327,7 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
         double min_drinks = std::numeric_limits<int>::max();
         double max_drinks = std::numeric_limits<int>::min();
         for (auto data : time_data) {
-            int year = data.key;
+            int year = static_cast<int>(data.key);
             double std_drinks = data.value;
             if (year < min_year) {
                 min_year = year;
