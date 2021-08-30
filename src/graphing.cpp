@@ -369,6 +369,10 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
             dateTicker->setDateTimeFormat("MMM\nyyyy");
         }
 
+        if (min_drinks > 0) {
+            min_drinks -= 0.5;
+        }
+
         dateTicker->setTickOrigin(min_year);
         abv_plot->xAxis->setTicker(dateTicker);
         abv_plot->addGraph();
@@ -377,7 +381,7 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
         abv_plot->xAxis->setLabel("Date");
         abv_plot->yAxis->setLabel("Std. Drinks");
         abv_plot->xAxis->setRange(min_year, max_year);
-        abv_plot->yAxis->setRange(min_drinks-0.5, max_drinks);
+        abv_plot->yAxis->setRange(min_drinks, max_drinks);
         //abv_plot->graph(0)->rescaleAxes();
         abv_plot->graph()->setLineStyle(QCPGraph::lsLine);
         abv_plot->graph()->setPen(QPen(color.darker(200)));
