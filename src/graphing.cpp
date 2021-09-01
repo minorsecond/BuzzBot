@@ -191,7 +191,6 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
      * @param all_drinks: a vector of Drinks.
      */
 
-    // TODO: Refactor this method
     std::map<int, double> date_std_drinks;
     const std::string first_week_string {week_number(std::stoi(all_drinks.at(0).date))};
     const std::string last_week_string {week_number(std::stoi(all_drinks[all_drinks.size()-1].date))};
