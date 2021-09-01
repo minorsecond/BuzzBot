@@ -8,7 +8,7 @@
 #include <iostream>
 #include <iomanip>
 #include <chrono>
-#include <time.h>
+#include <ctime>
 #include <algorithm>
 
 Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, const Options& options) {
