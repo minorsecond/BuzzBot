@@ -211,8 +211,8 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
 
         // Get week number & integer date value from DB date
         date_tmp.erase(std::remove(date_tmp.begin(), date_tmp.end(), '-'), date_tmp.end());
-        std::string week_num = week_number(std::stoi(date_tmp));
-        std::string date_str = std::to_string(date_from_week_num(week_num));
+        const std::string week_num = week_number(std::stoi(date_tmp));
+        const std::string date_str = std::to_string(date_from_week_num(week_num));
         int date = parse_date(date_str);
 
         // Get min & max dates for graph
@@ -257,7 +257,7 @@ bool Graphing::compare_by_date(const Drink &a, const Drink &b) {
     return date_a < date_b;
 }
 
-int Graphing::parse_date(std::string &date) {
+int Graphing::parse_date(const std::string &date) {
     /*
      * Convert date string to integer date.
      * @param date: A date in the format YYYYMMDD
