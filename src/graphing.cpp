@@ -226,20 +226,12 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
 
         // Add to the map of dates & std drinks
         std_drinks = Calculate::standard_drinks(all_drink.abv, all_drink._size, std_drink_size);
-        if (date_std_drinks.find(date) == date_std_drinks.end()) {
-            // Date not in date_std_drinks
-            date_std_drinks[date] = std_drinks;
-        } else {
-            // Date already processed
-            auto it = date_std_drinks.find(date);
-            it->second += std_drinks;
-        }
+        add_std_drinks(date, std_drinks, date_std_drinks);
     }
 
     add_empty_drinks(first_year, last_year, max_date, min_date, date_std_drinks);
-    auto time_data = create_qvect(date_std_drinks);
 
-    return time_data;
+    return create_qvect(date_std_drinks);
 }
 
 bool Graphing::compare_by_date(const Drink &a, const Drink &b) {
@@ -467,4 +459,21 @@ QVector<QCPGraphData> Graphing::create_qvect(const std::map<int, double> &date_s
     }
 
     return time_data;
+}
+
+void Graphing::add_std_drinks(const int date, const double std_drinks, std::map<int, double> &date_std_drinks) {
+    /*
+     * Add std drinks to the map of std drinks
+     * @param std_drinks the number of std drinks to add
+     * @param date_std_drinks: The map of std drinks
+     */
+
+    if (date_std_drinks.find(date) == date_std_drinks.end()) {
+        // Date not in date_std_drinks
+        date_std_drinks[date] = std_drinks;
+    } else {
+        // Date already processed
+        auto it = date_std_drinks.find(date);
+        it->second += std_drinks;
+    }
 }
