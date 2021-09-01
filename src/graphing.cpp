@@ -213,7 +213,7 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
         date_tmp.erase(std::remove(date_tmp.begin(), date_tmp.end(), '-'), date_tmp.end());
         const std::string week_num = week_number(std::stoi(date_tmp));
         const std::string date_str = std::to_string(date_from_week_num(week_num));
-        int date = parse_date(date_str);
+        const int date = parse_date(date_str);
 
         // Get min & max dates for graph
         if (date > max_date) {
