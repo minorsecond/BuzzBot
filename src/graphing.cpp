@@ -204,6 +204,7 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
     // Sort by date
     std::sort(all_drinks.begin(), all_drinks.end(), compare_by_date);
 
+
     for (auto & all_drink : all_drinks) {
         //date_tmp = parse_date(all_drink.date);
         std::string date_tmp = all_drink.date;
@@ -236,19 +237,7 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
     }
 
     // Add empty drinks to fix graph where no drinks were entered
-    for (int year = first_year; year <= last_year; year++) {
-        for (int week_num = 0; week_num <= 51; week_num++) {
-            std::string year_week_num = std::to_string(year) + '-' + std::to_string(week_num);
-            std::string date_str = std::to_string(date_from_week_num(year_week_num));
-            int date = parse_date(date_str);
-
-            // Add to vector
-            if (date_std_drinks.find(date) == date_std_drinks.end() && date <= max_date && date >= min_date) {
-                // Date not in date_std_drinks
-                date_std_drinks[date] = 0;
-            }
-        }
-    }
+    add_empty_drinks(first_year, last_year, max_date, min_date, date_std_drinks);
 
     // Create the QVectof of QCPGraphData objects
     QVector<QCPGraphData> time_data(static_cast<qsizetype>(date_std_drinks.size()));
@@ -446,4 +435,28 @@ int Graphing::date_from_week_num(const std::string& week_num) {
     int date = std::stoi(date_str);
 
     return date;
+}
+
+void Graphing::add_empty_drinks(const int first_year, const int last_year, const int max_date, const int min_date,
+                                std::map<int, double> &date_std_drinks) {
+    /*
+     * Add empty days to map if no drinks were consumed.
+     * @param first_year: int denoting first year
+     * @param last_year: int denoting last year
+     * @param date_std_drinks: map of dates and std drinks consumed
+     */
+
+    for (int year = first_year; year <= last_year; year++) {
+        for (int week_num = 0; week_num <= 51; week_num++) {
+            std::string year_week_num = std::to_string(year) + '-' + std::to_string(week_num);
+            std::string date_str = std::to_string(date_from_week_num(year_week_num));
+            int date = parse_date(date_str);
+
+            // Add to vector
+            if (date_std_drinks.find(date) == date_std_drinks.end() && date <= max_date && date >= min_date) {
+                // Date not in date_std_drinks
+                date_std_drinks[date] = 0;
+            }
+        }
+    }
 }

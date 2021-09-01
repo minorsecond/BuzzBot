@@ -29,8 +29,11 @@ public:
     static bool compare_by_date(const Drink &a, const Drink &b);
     static int parse_date(std::string &date);
     static QCustomPlot * plot_abvs(const QVector<QCPGraphData>& time_data, const Options& options, QDialog *parent);
-    static std::string week_number(const int date);
+    static std::string week_number(int date);
     static int date_from_week_num(const std::string& week_num);
+private:
+    static void add_empty_drinks(const int first_year, const int last_year, const int max_date, const int min_date,
+    std::map<int, double> &date_std_drinks);
 };
 
 
