@@ -242,7 +242,7 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
     // Create the QVectof of QCPGraphData objects
     QVector<QCPGraphData> time_data(static_cast<qsizetype>(date_std_drinks.size()));
     auto it = date_std_drinks.begin();
-    int it_value {0};
+    qsizetype it_value {0};
     for (it = date_std_drinks.begin(); it != date_std_drinks.end(); it++) {
         time_data[it_value].key = it->first;
         time_data[it_value].value = it->second;
