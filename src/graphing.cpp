@@ -236,18 +236,8 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
         }
     }
 
-    // Add empty drinks to fix graph where no drinks were entered
     add_empty_drinks(first_year, last_year, max_date, min_date, date_std_drinks);
-
-    // Create the QVectof of QCPGraphData objects
-    QVector<QCPGraphData> time_data(static_cast<qsizetype>(date_std_drinks.size()));
-    auto it = date_std_drinks.begin();
-    qsizetype it_value {0};
-    for (it = date_std_drinks.begin(); it != date_std_drinks.end(); it++) {
-        time_data[it_value].key = it->first;
-        time_data[it_value].value = it->second;
-        it_value += 1;
-    }
+    auto time_data = create_qvect(date_std_drinks);
 
     return time_data;
 }
@@ -459,4 +449,22 @@ void Graphing::add_empty_drinks(const int first_year, const int last_year, const
             }
         }
     }
+}
+
+QVector<QCPGraphData> Graphing::create_qvect(const std::map<int, double> &date_std_drinks) {
+    /*
+     * Create QVector of std drinks
+     */
+
+    // Create the QVectof of QCPGraphData objects
+    QVector<QCPGraphData> time_data(static_cast<qsizetype>(date_std_drinks.size()));
+    auto it = date_std_drinks.begin();
+    qsizetype it_value {0};
+    for (it = date_std_drinks.begin(); it != date_std_drinks.end(); it++) {
+        time_data[it_value].key = it->first;
+        time_data[it_value].value = it->second;
+        it_value += 1;
+    }
+
+    return time_data;
 }
