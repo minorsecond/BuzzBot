@@ -34,6 +34,7 @@ public:
 private:
     static void add_empty_drinks(const int first_year, const int last_year, const int max_date, const int min_date,
     std::map<int, double> &date_std_drinks);
+    static QVector<QCPGraphData> create_qvect(const std::map<int, double> &date_std_drinks);
 };
 
 
