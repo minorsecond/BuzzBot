@@ -431,8 +431,8 @@ void Graphing::add_empty_drinks(const int first_year, const int last_year, const
      * @param date_std_drinks: map of dates and std drinks consumed
      */
 
-    for (int year = first_year; year <= last_year; year++) {
-        for (int week_num = 0; week_num <= 51; week_num++) {
+    for (int year {first_year}; year <= last_year; year++) {
+        for (int week_num {0}; week_num <= 51; week_num++) {
             const std::string year_week_num {std::to_string(year) + '-' + std::to_string(week_num)};
             const std::string date_str {std::to_string(date_from_week_num(year_week_num))};
             int date = parse_date(date_str);
