@@ -239,7 +239,7 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
 
 bool Graphing::compare_by_date(const Drink &a, const Drink &b) {
     /*
-     * Compares dates between two drinks.
+     * Compare dates between two drinks.
      * @return: True if drink a is earlier than drink b. Else, false.
      */
 
