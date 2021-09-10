@@ -388,10 +388,10 @@ std::string Graphing::week_number(const int date) {
     struct tm tm{};
     strptime(std::to_string(date).c_str(), "%Y%m%d", &tm);
 
-    const int wday = tm.tm_wday;
-    const int delta = wday ? wday - 1 : days_per_week - 1;
+    const int wday {tm.tm_wday};
+    const int delta {wday ? wday - 1 : days_per_week - 1};
 
-    int week_num = (tm.tm_yday + days_per_week - delta) / days_per_week;
+    const int week_num {(tm.tm_yday + days_per_week - delta) / days_per_week};
 
     return std::to_string(date).substr(0, 4) + '-' + std::to_string(week_num);
 }
