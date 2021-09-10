@@ -11,6 +11,8 @@
 #include <ctime>
 #include <algorithm>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunknown-pragmas"
 Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, const Options& options) {
     /*
      * Main graphing window.
@@ -115,6 +117,8 @@ std::map<double, size_t> Graphing::count_values_in_vect(const std::vector<double
     return ibu_counts;
 }
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "UnusedLocalVariable"
 QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QDialog *parent) {
     /*
      * Plot IBU values in QCustomPlot
@@ -184,6 +188,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QD
 
     return ibu_plot;
 }
+#pragma clang diagnostic pop
 
 QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drinks, double std_drink_size) {
     /*
@@ -475,3 +480,5 @@ void Graphing::add_std_drinks(const int date, const double std_drinks, std::map<
         it->second += std_drinks;
     }
 }
+
+#pragma clang diagnostic pop
