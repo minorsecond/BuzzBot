@@ -259,7 +259,7 @@ int Graphing::parse_date(const std::string &date) {
      * @return: an integer in UNIX epoch time
      */
 
-    std::tm t = {};
+    std::tm t {};
     std::stringstream date_str;
     date_str.str(date);
     std::stringstream new_date;
