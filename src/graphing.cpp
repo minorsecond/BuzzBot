@@ -90,23 +90,22 @@ std::vector<double> Graphing::get_drink_abvs(const std::vector<Drink> &all_drink
     return abv_values;
 }
 
-std::map<double, size_t> Graphing::count_values_in_vect(const std::vector<double>& all_values) {
+std::map<double, size_t> Graphing::count_values_in_vect(std::vector<double> all_values) {
     /*
      * Create a map of values and their counts.
      * @param all_values: a vector of doubles.
      * @return: a map<double, int> of values (keys) and their counts (values).
      */
 
-    std::vector<double> ibu_copy {all_values};
     std::map<double, size_t> ibu_counts;
 
     // Get count (y value) of each IBU (x value).
     // First, get unique items in vector
-    std::sort(ibu_copy.begin(), ibu_copy.end());
-    ibu_copy.erase(unique(ibu_copy.begin(), ibu_copy.end()), ibu_copy.end());
+    std::sort(all_values.begin(), all_values.end());
+    all_values.erase(unique(all_values.begin(), all_values.end()), all_values.end());
 
     // Create map where key is the IBU value and value is the count of the IBU in all_values.
-    for (const double &i : ibu_copy) {
+    for (const double &i : all_values) {
         double ibu_value = i;
         size_t ibu_count = std::count(all_values.begin(), all_values.end(), ibu_value);
         ibu_counts[i] = ibu_count;
