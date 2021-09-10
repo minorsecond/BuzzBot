@@ -277,9 +277,9 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
      * @param time_data: A QVector of QCPGraphData objects.
      */
 
-    auto *abv_plot = new QCustomPlot(parent);
+    auto *abv_plot {new QCustomPlot(parent)};
     abv_plot->setAttribute(Qt::WA_DeleteOnClose);
-    const int limit = Calculate::weekly_limit(options);
+    const int limit {Calculate::weekly_limit(options)};
 
     abv_plot->plotLayout()->insertRow(0);
     abv_plot->plotLayout()->addElement(0, 0,
@@ -296,13 +296,13 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
 
     if (time_data.size() > 1) {
         // Get min and max values
-        int min_year = std::numeric_limits<int>::max(); // Everything is <= this
-        int max_year = std::numeric_limits<int>::min(); // Everything is >= this
-        double min_drinks = std::numeric_limits<int>::max();
-        double max_drinks = std::numeric_limits<int>::min();
+        int min_year {std::numeric_limits<int>::max()}; // Everything is <= this
+        int max_year {std::numeric_limits<int>::min()}; // Everything is >= this
+        double min_drinks {std::numeric_limits<int>::max()};
+        double max_drinks {std::numeric_limits<int>::min()};
         for (auto data : time_data) {
-            int year = static_cast<int>(data.key);
-            double std_drinks = data.value;
+            int year {static_cast<int>(data.key)};
+            double std_drinks {data.value};
             if (year < min_year) {
                 min_year = year;
             }
@@ -329,7 +329,7 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
 
         QColor color(70,95, 150, 150);
         // Set up limit line
-        auto* limit_line = new QCPItemStraightLine(abv_plot);
+        auto* limit_line {new QCPItemStraightLine(abv_plot)};
         limit_line->point1->setCoords(min_year, limit);
         limit_line->point2->setCoords(max_year, limit);
         limit_line->setPen(QPen(QColor(255, 0, 0)));
