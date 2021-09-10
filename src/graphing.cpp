@@ -453,9 +453,8 @@ QVector<QCPGraphData> Graphing::create_qvect(const std::map<int, double> &date_s
 
     // Create the QVectof of QCPGraphData objects
     QVector<QCPGraphData> time_data(static_cast<qsizetype>(date_std_drinks.size()));
-    auto it = date_std_drinks.begin();
     qsizetype it_value {0};
-    for (it = date_std_drinks.begin(); it != date_std_drinks.end(); it++) {
+    for (auto it {date_std_drinks.begin()}; it != date_std_drinks.end(); it++) {
         time_data[it_value].key = it->first;
         time_data[it_value].value = it->second;
         it_value += 1;
