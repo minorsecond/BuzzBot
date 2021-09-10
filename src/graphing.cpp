@@ -243,8 +243,8 @@ bool Graphing::compare_by_date(const Drink &a, const Drink &b) {
      * @return: True if drink a is earlier than drink b. Else, false.
      */
 
-    std::string date_a_cpy = a.date;
-    std::string date_b_cpy = b.date;
+    std::string date_a_cpy {a.date};
+    std::string date_b_cpy {b.date};
 
     int date_a {parse_date(date_a_cpy)};
     int date_b {parse_date(date_b_cpy)};
