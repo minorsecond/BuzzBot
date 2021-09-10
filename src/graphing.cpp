@@ -145,7 +145,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QD
     // Build vectors
 
     // Get total count of drinks
-    for (auto const& [unused, val] : ibu_counts) {
+    for (auto const& [unused, val] : ibu_counts) {  //Pragma to ignore unused var is for this line
         total_drinks += val;
     }
 
