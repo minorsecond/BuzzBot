@@ -64,7 +64,7 @@ std::vector<double> Graphing::get_beer_ibus(const std::vector<Drink>& all_drinks
      * @return: Vector of doubles representing all beer IBUs.
      */
 
-    std::vector<double> ibu_values;
+    std::vector<double> ibu_values {};
 
     for (const auto& drink : all_drinks) {
         double ibu = drink.ibu;
@@ -82,7 +82,7 @@ std::vector<double> Graphing::get_drink_abvs(const std::vector<Drink> &all_drink
      * @return: A vector of doubles denoting all drink IBUs.
      */
 
-    std::vector<double> abv_values;
+    std::vector<double> abv_values {};
 
     abv_values.reserve(all_drinks.size());
     for (const auto& drink : all_drinks) {
@@ -100,7 +100,7 @@ std::map<double, size_t> Graphing::count_values_in_vect(const std::vector<double
      */
 
     std::vector<double> ibu_copy {all_values};
-    std::map<double, size_t> ibu_counts;
+    std::map<double, size_t> ibu_counts {};
 
     // Get count (y value) of each IBU (x value).
     // First, get unique items in vector
@@ -196,7 +196,7 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
      * @param all_drinks: a vector of Drinks.
      */
 
-    std::map<int, double> date_std_drinks;
+    std::map<int, double> date_std_drinks {};
     const std::string first_week_string {week_number(std::stoi(all_drinks.at(0).date))};
     const std::string last_week_string {week_number(std::stoi(all_drinks[all_drinks.size()-1].date))};
     int min_date {std::numeric_limits<int>::max()}; // Everything is <= this
@@ -279,7 +279,7 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
 
     auto *abv_plot = new QCustomPlot(parent);
     abv_plot->setAttribute(Qt::WA_DeleteOnClose);
-    int limit = Calculate::weekly_limit(options);
+    const int limit = Calculate::weekly_limit(options);
 
     abv_plot->plotLayout()->insertRow(0);
     abv_plot->plotLayout()->addElement(0, 0,
