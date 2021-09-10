@@ -141,7 +141,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QD
     // Build vectors
 
     // Get total count of drinks
-    for (auto const& [key, val] : ibu_counts) {
+    for (auto const& [unused, val] : ibu_counts) {
         total_drinks += val;
     }
 
@@ -198,7 +198,6 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
     int max_date {std::numeric_limits<int>::min()}; // Everything is >= this
     const int first_year {std::stoi(first_week_string.substr(0, first_week_string.find('-')))};
     const int last_year {std::stoi(last_week_string.substr(0, last_week_string.find('-')))};
-    double std_drinks {0.0};
 
     // Sort by date
     std::sort(all_drinks.begin(), all_drinks.end(), compare_by_date);
@@ -224,7 +223,7 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
         }
 
         // Add to the map of dates & std drinks
-        std_drinks = Calculate::standard_drinks(all_drink.abv, all_drink._size, std_drink_size);
+        double std_drinks = Calculate::standard_drinks(all_drink.abv, all_drink._size, std_drink_size);
         add_std_drinks(date, std_drinks, date_std_drinks);
     }
 
