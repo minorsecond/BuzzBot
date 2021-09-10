@@ -34,8 +34,8 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
 
     if (!ibus.empty()) {
         no_beers = false;
-        std::map<double, size_t> ibu_counts = Graphing::count_values_in_vect(ibus);
-        auto ibu_plot = Graphing::plot_ibus(ibu_counts, this);
+        std::map<double, size_t> ibu_counts {Graphing::count_values_in_vect(ibus)};
+        auto ibu_plot {Graphing::plot_ibus(ibu_counts, this)};
         ibu_plot->setAttribute(Qt::WA_DeleteOnClose);  // Delete pointer on window close
         ibu_plot->setGeometry(0, 0, window_width, window_height/2);
         ibu_plot->show();
@@ -47,7 +47,7 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
         time_data = time_data_aggregator(all_drinks, std_drink_size);
     }
 
-    auto abv_plot = Graphing::plot_abvs(time_data, options, this);
+    auto abv_plot {Graphing::plot_abvs(time_data, options, this)};
 
     if (no_beers) {  // Full size plot if beer data is empty
         abv_plot->setGeometry(0, 0, window_width, window_height);
