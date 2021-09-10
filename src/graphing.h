@@ -23,7 +23,7 @@ public:
     explicit Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, const Options& options);
     static std::vector<double> get_beer_ibus(const std::vector<Drink>& all_drinks);
     static std::vector<double> get_drink_abvs(const std::vector<Drink>& all_drinks);
-    static std::map<double, size_t> count_values_in_vect(std::vector<double> all_values);
+    static std::map<double, size_t> count_values_in_vect(const std::vector<double>& all_values);
     static QCustomPlot * plot_ibus(const std::map<double, size_t>& ibu_counts, QDialog *parent = nullptr);
     static QVector<QCPGraphData> time_data_aggregator(std::vector<Drink> all_drinks, double std_drink_size);
     static bool compare_by_date(const Drink &a, const Drink &b);
