@@ -44,7 +44,7 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
         std::map<double, size_t> abv_counts = Graphing::count_ibus_in_vect(abvs);
         const auto abv_plot {Graphing::plot_abv_dist(abv_counts, this)};
         abv_plot->setAttribute(Qt::WA_DeleteOnClose);
-        abv_plot->setGeometry(0, static_cast<double>(window_height)/1.5+3.0, window_width, window_height / 3);
+        abv_plot->setGeometry(0, static_cast<int>(window_height/1.5+3.0), window_width, window_height / 3);
         abv_plot->show();
     }
 
