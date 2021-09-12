@@ -29,7 +29,7 @@ public:
     static bool compare_by_date(const Drink &a, const Drink &b);
     static int parse_date(const std::string &date);
     static QCustomPlot * plot_abv_dist(const std::map<double, size_t>& abv_counts, QDialog *parent);
-    static QCustomPlot * plot_abv_time(const QVector<QCPGraphData>& time_data, const Options& options, QDialog *parent);
+    static QCustomPlot * plt_std_drinks_time(const QVector<QCPGraphData>& time_data, const Options& options, QDialog *parent);
     static std::string week_number(const int date);
     static int date_from_week_num(const std::string& week_num);
 private:
