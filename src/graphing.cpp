@@ -19,8 +19,8 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
     ui.setupUi(this);
     this->setWindowTitle("Alcohol Habits");
 
-    int window_width {512};
-    int window_height {512};
+    const int window_width {512};
+    const int window_height {625};
 
     bool no_beers {true};
 
@@ -29,14 +29,23 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
 
     //Plot the IBU plot
     std::vector ibus {Graphing::get_beer_ibus(all_drinks)};
+    std::vector abvs {Graphing::get_drink_abvs(all_drinks)};
 
     if (!ibus.empty()) {
         no_beers = false;
-        std::map<double, size_t> ibu_counts = Graphing::count_values_in_vect(ibus);
+        std::map<double, size_t> ibu_counts = Graphing::count_ibus_in_vect(ibus);
         auto ibu_plot = Graphing::plot_ibus(ibu_counts, this);
         ibu_plot->setAttribute(Qt::WA_DeleteOnClose);  // Delete pointer on window close
-        ibu_plot->setGeometry(0, 0, window_width, window_height/2);
+        ibu_plot->setGeometry(0, 0, window_width, window_height / 3);
         ibu_plot->show();
+    }
+
+    if (!abvs.empty()) {
+        std::map<double, size_t> abv_counts = Graphing::count_ibus_in_vect(abvs);
+        const auto abv_plot {Graphing::plot_abv_dist(abv_counts, this)};
+        abv_plot->setAttribute(Qt::WA_DeleteOnClose);
+        abv_plot->setGeometry(0, static_cast<double>(window_height)/1.5+3.0, window_width, window_height / 3);
+        abv_plot->show();
     }
 
     // Plot the ABV plot
@@ -50,7 +59,7 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
     if (no_beers) {  // Full size plot if beer data is empty
         abv_plot->setGeometry(0, 0, window_width, window_height);
     } else {
-        abv_plot->setGeometry(0, (window_height/2+2), window_width, window_height/2);
+        abv_plot->setGeometry(0, (window_height/3+2), window_width, window_height/3);
     }
     abv_plot->show();
 }
@@ -90,29 +99,29 @@ std::vector<double> Graphing::get_drink_abvs(const std::vector<Drink> &all_drink
     return abv_values;
 }
 
-std::map<double, size_t> Graphing::count_values_in_vect(const std::vector<double>& all_values) {
+std::map<double, size_t> Graphing::count_ibus_in_vect(const std::vector<double>& all_values) {
     /*
      * Create a map of values and their counts.
      * @param all_values: a vector of doubles.
      * @return: a map<double, int> of values (keys) and their counts (values).
      */
 
-    std::vector<double> ibu_copy {all_values};
-    std::map<double, size_t> ibu_counts;
+    std::vector<double> vect_copy {all_values};
+    std::map<double, size_t> counts;
 
     // Get count (y value) of each IBU (x value).
     // First, get unique items in vector
-    std::sort(ibu_copy.begin(), ibu_copy.end());
-    ibu_copy.erase(unique(ibu_copy.begin(), ibu_copy.end()), ibu_copy.end());
+    std::sort(vect_copy.begin(), vect_copy.end());
+    vect_copy.erase(unique(vect_copy.begin(), vect_copy.end()), vect_copy.end());
 
     // Create map where key is the IBU value and value is the count of the IBU in all_values.
-    for (const double &i : ibu_copy) {
+    for (const double &i : vect_copy) {
         double ibu_value = i;
         size_t ibu_count = std::count(all_values.begin(), all_values.end(), ibu_value);
-        ibu_counts[i] = ibu_count;
+        counts[i] = ibu_count;
     }
 
-    return ibu_counts;
+    return counts;
 }
 
 QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QDialog *parent) {
@@ -476,8 +485,23 @@ void Graphing::add_std_drinks(const int date, const double std_drinks, std::map<
     }
 }
 
-QCustomPlot *Graphing::plot_abv_dist(const QVector<QCPGraphData> &abv_data) {
+QCustomPlot *Graphing::plot_abv_dist(const std::map<double, size_t>& abv_counts, QDialog *parent) {
     /*
      * Plot ABV distribution
      */
+
+    auto *abv_plot {new QCustomPlot(parent)};
+    abv_plot->setAttribute(Qt::WA_DeleteOnClose);
+
+    // Add title
+    // add title layout element:
+    abv_plot->plotLayout()->insertRow(0);
+    abv_plot->plotLayout()->addElement(0, 0,
+                                       new QCPTextElement(abv_plot, "Beer ABV Distribution",
+                                                          QFont(".AppleSystemUIFont", 12,
+                                                                QFont::Bold)));
+    for (const auto [key, value] : abv_counts) {
+        std::cout << key << std::endl;
+    }
+    return abv_plot;
 }

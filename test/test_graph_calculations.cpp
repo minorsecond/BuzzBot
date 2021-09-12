@@ -69,7 +69,7 @@ TEST_CASE("Count Values in Vector", "[Graph Data Compilation]") {
                                              {6.0, 1},
                                              {10.0, 4}};
 
-    std::map<double, size_t> output_values = Graphing::count_values_in_vect(input_values);
+    std::map<double, size_t> output_values = Graphing::count_ibus_in_vect(input_values);
 
     REQUIRE(output_values == expected_values);
 }
