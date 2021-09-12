@@ -420,7 +420,7 @@ void MainWindow::program_options(bool write) {
         std::ofstream out_data;
 
         if (!out_data) {
-            std::cerr << "Error: settings file could not be opened." << std::endl;
+            std::cerr << "Error: settings file could not be opened." << std::endl;  // TODO: Raise error window
             exit(1);
         }
 
