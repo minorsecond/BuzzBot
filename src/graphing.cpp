@@ -501,8 +501,52 @@ QCustomPlot *Graphing::plot_abv_dist(const std::map<double, size_t>& abv_counts,
                                        new QCPTextElement(abv_plot, "Beer ABV Distribution",
                                                           QFont(".AppleSystemUIFont", 12,
                                                                 QFont::Bold)));
-    for (const auto [key, value] : abv_counts) {
-        std::cout << key << std::endl;
+
+    QVector<double> abvs(static_cast<qsizetype>(abv_counts.size()));
+    QVector<double> percentages(static_cast<qsizetype>(abv_counts.size()));
+    size_t total_drinks {0};
+
+    // Build vectors
+
+    // Get total count of drinks
+    for (auto const& [key, val] : abv_counts) {
+        total_drinks += val;
     }
+
+    int i = 0;
+    for (auto const& [key, val] : abv_counts) {
+        abvs[i] = key;
+        //counts[i] = val;
+        percentages[i] = (static_cast<double>(val) / static_cast<double>(total_drinks)) * 100;
+        i++;
+    }
+
+    // Get min/max values for axes
+    double abv_min {*std::min_element(abvs.begin(), abvs.end())};
+    double abv_max {*std::max_element(abvs.begin(), abvs.end())};
+    double perc_min {*std::min_element(percentages.begin(), percentages.end())};
+    double perc_max {*std::max_element(percentages.begin(), percentages.end())};
+
+    // Graph style
+    QPen drawPen;
+    drawPen.setColor(Qt::black);
+    drawPen.setStyle(Qt::PenStyle::SolidLine);
+    drawPen.setWidth(2);
+
+    QColor color(120,77, 150, 150);
+
+    // Create the IBU graph
+    abv_plot->addGraph();
+    abv_plot->graph(0)->setData(abvs, percentages);
+    abv_plot->graph()->setPen(drawPen);
+    abv_plot->xAxis->setLabel("ABV");
+    abv_plot->yAxis->setLabel("% of All Drinks");
+    abv_plot->xAxis->setRange(abv_min, abv_max);
+    abv_plot->yAxis->setRange(perc_min, perc_max);
+    abv_plot->graph()->setLineStyle(QCPGraph::lsLine);
+    abv_plot->graph()->setPen(QPen(color.darker(200)));
+    abv_plot->graph()->setBrush(QBrush(color));
+    abv_plot->replot();
+
     return abv_plot;
 }
