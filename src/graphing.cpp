@@ -134,7 +134,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QD
     ibu_plot->plotLayout()->insertRow(0);
     ibu_plot->plotLayout()->addElement(0, 0,
                                        new QCPTextElement(ibu_plot, "Beer IBU Distribution",
-                                                          QFont(".AppleSystemUIFont", 12,
+                                                          QFont("Helvetica Neue", 12,
                                                                 QFont::Bold)));
 
     QVector<double> ibus(static_cast<qsizetype>(ibu_counts.size()));
@@ -284,7 +284,7 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
     abv_plot->plotLayout()->insertRow(0);
     abv_plot->plotLayout()->addElement(0, 0,
                                        new QCPTextElement(abv_plot, "Alcohol Consumption Over Time",
-                                                          QFont("sans", 12, QFont::Bold)));
+                                                          QFont("Helvetica Neue", 12, QFont::Bold)));
 
     // Create the ABV graph
 
