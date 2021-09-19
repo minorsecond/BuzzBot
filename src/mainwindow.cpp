@@ -94,6 +94,11 @@ MainWindow::MainWindow(QWidget *parent)
     // Update fields to match beer that comes first alphabetically
     reset_fields();
 
+    // Set up IBU spinbox No Value item
+    ui->beerIbuInput->setRange(-1, 100);
+    ui->beerIbuInput->setSingleStep(1);
+    ui->beerIbuInput->setSpecialValueText(tr(" "));
+
     // Start the stat pane update stat_update_timer
     auto *stats_timer = new QTimer(this);
     connect(stats_timer, &QTimer::timeout, this, &MainWindow::update_stats_if_new_day);
