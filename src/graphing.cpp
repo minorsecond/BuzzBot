@@ -145,16 +145,20 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QD
     // Build vectors
 
     // Get total count of drinks
-    for (auto const& [unused, val] : ibu_counts) {  //Pragma to ignore unused var is for this line
-        total_drinks += val;
+    for (auto const& [ibu, count] : ibu_counts) {  //Pragma to ignore unused var is for this line
+        if (ibu >= 0) {
+            total_drinks += count;
+        }
     }
 
     int i = 0;
     for (auto const& [key, val] : ibu_counts) {
-        ibus[i] = key;
-        //counts[i] = val;
-        percentages[i] = (static_cast<double>(val) / static_cast<double>(total_drinks)) * 100;
-        i++;
+        if (key >= 0) {
+            ibus[i] = key;
+            //counts[i] = val;
+            percentages[i] = (static_cast<double>(val) / static_cast<double>(total_drinks)) * 100;
+            i++;
+        }
     }
 
     // Get min/max values for axes
