@@ -271,18 +271,13 @@ bool Calculate::compare_strings(std::string lhs, std::string rhs) {
      * Compare two strings alphabetically. Used to compare strings, ignoring case.
      */
 
-    std::string lhs_tmp;
-    std::string rhs_tmp;
-
     // Convert strings to uppercase
     for (char& c : lhs) {
         c = std::toupper(c, std::locale());
-        lhs_tmp += c;
     }
 
     for (char& c : rhs) {
         c = std::toupper(c, std::locale());
-        rhs_tmp += c;
     }
 
     return lhs < rhs;

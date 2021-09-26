@@ -128,6 +128,7 @@ void MainWindow::update_beer_types_producers() {
 
     if (!selected_beer.id || selected_beer.id == -1) {  // Clear fields if new name
         clear_fields("Beer");
+        ui->beerIbuInput->setValue(-1);
     } else {
         std::string beer_type = selected_beer.type;
         std::string beer_subtype = selected_beer.subtype;
@@ -176,6 +177,7 @@ Drink MainWindow::get_beer_attrs_from_fields(std::string alcohol_type) {
     drink.producer = ui->beerBreweryInput->currentText().toStdString();
     drink.vintage = -999;
     drink.ibu = ui->beerIbuInput->value();
+    std::cout << "IBU: " << drink.ibu << std::endl;
     drink.abv = ui->beerAbvInput->value();
     drink._size = ui->beerSizeInput->value();
     drink.rating = ui->beerRatingInput->value();

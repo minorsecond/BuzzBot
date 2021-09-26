@@ -134,7 +134,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QD
     ibu_plot->plotLayout()->insertRow(0);
     ibu_plot->plotLayout()->addElement(0, 0,
                                        new QCPTextElement(ibu_plot, "Beer IBU Distribution",
-                                                          QFont(".AppleSystemUIFont", 12,
+                                                          QFont("Helvetica Neue", 12,
                                                                 QFont::Bold)));
 
     QVector<double> ibus(static_cast<qsizetype>(ibu_counts.size()));
@@ -145,16 +145,20 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QD
     // Build vectors
 
     // Get total count of drinks
-    for (auto const& [unused, val] : ibu_counts) {  //Pragma to ignore unused var is for this line
-        total_drinks += val;
+    for (auto const& [ibu, count] : ibu_counts) {  //Pragma to ignore unused var is for this line
+        if (ibu >= 0) {
+            total_drinks += count;
+        }
     }
 
     int i = 0;
     for (auto const& [key, val] : ibu_counts) {
-        ibus[i] = key;
-        //counts[i] = val;
-        percentages[i] = (static_cast<double>(val) / static_cast<double>(total_drinks)) * 100;
-        i++;
+        if (key >= 0) {
+            ibus[i] = key;
+            //counts[i] = val;
+            percentages[i] = (static_cast<double>(val) / static_cast<double>(total_drinks)) * 100;
+            i++;
+        }
     }
 
     // Get min/max values for axes
@@ -284,7 +288,7 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
     abv_plot->plotLayout()->insertRow(0);
     abv_plot->plotLayout()->addElement(0, 0,
                                        new QCPTextElement(abv_plot, "Alcohol Consumption Over Time",
-                                                          QFont("sans", 12, QFont::Bold)));
+                                                          QFont("Helvetica Neue", 12, QFont::Bold)));
 
     // Create the ABV graph
 
