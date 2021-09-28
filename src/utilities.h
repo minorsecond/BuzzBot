@@ -9,6 +9,7 @@
 class utilities {
 public:
     static std::string zero_pad_string(unsigned integer);
+    static std::string get_local_date();
 };
 
 

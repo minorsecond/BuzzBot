@@ -104,8 +104,6 @@ MainWindow::MainWindow(QWidget *parent)
     auto *stats_timer = new QTimer(this);
     connect(stats_timer, &QTimer::timeout, this, &MainWindow::update_stats_if_new_day);
     stats_timer->start(5000);
-    int days_in_a_row {Calculate::days_in_row(storage, "2021-09-28")};
-    std::cout << "Days drank in a row: " << days_in_a_row << std::endl;
 }
 
 void MainWindow::add_menubar_items() {
@@ -707,7 +705,7 @@ std::tuple<std::chrono::year_month_day, std::string> MainWindow::get_filter_date
     std::chrono::weekday filter_day = get_filter_weekday_start();
 
     // get_local_date returns a string in the form of YYYY-MM-DD
-    std::string query_date = get_local_date();
+    std::string query_date = utilities::get_local_date();
 
     // Back to date object
     std::tm tm = {};
@@ -762,28 +760,6 @@ std::string MainWindow::format_date(std::chrono::year_month_day date) {
     std::string query_date = year + "-" + month + "-" + day;
 
     return query_date;
-}
-
-std::string MainWindow::get_local_date() {
-    /*
-     * Get date in localtime
-     * @return: A string denoting the date in localtime, with the format YYYY-MM-DD
-     */
-
-    // Get today's date in local time.
-    char query_date[10];
-    std::string output;
-
-    auto todays_date = std::chrono::system_clock::now();
-    auto now_c = std::chrono::system_clock::to_time_t(todays_date);
-    std::tm now_tm = *std::localtime(&now_c);
-    std::strftime(query_date, sizeof query_date, "%Y-%m-%d", &now_tm);
-
-    for (char i : query_date) {
-        output += std::string(1, i);
-    }
-
-    return output;
 }
 
 void MainWindow::open_graphs() {

@@ -4,6 +4,7 @@
 
 #include "mainwindow.h"
 #include "calculate.h"
+#include "utilities.h"
 #include <iostream>
 
 void MainWindow::update_stat_panel() {
@@ -66,6 +67,7 @@ void MainWindow::update_stat_panel() {
     update_mean_abv(current_tab);
     update_mean_ibu(current_tab);
     update_std_drinks_today();
+    ui->consecutiveConsumptionLabel->setText(QString::fromStdString(std::to_string(Calculate::days_in_row(storage))));
 }
 
 void MainWindow::update_drinks_this_week(double standard_drinks, const std::string& weekday_name) {
@@ -234,7 +236,7 @@ void MainWindow::update_std_drinks_today() {
 
     double std_drinks_today {0.0};
 
-    std::string query_date = get_local_date();
+    std::string query_date = utilities::get_local_date();
 
     std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
 
