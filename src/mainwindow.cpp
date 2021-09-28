@@ -7,6 +7,7 @@
 #include "exporters.h"
 #include "calculate.h"
 #include "graphing.h"
+#include "utilities.h"
 #include <iomanip>
 #include <filesystem>
 #include <iostream>
@@ -103,6 +104,8 @@ MainWindow::MainWindow(QWidget *parent)
     auto *stats_timer = new QTimer(this);
     connect(stats_timer, &QTimer::timeout, this, &MainWindow::update_stats_if_new_day);
     stats_timer->start(5000);
+    int days_in_a_row {Calculate::days_in_row(storage, "2021-09-28")};
+    std::cout << "Days drank in a row: " << days_in_a_row << std::endl;
 }
 
 void MainWindow::add_menubar_items() {
@@ -753,8 +756,8 @@ std::string MainWindow::format_date(std::chrono::year_month_day date) {
 
     std::string year = std::to_string((int)date.year());
 
-    std::string month = zero_pad_string((unsigned)date.month());
-    std::string day = zero_pad_string((unsigned)date.day());
+    std::string month = utilities::zero_pad_string((unsigned)date.month());
+    std::string day = utilities::zero_pad_string((unsigned)date.day());
 
     std::string query_date = year + "-" + month + "-" + day;
 

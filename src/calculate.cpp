@@ -3,10 +3,12 @@
 //
 
 #include "calculate.h"
+#include "utilities.h"
 #include <cmath>
 #include <iostream>
 #include <algorithm>
 
+using namespace sqlite_orm;
 double Calculate::standard_drinks(const double &abv, const double &amount, const double &std_drink_size) {
     /*
      * Calculate the number of standard drinks in a drink.
@@ -305,4 +307,47 @@ int Calculate::weekly_limit(const Options& options) {
     }
 
     return drink_limit;
+}
+
+int Calculate::days_in_row(Storage &storage, const std::string &date) {
+    /*
+     * Calculates the number of days in a row one has consumed alcohol.
+     * @param storage: a storage object
+     * @param date: today's date
+     */
+
+    bool found_day_without_drink {false};
+    int day_counter {0};
+
+    // Construct the initial date
+    //auto search_date {std::make_unique<std::tm>()};
+    tm search_date{};
+    search_date.tm_year = std::stoi(date.substr(0, 4));
+    search_date.tm_mon = std::stoi(date.substr(5, 7));
+    search_date.tm_mday = std::stoi(date.substr(8, 9));
+
+    --search_date.tm_mday;
+
+    std::string prev_day {std::to_string(search_date.tm_year) + '-'
+                                + utilities::zero_pad_string(search_date.tm_mon) + '-' +
+                                utilities::zero_pad_string(search_date.tm_mday)};
+
+    std::cout << "Initial date: " << prev_day << std::endl;
+
+    while (!found_day_without_drink) {
+        if (storage.get_all<Drink>(where(c(&Drink::date) == prev_day)).empty()) {
+            std::cout << "Results are empty" << std::endl;
+            found_day_without_drink = true;
+        } else {
+            day_counter ++;
+            --search_date.tm_mday;
+            prev_day = std::to_string(search_date.tm_year) + '-' + utilities::zero_pad_string(search_date.tm_mon) + '-'
+                    + utilities::zero_pad_string(search_date.tm_mday);
+
+            if (storage.get_all<Drink>(where(c(&Drink::date) == prev_day)).empty()) {
+                found_day_without_drink = true;
+            }
+        }
+    }
+    return day_counter;
 }

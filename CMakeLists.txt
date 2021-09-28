@@ -37,10 +37,10 @@ add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cp
         src/liquor.cpp src/wine.cpp src/filters.cpp  src/about.cpp src/about.h src/exporters.cpp src/exporters.h
         src/standard_drink_calculator.cpp src/standard_drink_calculator.h src/confirm_dialog.cpp src/confirm_dialog.h
         src/graphing.cpp src/graphing.h include/qcustomplot.h include/qcustomplot.cpp
-        src/table_manipulation.cpp src/stats_updaters.cpp)
+        src/table_manipulation.cpp src/stats_updaters.cpp src/utilities.cpp src/utilities.h)
 add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp
         test/test_database_functions.cpp test/test_calculations.cpp test/test_graph_calculations.cpp src/graphing.cpp
-        src/graphing.h include/qcustomplot.cpp include/qcustomplot.h)
+        src/graphing.h include/qcustomplot.cpp include/qcustomplot.h src/utilities.cpp src/utilities.h)
 
 target_precompile_headers(BuzzBot PRIVATE include/sqlite_orm.h)
 
