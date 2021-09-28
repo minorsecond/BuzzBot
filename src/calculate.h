@@ -26,6 +26,7 @@ public:
     static double ml_to_oz(const double &input_ml);
     static bool compare_strings(std::string lhs, std::string rhs);
     static int weekly_limit(const Options& options);
+    static int days_in_row(Storage &storage, const std::string &date);
 };
 
 
