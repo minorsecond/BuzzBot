@@ -74,7 +74,6 @@ private:
     std::tuple<std::chrono::year_month_day, std::string> get_filter_date();
     void update_std_drinks_today();
     static std::string format_date(std::chrono::year_month_day date);
-    static std::string get_local_date();
     static std::string get_weekday_name(unsigned weekday_number);
     void open_graphs();
     double get_std_drink_size_from_options();

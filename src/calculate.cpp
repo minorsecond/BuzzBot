@@ -309,7 +309,7 @@ int Calculate::weekly_limit(const Options& options) {
     return drink_limit;
 }
 
-int Calculate::days_in_row(Storage &storage, const std::string &date) {
+int Calculate::days_in_row(Storage &storage) {
     /*
      * Calculates the number of days in a row one has consumed alcohol.
      * @param storage: a storage object
@@ -318,6 +318,7 @@ int Calculate::days_in_row(Storage &storage, const std::string &date) {
 
     bool found_day_without_drink {false};
     int day_counter {0};
+    const std::string date {utilities::get_local_date()};
 
     // Construct the initial date
     //auto search_date {std::make_unique<std::tm>()};
@@ -334,7 +335,13 @@ int Calculate::days_in_row(Storage &storage, const std::string &date) {
 
     std::cout << "Initial date: " << prev_day << std::endl;
 
+    bool scanned_today {false};
     while (!found_day_without_drink) {
+        if (!scanned_today && !storage.get_all<Drink>(where(c(&Drink::date) == date)).empty()) {
+            std::cout << "Found drink on: " << date << std::endl;
+            day_counter ++;
+            scanned_today = true;
+        }
         if (storage.get_all<Drink>(where(c(&Drink::date) == prev_day)).empty()) {
             std::cout << "Results are empty" << std::endl;
             found_day_without_drink = true;
