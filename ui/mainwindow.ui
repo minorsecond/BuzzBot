@@ -504,7 +504,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="daysConsecutiveLabel">
          <property name="text">
-          <string>Days consumed consecutively</string>
+          <string>Days consumed consecutively:</string>
          </property>
         </widget>
        </item>

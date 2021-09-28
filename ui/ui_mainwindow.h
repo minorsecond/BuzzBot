@@ -1103,7 +1103,7 @@ public:
         avgIbuDrinkOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
         drinksThisWeekLabel->setText(QCoreApplication::translate("MainWindow", "Std. drinks this week:", nullptr));
         volAlcoholRemainingOutput->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
-        daysConsecutiveLabel->setText(QCoreApplication::translate("MainWindow", "Days consumed consecutively", nullptr));
+        daysConsecutiveLabel->setText(QCoreApplication::translate("MainWindow", "Days consumed consecutively:", nullptr));
         consecutiveConsumptionLabel->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
         drinkDataLabel->setText(QCoreApplication::translate("MainWindow", "Drink Data", nullptr));
         clearFieldsButton->setText(QCoreApplication::translate("MainWindow", "Clear Selections", nullptr));
