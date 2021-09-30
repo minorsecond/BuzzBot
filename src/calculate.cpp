@@ -321,17 +321,16 @@ int Calculate::days_in_row(Storage &storage) {
     const std::string date {utilities::get_local_date()};
 
     // Construct the initial date
-    //auto search_date {std::make_unique<std::tm>()};
-    tm search_date{};
+    std::tm search_date{};
     search_date.tm_year = std::stoi(date.substr(0, 4));
     search_date.tm_mon = std::stoi(date.substr(5, 7));
     search_date.tm_mday = std::stoi(date.substr(8, 9));
 
-    --search_date.tm_mday;
+    decrement_day(search_date);
 
     std::string prev_day {std::to_string(search_date.tm_year) + '-'
-                                + utilities::zero_pad_string(search_date.tm_mon) + '-' +
-                                utilities::zero_pad_string(search_date.tm_mday)};
+                          + utilities::zero_pad_string(search_date.tm_mon) + '-' +
+                          utilities::zero_pad_string(search_date.tm_mday)};
 
     std::cout << "Initial date: " << prev_day << std::endl;
 
@@ -347,9 +346,11 @@ int Calculate::days_in_row(Storage &storage) {
             found_day_without_drink = true;
         } else {
             day_counter ++;
-            --search_date.tm_mday;
+            std::cout << "Decrementing: " << std::to_string(search_date.tm_year) + '-' + utilities::zero_pad_string(search_date.tm_mon) + '-'
+                                             + utilities::zero_pad_string(search_date.tm_mday) << std::endl;
+            decrement_day(search_date);
             prev_day = std::to_string(search_date.tm_year) + '-' + utilities::zero_pad_string(search_date.tm_mon) + '-'
-                    + utilities::zero_pad_string(search_date.tm_mday);
+                       + utilities::zero_pad_string(search_date.tm_mday);
 
             if (storage.get_all<Drink>(where(c(&Drink::date) == prev_day)).empty()) {
                 found_day_without_drink = true;
@@ -357,4 +358,18 @@ int Calculate::days_in_row(Storage &storage) {
         }
     }
     return day_counter;
+}
+
+void Calculate::decrement_day(std::tm &date) {
+    /* Decrements a time object by a day
+     * @param date: a tm objected
+     */
+
+    std::time_t search_date_t {std::mktime(&date)};
+    search_date_t -= 60*60*24;
+    std::tm *search_date {std::localtime(&search_date_t)};
+
+    date.tm_year = search_date->tm_year;
+    date.tm_mon = search_date->tm_mon;
+    date.tm_mday = search_date->tm_mday;
 }
