@@ -327,8 +327,6 @@ int Calculate::days_in_row(Storage &storage) {
     search_date.tm_mon = std::stoi(date.substr(5, 7)) - 1;
     search_date.tm_mday = std::stoi(date.substr(8, 9));
 
-    std::cout << std::to_string(search_date.tm_year) + '-' + std::to_string(search_date.tm_mon) + '-' + std::to_string(search_date.tm_mday) << std::endl;
-
     decrement_day(search_date);
 
     std::string prev_day {std::to_string(search_date.tm_year + 1900) + '-'
@@ -365,7 +363,7 @@ int Calculate::days_in_row(Storage &storage) {
 
 void Calculate::decrement_day(std::tm &date) {
     /* Decrements a time object by a day
-     * @param date: a tm objected
+     * @param date: a tm object
      */
 
     std::time_t search_date_t {std::mktime(&date)};
