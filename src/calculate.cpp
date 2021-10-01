@@ -371,8 +371,6 @@ void Calculate::decrement_day(std::tm &date) {
     std::time_t search_date_t {std::mktime(&date)};
     search_date_t -= 60*60*24;
     std::tm *search_date {std::localtime(&search_date_t)};
-    std::cout << "Pre date: " << std::asctime(&date) << std::endl;
-    std::cout << "New date: " << std::asctime(search_date) << std::endl;
 
     date.tm_year = search_date->tm_year;
     date.tm_mon = search_date->tm_mon;
