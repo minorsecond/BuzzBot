@@ -5,6 +5,7 @@
 #include "calculate.h"
 #include "utilities.h"
 #include <cmath>
+#include <ctime>
 #include <iostream>
 #include <algorithm>
 
@@ -322,34 +323,30 @@ int Calculate::days_in_row(Storage &storage) {
 
     // Construct the initial date
     std::tm search_date{};
-    search_date.tm_year = std::stoi(date.substr(0, 4));
-    search_date.tm_mon = std::stoi(date.substr(5, 7));
+    search_date.tm_year = std::stoi(date.substr(0, 4)) - 1900;
+    search_date.tm_mon = std::stoi(date.substr(5, 7)) - 1;
     search_date.tm_mday = std::stoi(date.substr(8, 9));
+
+    std::cout << std::to_string(search_date.tm_year) + '-' + std::to_string(search_date.tm_mon) + '-' + std::to_string(search_date.tm_mday) << std::endl;
 
     decrement_day(search_date);
 
-    std::string prev_day {std::to_string(search_date.tm_year) + '-'
-                          + utilities::zero_pad_string(search_date.tm_mon) + '-' +
+    std::string prev_day {std::to_string(search_date.tm_year + 1900) + '-'
+                          + utilities::zero_pad_string(search_date.tm_mon + 1) + '-' +
                           utilities::zero_pad_string(search_date.tm_mday)};
-
-    std::cout << "Initial date: " << prev_day << std::endl;
 
     bool scanned_today {false};
     while (!found_day_without_drink) {
         if (!scanned_today && !storage.get_all<Drink>(where(c(&Drink::date) == date)).empty()) {
-            std::cout << "Found drink on: " << date << std::endl;
             day_counter ++;
             scanned_today = true;
         }
         if (storage.get_all<Drink>(where(c(&Drink::date) == prev_day)).empty()) {
-            std::cout << "Results are empty" << std::endl;
             found_day_without_drink = true;
         } else {
             day_counter ++;
-            std::cout << "Decrementing: " << std::to_string(search_date.tm_year) + '-' + utilities::zero_pad_string(search_date.tm_mon) + '-'
-                                             + utilities::zero_pad_string(search_date.tm_mday) << std::endl;
             decrement_day(search_date);
-            prev_day = std::to_string(search_date.tm_year) + '-' + utilities::zero_pad_string(search_date.tm_mon) + '-'
+            prev_day = std::to_string(search_date.tm_year + 1900) + '-' + utilities::zero_pad_string(search_date.tm_mon + 1) + '-'
                        + utilities::zero_pad_string(search_date.tm_mday);
 
             if (storage.get_all<Drink>(where(c(&Drink::date) == prev_day)).empty()) {
@@ -368,6 +365,8 @@ void Calculate::decrement_day(std::tm &date) {
     std::time_t search_date_t {std::mktime(&date)};
     search_date_t -= 60*60*24;
     std::tm *search_date {std::localtime(&search_date_t)};
+    std::cout << "Pre date: " << std::asctime(&date) << std::endl;
+    std::cout << "New date: " << std::asctime(search_date) << std::endl;
 
     date.tm_year = search_date->tm_year;
     date.tm_mon = search_date->tm_mon;
