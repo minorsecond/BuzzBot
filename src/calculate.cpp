@@ -336,6 +336,7 @@ int Calculate::days_in_row(Storage &storage) {
                           utilities::zero_pad_string(search_date.tm_mday)};
 
     bool scanned_today {false};
+    bool scanned_yesterday {false};
     while (!found_day_without_drink) {
         if (!scanned_today && !storage.get_all<Drink>(where(c(&Drink::date) == date)).empty()) {
             day_counter ++;
@@ -343,9 +344,12 @@ int Calculate::days_in_row(Storage &storage) {
         } else if (!scanned_today) {
             scanned_today = true;
         }
-        if (storage.get_all<Drink>(where(c(&Drink::date) == prev_day)).empty()) {
+        if (!scanned_yesterday && storage.get_all<Drink>(where(c(&Drink::date) == prev_day)).empty()) {
             found_day_without_drink = true;
         } else {
+            if (!scanned_yesterday) {
+                scanned_yesterday = true;
+            }
             day_counter ++;
             decrement_day(search_date);
             prev_day = std::to_string(search_date.tm_year + 1900) + '-' + utilities::zero_pad_string(search_date.tm_mon + 1) + '-'
