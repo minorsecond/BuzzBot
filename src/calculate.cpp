@@ -340,6 +340,8 @@ int Calculate::days_in_row(Storage &storage) {
         if (!scanned_today && !storage.get_all<Drink>(where(c(&Drink::date) == date)).empty()) {
             day_counter ++;
             scanned_today = true;
+        } else if (!scanned_today) {
+            scanned_today = true;
         }
         if (storage.get_all<Drink>(where(c(&Drink::date) == prev_day)).empty()) {
             found_day_without_drink = true;
