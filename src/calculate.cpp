@@ -323,8 +323,8 @@ int Calculate::days_in_row(Storage &storage) {
 
     // Construct the initial date
     std::tm search_date{};
-    search_date.tm_year = std::stoi(date.substr(0, 4)) - 1900;
-    search_date.tm_mon = std::stoi(date.substr(5, 7)) - 1;
+    search_date.tm_year = std::stoi(date.substr(0, 4)) - 1900;  // tm takes year - 1900
+    search_date.tm_mon = std::stoi(date.substr(5, 7)) - 1;  // tm month is 0-indexed
     search_date.tm_mday = std::stoi(date.substr(8, 9));
 
     decrement_day(search_date);
