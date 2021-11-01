@@ -15,7 +15,7 @@ About::About() {
     this->setFixedSize(237, 272);
 
     // Version text
-    std::string version = "2.2.0";
+    std::string version = "2.2.1";
     ui.versionLabel->setText(QString::fromStdString("Version " + version));
 
     ui.copyrightLabel->setText("Ross Wardrup, 2021");
