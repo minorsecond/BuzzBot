@@ -10,7 +10,7 @@ set(CMAKE_AUTORCC ON)
 project(BuzzBot)
 set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libproc.h")
 #set(Qt6_DIR "/Users/rwardrup/Qt/6.0.0/clang_64/lib/cmake/Qt6")
-set(CMAKE_PREFIX_PATH "/Users/rwardrup/Qt/6.0.0/clang_64/")
+set(CMAKE_PREFIX_PATH "/Users/rwardrup/Qt/5.15.2/clang_64/")
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     message("Building debug")
