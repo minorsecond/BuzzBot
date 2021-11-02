@@ -293,9 +293,9 @@ int Calculate::weekly_limit(const Options& options) {
      * @return: the weekly standard drink limit.
      */
 
-    std::string standard = options.limit_standard;
-    std::string sex = options.sex;
-    int drink_limit = options.weekly_limit;
+    const std::string standard {options.limit_standard};
+    const std::string sex {options.sex};
+    int drink_limit {options.weekly_limit};
 
     if (standard == "NIAAA") {
         if (sex == "male") {
@@ -303,7 +303,7 @@ int Calculate::weekly_limit(const Options& options) {
         } else if (sex == "female") {
             drink_limit = 7;
         } else {
-            std::cout << "Sex is incorrectly set: " << sex << std::endl;
+            std::cout << "Sex is incorrectly set: " << sex << std::endl;  //TODO: Handle this
         }
     }
 
