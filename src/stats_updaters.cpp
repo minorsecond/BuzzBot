@@ -4,6 +4,7 @@
 
 #include "mainwindow.h"
 #include "calculate.h"
+#include "utilities.h"
 #include <iostream>
 
 void MainWindow::update_stat_panel() {
@@ -66,6 +67,7 @@ void MainWindow::update_stat_panel() {
     update_mean_abv(current_tab);
     update_mean_ibu(current_tab);
     update_std_drinks_today();
+    ui->consecutiveConsumptionLabel->setText(QString::fromStdString(std::to_string(Calculate::days_in_row(storage))));
 }
 
 void MainWindow::update_drinks_this_week(double standard_drinks, const std::string& weekday_name) {
@@ -234,7 +236,7 @@ void MainWindow::update_std_drinks_today() {
 
     double std_drinks_today {0.0};
 
-    std::string query_date = get_local_date();
+    std::string query_date = utilities::get_local_date();
 
     std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
 
@@ -289,27 +291,6 @@ std::string MainWindow::get_weekday_name(unsigned int weekday_number) {
     }
 
     return day_name;
-}
-
-std::string MainWindow::zero_pad_string(unsigned integer) {
-    /*
-     * Add a leading zero to a string.
-     * @param integer: The input integer which should be padded.
-     * @return: A 0-padded string.
-     */
-
-    std::stringstream ss;
-
-    // the number is converted to string with the help of stringstream
-    ss << integer;
-    std::string ret;
-    ss >> ret;
-
-    // Append zero chars
-    int str_length = ret.length();
-    for (int i = 0; i < 2 - str_length; i++)
-        ret = "0" + ret;
-    return ret;
 }
 
 double MainWindow::get_std_drink_size_from_options() {

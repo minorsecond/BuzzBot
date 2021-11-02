@@ -7,6 +7,7 @@
 #include "exporters.h"
 #include "calculate.h"
 #include "graphing.h"
+#include "utilities.h"
 #include <iomanip>
 #include <filesystem>
 #include <iostream>
@@ -704,7 +705,7 @@ std::tuple<std::chrono::year_month_day, std::string> MainWindow::get_filter_date
     std::chrono::weekday filter_day = get_filter_weekday_start();
 
     // get_local_date returns a string in the form of YYYY-MM-DD
-    std::string query_date = get_local_date();
+    std::string query_date = utilities::get_local_date();
 
     // Back to date object
     std::tm tm = {};
@@ -753,34 +754,12 @@ std::string MainWindow::format_date(std::chrono::year_month_day date) {
 
     std::string year = std::to_string((int)date.year());
 
-    std::string month = zero_pad_string((unsigned)date.month());
-    std::string day = zero_pad_string((unsigned)date.day());
+    std::string month = utilities::zero_pad_string((unsigned)date.month());
+    std::string day = utilities::zero_pad_string((unsigned)date.day());
 
     std::string query_date = year + "-" + month + "-" + day;
 
     return query_date;
-}
-
-std::string MainWindow::get_local_date() {
-    /*
-     * Get date in localtime
-     * @return: A string denoting the date in localtime, with the format YYYY-MM-DD
-     */
-
-    // Get today's date in local time.
-    char query_date[10];
-    std::string output;
-
-    auto todays_date = std::chrono::system_clock::now();
-    auto now_c = std::chrono::system_clock::to_time_t(todays_date);
-    std::tm now_tm = *std::localtime(&now_c);
-    std::strftime(query_date, sizeof query_date, "%Y-%m-%d", &now_tm);
-
-    for (char i : query_date) {
-        output += std::string(1, i);
-    }
-
-    return output;
 }
 
 void MainWindow::open_graphs() {
