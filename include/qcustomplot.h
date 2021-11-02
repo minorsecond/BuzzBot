@@ -26,7 +26,7 @@
 #ifndef QCUSTOMPLOT_H
 #define QCUSTOMPLOT_H
 
-#include <qglobal.h>
+#include <QtCore/qglobal.h>
 
 // some Qt version/configuration dependent macros to include or exclude certain code paths:
 #ifdef QCUSTOMPLOT_USE_OPENGL
@@ -47,25 +47,25 @@
 #  endif
 #endif
 
-#include <QObject>
-#include <QPointer>
-#include <QSharedPointer>
-#include <QTimer>
-#include <QPainter>
-#include <QPainterPath>
-#include <QPaintEvent>
-#include <QMouseEvent>
-#include <QWheelEvent>
-#include <QPixmap>
-#include <QVector>
-#include <QString>
-#include <QDateTime>
-#include <QMultiMap>
-#include <QFlags>
-#include <QDebug>
-#include <QStack>
-#include <QCache>
-#include <QMargins>
+#include <QtCore/QObject>
+#include <QtCore/QPointer>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QTimer>
+#include <QtGui/QPainter>
+#include <QtGui/QPainterPath>
+#include <QtGui/QPaintEvent>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QWheelEvent>
+#include <QtGui/QPixmap>
+#include <QtCore/QVector>
+#include <QtCore/QString>
+#include <QtCore/QDateTime>
+#include <QtCore/QMultiMap>
+#include <QtCore/QFlags>
+#include <QtCore/QDebug>
+#include <QtCore/QStack>
+#include <QtCore/QCache>
+#include <QtCore/QMargins>
 #include <qmath.h>
 #include <limits>
 #include <algorithm>
@@ -93,14 +93,14 @@
 #  include <QtGui/QPrintEngine>
 #else
 #  include <QtNumeric>
-#  include <QWidget>
+#  include <QtWidgets/QWidget>
 #  include <QtPrintSupport/QtPrintSupport>
 #endif
 #if QT_VERSION >= QT_VERSION_CHECK(4, 8, 0)
-#  include <QElapsedTimer>
+#  include <QtCore/QElapsedTimer>
 #endif
 # if QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
-#  include <QTimeZone>
+#  include <QtCore/QTimeZone>
 #endif
 
 class QCPPainter;
@@ -153,29 +153,11 @@ class QCPPolarGraph;
 /*!
   The QCP Namespace contains general enums, QFlags and functions used throughout the QCustomPlot
   library.
-  
+
   It provides QMetaObject-based reflection of its enums and flags via \a QCP::staticMetaObject.
 */
-#ifndef Q_MOC_RUN
 namespace QCP {
-#else
-class QCP { // when in moc-run, make it look like a class, so we get Q_GADGET, Q_ENUMS/Q_FLAGS features in namespace
-  Q_GADGET
-  Q_ENUMS(ExportPen)
-  Q_ENUMS(ResolutionUnit)
-  Q_ENUMS(SignDomain)
-  Q_ENUMS(MarginSide)
-  Q_FLAGS(MarginSides)
-  Q_ENUMS(AntialiasedElement)
-  Q_FLAGS(AntialiasedElements)
-  Q_ENUMS(PlottingHint)
-  Q_FLAGS(PlottingHints)
-  Q_ENUMS(Interaction)
-  Q_FLAGS(Interactions)
-  Q_ENUMS(SelectionRectMode)
-  Q_ENUMS(SelectionType)
-public:
-#endif
+  Q_NAMESPACE
 
 /*!
   Defines the different units in which the image resolution can be specified in the export
@@ -318,6 +300,20 @@ enum SelectionType { stNone                ///< The plottable is not selectable
                      ,stMultipleDataRanges ///< Any combination of data points/ranges can be selected
                     };
 
+  Q_ENUM_NS(ExportPen)
+  Q_ENUM_NS(ResolutionUnit)
+  Q_ENUM_NS(SignDomain)
+  Q_ENUM_NS(MarginSide)
+  Q_FLAG_NS(MarginSides)
+  Q_ENUM_NS(AntialiasedElement)
+  Q_FLAG_NS(AntialiasedElements)
+  Q_ENUM_NS(PlottingHint)
+  Q_FLAG_NS(PlottingHints)
+  Q_ENUM_NS(Interaction)
+  Q_FLAG_NS(Interactions)
+  Q_ENUM_NS(SelectionRectMode)
+  Q_ENUM_NS(SelectionType)
+
 /*! \internal
   
   Returns whether the specified \a value is considered an invalid data value for plottables (i.e.
@@ -378,23 +374,12 @@ inline int getMarginValue(const QMargins &margins, QCP::MarginSide side)
   return 0;
 }
 
-
-extern const QMetaObject staticMetaObject; // in moc-run we create a static meta object for QCP "fake" object. This line is the link to it via QCP::staticMetaObject in normal operation as namespace
-
 } // end of namespace QCP
 Q_DECLARE_OPERATORS_FOR_FLAGS(QCP::AntialiasedElements)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QCP::PlottingHints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QCP::MarginSides)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QCP::Interactions)
-Q_DECLARE_METATYPE(QCP::ExportPen)
-Q_DECLARE_METATYPE(QCP::ResolutionUnit)
-Q_DECLARE_METATYPE(QCP::SignDomain)
-Q_DECLARE_METATYPE(QCP::MarginSide)
-Q_DECLARE_METATYPE(QCP::AntialiasedElement)
-Q_DECLARE_METATYPE(QCP::PlottingHint)
-Q_DECLARE_METATYPE(QCP::Interaction)
-Q_DECLARE_METATYPE(QCP::SelectionRectMode)
-Q_DECLARE_METATYPE(QCP::SelectionType)
+//no need to use Q_DECLARE_METATYPE on enum since Q_ENUM_NS adds enum as metatype automatically
 
 /* end of 'src/global.h' */
 

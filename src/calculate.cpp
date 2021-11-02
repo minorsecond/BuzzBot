@@ -3,10 +3,13 @@
 //
 
 #include "calculate.h"
+#include "utilities.h"
 #include <cmath>
+#include <ctime>
 #include <iostream>
 #include <algorithm>
 
+using namespace sqlite_orm;
 double Calculate::standard_drinks(const double &abv, const double &amount, const double &std_drink_size) {
     /*
      * Calculate the number of standard drinks in a drink.
@@ -290,9 +293,9 @@ int Calculate::weekly_limit(const Options& options) {
      * @return: the weekly standard drink limit.
      */
 
-    std::string standard = options.limit_standard;
-    std::string sex = options.sex;
-    int drink_limit = options.weekly_limit;
+    const std::string standard {options.limit_standard};
+    const std::string sex {options.sex};
+    int drink_limit {options.weekly_limit};
 
     if (standard == "NIAAA") {
         if (sex == "male") {
@@ -300,9 +303,74 @@ int Calculate::weekly_limit(const Options& options) {
         } else if (sex == "female") {
             drink_limit = 7;
         } else {
-            std::cout << "Sex is incorrectly set: " << sex << std::endl;
+            std::cout << "Sex is incorrectly set: " << sex << std::endl;  //TODO: Handle this
         }
     }
 
     return drink_limit;
+}
+
+int Calculate::days_in_row(Storage &storage) {
+    /*
+     * Calculates the number of days in a row one has consumed alcohol.
+     * @param storage: a storage object
+     * @param date: today's date
+     */
+
+    bool found_day_without_drink {false};
+    int day_counter {0};
+    const std::string date {utilities::get_local_date()};
+
+    // Construct the initial date
+    std::tm search_date{};
+    search_date.tm_year = std::stoi(date.substr(0, 4)) - 1900;  // tm takes year - 1900
+    search_date.tm_mon = std::stoi(date.substr(5, 7)) - 1;  // tm month is 0-indexed
+    search_date.tm_mday = std::stoi(date.substr(8, 9));
+
+    decrement_day(search_date);
+
+    std::string prev_day {std::to_string(search_date.tm_year + 1900) + '-'
+                          + utilities::zero_pad_string(search_date.tm_mon + 1) + '-' +
+                          utilities::zero_pad_string(search_date.tm_mday)};
+
+    bool scanned_today {false};
+    bool scanned_yesterday {false};
+    while (!found_day_without_drink) {
+        if (!scanned_today && !storage.get_all<Drink>(where(c(&Drink::date) == date)).empty()) {
+            day_counter ++;
+            scanned_today = true;
+        } else if (!scanned_today) {
+            scanned_today = true;
+        }
+        if (!scanned_yesterday && storage.get_all<Drink>(where(c(&Drink::date) == prev_day)).empty()) {
+            found_day_without_drink = true;
+        } else {
+            if (!scanned_yesterday) {
+                scanned_yesterday = true;
+            }
+            day_counter ++;
+            decrement_day(search_date);
+            prev_day = std::to_string(search_date.tm_year + 1900) + '-' + utilities::zero_pad_string(search_date.tm_mon + 1) + '-'
+                       + utilities::zero_pad_string(search_date.tm_mday);
+
+            if (storage.get_all<Drink>(where(c(&Drink::date) == prev_day)).empty()) {
+                found_day_without_drink = true;
+            }
+        }
+    }
+    return day_counter;
+}
+
+void Calculate::decrement_day(std::tm &date) {
+    /* Decrements a time object by a day
+     * @param date: a tm object
+     */
+
+    std::time_t search_date_t {std::mktime(&date)};
+    search_date_t -= 60*60*24;
+    std::tm *search_date {std::localtime(&search_date_t)};
+
+    date.tm_year = search_date->tm_year;
+    date.tm_mon = search_date->tm_mon;
+    date.tm_mday = search_date->tm_mday;
 }

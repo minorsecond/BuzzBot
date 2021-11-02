@@ -10,7 +10,7 @@ set(CMAKE_AUTORCC ON)
 project(BuzzBot)
 set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libproc.h")
 #set(Qt6_DIR "/Users/rwardrup/Qt/6.0.0/clang_64/lib/cmake/Qt6")
-set(CMAKE_PREFIX_PATH "/Users/rwardrup/Qt/6.0.0/clang_64/")
+set(CMAKE_PREFIX_PATH "/Users/rwardrup/Qt/6.2.0/clang_64/")
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     message("Building debug")
@@ -37,10 +37,10 @@ add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cp
         src/liquor.cpp src/wine.cpp src/filters.cpp  src/about.cpp src/about.h src/exporters.cpp src/exporters.h
         src/standard_drink_calculator.cpp src/standard_drink_calculator.h src/confirm_dialog.cpp src/confirm_dialog.h
         src/graphing.cpp src/graphing.h include/qcustomplot.h include/qcustomplot.cpp
-        src/table_manipulation.cpp src/stats_updaters.cpp)
+        src/table_manipulation.cpp src/stats_updaters.cpp src/utilities.cpp src/utilities.h)
 add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp
         test/test_database_functions.cpp test/test_calculations.cpp test/test_graph_calculations.cpp src/graphing.cpp
-        src/graphing.h include/qcustomplot.cpp include/qcustomplot.h)
+        src/graphing.h include/qcustomplot.cpp include/qcustomplot.h src/utilities.cpp src/utilities.h)
 
 target_precompile_headers(BuzzBot PRIVATE include/sqlite_orm.h)
 
@@ -58,11 +58,11 @@ target_link_libraries(functions_test SQLite3 Catch2::Catch2 Qt6::Core Qt6::Gui Q
 
 set_target_properties(BuzzBot PROPERTIES
         MACOSX_BUNDLE_BUNDLE_NAME "BuzzBot"
-        MACOSX_BUNDLE_BUNDLE_VERSION "2.1.7"
+        MACOSX_BUNDLE_BUNDLE_VERSION "2.2.1"
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_ICON_FILE icon.icns
-        MACOSX_BUNDLE_LONG_VERSION_STRING "2.1.7"
-        MACOSX_BUNDLE_SHORT_VERSION_STRING "2.1.7"
+        MACOSX_BUNDLE_LONG_VERSION_STRING "2.2.1"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "2.2.1"
         MACOSX_BUNDLE_COPYRIGHT "2021 Ross Wardrup"
         MACOSX_BUNDLE_GUI_IDENTIFIER com.rwardrup.buzzbot
         XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
