@@ -10,7 +10,7 @@ set(CMAKE_AUTORCC ON)
 project(BuzzBot)
 set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libproc.h")
 #set(Qt6_DIR "/Users/rwardrup/Qt/6.0.0/clang_64/lib/cmake/Qt6")
-set(CMAKE_PREFIX_PATH "/Users/rwardrup/Qt/6.0.0/clang_64/")
+set(CMAKE_PREFIX_PATH "/Users/rwardrup/Qt/6.2.0/clang_64/")
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     message("Building debug")
@@ -58,11 +58,11 @@ target_link_libraries(functions_test SQLite3 Catch2::Catch2 Qt6::Core Qt6::Gui Q
 
 set_target_properties(BuzzBot PROPERTIES
         MACOSX_BUNDLE_BUNDLE_NAME "BuzzBot"
-        MACOSX_BUNDLE_BUNDLE_VERSION "2.1.7"
+        MACOSX_BUNDLE_BUNDLE_VERSION "2.2.1"
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_ICON_FILE icon.icns
-        MACOSX_BUNDLE_LONG_VERSION_STRING "2.1.7"
-        MACOSX_BUNDLE_SHORT_VERSION_STRING "2.1.7"
+        MACOSX_BUNDLE_LONG_VERSION_STRING "2.2.1"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "2.2.1"
         MACOSX_BUNDLE_COPYRIGHT "2021 Ross Wardrup"
         MACOSX_BUNDLE_GUI_IDENTIFIER com.rwardrup.buzzbot
         XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"

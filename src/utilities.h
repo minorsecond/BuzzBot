@@ -5,6 +5,7 @@
 #ifndef BUZZBOT_UTILITIES_H
 #define BUZZBOT_UTILITIES_H
 
+#include <string>
 
 class utilities {
 public:

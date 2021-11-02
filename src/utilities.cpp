@@ -3,6 +3,7 @@
 //
 
 #include "utilities.h"
+#include <sstream>
 
 std::string utilities::zero_pad_string(unsigned integer) {
     /*
