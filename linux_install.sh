@@ -6,8 +6,8 @@ mkdir build
 cd build || exit
 
 echo "Running cmake & make"
-cmake -DCMAKE_BUILD_TYPE=Release ../
-make -j4
+cmake -DCMAKE_BUILD_TYPE=Release ../ --target BuzzBot
+cmake --build . --target BuzzBot
 
 echo "Moving binary"
 mkdir -p ~/.local/bin/
