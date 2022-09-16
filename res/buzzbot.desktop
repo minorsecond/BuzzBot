@@ -1,0 +1,12 @@
+[Desktop Entry]
+Comment[en_US]=A beer/liquor/wine drink tracker
+Comment=A beer/liquor/wine drink tracker
+Exec=BuzzBot
+GenericName[en_US]=
+Icon=big_sur_icon
+Name[en_US]=BuzzBot
+Name=BuzzBot
+StartupNotify=true
+Terminal=false
+Type=Application
+X-KDE-SubstituteUID=false
