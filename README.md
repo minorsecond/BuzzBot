@@ -16,3 +16,13 @@
 - Number of standard drinks left for the weeks
 - Average ABV & IBU per drink
 - Drink notes
+
+### Installation instructions
+- `git clone https://github.com/minorsecond/BuzzBot.git`
+- `cd BuzzBot`
+- `mkdir build && cd build`
+- `cmake ..`
+- `cmake --build . --target BuzzBot`
+- If you're running macOS, you'll have a `BuzzBot.app` file in the `build` directory.
+- If you're running Linux, you can install the app in `~/.local/bin` by running `cmake --install .`. 
+The app should then be available in your app menu.
