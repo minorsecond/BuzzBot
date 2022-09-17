@@ -151,13 +151,6 @@ void MainWindow::update_volume_alcohol_remaining(double volume_alcohol_consumed)
      */
 
     double volume_alcohol_remaining;
-    double std_drink_size;
-
-    if (options.std_drink_country == "Custom") {
-        std_drink_size = std::stod(options.std_drink_size);
-    } else {
-        std_drink_size = get_std_drink_size_from_options();
-    }
 
     if (options.units == "Imperial") {
         volume_alcohol_remaining = Calculate::volume_alcohol_remaining(options, volume_alcohol_consumed);
