@@ -1,7 +1,7 @@
-if(APPLE AND NOT UNIX)
-    set(APPLE TRUE)
+IF(APPLE AND NOT UNIX)
+    message(STATUS "Building for Apple")
 ELSEIF(UNIX AND NOT APPLE)
-    set(LINUX TRUE)
+    message(STATUS "Building for Linux")
 endif()
 cmake_minimum_required(VERSION 3.17)
 
@@ -17,16 +17,12 @@ IF(APPLE)
     set(Qt6_DIR "~/Qt/6.3.2/macos/lib/cmake/Qt6")
 ENDIF()
 project(BuzzBot)
-#set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libproc.h")
-#set(Qt6_DIR "/Users/rwardrup/Qt/6.0.0/clang_64/lib/cmake/Qt6")
-#set(CMAKE_PREFIX_PATH "/Users/rwardrup/Qt/6.2.0/clang_64/")
 
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     message("Building debug")
-    add_compile_options(-Wall -Werror -Wextra -g -O0 -pedantic --coverage)
-    add_link_options(--coverage)
+    add_compile_options(-Wall -Werror -Wextra -g -O0 -pedantic)
 elseif(CMAKE_BUILD_TYPE MATCHES Release)
     message(STATUS "Building release")
     add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic)
@@ -39,11 +35,13 @@ include_directories(/usr/lib /usr/lib64)
 find_package(Qt6 COMPONENTS Core Widgets PrintSupport Gui)
 
 IF( NOT Qt6_FOUND )
+    message(STATUS "Could not automatically find Qt6 for ${CMAKE_SYSTEM_NAME}")
     IF(APPLE)
         set(Qt6_DIR "~/Qt/6.3.2/macos/lib/cmake/Qt6")
-    ELSE()
-        SET(CMAKE_PREFIX_PATH ~/Qt/6.3.2/gcc_64/lib/)
+    ELSEIF(UNIX)
+        SET(CMAKE_PREFIX_PATH $ENV{HOME}/Qt/6.3.2/gcc_64/lib/cmake)
     ENDIF()
+    MESSAGE(STATUS ${CMAKE_PREFIX_PATH})
     find_package(Qt6 COMPONENTS Core Widgets PrintSupport Gui REQUIRED)
 ENDIF()
 
@@ -64,7 +62,7 @@ add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cp
         src/standard_drink_calculator.cpp src/standard_drink_calculator.h src/confirm_dialog.cpp src/confirm_dialog.h
         src/graphing.cpp src/graphing.h include/qcustomplot.h include/qcustomplot.cpp
         src/table_manipulation.cpp src/stats_updaters.cpp src/utilities.cpp src/utilities.h)
-add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp
+add_executable(tests src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp
         test/test_database_functions.cpp test/test_calculations.cpp test/test_graph_calculations.cpp src/graphing.cpp
         src/graphing.h include/qcustomplot.cpp include/qcustomplot.h src/utilities.cpp src/utilities.h)
 
@@ -91,7 +89,7 @@ IF(APPLE)
             XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
             XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
             XCODE_ATTRIBUTE_EXECUTABLE_NAME "buzzbot")
-ELSEIF(LINUX)
+ELSEIF(UNIX)
     file(MAKE_DIRECTORY $ENV{HOME}/.local/share/com.rwardrup.buzzbot)
     add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/previous.png
             $ENV{HOME}/.local/share/icons/com.rwardrup.buzzbot/previous.png)
@@ -109,12 +107,13 @@ IF(APPLE)
     set_target_properties(BuzzBot PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
 ENDIF()
 target_link_libraries(BuzzBot Qt6::Core Qt6::Widgets Qt6::PrintSupport Qt6::Gui sqlite3)
-target_link_libraries(functions_test sqlite3 Catch2::Catch2 Qt6::Core Qt6::Gui Qt6::Widgets Qt6::PrintSupport)
+target_link_libraries(tests sqlite3 Catch2::Catch2 Qt6::Core Qt6::Gui Qt6::Widgets Qt6::PrintSupport)
 
-IF(LINUX)
-    install(TARGETS BuzzBot DESTINATION bin)
-
+IF(UNIX)
+    #install(TARGETS BuzzBot DESTINATION bin)
+    install(CODE "execute_process(COMMAND ../linux_install.sh)")
+ENDIF()
 include(CTest)
 include(Catch)
-catch_discover_tests(functions_test)
-add_test(NAME functions_test COMMAND functions_test)
+catch_discover_tests(tests)
+add_test(NAME tests COMMAND tests)
