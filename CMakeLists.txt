@@ -62,7 +62,7 @@ add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cp
         src/standard_drink_calculator.cpp src/standard_drink_calculator.h src/confirm_dialog.cpp src/confirm_dialog.h
         src/graphing.cpp src/graphing.h include/qcustomplot.h include/qcustomplot.cpp
         src/table_manipulation.cpp src/stats_updaters.cpp src/utilities.cpp src/utilities.h)
-add_executable(function_tests src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp
+add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp
         test/test_database_functions.cpp test/test_calculations.cpp test/test_graph_calculations.cpp src/graphing.cpp
         src/graphing.h include/qcustomplot.cpp include/qcustomplot.h src/utilities.cpp src/utilities.h)
 
@@ -107,7 +107,7 @@ IF(APPLE)
     set_target_properties(BuzzBot PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
 ENDIF()
 target_link_libraries(BuzzBot Qt6::Core Qt6::Widgets Qt6::PrintSupport Qt6::Gui sqlite3)
-target_link_libraries(function_tests sqlite3 Catch2::Catch2 Qt6::Core Qt6::Gui Qt6::Widgets Qt6::PrintSupport)
+target_link_libraries(functions_test sqlite3 Catch2::Catch2 Qt6::Core Qt6::Gui Qt6::Widgets Qt6::PrintSupport)
 
 IF(UNIX AND NOT APPLE)
     #install(TARGETS BuzzBot DESTINATION bin)
@@ -115,5 +115,5 @@ IF(UNIX AND NOT APPLE)
 ENDIF()
 include(CTest)
 include(Catch)
-catch_discover_tests(function_tests)
-add_test(NAME function_tests COMMAND function_tests)
+catch_discover_tests(functions_test)
+add_test(NAME functions_test COMMAND functions_test)
