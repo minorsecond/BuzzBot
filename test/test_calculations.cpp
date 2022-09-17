@@ -6,7 +6,11 @@
 #include "../src/mainwindow.h"
 #include <filesystem>
 #include <iostream>
+#if __has_include("catch2/catch.hpp")
 #include <catch2/catch.hpp>
+#else
+#include <catch2/catch_all.hpp>
+#endif
 
 TEST_CASE("Standard Drinks", "[Drink Calculations]") {
     double mosaic_standard_drinks = Calculate::standard_drinks(8.6, 12, 0.6);

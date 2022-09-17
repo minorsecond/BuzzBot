@@ -7,7 +7,11 @@
 #include <iostream>
 #include <sys/stat.h>
 #include <filesystem>
+#if __has_include("catch2/catch.hpp")
 #include <catch2/catch.hpp>
+#else
+#include <catch2/catch_all.hpp>
+#endif
 
 inline bool exists (const std::string& name) {
     struct stat buffer{};

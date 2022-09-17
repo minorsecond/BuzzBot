@@ -1,4 +1,4 @@
-IF(APPLE AND NOT UNIX)
+IF(APPLE)
     message(STATUS "Building for Apple")
 ELSEIF(UNIX AND NOT APPLE)
     message(STATUS "Building for Linux")
@@ -14,7 +14,6 @@ set(CMAKE_AUTORCC ON)
 IF(APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
     set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libproc.h")
-    set(Qt6_DIR "~/Qt/6.3.2/macos/lib/cmake/Qt6")
 ENDIF()
 project(BuzzBot)
 
@@ -37,8 +36,9 @@ find_package(Qt6 COMPONENTS Core Widgets PrintSupport Gui)
 IF( NOT Qt6_FOUND )
     message(STATUS "Could not automatically find Qt6 for ${CMAKE_SYSTEM_NAME}")
     IF(APPLE)
-        set(Qt6_DIR "~/Qt/6.3.2/macos/lib/cmake/Qt6")
-    ELSEIF(UNIX)
+        message(STATUS "Searching for Qt in home directory")
+        set(CMAKE_PREFIX_PATH  $ENV{HOME}/Qt/6.3.2/macos/lib/cmake)
+    ELSEIF(UNIX AND NOT APPLE)
         SET(CMAKE_PREFIX_PATH $ENV{HOME}/Qt/6.3.2/gcc_64/lib/cmake)
     ENDIF()
     MESSAGE(STATUS ${CMAKE_PREFIX_PATH})
@@ -62,7 +62,7 @@ add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cp
         src/standard_drink_calculator.cpp src/standard_drink_calculator.h src/confirm_dialog.cpp src/confirm_dialog.h
         src/graphing.cpp src/graphing.h include/qcustomplot.h include/qcustomplot.cpp
         src/table_manipulation.cpp src/stats_updaters.cpp src/utilities.cpp src/utilities.h)
-add_executable(tests src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp
+add_executable(function_tests src/database.cpp src/database.h src/calculate.cpp src/calculate.h test/test-main.cpp
         test/test_database_functions.cpp test/test_calculations.cpp test/test_graph_calculations.cpp src/graphing.cpp
         src/graphing.h include/qcustomplot.cpp include/qcustomplot.h src/utilities.cpp src/utilities.h)
 
@@ -89,7 +89,7 @@ IF(APPLE)
             XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
             XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
             XCODE_ATTRIBUTE_EXECUTABLE_NAME "buzzbot")
-ELSEIF(UNIX)
+ELSEIF(UNIX AND NOT APPLE)
     file(MAKE_DIRECTORY $ENV{HOME}/.local/share/com.rwardrup.buzzbot)
     add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/previous.png
             $ENV{HOME}/.local/share/icons/com.rwardrup.buzzbot/previous.png)
@@ -107,13 +107,13 @@ IF(APPLE)
     set_target_properties(BuzzBot PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
 ENDIF()
 target_link_libraries(BuzzBot Qt6::Core Qt6::Widgets Qt6::PrintSupport Qt6::Gui sqlite3)
-target_link_libraries(tests sqlite3 Catch2::Catch2 Qt6::Core Qt6::Gui Qt6::Widgets Qt6::PrintSupport)
+target_link_libraries(function_tests sqlite3 Catch2::Catch2 Qt6::Core Qt6::Gui Qt6::Widgets Qt6::PrintSupport)
 
-IF(UNIX)
+IF(UNIX AND NOT APPLE)
     #install(TARGETS BuzzBot DESTINATION bin)
     install(CODE "execute_process(COMMAND ../linux_install.sh)")
 ENDIF()
 include(CTest)
 include(Catch)
-catch_discover_tests(tests)
-add_test(NAME tests COMMAND tests)
+catch_discover_tests(function_tests)
+add_test(NAME function_tests COMMAND function_tests)
