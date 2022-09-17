@@ -15,10 +15,13 @@
 #include <QComboBox>
 #include <QMessageBox>
 #include <QStandardPaths>
-#include <CoreFoundation/CFBundle.h>
 #include <QFileDialog>
 #include <QTimer>
 #include <chrono>
+
+#ifdef __APPLE__
+    #include <CoreFoundation/CFBundle.h>
+#endif
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -140,24 +143,29 @@ void MainWindow::configure_calendar() {
      * Set up the calendar widget with nicer settings.
      */
 
-    // First, get path of .app file
+#ifdef __APPLE__
     CFURLRef app_url_ref = CFBundleCopyBundleURL(CFBundleGetMainBundle());
     CFStringRef mac_path = CFURLCopyFileSystemPath(app_url_ref, kCFURLPOSIXPathStyle);
     QString icon_path_qstring = CFStringGetCStringPtr(mac_path, CFStringGetSystemEncoding());
-
-    // Set path to icons
     std::string previous_month_arrow = icon_path_qstring.toStdString() + "/Contents/Resources/previous.png";
     std::string next_month_arrow = icon_path_qstring.toStdString() + "/Contents/Resources/next.png";
+#elif __linux__
+    const std::string home_path = utilities::get_home_path();
+    const std::string next_month_arrow = home_path + "/.local/share/icons/com.rwardrup.buzzbot/next.png";
+    const std::string previous_month_arrow = home_path + "/.local/share/icons/com.rwardrup.buzzbot/previous.png";
+#endif
+
     std::string stylesheet_text = "QCalendarWidget QWidget#qt_calendar_navigationbar\n"
                                   "{\n"
-                                  "\tcolor: transparent;\n"
-                                  "\tbackground-color: transparent;\n"
+                                  //"\tcolor: rgba(169,204,227,128);\n"
+                                  "\tbackground-color: rgba(84, 153, 199 ,128);\n"
+                                  "\tborder: 1px solid #4f4f4f;"
                                   "}\n"
                                   "QCalendarWidget QToolButton {\n"
                                   "  \tbackground-color: rgba(128, 128, 128, 0);\n"
                                   "}\n"
                                   " /* header row */\n"
-                                  "QCalendarWidget QWidget { alternate-background-color: rgba(128, 128, 128, 0); }\n"
+                                  "QCalendarWidget QWidget { alternate-background-color: rgba(128, 128, 128, 0);}\n"
                                   "QCalendarWidget QToolButton#qt_calendar_prevmonth \n"
                                   "{\n"
                                   "\tqproperty-icon: url(" + previous_month_arrow +

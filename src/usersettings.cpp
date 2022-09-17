@@ -77,7 +77,7 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
     connect(ui.clearDataButton, &QPushButton::clicked, this, &UserSettings::clicked_clear_data);
     connect(ui.imperialRadioButton, &QRadioButton::clicked, this, &UserSettings::update_std_drink_size_label);
     connect(ui.metricRadioButton, &QRadioButton::clicked, this, &UserSettings::update_std_drink_size_label);
-    connect(ui.stdDrinkDefComboBox, &QComboBox::activated, this, &UserSettings::std_drink_country_changed);
+    connect(ui.stdDrinkDefComboBox, QOverload<int>::of(&QComboBox::activated), this, &UserSettings::std_drink_country_changed);
 }
 
 std::string UserSettings::get_sex() {
