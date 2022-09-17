@@ -105,9 +105,14 @@ ELSEIF(LINUX)
             $ENV{HOME}/.local/share/applications/buzzbot.desktop)
 ENDIF()
 
-#set_target_properties(BuzzBot PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
+IF(APPLE)
+    set_target_properties(BuzzBot PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
+ENDIF()
 target_link_libraries(BuzzBot Qt6::Core Qt6::Widgets Qt6::PrintSupport Qt6::Gui sqlite3)
 target_link_libraries(functions_test sqlite3 Catch2::Catch2 Qt6::Core Qt6::Gui Qt6::Widgets Qt6::PrintSupport)
+
+IF(LINUX)
+    install(TARGETS BuzzBot DESTINATION bin)
 
 include(CTest)
 include(Catch)
