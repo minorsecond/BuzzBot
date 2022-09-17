@@ -3,8 +3,12 @@
 //
 
 #include "about.h"
-#include "utilities.h"
 #include <QDir>
+#ifdef __APPLE__
+    #include <CoreFoundation/CFBundle.h>
+#elif __linux
+    #include "utilities.h"
+#endif
 
 About::About() {
     /*
@@ -24,9 +28,19 @@ About::About() {
     ui.acknowledgementsLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
     ui.acknowledgementsLabel->setOpenExternalLinks(true);
 
+#ifdef __linux__
     const std::string home_path = utilities::get_home_path();
     const std::string icon_path = home_path + "/.local/share/com.rwardrup.buzzbot/mini-icon.png";
+#elif __APPLE__
+    CFURLRef app_url_ref = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    CFStringRef mac_path = CFURLCopyFileSystemPath(app_url_ref, kCFURLPOSIXPathStyle);
+    QString icon_path_qstring = CFStringGetCStringPtr(mac_path, CFStringGetSystemEncoding());
 
+    // Set path to icon
+    std::string icon_path = icon_path_qstring.toStdString() + "/Contents/Resources/mini-icon.png";
+    CFRelease(app_url_ref);
+    CFRelease(mac_path);
+#endif
     // Set icon
     QPixmap pixmap(QString::fromStdString(icon_path));
     ui.miniIcon->setPixmap(pixmap);
