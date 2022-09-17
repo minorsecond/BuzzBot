@@ -37,18 +37,24 @@ include_directories(/usr/lib /usr/lib64)
 find_package(Qt6 COMPONENTS Core Widgets PrintSupport Gui)
 
 IF( NOT Qt6_FOUND )
-    SET(CMAKE_PREFIX_PATH ~/Qt/6.3.2/gcc_64/lib/)
+    IF(APPLE)
+        set(Qt6_DIR "~/Qt/6.3.2/macos/lib/cmake/Qt6")
+    ELSE()
+        SET(CMAKE_PREFIX_PATH ~/Qt/6.3.2/gcc_64/lib/)
+    ENDIF()
     find_package(Qt6 COMPONENTS Core Widgets PrintSupport Gui REQUIRED)
 ENDIF()
 
 find_package(SQLite3 REQUIRED)
 find_package(Catch2 REQUIRED)
 
-set(ICON_NAME "icon.icns")
-set(ICON_PATH ${PROJECT_SOURCE_DIR}/res/${ICON_NAME})
-set(buzzbot_ICON ${ICON_PATH})
-#set_source_files_properties(${buzzbot_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-#file(COPY ${ICON_PATH} DESTINATION "BuzzBot.app/Contents/Resources")
+IF(APPLE)
+    set(ICON_NAME "icon.icns")
+    set(ICON_PATH ${PROJECT_SOURCE_DIR}/res/${ICON_NAME})
+    set(buzzbot_ICON ${ICON_PATH})
+    set_source_files_properties(${buzzbot_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    file(COPY ${ICON_PATH} DESTINATION "BuzzBot.app/Contents/Resources")
+ENDIF()
 
 add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp src/mainwindow.h
         src/database.h src/usersettings.cpp src/usersettings.h src/calculate.cpp src/calculate.h src/beer.cpp
@@ -62,13 +68,28 @@ add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp 
 
 target_precompile_headers(BuzzBot PRIVATE include/sqlite_orm.h)
 
-# Copy resources to build dir
-#add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/previous.png
-#        ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/previous.png)
-#add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/next.png
-#        ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/next.png)
-#add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/mini-icon.png
-#        ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/mini-icon.png)
+IF(APPLE)
+    # Copy resources to build dir
+    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/previous.png
+            ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/previous.png)
+    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/next.png
+            ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/next.png)
+    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/mini-icon.png
+            ${CMAKE_CURRENT_BINARY_DIR}/BuzzBot.app/Contents/Resources/mini-icon.png)
+
+    set_target_properties(BuzzBot PROPERTIES
+            MACOSX_BUNDLE_BUNDLE_NAME "BuzzBot"
+            MACOSX_BUNDLE_BUNDLE_VERSION "2.2.1"
+            MACOSX_BUNDLE TRUE
+            MACOSX_BUNDLE_ICON_FILE icon.icns
+            MACOSX_BUNDLE_LONG_VERSION_STRING "2.2.1"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "2.2.1"
+            MACOSX_BUNDLE_COPYRIGHT "2021 Ross Wardrup"
+            MACOSX_BUNDLE_GUI_IDENTIFIER com.rwardrup.buzzbot
+            XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
+            XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
+            XCODE_ATTRIBUTE_EXECUTABLE_NAME "buzzbot")
+ENDIF()
 
 #set_target_properties(BuzzBot PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
 target_link_libraries(BuzzBot Qt6::Core Qt6::Widgets Qt6::PrintSupport Qt6::Gui sqlite3)
