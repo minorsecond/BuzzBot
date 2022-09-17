@@ -7,10 +7,10 @@
 #include <iostream>
 #include <sys/stat.h>
 #include <filesystem>
-#if __has_include("catch2/catch.hpp")
-#include <catch2/catch.hpp>
+#if __has_include("catch2/catch_test_macros.hpp")
+#include <catch2/catch_test_macros.hpp>
 #else
-#include <catch2/catch_all.hpp>
+#include <catch2/catch.hpp>
 #endif
 
 inline bool exists (const std::string& name) {
