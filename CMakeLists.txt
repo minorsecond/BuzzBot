@@ -26,8 +26,14 @@ endif ()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 
 enable_testing()
-include_directories(/usr/lib)
-find_package(Qt6 COMPONENTS Core Widgets PrintSupport Gui REQUIRED)
+include_directories(/usr/lib /usr/lib64)
+find_package(Qt6 COMPONENTS Core Widgets PrintSupport Gui)
+
+IF( NOT Qt6_FOUND )
+    SET(CMAKE_PREFIX_PATH ~/Qt/6.3.2/gcc_64/lib/)
+    find_package(Qt6 COMPONENTS Core Widgets PrintSupport Gui REQUIRED)
+ENDIF()
+
 find_package(SQLite3 REQUIRED)
 find_package(Catch2 REQUIRED)
 
