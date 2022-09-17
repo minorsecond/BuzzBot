@@ -151,8 +151,8 @@ void MainWindow::configure_calendar() {
     std::string next_month_arrow = icon_path_qstring.toStdString() + "/Contents/Resources/next.png";
 #elif __linux__
     const std::string home_path = utilities::get_home_path();
-    const std::string next_month_arrow = home_path + "/.local/share/com.rwardrup.buzzbot/next.png";
-    const std::string previous_month_arrow = home_path + "/.local/share/com.rwardrup.buzzbot/previous.png";
+    const std::string next_month_arrow = home_path + "/.local/share/icons/com.rwardrup.buzzbot/next.png";
+    const std::string previous_month_arrow = home_path + "/.local/share/icons/com.rwardrup.buzzbot/previous.png";
 #endif
 
     std::string stylesheet_text = "QCalendarWidget QWidget#qt_calendar_navigationbar\n"
