@@ -21,7 +21,7 @@ double Calculate::standard_drinks(const double &abv, const double &amount, const
      * @param std_drink_size: the size of the standard drink, in the same unit as amount.
      */
 
-    double alcohol_amt = alcohol_volume(abv, amount);
+    const double alcohol_amt = alcohol_volume(abv, amount);
     return round_to_two_decimal_points(alcohol_amt / std_drink_size);
 }
 
@@ -51,7 +51,7 @@ double Calculate::standard_drinks_remaining(const Options& options, const double
 
     double weekly_drinks_remaining;
 
-    int drink_limit = Calculate::weekly_limit(options);
+    const int drink_limit = Calculate::weekly_limit(options);
 
     weekly_drinks_remaining = drink_limit - standard_drinks_consumed;
 
@@ -100,7 +100,7 @@ std::string Calculate::favorite_producer(const Storage& storage, const std::stri
     std::string favorite_producer;
 
     //std::vector<Drink> all_drinks = storage.get_all<Drink>();
-    std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
+    const std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
     producers.reserve(all_drinks.size());
     for (const auto& drink: all_drinks) {
@@ -133,7 +133,7 @@ std::string Calculate::favorite_drink(const Storage& storage, const std::string&
     std::vector<std::string> drinks;
     std::string favorite_drink;
 
-    std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
+    const std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
     drinks.reserve(all_drinks.size());
     for (const auto& drink: all_drinks) {
@@ -165,7 +165,7 @@ double Calculate::mean_abv(const Storage& storage, const std::string& drink_type
 
     double abv_sum = 0.0;
     unsigned drink_count = 0;
-    std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
+    const std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
     for (const auto& drink : all_drinks) {
         drink_count += 1;
@@ -184,7 +184,7 @@ double Calculate::mean_ibu(const Storage& storage, const std::string& drink_type
 
     double ibu_sum = 0.0;
     unsigned drink_count = 0;
-    std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
+    const std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
     for (const auto& drink : all_drinks) {
         // Ignore empty IBU values
@@ -208,7 +208,7 @@ std::string Calculate::favorite_type(const Storage& storage, const std::string& 
     std::vector<std::string> types;
     std::string favorite_type;
 
-    std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
+    const std::vector<Drink> all_drinks = Database::filter("Alcohol Type", drink_type, storage);
 
     types.reserve(all_drinks.size());
     for (const auto& drink: all_drinks) {
@@ -254,8 +254,7 @@ double Calculate::oz_to_ml(const double &input_oz) {
      * @return: A double denoting drink volume in milliliters.
      */
 
-    double ml = input_oz * 29.5735;
-    return ml;
+    return input_oz * 29.5735;
 }
 
 double Calculate::ml_to_oz(const double &input_ml) {
@@ -265,8 +264,7 @@ double Calculate::ml_to_oz(const double &input_ml) {
      * @return: A double denoting drink volume in ounces.
      */
 
-    double oz = input_ml / 29.5735;
-    return oz;
+    return input_ml / 29.5735;
 }
 
 bool Calculate::compare_strings(std::string lhs, std::string rhs) {
@@ -368,7 +366,7 @@ void Calculate::decrement_day(std::tm &date) {
 
     std::time_t search_date_t {std::mktime(&date)};
     search_date_t -= 60*60*24;
-    std::tm *search_date {std::localtime(&search_date_t)};
+    const std::tm *search_date {std::localtime(&search_date_t)};
 
     date.tm_year = search_date->tm_year;
     date.tm_mon = search_date->tm_mon;

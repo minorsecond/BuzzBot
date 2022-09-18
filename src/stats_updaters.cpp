@@ -12,22 +12,20 @@ void MainWindow::update_stat_panel() {
      * Calculate number of standard drinks consumed since Sunday.
      */
 
-    std::chrono::year_month_day start_date{};
     double standard_drinks = 0;
-    std::string weekday_name;
-    std::string current_tab = get_current_tab();
+    const std::string current_tab = get_current_tab();
 
     // Get filter day & day of week.
-    std::tuple<std::chrono::year_month_day, std::string> filter_date_results = get_filter_date();
+    const std::tuple<std::chrono::year_month_day, std::string> filter_date_results = get_filter_date();
 
-    start_date = std::get<0>(filter_date_results);
-    weekday_name = std::get<1>(filter_date_results);
+    const std::chrono::year_month_day start_date = std::get<0>(filter_date_results);
+    const std::string weekday_name = std::get<1>(filter_date_results);
 
-    std::string query_date = format_date(start_date);
+    const std::string query_date = format_date(start_date);
 
     std::cout << "Calculating stats since " << query_date << ", which is last " << weekday_name << std::endl;
 
-    std::vector<Drink> drinks_this_week = Database::filter("After Date", query_date, storage);
+    const std::vector<Drink> drinks_this_week = Database::filter("After Date", query_date, storage);
 
     std::cout << "The results contain: " << drinks_this_week.size() << " drinks." << std::endl;
 
@@ -36,7 +34,7 @@ void MainWindow::update_stat_panel() {
         if (options.std_drink_country == "Custom") {
             standard_drinks += Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size));
         } else {
-            double std_drink_size = get_std_drink_size_from_options();  // This is in oz.
+            const double std_drink_size = get_std_drink_size_from_options();  // This is in oz.
 
             /*
              * Drink._size will always be in ounces. std_drink_size should also be in ounces. The result will be
@@ -59,7 +57,7 @@ void MainWindow::update_stat_panel() {
     update_standard_drinks_left_this_week(standard_drinks);
 
     // update_vol_alcohol_consumed_this_week returns either ml or oz, depending on setting
-    double vol_alc_consumed = update_vol_alcohol_consumed_this_week(drinks_this_week, weekday_name);
+    const double vol_alc_consumed = update_vol_alcohol_consumed_this_week(drinks_this_week, weekday_name);
     update_volume_alcohol_remaining(vol_alc_consumed);
     update_favorite_producer(current_tab);
     update_favorite_drink(current_tab);
@@ -77,7 +75,7 @@ void MainWindow::update_drinks_this_week(double standard_drinks, const std::stri
      * @param weekday_name: The day the calculation began on.
      */
 
-    std::string drinksThisWeekLabelText = "Std. drinks since " + weekday_name + ":";
+    const std::string drinksThisWeekLabelText = "Std. drinks since " + weekday_name + ":";
     ui->drinksThisWeekLabel->setText(QString::fromStdString(drinksThisWeekLabelText));
     if (standard_drinks == 0.0) {
         ui->drinksThisWeekOutput->setText("0.0");
@@ -91,7 +89,7 @@ void MainWindow::update_standard_drinks_left_this_week(double std_drinks_consume
      * Update the std. drinks left this week to the amount of std. drinks left this week.
      */
 
-    double std_drinks_left = Calculate::standard_drinks_remaining(options, std_drinks_consumed);
+    const double std_drinks_left = Calculate::standard_drinks_remaining(options, std_drinks_consumed);
     ui->drinksLeftOutput->setText(QString::fromStdString(Calculate::double_to_string(std_drinks_left)));
 
     // Set standard drinks remaining text to red if negative
@@ -115,7 +113,7 @@ double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink
     if (options.units == "Metric") {
         units = "ml";
     }
-    std::string volumeThisWeekLabelText = units + " alcohol since " + weekday_name + ":";
+    const std::string volumeThisWeekLabelText = units + " alcohol since " + weekday_name + ":";
     ui->volAlcoholConsumedLabel->setText(QString::fromStdString(volumeThisWeekLabelText));
 
     // Calculate total volume for the week
@@ -125,7 +123,7 @@ double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink
             drinks_vol_alcohol = (drink.abv / 100) * drink._size;
         } else {
             // Everything is stored in DB as oz. Convert back to ml for display.
-            double drink_size = Calculate::oz_to_ml(drink._size);
+            const double drink_size = Calculate::oz_to_ml(drink._size);
             drinks_vol_alcohol = (drink.abv / 100) * drink_size;
         }
         volume_consumed += drinks_vol_alcohol;
@@ -229,9 +227,9 @@ void MainWindow::update_std_drinks_today() {
 
     double std_drinks_today {0.0};
 
-    std::string query_date = utilities::get_local_date();
+    const std::string query_date = utilities::get_local_date();
 
-    std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
+    const std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
 
     for (auto& drink : drinks_today) {
         double std_drinks;

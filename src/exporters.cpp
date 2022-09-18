@@ -22,7 +22,7 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
 
     std::ofstream output_csv(path);
 
-    std::string size_header = (units == "Metric") ? "Size (ml)," : "Size (oz),";
+    const std::string size_header = (units == "Metric") ? "Size (ml)," : "Size (oz),";
 
     // Create the header
     output_csv << "Date,";
@@ -41,17 +41,17 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
     output_csv << "ID\n";
 
     for (const auto& drink : drinks) {
-        std::string ibu = (drink.ibu == -1) ? "" : std::to_string(drink.ibu);
-        std::string vintage = (drink.vintage == -999) ? "" : std::to_string(drink.vintage);
+        const std::string ibu = (drink.ibu == -1) ? "" : std::to_string(drink.ibu);
+        const std::string vintage = (drink.vintage == -999) ? "" : std::to_string(drink.vintage);
 
-        std::string drink_name = '"' + drink.name + '"';
-        std::string drink_type = '"' + drink.type + '"';
-        std::string drink_subtype = '"' + drink.subtype + '"';
-        std::string drink_producer = '"' + drink.producer + '"';
-        std::string drink_notes = '"' + drink.notes + '"';
+        const std::string drink_name = '"' + drink.name + '"';
+        const std::string drink_type = '"' + drink.type + '"';
+        const std::string drink_subtype = '"' + drink.subtype + '"';
+        const std::string drink_producer = '"' + drink.producer + '"';
+        const std::string drink_notes = '"' + drink.notes + '"';
 
         // Convert size to ml if metric option is selected
-        std::string size = (units == "Metric") ? std::to_string(Calculate::oz_to_ml(drink._size)) :
+        const std::string size = (units == "Metric") ? std::to_string(Calculate::oz_to_ml(drink._size)) :
                 std::to_string(drink._size);
 
         output_csv << drink.date + ",";

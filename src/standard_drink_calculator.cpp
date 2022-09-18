@@ -34,9 +34,9 @@ void StandardDrinkCalc::volume_changed() {
      * Calculate standard drinks when volume number changes.
      */
 
-    double volume = ui.volumeInput->value();
-    double abv = ui.abvInput->value();
-    double std_drink = ui.stdDrinkInput->value();
+    const double volume = ui.volumeInput->value();
+    const double abv = ui.abvInput->value();
+    const double std_drink = ui.stdDrinkInput->value();
 
     if (std_drink > 0) {
         std::string standard_drinks = Calculate::double_to_string(Calculate::standard_drinks(abv, volume, std_drink));
@@ -51,9 +51,9 @@ void StandardDrinkCalc::abv_changed() {
      * Calculate standard drinks when ABV value changes.
      */
 
-    double abv = ui.abvInput->value();
-    double volume = ui.volumeInput->value();
-    double std_drink = ui.stdDrinkInput->value();
+    const double abv = ui.abvInput->value();
+    const double volume = ui.volumeInput->value();
+    const double std_drink = ui.stdDrinkInput->value();
 
     if (std_drink > 0) {
         std::string standard_drinks = Calculate::double_to_string(Calculate::standard_drinks(abv, volume, std_drink));
@@ -68,9 +68,9 @@ void StandardDrinkCalc::std_drinks_changed() {
      * Calculate standard drinks when std drink value changes.
      */
 
-    double abv = ui.abvInput->value();
-    double volume = ui.volumeInput->value();
-    double std_drink = ui.stdDrinkInput->value();
+    const double abv = ui.abvInput->value();
+    const double volume = ui.volumeInput->value();
+    const double std_drink = ui.stdDrinkInput->value();
 
     if (std_drink > 0) {
         std::string standard_drinks = Calculate::double_to_string(Calculate::standard_drinks(abv, volume, std_drink));

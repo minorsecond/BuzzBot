@@ -27,7 +27,7 @@ std::string utilities::zero_pad_string(unsigned integer) {
     ss >> ret;
 
     // Append zero chars
-    int str_length = ret.length();
+    const int str_length = ret.length();
     for (int i = 0; i < 2 - str_length; i++)
         ret = "0" + ret;
     return ret;
@@ -42,8 +42,8 @@ std::string utilities::get_local_date() {
     // Get today's date in local time.
     std::string output;
 
-    auto todays_date = std::chrono::system_clock::now();
-    auto now_c = std::chrono::system_clock::to_time_t(todays_date);
+    const auto todays_date = std::chrono::system_clock::now();
+    const auto now_c = std::chrono::system_clock::to_time_t(todays_date);
     std::tm now_tm = *std::localtime(&now_c);
 #ifdef __APPLE__
     char query_date[10];
