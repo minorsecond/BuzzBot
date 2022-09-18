@@ -47,7 +47,6 @@ ENDIF()
 
 find_package(SQLite3 REQUIRED)
 find_package(Catch2 3 REQUIRED)
-find_package(Boost REQUIRED)
 
 IF(APPLE)
     set(ICON_NAME "icon.icns")
