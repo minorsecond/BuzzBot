@@ -80,13 +80,25 @@ jobs:
           cmake -Bbuild -H. -DBUILD_TESTING=OFF
           sudo cmake --build build/ --target install
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 20 --slave /usr/bin/g++ g++ /usr/bin/g++-11
-          cd /tmp
-          wget https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.gz
-          tar xzf boost*.tar.gz
-          cd boost_1*
-          ./bootstrap.sh --prefix=/usr/
-          ./b2
-          sudo ./b2 install
+      - name: Install boost
+        uses: MarkusJx/install-boost@v2.3.1
+        id: install-boost
+        with:
+          # REQUIRED: Specify the required boost version
+          # A list of supported versions can be found here:
+          # https://github.com/actions/boost-versions/blob/main/versions-manifest.json
+          boost_version: 1.73.0
+          # OPTIONAL: Specify a platform version
+          platform_version: 18.04
+          # OPTIONAL: Specify a custom install location
+          boost_install_dir: /usr/local
+          # OPTIONAL: Specify a toolset
+          toolset: gcc
+          # OPTIONAL: Specify an architecture
+          arch: x86
+
+            # NOTE: If a boost version matching all requirements cannot be found,
+          # this build step will fail
 
       - name: Create Build Environment
         # Some projects don't allow in-source building, so create a separate build directory
