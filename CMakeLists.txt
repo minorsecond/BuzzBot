@@ -48,6 +48,11 @@ ENDIF()
 find_package(SQLite3 REQUIRED)
 find_package(Catch2 3 REQUIRED)
 
+if(DEFINED BOOST_ROOT)
+    message(STATUS "Searching for Boost in ${BOOST_ROOT}")
+    find_package(BOOST PATHS ${BOOST_ROOT} REQUIRED)
+endif()
+
 IF(APPLE)
     set(ICON_NAME "icon.icns")
     set(ICON_PATH ${PROJECT_SOURCE_DIR}/res/${ICON_NAME})
