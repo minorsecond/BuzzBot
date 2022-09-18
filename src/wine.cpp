@@ -37,10 +37,10 @@ void MainWindow::update_wine_fields() {
     rename_duplicate_drink_names(all_wine);
 
     for (const auto& wine : all_wine) {
-        QString winery_name = QString::fromStdString(wine.producer);
-        QString wine_type = QString::fromStdString(wine.type);
-        QString wine_subtype = QString::fromStdString(wine.subtype);
-        std::string wine_name = wine.name;
+        const QString winery_name = QString::fromStdString(wine.producer);
+        const QString wine_type = QString::fromStdString(wine.type);
+        const QString wine_subtype = QString::fromStdString(wine.subtype);
+        const std::string wine_name = wine.name;
 
         wineries.insert(winery_name);
         types.insert(wine_type);
@@ -70,7 +70,7 @@ void MainWindow::update_wine_fields() {
     std::sort(names_tmp.begin(), names_tmp.end(), Calculate::compare_strings);
 
     for (const auto& name : names_tmp) {
-        QString name_q = QString::fromStdString(name);
+        const QString name_q = QString::fromStdString(name);
         ui->wineNameInput->addItem(name_q);
     }
 
@@ -83,7 +83,7 @@ void MainWindow::update_wine_fields() {
     // Rest to first name in field
     ui->wineNameInput->setCurrentIndex(0);
     update_wine_types_producers();
-    std::string wine_notes_text = get_latest_notes(ui->wineNameInput->currentText().toStdString());
+    const std::string wine_notes_text = get_latest_notes(ui->wineNameInput->currentText().toStdString());
     ui->wineNotesInput->setText(QString::fromStdString(wine_notes_text));
 }
 
@@ -92,8 +92,8 @@ void MainWindow::populate_wine_fields(const Drink& drink_at_row) {
      * Populate the wine entry fields if user is on the wine entry tab.
      */
 
-    QDate date = format_date_for_input(drink_at_row);
-    std::string notes = get_latest_notes(drink_at_row.name);
+    const QDate date = format_date_for_input(drink_at_row);
+    const std::string notes = get_latest_notes(drink_at_row.name);
     ui->wineDateInput->setDate(date);
     ui->wineNameInput->setCurrentText(drink_at_row.name.c_str());
     ui->wineTypeInput->setCurrentText(drink_at_row.type.c_str());
@@ -119,12 +119,12 @@ void MainWindow::update_wine_types_producers() {
     QSignalBlocker subtype_input_signal_blocker(ui->wineSubtypeInput);
     QSignalBlocker brewery_input_signal_blocker(ui->wineryInput);
 
-    std::string input_wine = ui->wineNameInput->currentText().toStdString();
+    const std::string input_wine = ui->wineNameInput->currentText().toStdString();
     Drink selected_wine;
     if (input_wine.find(" -- (") != std::string::npos) {  // This is a drink with a name that matches another beer, and contains the producer name in the dropdown
         std::string producer_name {input_wine.substr(input_wine.find(" -- (") + 5)};
         producer_name = producer_name.substr(0, producer_name.size() - 1);
-        std::string wine_name {input_wine.substr(0, input_wine.find(" -- ("))};
+        const std::string wine_name {input_wine.substr(0, input_wine.find(" -- ("))};
         selected_wine = Database::get_drink_by_name(storage, "Wine", wine_name, producer_name);
     } else {
         selected_wine = Database::get_drink_by_name(storage, "Wine", input_wine);
@@ -133,18 +133,18 @@ void MainWindow::update_wine_types_producers() {
     if (!selected_wine.id || selected_wine.id == -1) {
         clear_fields("Wine");
     } else {
-        std::string wine_type = selected_wine.type;
-        std::string wine_subtype = selected_wine.subtype;
-        std::string producer = selected_wine.producer;
-        double abv = selected_wine.abv;
+        const std::string wine_type = selected_wine.type;
+        const std::string wine_subtype = selected_wine.subtype;
+        const std::string producer = selected_wine.producer;
+        const double abv = selected_wine.abv;
         double size = selected_wine._size;
-        int vintage {selected_wine.vintage};
+        const int vintage {selected_wine.vintage};
 
         if (options.units == "Metric") {
             size = Calculate::oz_to_ml(size);
         }
 
-        int rating = selected_wine.rating;
+        const int rating = selected_wine.rating;
         ui->wineTypeInput->setCurrentText(QString::fromStdString(wine_type));
         ui->wineSubtypeInput->setCurrentText(QString::fromStdString(wine_subtype));
         ui->wineryInput->setCurrentText(QString::fromStdString(producer));
@@ -154,7 +154,7 @@ void MainWindow::update_wine_types_producers() {
         ui->wineVintage->setValue(vintage);
 
         // Set notes to the notes for liquor in the name input
-        std::string notes = get_latest_notes(ui->wineNameInput->currentText().toStdString());
+        const std::string notes = get_latest_notes(ui->wineNameInput->currentText().toStdString());
         ui->wineNotesInput->setText(QString::fromStdString(notes));
     }
 }
@@ -169,11 +169,11 @@ Drink MainWindow::get_wine_attrs_from_fields(std::string alcohol_type) {
     std::string drink_name {ui->wineNameInput->currentText().toStdString()};
 
     if (drink_name.find(" -- (") != std::string::npos) {  // This is a beer with a name that matches another beer, and contains the producer name in the dropdown
-        std::string producer_name {drink_name.substr(drink_name.find(" -- (") + 5)};
+        const std::string producer_name {drink_name.substr(drink_name.find(" -- (") + 5)};
         drink_name = drink_name.substr(0, drink_name.find(" -- ("));
     }
 
-    std::string drink_date = ui->wineDateInput->date().toString("yyyy-MM-dd").toStdString();
+    const std::string drink_date = ui->wineDateInput->date().toString("yyyy-MM-dd").toStdString();
     drink.date = drink_date;
     drink.name = drink_name;
     drink.type = ui->wineTypeInput->currentText().toStdString();
