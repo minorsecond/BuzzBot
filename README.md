@@ -26,3 +26,13 @@
 - If you're running macOS, you'll have a `BuzzBot.app` file in the `build` directory.
 - If you're running Linux, you can install the app in `~/.local/bin` by running `cmake --install .`. 
 The app should then be available in your app menu.
+
+### Developing BuzzBot
+- Dependencies:
+    - Qt 6.2.4
+    - G++11
+    - Boost 1.79 or greater
+    - Sqlite3
+    - Catch2 (3.0 or greater)
+- CLion is the preferred IDE but you can obviously use anything
+- Please run unit tests after making your changes. A CI system is in place to protect against bad PRs but you will save yourself time by doing so
