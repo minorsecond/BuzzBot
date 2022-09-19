@@ -5,17 +5,7 @@
 #include "database.h"
 #include "../include/qcustomplot.h"
 #include "../ui/ui_mainwindow.h"
-
-struct Options {
-    std::string sex = "male";
-    std::string date_calculation_method = "Fixed";
-    std::string weekday_start = "Sunday";
-    std::string limit_standard = "NIAAA";
-    std::string units = "Imperial";
-    std::string std_drink_country = "United States";
-    std::string std_drink_size = "0.6";  // Store as ounces
-    int weekly_limit = -1;
-};
+#include "options.h"
 
 class MainWindow : public QMainWindow
 {

@@ -7,7 +7,7 @@
 
 #include <string>
 #include "database.h"
-#include "mainwindow.h"
+#include "options.h"
 
 class Calculate {
 public:
