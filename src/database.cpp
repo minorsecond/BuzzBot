@@ -262,10 +262,11 @@ int Database::increment_version(Storage storage, int current_version) {
              * It will be necessary to update code in mainwindow.cpp (and probably elsewhere) to then use this new
              * size column.*/
         }
-        // Set to new version number
-        storage.pragma.user_version(current_version);
-        storage.sync_schema(true);
     }
+    // Set to new version number
+    storage.pragma.user_version(current_version);
+    storage.sync_schema(true);
+
     return storage.pragma.user_version();
 }
 
