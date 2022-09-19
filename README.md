@@ -34,5 +34,5 @@ The app should then be available in your app menu.
     - Boost 1.79 or greater
     - Sqlite3
     - Catch2 (3.0 or greater)
-- CLion is the preferred IDE but you can obviously use anything
+- CLion is the preferred IDE, but you can obviously use anything
 - Please run unit tests after making your changes. A CI system is in place to protect against bad PRs but you will save yourself time by doing so
