@@ -12,8 +12,8 @@ std::string Database::path() {
      */
 
     // Find path to application support directory
-    std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
-    std::string full_path = directory + "/buzzbot.db";
+    const std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
+    const std::string full_path = directory + "/buzzbot.db";
     std::filesystem::create_directory(directory);
 
     std::cout << "Using DB located at " << full_path << std::endl;
@@ -27,7 +27,7 @@ std::vector<Drink> Database::read(Storage storage) {
      * @return all_drinks A vector containing Drink, storing all rows in the database.
      */
 
-    std::vector<Drink> all_drinks = storage.get_all<Drink>();
+    const std::vector<Drink> all_drinks = storage.get_all<Drink>();
 
     return all_drinks;
 }
@@ -47,8 +47,8 @@ Storage Database::write(Drink drink, Storage storage) {
      * @return Storage: The storage instance
      */
 
-    std::string database_path = path();
-    int inserted_id = storage.insert(drink);
+    const std::string database_path = path();
+    const int inserted_id = storage.insert(drink);
     drink.id = inserted_id;
     write_db_to_disk(storage);
 
@@ -83,7 +83,7 @@ Drink Database::read_row(const int &row_num, Storage &storage) {
      * @return drink: The results of the database query.
      */
     
-    auto drink = storage.get<Drink>(row_num);
+    const auto drink = storage.get<Drink>(row_num);
     return drink;
 }
 
@@ -106,8 +106,7 @@ std::string Database::get_latest_notes(Storage &storage, const std::string& name
      * @return notes: A string containing notes entered for the name and alcohol type.
      */
 
-    // TODO: Get notes based on primary key
-    std::vector<Drink> drinks = storage.get_all<Drink>(where(c(&Drink::name) == name && c(&Drink::alcohol_type) == alcohol_type));
+    const std::vector<Drink> drinks = storage.get_all<Drink>(where(c(&Drink::name) == name && c(&Drink::alcohol_type) == alcohol_type));
     std::string notes;
     int temp_id = 0;
     for (const auto& drink_for_notes : drinks) {
@@ -155,7 +154,7 @@ std::vector<Drink> Database::filter(const std::string& filter_type, const std::s
         // Parse the -- (PRODUCER) text to strip out drink name and producer.
         std::string producer_name {filter_text.substr(filter_text.find(" -- (") + 5)};
         producer_name = producer_name.substr(0, producer_name.size() - 1);
-        std::string drink_name {filter_text.substr(0, filter_text.find(" -- ("))};
+        const std::string drink_name {filter_text.substr(0, filter_text.find(" -- ("))};
         std::cout << drink_name << " " << producer_name << std::endl;
         filtered_drinks = storage.get_all<Drink>(where(c(&Drink::name) == drink_name and c(&Drink::producer) == producer_name));
     } else {
@@ -219,7 +218,7 @@ std::vector<Drink> Database::get_drinks_by_type(Storage &storage, std::string dr
      * @param drink_type: The type of drink to filter on.
      * @return: A vector of drinks that match drink_type.
      */
-    std::vector<Drink> drinks_by_type = storage.get_all<Drink>(where(c(&Drink::type) == std::move(drink_type)));
+    const std::vector<Drink> drinks_by_type = storage.get_all<Drink>(where(c(&Drink::type) == std::move(drink_type)));
     return drinks_by_type;
 }
 
@@ -230,7 +229,7 @@ std::vector<Drink> Database::get_drinks_by_producer(Storage &storage, std::strin
      * @param producer: The producer name to filter on.
      * @return: A vector of drinks produced by a producer.
      */
-    std::vector<Drink> drinks_by_producer = storage.get_all<Drink>(where(c(&Drink::producer) == std::move(producer)));
+    const std::vector<Drink> drinks_by_producer = storage.get_all<Drink>(where(c(&Drink::producer) == std::move(producer)));
     return drinks_by_producer;
 }
 
@@ -252,7 +251,7 @@ int Database::increment_version(Storage storage, int current_version) {
      */
 
     std::cout << "Using DB version " << storage.pragma.user_version() << std::endl;
-    int version = get_version(storage);
+    const int version = get_version(storage);
     if (version < 8 && current_version == 8) {
         std::cout << "*** Upgrading DB from version " << storage.pragma.user_version() <<  " to " << current_version << std::endl;
 
@@ -272,12 +271,12 @@ bool Database::compare_date(const Drink &a, const Drink &b) {
      * @return: True if second date is more recent than the first date. Else, false.
      */
 
-    int a_year = std::stoi(a.date.substr(0, 4));
-    int a_month = std::stoi(a.date.substr(5, 7));
-    int a_day = std::stoi(a.date.substr(8, 9));
-    int b_year = std::stoi(b.date.substr(0, 4));
-    int b_month = std::stoi(b.date.substr(5, 7));
-    int b_day = std::stoi(b.date.substr(8, 9));
+    const int a_year = std::stoi(a.date.substr(0, 4));
+    const int a_month = std::stoi(a.date.substr(5, 7));
+    const int a_day = std::stoi(a.date.substr(8, 9));
+    const int b_year = std::stoi(b.date.substr(0, 4));
+    const int b_month = std::stoi(b.date.substr(5, 7));
+    const int b_day = std::stoi(b.date.substr(8, 9));
 
     if (a_year < b_year) {
         return true;

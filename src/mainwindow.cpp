@@ -144,18 +144,18 @@ void MainWindow::configure_calendar() {
      */
 
 #ifdef __APPLE__
-    CFURLRef app_url_ref = CFBundleCopyBundleURL(CFBundleGetMainBundle());
-    CFStringRef mac_path = CFURLCopyFileSystemPath(app_url_ref, kCFURLPOSIXPathStyle);
-    QString icon_path_qstring = CFStringGetCStringPtr(mac_path, CFStringGetSystemEncoding());
-    std::string previous_month_arrow = icon_path_qstring.toStdString() + "/Contents/Resources/previous.png";
-    std::string next_month_arrow = icon_path_qstring.toStdString() + "/Contents/Resources/next.png";
+    const CFURLRef app_url_ref = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    const CFStringRef mac_path = CFURLCopyFileSystemPath(app_url_ref, kCFURLPOSIXPathStyle);
+    const QString icon_path_qstring = CFStringGetCStringPtr(mac_path, CFStringGetSystemEncoding());
+    const std::string previous_month_arrow = icon_path_qstring.toStdString() + "/Contents/Resources/previous.png";
+    const std::string next_month_arrow = icon_path_qstring.toStdString() + "/Contents/Resources/next.png";
 #elif __linux__
     const std::string home_path = utilities::get_home_path();
     const std::string next_month_arrow = home_path + "/.local/share/icons/com.rwardrup.buzzbot/next.png";
     const std::string previous_month_arrow = home_path + "/.local/share/icons/com.rwardrup.buzzbot/previous.png";
 #endif
 
-    std::string stylesheet_text = "QCalendarWidget QWidget#qt_calendar_navigationbar\n"
+    const std::string stylesheet_text = "QCalendarWidget QWidget#qt_calendar_navigationbar\n"
                                   "{\n"
                                   //"\tcolor: rgba(169,204,227,128);\n"
                                   "\tbackground-color: rgba(84, 153, 199 ,128);\n"
@@ -269,7 +269,7 @@ void MainWindow::set_input_states() {
     ui->wineryInput->setDuplicatesEnabled(false);
 
     // Set datepicker to today's date
-    QDate todays_date = QDate::currentDate();
+    const QDate todays_date = QDate::currentDate();
     ui->beerDateInput->setDate(todays_date);
     ui->liquorDateInput->setDate(todays_date);
     ui->wineDateInput->setDate(todays_date);
@@ -285,12 +285,12 @@ void MainWindow::submit_button_clicked() {
      * Create a drink from user input and write it to the database.
      */
 
-    QItemSelectionModel *selection_model = ui->drinkLogTable->selectionModel();
-    QModelIndexList selected_rows = selection_model->selectedRows();
+    const QItemSelectionModel *selection_model = ui->drinkLogTable->selectionModel();
+    const QModelIndexList selected_rows = selection_model->selectedRows();
 
     // Get current tab selected
-    std::string alcohol_type = get_current_tab();
-    Drink entered_drink = get_drink_attributes_from_fields();
+    const std::string alcohol_type = get_current_tab();
+    const Drink entered_drink = get_drink_attributes_from_fields();
 
     // Prevent blank submissions
     if (entered_drink.name.empty() || entered_drink.abv == 0.0 || entered_drink._size == 0.0 || entered_drink.producer.empty()) {
@@ -317,7 +317,7 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
      * @param QItemSelection: A QItemSelection.
      */
 
-    Drink drink_at_row = get_drink_at_selected_row();
+    const Drink drink_at_row = get_drink_at_selected_row();
 
     if (drink_at_row.alcohol_type == "Beer") {
         populate_beer_fields(drink_at_row);
@@ -347,13 +347,13 @@ void MainWindow::open_export_dialog() {
      * Open the export dialog.
      */
 
-    QString desktop_path = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0);
-    QString preferred_path = desktop_path + "/buzzbot.csv";
+    const QString desktop_path = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0);
+    const QString preferred_path = desktop_path + "/buzzbot.csv";
 
     QString filter = "CSV Files (*.csv)";
-    QString filepath_qstring = QFileDialog::getSaveFileName(this, "Save File", preferred_path, filter, &filter);
+    const QString filepath_qstring = QFileDialog::getSaveFileName(this, "Save File", preferred_path, filter, &filter);
 
-    std::vector<Drink> all_drinks = storage.get_all<Drink>();
+    const std::vector<Drink> all_drinks = storage.get_all<Drink>();
     exporters::to_csv(all_drinks, filepath_qstring.toStdString(), options.units);
 }
 
@@ -403,8 +403,8 @@ std::string MainWindow::settings_path() {
      */
 
     // Find path to application support directory
-    std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
-    std::string settings_path = directory + "/buzzbot_settings.conf";
+    const std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
+    const std::string settings_path = directory + "/buzzbot_settings.conf";
     std::filesystem::create_directory(directory);
 
     return settings_path;
@@ -423,14 +423,14 @@ void MainWindow::program_options(bool write) {
 
     if (write) {
         std::cout << "Writing user settings to " << path << std::endl;
-        std::string sex_setting = "sex:" + options.sex;
-        std::string start_day = "start_day:" + options.weekday_start;
-        std::string date_calculation_method = "date_calculation_method:" + options.date_calculation_method;
-        std::string limit_standard = "limit_standard:" + options.limit_standard;
-        std::string weekly_limit = "custom_weekly_limit:" + std::to_string(options.weekly_limit);
-        std::string units = "units:" + options.units;
-        std::string std_drink_size = "std_drink_size:" + options.std_drink_size;
-        std::string std_drink_country = "std_drink_country:" + options.std_drink_country;
+        const std::string sex_setting = "sex:" + options.sex;
+        const std::string start_day = "start_day:" + options.weekday_start;
+        const std::string date_calculation_method = "date_calculation_method:" + options.date_calculation_method;
+        const std::string limit_standard = "limit_standard:" + options.limit_standard;
+        const std::string weekly_limit = "custom_weekly_limit:" + std::to_string(options.weekly_limit);
+        const std::string units = "units:" + options.units;
+        const std::string std_drink_size = "std_drink_size:" + options.std_drink_size;
+        const std::string std_drink_country = "std_drink_country:" + options.std_drink_country;
         std::ofstream out_data;
 
         if (!out_data) {
@@ -530,10 +530,10 @@ void MainWindow::tab_changed() {
      * Update notes when tab is changed.
      */
 
-    Drink selected_drink = get_drink_at_selected_row();
-    std::string name = selected_drink.name;
-    std::string selected_drink_alc_type = selected_drink.alcohol_type;
-    std::string new_tab = get_current_tab();
+    const Drink selected_drink = get_drink_at_selected_row();
+    const std::string name = selected_drink.name;
+    const std::string selected_drink_alc_type = selected_drink.alcohol_type;
+    const std::string new_tab = get_current_tab();
     update_stat_panel();
 
     reset_fields();
@@ -629,8 +629,8 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
      */
 
     // Do not clear names!
-    QItemSelectionModel *selection_model = ui->drinkLogTable->selectionModel();
-    QModelIndexList selected_rows = selection_model->selectedRows();
+    const QItemSelectionModel *selection_model = ui->drinkLogTable->selectionModel();
+    const QModelIndexList selected_rows = selection_model->selectedRows();
 
     if (selected_rows.empty()) {
         if (alcohol_type == "Beer") {
@@ -710,16 +710,16 @@ std::tuple<std::chrono::year_month_day, std::string> MainWindow::get_filter_date
     std::chrono::year_month_day start_date{};
     std::string weekday_name;
 
-    std::chrono::weekday filter_day = get_filter_weekday_start();
+    const std::chrono::weekday filter_day = get_filter_weekday_start();
 
     // get_local_date returns a string in the form of YYYY-MM-DD
-    std::string query_date = utilities::get_local_date();
+    const std::string query_date = utilities::get_local_date();
 
     // Back to date object
     std::tm tm = {};
     std::stringstream ss(query_date);
     ss >> std::get_time(&tm,"%Y-%m-%d");
-    auto tp = std::chrono::floor<std::chrono::days>(std::chrono::system_clock::from_time_t(std::mktime(&tm)));
+    const auto tp = std::chrono::floor<std::chrono::days>(std::chrono::system_clock::from_time_t(std::mktime(&tm)));
 
     // Get date of last filter_day
     if (options.date_calculation_method == "Fixed") {
@@ -731,8 +731,8 @@ std::tuple<std::chrono::year_month_day, std::string> MainWindow::get_filter_date
         start_date = tp - std::chrono::days{6};
 
         // Get weekday name
-        std::chrono::weekday one_week = std::chrono::weekday(tp - std::chrono::days{7});
-        unsigned weekday = one_week.iso_encoding();
+        const std::chrono::weekday one_week = std::chrono::weekday(tp - std::chrono::days{7});
+        const unsigned weekday = one_week.iso_encoding();
         weekday_name = get_weekday_name(weekday);
     }
 
@@ -744,7 +744,7 @@ void MainWindow::update_stats_if_new_day() {
      * Update the stats panel if day of the week isn't the same as the date in stats panel.
      */
 
-    std::time_t t = std::time(nullptr);
+    const std::time_t t = std::time(nullptr);
     std::stringstream ssTp;
     ssTp << std::put_time(std::localtime(&t), "%A");
     std::string weekday_name = ssTp.str();
@@ -760,12 +760,12 @@ std::string MainWindow::format_date(std::chrono::year_month_day date) {
      * @return: formatted date string.
      */
 
-    std::string year = std::to_string((int)date.year());
+    const std::string year = std::to_string((int)date.year());
 
-    std::string month = utilities::zero_pad_string((unsigned)date.month());
-    std::string day = utilities::zero_pad_string((unsigned)date.day());
+    const std::string month = utilities::zero_pad_string((unsigned)date.month());
+    const std::string day = utilities::zero_pad_string((unsigned)date.day());
 
-    std::string query_date = year + "-" + month + "-" + day;
+    const std::string query_date = year + "-" + month + "-" + day;
 
     return query_date;
 }
@@ -775,9 +775,9 @@ void MainWindow::open_graphs() {
      * Create graphs of drink data.
      */
 
-    std::string db_path = Database::path();
-    std::vector<Drink> all_drinks = Database::read(storage);
-    double std_drink_size = get_std_drink_size_from_options();
+    const std::string db_path = Database::path();
+    const std::vector<Drink> all_drinks = Database::read(storage);
+    const double std_drink_size = get_std_drink_size_from_options();
     auto *graphing_window = new Graphing(all_drinks, std_drink_size, options);
     graphing_window->setAttribute(Qt::WA_DeleteOnClose); // Delete pointer on window close
     graphing_window->setModal(false);

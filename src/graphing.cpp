@@ -28,11 +28,11 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
     this->setFixedHeight(window_height);
 
     //Plot the IBU plot
-    std::vector ibus {Graphing::get_beer_ibus(all_drinks)};
+    const std::vector ibus {Graphing::get_beer_ibus(all_drinks)};
 
     if (!ibus.empty()) {
         no_beers = false;
-        std::map<double, size_t> ibu_counts {Graphing::count_values_in_vect(ibus)};
+        const std::map<double, size_t> ibu_counts {Graphing::count_values_in_vect(ibus)};
         auto ibu_plot {Graphing::plot_ibus(ibu_counts, this)};
         ibu_plot->setAttribute(Qt::WA_DeleteOnClose);  // Delete pointer on window close
         ibu_plot->setGeometry(0, 0, window_width, window_height/2);
@@ -107,7 +107,7 @@ std::map<double, size_t> Graphing::count_values_in_vect(const std::vector<double
 
     // Create map where key is the IBU value and value is the count of the IBU in all_values.
     for (const double &i : ibu_copy) {
-        double ibu_value = i;
+        const double ibu_value = i;
         size_t ibu_count = std::count(all_values.begin(), all_values.end(), ibu_value);
         ibu_counts[i] = ibu_count;
     }
@@ -134,7 +134,6 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QD
                                                                 QFont::Bold)));
 
     QVector<double> ibus(static_cast<qsizetype>(ibu_counts.size()));
-    //QVector<double> counts(ibu_counts.size());
     QVector<double> percentages(static_cast<qsizetype>(ibu_counts.size()));
     size_t total_drinks {0};
 
@@ -158,12 +157,10 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QD
     }
 
     // Get min/max values for axes
-    double ibu_min {*std::min_element(ibus.begin(), ibus.end())};
-    double ibu_max {*std::max_element(ibus.begin(), ibus.end())};
-    //double count_min = *std::min_element(counts.begin(), counts.end());
-    //double count_max = *std::max_element(counts.begin(), counts.end());
-    double perc_min {*std::min_element(percentages.begin(), percentages.end())};
-    double perc_max {*std::max_element(percentages.begin(), percentages.end())};
+    const double ibu_min {*std::min_element(ibus.begin(), ibus.end())};
+    const double ibu_max {*std::max_element(ibus.begin(), ibus.end())};
+    const double perc_min {*std::min_element(percentages.begin(), percentages.end())};
+    const double perc_max {*std::max_element(percentages.begin(), percentages.end())};
 
     // Graph style
     QPen drawPen;
@@ -171,7 +168,7 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QD
     drawPen.setStyle(Qt::PenStyle::SolidLine);
     drawPen.setWidth(2);
 
-    QColor color(120,77, 150, 150);
+    const QColor color(120,77, 150, 150);
 
     // Create the IBU graph
     ibu_plot->addGraph();
@@ -242,8 +239,8 @@ bool Graphing::compare_by_date(const Drink &a, const Drink &b) {
      * @return: True if drink a is earlier than drink b. Else, false.
      */
 
-    std::string date_a_cpy {a.date};
-    std::string date_b_cpy {b.date};
+    const std::string date_a_cpy {a.date};
+    const std::string date_b_cpy {b.date};
 
     int date_a {parse_date(date_a_cpy)};
     int date_b {parse_date(date_b_cpy)};
@@ -403,7 +400,7 @@ int Graphing::date_from_week_num(const std::string& week_num) {
      */
 
     struct tm tm{};
-    std::string week_num_tmp {week_num + "-1"};
+    const std::string week_num_tmp {week_num + "-1"};
     auto week_char {std::make_unique<char>(week_num_tmp.length() + 1)};
     strcpy(week_char.get(), week_num_tmp.c_str());
     strptime(week_char.get(), "%Y-%W-%w", &tm);
@@ -415,7 +412,7 @@ int Graphing::date_from_week_num(const std::string& week_num) {
     month = (month.length() == 1) ? '0' + month : month; // Zero pad if single digit month
     day = (day.length() == 1) ? '0' + day : day;  // Zero pad if single digit day
 
-    std::string date_str = year + month + day;
+    const std::string date_str = year + month + day;
     int date {std::stoi(date_str)};
 
     return date;
@@ -434,7 +431,7 @@ void Graphing::add_empty_drinks(const int first_year, const int last_year, const
         for (int week_num {0}; week_num <= 51; week_num++) {
             const std::string year_week_num {std::to_string(year) + '-' + std::to_string(week_num)};
             const std::string date_str {std::to_string(date_from_week_num(year_week_num))};
-            int date = parse_date(date_str);
+            const int date = parse_date(date_str);
 
             // Add to vector
             if (date_std_drinks.find(date) == date_std_drinks.end() && date <= max_date && date >= min_date) {

@@ -20,7 +20,7 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
     ui.setupUi(this);
     this->setFixedSize(675, 300);
 
-    int std_drink_cbox_index = populate_country_cbox(country_info);
+    const int std_drink_cbox_index = populate_country_cbox(country_info);
     ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString("Custom"));
 
     set_std_drink_input_states(options);
@@ -51,7 +51,7 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
     }
 
     // Set weekday selector
-    std::string current_date = options.weekday_start;
+    const std::string current_date = options.weekday_start;
     if (!current_date.empty()) {
         ui.weekdayStartInput->setCurrentText(QString::fromStdString(current_date));
     } else {
@@ -197,9 +197,7 @@ double UserSettings::get_std_drink_size() {
      * @return: Value set in stdDrinkDefComboBox that denotes how big a standard drink is.
      */
 
-    std::string std_drink_cbox_value = ui.stdDrinkDefComboBox->currentText().toStdString();
-    double std_drink_size;
-    std_drink_size = ui.stdDrinkDefInput->value();
+    double std_drink_size {ui.stdDrinkDefInput->value()};
 
     return std_drink_size;
 }
@@ -238,8 +236,6 @@ void UserSettings::std_drink_country_changed() {
         ui.stdDrinkDefInput->setEnabled(true);
     } else {
         ui.stdDrinkDefInput->setEnabled(false);
-        //double new_std_drink_size = get_std_drink_size_from_options();
-        //ui.stdDrinkDefInput->setValue(new_std_drink_size);
     }
 }
 

@@ -28,11 +28,11 @@ std::vector<std::set<QString>> MainWindow::generate_filter_item_sets() {
     std::vector<Drink> all_drinks = Database::read(storage);
     rename_duplicate_drink_names(all_drinks);
     for (const auto& drink : all_drinks) {
-        QString drink_name = QString::fromStdString(drink.name);
-        QString drink_type = QString::fromStdString(drink.type);
-        QString drink_subtype = QString::fromStdString(drink.subtype);
-        QString producer = QString::fromStdString(drink.producer);
-        QString rating = QString::fromStdString(std::to_string(drink.rating));
+        const QString drink_name = QString::fromStdString(drink.name);
+        const QString drink_type = QString::fromStdString(drink.type);
+        const QString drink_subtype = QString::fromStdString(drink.subtype);
+        const QString producer = QString::fromStdString(drink.producer);
+        const QString rating = QString::fromStdString(std::to_string(drink.rating));
 
         drink_names.insert(drink_name);
         drink_types.insert(drink_type);
@@ -55,7 +55,7 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
      * @param filter type: Type of filter to use. Options in drink name (name), drink type (type) and producer.
      */
 
-    std::vector<std::set<QString>> filter_values = generate_filter_item_sets();
+    const std::vector<std::set<QString>> filter_values = generate_filter_item_sets();
 
     if (filter_type == "Name") {
         for (const auto& name : filter_values.at(0)) {
@@ -79,7 +79,7 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
         // Convert rating integers to QStrings and put in set
         std::vector<int> ratings_tmp;
         for (const auto& rating_value : filter_values.at(4)) {
-            int rating_int = std::stoi(rating_value.toStdString());
+            const int rating_int = std::stoi(rating_value.toStdString());
             ratings_tmp.push_back(rating_int);
         }
 
@@ -87,7 +87,7 @@ void MainWindow::populate_filter_menus(const std::string& filter_type) {
         std::sort(ratings_tmp.begin(), ratings_tmp.end(), std::greater<>());
 
         for (const auto& rating : ratings_tmp) {
-            QString rating_qstring = QString::fromStdString(std::to_string(rating));
+            const QString rating_qstring = QString::fromStdString(std::to_string(rating));
             ui->filterTextInput->addItem(rating_qstring);
         }
     }
@@ -101,7 +101,7 @@ void MainWindow::enable_filter_text(const QString&) {
     (ui->filterCategoryInput->currentText().toStdString() == "None") ? ui->filterTextInput->setDisabled(true) : \
         ui->filterTextInput->setEnabled(true);
 
-    std::string filter_type = ui->filterCategoryInput->currentText().toStdString();
+    const std::string filter_type = ui->filterCategoryInput->currentText().toStdString();
     populate_filter_menus(filter_type);
     update_table();
 }

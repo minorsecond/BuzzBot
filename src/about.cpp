@@ -19,7 +19,7 @@ About::About() {
     this->setFixedSize(237, 272);
 
     // Version text
-    std::string version = "2.2.1";
+    const std::string version = "2.2.1";
     ui.versionLabel->setText(QString::fromStdString("Version " + version));
 
     ui.copyrightLabel->setText("Ross Wardrup, 2021");
@@ -32,12 +32,12 @@ About::About() {
     const std::string home_path = utilities::get_home_path();
     const std::string icon_path = home_path + "/.local/share/com.rwardrup.buzzbot/mini-icon.png";
 #elif __APPLE__
-    CFURLRef app_url_ref = CFBundleCopyBundleURL(CFBundleGetMainBundle());
-    CFStringRef mac_path = CFURLCopyFileSystemPath(app_url_ref, kCFURLPOSIXPathStyle);
-    QString icon_path_qstring = CFStringGetCStringPtr(mac_path, CFStringGetSystemEncoding());
+    const CFURLRef app_url_ref = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    const CFStringRef mac_path = CFURLCopyFileSystemPath(app_url_ref, kCFURLPOSIXPathStyle);
+    const QString icon_path_qstring = CFStringGetCStringPtr(mac_path, CFStringGetSystemEncoding());
 
     // Set path to icon
-    std::string icon_path = icon_path_qstring.toStdString() + "/Contents/Resources/mini-icon.png";
+    const std::string icon_path = icon_path_qstring.toStdString() + "/Contents/Resources/mini-icon.png";
     CFRelease(app_url_ref);
     CFRelease(mac_path);
 #endif
