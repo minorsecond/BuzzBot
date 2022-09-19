@@ -27,7 +27,7 @@ elseif(CMAKE_BUILD_TYPE MATCHES Release)
     add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic)
 endif ()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-enum-enum-conversion")
 
 enable_testing()
 include_directories(/usr/lib /usr/lib64)
