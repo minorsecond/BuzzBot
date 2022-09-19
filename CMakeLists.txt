@@ -19,15 +19,7 @@ project(BuzzBot)
 
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-if (CMAKE_BUILD_TYPE MATCHES Debug)
-    message("Building debug")
-    add_compile_options(-Wall -Werror -Wextra -g -O0 -pedantic)
-elseif(CMAKE_BUILD_TYPE MATCHES Release)
-    message(STATUS "Building release")
-    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic)
-endif ()
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-enum-enum-conversion")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast")
 
 enable_testing()
 include_directories(/usr/lib /usr/lib64)
@@ -60,10 +52,21 @@ add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cp
         src/liquor.cpp src/wine.cpp src/filters.cpp  src/about.cpp src/about.h src/exporters.cpp src/exporters.h
         src/standard_drink_calculator.cpp src/standard_drink_calculator.h src/confirm_dialog.cpp src/confirm_dialog.h
         src/graphing.cpp src/graphing.h include/qcustomplot.h include/qcustomplot.cpp
-        src/table_manipulation.cpp src/stats_updaters.cpp src/utilities.cpp src/utilities.h)
+        src/table_manipulation.cpp src/stats_updaters.cpp src/utilities.cpp src/utilities.h src/drink.h
+        src/graphing_calculations.h src/graphing_calculations.cpp src/options.h)
 add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h
-        test/test_database_functions.cpp test/test_calculations.cpp test/test_graph_calculations.cpp src/graphing.cpp
-        src/graphing.h include/qcustomplot.cpp include/qcustomplot.h src/utilities.cpp src/utilities.h)
+        test/test_database_functions.cpp test/test_calculations.cpp test/test_graph_calculations.cpp
+        src/utilities.cpp src/utilities.h src/drink.h src/graphing_calculations.h src/graphing_calculations.cpp src/options.h)
+
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+    message("Building debug")
+    #add_compile_options(-Werror -g -O0 -pedantic)
+    # These warnings occur in include files and we don't want to modify them
+    add_compile_options(-Wall -Werror -Wextra -g -O0 - pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
+elseif(CMAKE_BUILD_TYPE MATCHES Release)
+    message(STATUS "Building release")
+    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
+endif ()
 
 target_precompile_headers(BuzzBot PRIVATE include/sqlite_orm.h)
 
@@ -106,10 +109,9 @@ IF(APPLE)
     set_target_properties(BuzzBot PROPERTIES MACOSX_BUNDLE_ICONFILE ${ICON_NAME})
 ENDIF()
 target_link_libraries(BuzzBot Qt6::Core Qt6::Widgets Qt6::PrintSupport Qt6::Gui sqlite3)
-target_link_libraries(functions_test PRIVATE sqlite3 Catch2::Catch2WithMain Qt6::Core Qt6::Gui Qt6::Widgets Qt6::PrintSupport)
+target_link_libraries(functions_test PRIVATE sqlite3 Catch2::Catch2WithMain Qt6::Core)
 
 IF(UNIX AND NOT APPLE)
-    #install(TARGETS BuzzBot DESTINATION bin)
     install(CODE "execute_process(COMMAND ../linux_install.sh)")
 ENDIF()
 include(CTest)
