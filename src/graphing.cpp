@@ -6,7 +6,6 @@
 #include "include/qcustomplot.h"
 #include "calculate.h"
 #include <iostream>
-#include <iomanip>
 #include <chrono>
 #include <ctime>
 #include <algorithm>
@@ -28,11 +27,11 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
     this->setFixedHeight(window_height);
 
     //Plot the IBU plot
-    const std::vector ibus {Graphing::get_beer_ibus(all_drinks)};
+    const std::vector ibus {GraphingCalculations::get_beer_ibus(all_drinks)};
 
     if (!ibus.empty()) {
         no_beers = false;
-        const std::map<double, size_t> ibu_counts {Graphing::count_values_in_vect(ibus)};
+        const std::map<double, size_t> ibu_counts {GraphingCalculations::count_values_in_vect(ibus)};
         auto ibu_plot {Graphing::plot_ibus(ibu_counts, this)};
         ibu_plot->setAttribute(Qt::WA_DeleteOnClose);  // Delete pointer on window close
         ibu_plot->setGeometry(0, 0, window_width, window_height/2);
@@ -42,7 +41,7 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
     // Plot the ABV plot
     QVector<QCPGraphData> time_data;
     if (!all_drinks.empty()) {
-        time_data = time_data_aggregator(all_drinks, std_drink_size);
+        time_data = Graphing::time_data_aggregator(all_drinks, std_drink_size);
     }
 
     auto abv_plot {Graphing::plot_abvs(time_data, options, this)};
@@ -53,66 +52,6 @@ Graphing::Graphing(const std::vector<Drink>& all_drinks, double std_drink_size, 
         abv_plot->setGeometry(0, (window_height/2+2), window_width, window_height/2);
     }
     abv_plot->show();
-}
-
-std::vector<double> Graphing::get_beer_ibus(const std::vector<Drink>& all_drinks) {
-    /*
-     * Create a vector containing IBU values of all beers.
-     * @param all_drinks: A vector of drinks. This will be all drinks in the database.
-     * @return: Vector of doubles representing all beer IBUs.
-     */
-
-    std::vector<double> ibu_values {};
-
-    for (const auto& drink : all_drinks) {
-        double ibu = drink.ibu;
-        if (ibu > 0)  // Exclude non-beer drinks
-        ibu_values.push_back(ibu);
-    }
-
-    return ibu_values;
-}
-
-std::vector<double> Graphing::get_drink_abvs(const std::vector<Drink> &all_drinks) {
-    /*
-     * Create a vector containing ABV values of all drinks.
-     * @param all_drinks: A vector of drinks. This will be all drinks in the database.
-     * @return: A vector of doubles denoting all drink IBUs.
-     */
-
-    std::vector<double> abv_values {};
-
-    abv_values.reserve(all_drinks.size());
-    for (const auto& drink : all_drinks) {
-        abv_values.push_back(drink.abv);
-    }
-
-    return abv_values;
-}
-
-std::map<double, size_t> Graphing::count_values_in_vect(const std::vector<double>& all_values) {
-    /*
-     * Create a map of values and their counts.
-     * @param all_values: a vector of doubles.
-     * @return: a map<double, int> of values (keys) and their counts (values).
-     */
-
-    std::vector<double> ibu_copy {all_values};
-    std::map<double, size_t> ibu_counts {};
-
-    // Get count (y value) of each IBU (x value).
-    // First, get unique items in vector
-    std::sort(ibu_copy.begin(), ibu_copy.end());
-    ibu_copy.erase(unique(ibu_copy.begin(), ibu_copy.end()), ibu_copy.end());
-
-    // Create map where key is the IBU value and value is the count of the IBU in all_values.
-    for (const double &i : ibu_copy) {
-        const double ibu_value = i;
-        size_t ibu_count = std::count(all_values.begin(), all_values.end(), ibu_value);
-        ibu_counts[i] = ibu_count;
-    }
-
-    return ibu_counts;
 }
 
 QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QDialog *parent) {
@@ -184,87 +123,6 @@ QCustomPlot * Graphing::plot_ibus(const std::map<double, size_t>& ibu_counts, QD
     ibu_plot->replot();
 
     return ibu_plot;
-}
-
-QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drinks, double std_drink_size) {
-    /*
-     * Creates a QVector of QCPGraphData from a vector of Drinks.
-     * @param all_drinks: a vector of Drinks.
-     */
-
-    std::map<int, double> date_std_drinks {};
-    const std::string first_week_string {week_number(std::stoi(all_drinks.at(0).date))};
-    const std::string last_week_string {week_number(std::stoi(all_drinks[all_drinks.size()-1].date))};
-    int min_date {std::numeric_limits<int>::max()}; // Everything is <= this
-    int max_date {std::numeric_limits<int>::min()}; // Everything is >= this
-    const int first_year {std::stoi(first_week_string.substr(0, first_week_string.find('-')))};
-    const int last_year {std::stoi(last_week_string.substr(0, last_week_string.find('-')))};
-
-    // Sort by date
-    std::sort(all_drinks.begin(), all_drinks.end(), compare_by_date);
-
-
-    for (const auto &all_drink : all_drinks) {
-        //date_tmp = parse_date(all_drink.date);
-        std::string date_tmp = all_drink.date;
-
-        // Get week number & integer date value from DB date
-        date_tmp.erase(std::remove(date_tmp.begin(), date_tmp.end(), '-'), date_tmp.end());
-        const std::string week_num {week_number(std::stoi(date_tmp))};
-        const std::string date_str {std::to_string(date_from_week_num(week_num))};
-        const int date {parse_date(date_str)};
-
-        // Get min & max dates for graph
-        if (date > max_date) {
-            max_date = date;
-        }
-
-        if (date < min_date) {
-            min_date = date;
-        }
-
-        // Add to the map of dates & std drinks
-        double std_drinks {Calculate::standard_drinks(all_drink.abv, all_drink._size, std_drink_size)};
-        add_std_drinks(date, std_drinks, date_std_drinks);
-    }
-
-    add_empty_drinks(first_year, last_year, max_date, min_date, date_std_drinks);
-
-    return create_qvect(date_std_drinks);
-}
-
-bool Graphing::compare_by_date(const Drink &a, const Drink &b) {
-    /*
-     * Compare dates between two drinks.
-     * @return: True if drink a is earlier than drink b. Else, false.
-     */
-
-    const std::string date_a_cpy {a.date};
-    const std::string date_b_cpy {b.date};
-
-    int date_a {parse_date(date_a_cpy)};
-    int date_b {parse_date(date_b_cpy)};
-
-    return date_a < date_b;
-}
-
-int Graphing::parse_date(const std::string &date) {
-    /*
-     * Convert date string to integer date.
-     * @param date: A date in the format YYYYMMDD
-     * @return: an integer in UNIX epoch time
-     */
-
-    std::tm t {};
-    std::stringstream date_str;
-    date_str.str(date);
-    std::stringstream new_date;
-
-    date_str >> std::get_time(&t, "%Y%m%d");
-    std::put_time(&t, "%c");
-    auto timet = (int)std::mktime(&t);
-
-    return timet;
 }
 
 QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const Options& options, QDialog *parent) {
@@ -373,51 +231,6 @@ QCustomPlot *Graphing::plot_abvs(const QVector<QCPGraphData>& time_data, const O
     return abv_plot;
 }
 
-std::string Graphing::week_number(const int date) {
-    /*
-     * Get the week number for a date
-     * @param date: An integer of date, e.g. 20210405
-     * @return: year and week number, e.g. 2021-05
-     */
-
-    constexpr int days_per_week {7};
-    struct tm tm{};
-    strptime(std::to_string(date).c_str(), "%Y%m%d", &tm);
-
-    const int wday {tm.tm_wday};
-    const int delta {wday ? wday - 1 : days_per_week - 1};
-
-    const int week_num {(tm.tm_yday + days_per_week - delta) / days_per_week};
-
-    return std::to_string(date).substr(0, 4) + '-' + std::to_string(week_num);
-}
-
-int Graphing::date_from_week_num(const std::string& week_num) {
-    /*
-     * Calculates the date from a week number.
-     * @param week_num: theweek number to calculate the date for.
-     * @return an integer denoting date, in YYYYMMDD format.
-     */
-
-    struct tm tm{};
-    const std::string week_num_tmp {week_num + "-1"};
-    auto week_char {std::make_unique<char>(week_num_tmp.length() + 1)};
-    strcpy(week_char.get(), week_num_tmp.c_str());
-    strptime(week_char.get(), "%Y-%W-%w", &tm);
-
-    std::string year {std::to_string(tm.tm_year +1900)};
-    std::string month {std::to_string(tm.tm_mon + 1)};
-    std::string day {std::to_string(tm.tm_mday)};
-
-    month = (month.length() == 1) ? '0' + month : month; // Zero pad if single digit month
-    day = (day.length() == 1) ? '0' + day : day;  // Zero pad if single digit day
-
-    const std::string date_str = year + month + day;
-    int date {std::stoi(date_str)};
-
-    return date;
-}
-
 void Graphing::add_empty_drinks(const int first_year, const int last_year, const int max_date, const int min_date,
                                 std::map<int, double> &date_std_drinks) {
     /*
@@ -430,8 +243,8 @@ void Graphing::add_empty_drinks(const int first_year, const int last_year, const
     for (int year {first_year}; year <= last_year; year++) {
         for (int week_num {0}; week_num <= 51; week_num++) {
             const std::string year_week_num {std::to_string(year) + '-' + std::to_string(week_num)};
-            const std::string date_str {std::to_string(date_from_week_num(year_week_num))};
-            const int date = parse_date(date_str);
+            const std::string date_str {std::to_string(GraphingCalculations::date_from_week_num(year_week_num))};
+            const int date = GraphingCalculations::parse_date(date_str);
 
             // Add to vector
             if (date_std_drinks.find(date) == date_std_drinks.end() && date <= max_date && date >= min_date) {
@@ -474,4 +287,51 @@ void Graphing::add_std_drinks(const int date, const double std_drinks, std::map<
         auto it = date_std_drinks.find(date);
         it->second += std_drinks;
     }
+}
+
+QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drinks, double std_drink_size) {
+    /*
+     * Creates a QVector of QCPGraphData from a vector of Drinks.
+     * @param all_drinks: a vector of Drinks.
+     */
+
+    std::map<int, double> date_std_drinks {};
+    const std::string first_week_string {GraphingCalculations::week_number(std::stoi(all_drinks.at(0).date))};
+    const std::string last_week_string {GraphingCalculations::week_number(std::stoi(all_drinks[all_drinks.size()-1].date))};
+    int min_date {std::numeric_limits<int>::max()}; // Everything is <= this
+    int max_date {std::numeric_limits<int>::min()}; // Everything is >= this
+    const int first_year {std::stoi(first_week_string.substr(0, first_week_string.find('-')))};
+    const int last_year {std::stoi(last_week_string.substr(0, last_week_string.find('-')))};
+
+    // Sort by date
+    std::sort(all_drinks.begin(), all_drinks.end(), GraphingCalculations::compare_by_date);
+
+
+    for (const auto &all_drink : all_drinks) {
+        //date_tmp = parse_date(all_drink.date);
+        std::string date_tmp = all_drink.date;
+
+        // Get week number & integer date value from DB date
+        date_tmp.erase(std::remove(date_tmp.begin(), date_tmp.end(), '-'), date_tmp.end());
+        const std::string week_num {GraphingCalculations::week_number(std::stoi(date_tmp))};
+        const std::string date_str {std::to_string(GraphingCalculations::date_from_week_num(week_num))};
+        const int date {GraphingCalculations::parse_date(date_str)};
+
+        // Get min & max dates for graph
+        if (date > max_date) {
+            max_date = date;
+        }
+
+        if (date < min_date) {
+            min_date = date;
+        }
+
+        // Add to the map of dates & std drinks
+        double std_drinks {Calculate::standard_drinks(all_drink.abv, all_drink._size, std_drink_size)};
+        add_std_drinks(date, std_drinks, date_std_drinks);
+    }
+
+    add_empty_drinks(first_year, last_year, max_date, min_date, date_std_drinks);
+
+    return create_qvect(date_std_drinks);
 }

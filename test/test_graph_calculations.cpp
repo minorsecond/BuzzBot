@@ -2,8 +2,9 @@
 // Created by Ross Wardrup on 4/21/21.
 //
 
-#include "src/graphing.h"
+#include "src/graphing_calculations.h"
 #include <iostream>
+#include <map>
 #if __has_include("catch2/catch_test_macros.hpp")
 #include <catch2/catch_test_macros.hpp>
 #else
@@ -33,7 +34,7 @@ TEST_CASE("IBU Vector Creation", "[Graph Data Compilation]") {
     all_drinks.push_back(etrwo2);
     all_drinks.push_back(titos);
 
-    std::vector<double> beer_ibus = Graphing::get_beer_ibus(all_drinks);
+    std::vector<double> beer_ibus = GraphingCalculations::get_beer_ibus(all_drinks);
 
     REQUIRE(beer_ibus == expected_values);
 }
@@ -61,7 +62,7 @@ TEST_CASE("ABV Vector Creation", "[Graph Data Compilation]") {
     all_drinks.push_back(etrwo2);
     all_drinks.push_back(titos);
 
-    std::vector<double> drink_abvs = Graphing::get_drink_abvs(all_drinks);
+    std::vector<double> drink_abvs = GraphingCalculations::get_drink_abvs(all_drinks);
 
     REQUIRE(drink_abvs == expected_values);
 }
@@ -73,7 +74,7 @@ TEST_CASE("Count Values in Vector", "[Graph Data Compilation]") {
                                              {6.0, 1},
                                              {10.0, 4}};
 
-    std::map<double, size_t> output_values = Graphing::count_values_in_vect(input_values);
+    std::map<double, size_t> output_values = GraphingCalculations::count_values_in_vect(input_values);
 
     REQUIRE(output_values == expected_values);
 }

@@ -2,26 +2,9 @@
 #define DATABASE_H
 
 #include "../include/sqlite_orm.h"
+#include "drink.h"
 #include <vector>
 #include <QDate>
-
-struct Drink {
-    int id;
-    std::string date;
-    std::string name;
-    std::string type;
-    std::string subtype;
-    std::string producer;
-    double abv;
-    double ibu;
-    double _size;  // TODO: Rename to size
-    int rating;
-    std::string notes;
-    int vintage;
-    std::string alcohol_type;
-    std::string timestamp;
-    int sort_order;
-};
 
 inline auto initStorage(const std::string& file_name, int db_version) {
     /*
@@ -45,6 +28,7 @@ inline auto initStorage(const std::string& file_name, int db_version) {
                                                           sqlite_orm::make_column("abv", &Drink::abv),
                                                           sqlite_orm::make_column("ibu", &Drink::ibu),
                                                           sqlite_orm::make_column("_size", &Drink::_size, sqlite_orm::default_value(0.0)),
+                                                          sqlite_orm::make_column("size", &Drink::_size, sqlite_orm::default_value(0.0)),
                                                           sqlite_orm::make_column("rating", &Drink::rating),
                                                           sqlite_orm::make_column("notes", &Drink::notes),
                                                           sqlite_orm::make_column("vintage", &Drink::vintage, sqlite_orm::default_value(-999)),

@@ -3,7 +3,7 @@
 //
 
 #include "../src/calculate.h"
-#include "../src/mainwindow.h"
+//#include "../src/mainwindow.h"
 #include <filesystem>
 #include <iostream>
 #if __has_include("catch2/catch_test_macros.hpp")
