@@ -27,20 +27,20 @@ private:
 
 public:
     // Setters
-    void set_date(std::string date);
-    void set_name(std::string name);
-    void set_type(std::string type);
-    void set_subtype(std::string subtype);
-    void set_producer(std::string producer);
-    void set_abv(double abv);
-    void set_ibu(double ibu);
-    void set_size(double size);
-    void set_rating(int rating);
-    void set_notes(std::string notes);
-    void set_vintage(int vintage);
-    void set_alcohol_type(std::string alcohol_type);
-    void set_timestamp(std::string timestamp);
-    void set_sort_order(int sort_order);
+    void set_date(const std::string &in_date);
+    void set_name(const std::string &in_name);
+    void set_type(const std::string &in_type);
+    void set_subtype(const std::string &in_subtype);
+    void set_producer(const std::string &in_producer);
+    void set_abv(const double &in_abv);
+    void set_ibu(const double &in_ibu);
+    void set_size(const double &in_size);
+    void set_rating(const int &in_rating);
+    void set_notes(const std::string &in_notes);
+    void set_vintage(const int &in_vintage);
+    void set_alcohol_type(const std::string &in_alcohol_type);
+    void set_timestamp(const std::string &in_timestamp);
+    void set_sort_order(const int &in_sort_order);
 
     // Getters
     std::string get_date();
