@@ -4,6 +4,16 @@
 
 #include "drink.h"
 
+void Drink::set_id(const int &in_id) {
+    /*
+     * Set drink id
+     * @param in_id: Drink PK id
+     * @return: None
+     */
+
+    id = in_id;
+}
+
 void Drink::set_date(const std::string &in_date) {
     /*
      * Set drink date.
@@ -144,7 +154,15 @@ void Drink::set_sort_order(const int &in_sort_order) {
     sort_order = in_sort_order;
 }
 
-std::string Drink::get_date() {
+int Drink::get_id() const {
+    /*
+     * Get drink PK id
+     * @return: drink ID
+     */
+    return id;
+}
+
+std::string Drink::get_date() const {
     /*
      * Get drink date
      * @return: Drink date
@@ -152,7 +170,7 @@ std::string Drink::get_date() {
     return date;
 }
 
-std::string Drink::get_name() {
+std::string Drink::get_name() const {
     /*
      * Get drink name.
      * @return: Drink name.
@@ -160,7 +178,7 @@ std::string Drink::get_name() {
     return name;
 }
 
-std::string Drink::get_type() {
+std::string Drink::get_type() const {
     /*
      * Get drink type.
      * @return: Drink type.
@@ -168,7 +186,7 @@ std::string Drink::get_type() {
     return type;
 }
 
-std::string Drink::get_subtype() {
+std::string Drink::get_subtype() const {
     /*
      * Get drink subtype.
      * @return: Drink subtype.
@@ -176,7 +194,7 @@ std::string Drink::get_subtype() {
     return subtype;
 }
 
-std::string Drink::get_producer() {
+std::string Drink::get_producer() const {
     /*
      * Get drink producer.
      * @return: Drink producer.
@@ -184,7 +202,7 @@ std::string Drink::get_producer() {
     return producer;
 }
 
-double Drink::get_abv() {
+double Drink::get_abv() const {
     /*
      * Get drink ABV
      * @return: Drink ABV
@@ -192,7 +210,7 @@ double Drink::get_abv() {
     return abv;
 }
 
-double Drink::get_ibu() {
+double Drink::get_ibu() const {
     /*
      * Get drink IBU
      * @return: Drink IBU
@@ -200,7 +218,7 @@ double Drink::get_ibu() {
     return ibu;
 }
 
-double Drink::get_size() {
+double Drink::get_size() const {
     /*
      * Get drink size
      * @return: Drink size
@@ -208,7 +226,7 @@ double Drink::get_size() {
     return _size;
 }
 
-int Drink::get_rating() {
+int Drink::get_rating() const {
     /*
      * Get drink rating
      * @return: Drink rating.
@@ -216,7 +234,7 @@ int Drink::get_rating() {
     return rating;
 }
 
-std::string Drink::get_notes() {
+std::string Drink::get_notes() const {
     /*
      * Get drink notes
      * @return: Drink notes
@@ -224,7 +242,7 @@ std::string Drink::get_notes() {
     return notes;
 }
 
-int Drink::get_vintage() {
+int Drink::get_vintage() const {
     /*
      * Get drink vintage.
      * @return: drink vintage
@@ -232,7 +250,7 @@ int Drink::get_vintage() {
     return vintage;
 }
 
-std::string Drink::get_alcohol_type() {
+std::string Drink::get_alcohol_type() const {
     /*
      * Get alcohol type.
      * @return: Alcohol type
@@ -240,7 +258,7 @@ std::string Drink::get_alcohol_type() {
     return alcohol_type;
 }
 
-std::string Drink::get_timestamp() {
+std::string Drink::get_timestamp() const {
     /*
      * Get drink timestamp.
      * @return: drink timestamp
@@ -248,7 +266,7 @@ std::string Drink::get_timestamp() {
     return timestamp;
 }
 
-int Drink::get_sort_order() {
+int Drink::get_sort_order() const {
     /*
      * Get drink sort order.
      * @return: Sort order

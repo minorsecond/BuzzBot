@@ -276,12 +276,12 @@ bool Database::compare_date(const Drink &a, const Drink &b) {
      * @return: True if second date is more recent than the first date. Else, false.
      */
 
-    const int a_year = std::stoi(a.date.substr(0, 4));
-    const int a_month = std::stoi(a.date.substr(5, 7));
-    const int a_day = std::stoi(a.date.substr(8, 9));
-    const int b_year = std::stoi(b.date.substr(0, 4));
-    const int b_month = std::stoi(b.date.substr(5, 7));
-    const int b_day = std::stoi(b.date.substr(8, 9));
+    const int a_year = std::stoi(a.get_date().substr(0, 4));
+    const int a_month = std::stoi(a.get_date().substr(5, 7));
+    const int a_day = std::stoi(a.get_date().substr(8, 9));
+    const int b_year = std::stoi(b.get_date().substr(0, 4));
+    const int b_month = std::stoi(b.get_date().substr(5, 7));
+    const int b_day = std::stoi(b.get_date().substr(8, 9));
 
     if (a_year < b_year) {
         return true;
