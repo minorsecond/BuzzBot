@@ -143,3 +143,115 @@ void Drink::set_sort_order(const int &in_sort_order) {
 
     sort_order = in_sort_order;
 }
+
+std::string Drink::get_date() {
+    /*
+     * Get drink date
+     * @return: Drink date
+     */
+    return date;
+}
+
+std::string Drink::get_name() {
+    /*
+     * Get drink name.
+     * @return: Drink name.
+     */
+    return name;
+}
+
+std::string Drink::get_type() {
+    /*
+     * Get drink type.
+     * @return: Drink type.
+     */
+    return type;
+}
+
+std::string Drink::get_subtype() {
+    /*
+     * Get drink subtype.
+     * @return: Drink subtype.
+     */
+    return subtype;
+}
+
+std::string Drink::get_producer() {
+    /*
+     * Get drink producer.
+     * @return: Drink producer.
+     */
+    return producer;
+}
+
+double Drink::get_abv() {
+    /*
+     * Get drink ABV
+     * @return: Drink ABV
+     */
+    return abv;
+}
+
+double Drink::get_ibu() {
+    /*
+     * Get drink IBU
+     * @return: Drink IBU
+     */
+    return ibu;
+}
+
+double Drink::get_size() {
+    /*
+     * Get drink size
+     * @return: Drink size
+     */
+    return _size;
+}
+
+int Drink::get_rating() {
+    /*
+     * Get drink rating
+     * @return: Drink rating.
+     */
+    return rating;
+}
+
+std::string Drink::get_notes() {
+    /*
+     * Get drink notes
+     * @return: Drink notes
+     */
+    return notes;
+}
+
+int Drink::get_vintage() {
+    /*
+     * Get drink vintage.
+     * @return: drink vintage
+     */
+    return vintage;
+}
+
+std::string Drink::get_alcohol_type() {
+    /*
+     * Get alcohol type.
+     * @return: Alcohol type
+     */
+    return alcohol_type;
+}
+
+std::string Drink::get_timestamp() {
+    /*
+     * Get drink timestamp.
+     * @return: drink timestamp
+     */
+    return timestamp;
+}
+
+int Drink::get_sort_order() {
+    /*
+     * Get drink sort order.
+     * @return: Sort order
+     */
+    return sort_order;
+}
