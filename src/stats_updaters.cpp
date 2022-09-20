@@ -27,21 +27,9 @@ void MainWindow::update_stat_panel() {
 
     const std::vector<Drink> drinks_this_week = Database::filter("After Date", query_date, storage);
 
-    std::cout << "The results contain: " << drinks_this_week.size() << " drinks." << std::endl;
-
     std::cout << "Using std drink size of " << options.std_drink_size << " in stats calculation" << std::endl;
     for (const auto& drink : drinks_this_week) {
-        if (options.std_drink_country == "Custom") {
-            standard_drinks += Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size));
-        } else {
-            const double std_drink_size = get_std_drink_size_from_options();  // This is in oz.
-
-            /*
-             * Drink._size will always be in ounces. std_drink_size should also be in ounces. The result will be
-             * independent of whichever unit the user has selected, as everything is stored as ounces.
-             */
-            standard_drinks += Calculate::standard_drinks(drink.abv, drink._size, std_drink_size);
-        }
+        standard_drinks += drink.standard_drinks();
     }
 
     if (options.units == "Imperial") {
@@ -120,11 +108,11 @@ double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink
     for (const auto& drink : drinks_this_week) {
         double drinks_vol_alcohol;
         if (options.units == "Imperial") {
-            drinks_vol_alcohol = (drink.abv / 100) * drink._size;
+            drinks_vol_alcohol = (drink.get_abv() / 100) * drink.get_size();
         } else {
             // Everything is stored in DB as oz. Convert back to ml for display.
-            const double drink_size = Calculate::oz_to_ml(drink._size);
-            drinks_vol_alcohol = (drink.abv / 100) * drink_size;
+            const double drink_size = Calculate::oz_to_ml(drink.get_size());
+            drinks_vol_alcohol = (drink.get_abv() / 100) * drink_size;
         }
         volume_consumed += drinks_vol_alcohol;
     }
@@ -232,14 +220,7 @@ void MainWindow::update_std_drinks_today() {
     const std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
 
     for (auto& drink : drinks_today) {
-        double std_drinks;
-        if (options.std_drink_country == "Custom") {
-            std_drinks= Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size));
-        } else {
-            double std_drink_size = get_std_drink_size_from_options();
-            std_drinks = Calculate::standard_drinks(drink.abv, drink._size, std_drink_size);
-        }
-        std_drinks_today += std_drinks;
+        std_drinks_today += drink.standard_drinks();
     }
 
     ui->stdDrinksTodayOutput->setText(QString::fromStdString(Calculate::double_to_string(std_drinks_today)));

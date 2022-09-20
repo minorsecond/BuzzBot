@@ -296,8 +296,8 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
      */
 
     std::map<int, double> date_std_drinks {};
-    const std::string first_week_string {GraphingCalculations::week_number(std::stoi(all_drinks.at(0).date))};
-    const std::string last_week_string {GraphingCalculations::week_number(std::stoi(all_drinks[all_drinks.size()-1].date))};
+    const std::string first_week_string {GraphingCalculations::week_number(std::stoi(all_drinks.at(0).get_date()))};
+    const std::string last_week_string {GraphingCalculations::week_number(std::stoi(all_drinks[all_drinks.size()-1].get_date()))};
     int min_date {std::numeric_limits<int>::max()}; // Everything is <= this
     int max_date {std::numeric_limits<int>::min()}; // Everything is >= this
     const int first_year {std::stoi(first_week_string.substr(0, first_week_string.find('-')))};
@@ -307,9 +307,9 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
     std::sort(all_drinks.begin(), all_drinks.end(), GraphingCalculations::compare_by_date);
 
 
-    for (const auto &all_drink : all_drinks) {
+    for (Drink all_drink : all_drinks) {
         //date_tmp = parse_date(all_drink.date);
-        std::string date_tmp = all_drink.date;
+        std::string date_tmp = all_drink.get_date();
 
         // Get week number & integer date value from DB date
         date_tmp.erase(std::remove(date_tmp.begin(), date_tmp.end(), '-'), date_tmp.end());
@@ -327,8 +327,7 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
         }
 
         // Add to the map of dates & std drinks
-        double std_drinks {Calculate::standard_drinks(all_drink.abv, all_drink._size, std_drink_size)};
-        add_std_drinks(date, std_drinks, date_std_drinks);
+        add_std_drinks(date, all_drink.standard_drinks(), date_std_drinks);
     }
 
     add_empty_drinks(first_year, last_year, max_date, min_date, date_std_drinks);

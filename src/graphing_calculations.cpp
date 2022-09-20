@@ -18,7 +18,7 @@ std::vector<double> GraphingCalculations::get_beer_ibus(const std::vector<Drink>
     std::vector<double> ibu_values {};
 
     for (const auto& drink : all_drinks) {
-        double ibu = drink.ibu;
+        double ibu = drink.get_ibu();
         if (ibu > 0)  // Exclude non-beer drinks
             ibu_values.push_back(ibu);
     }
@@ -37,7 +37,7 @@ std::vector<double> GraphingCalculations::get_drink_abvs(const std::vector<Drink
 
     abv_values.reserve(all_drinks.size());
     for (const auto& drink : all_drinks) {
-        abv_values.push_back(drink.abv);
+        abv_values.push_back(drink.get_abv());
     }
 
     return abv_values;
@@ -74,8 +74,8 @@ bool GraphingCalculations::compare_by_date(const Drink &a, const Drink &b) {
      * @return: True if drink a is earlier than drink b. Else, false.
      */
 
-    const std::string date_a_cpy {a.date};
-    const std::string date_b_cpy {b.date};
+    const std::string date_a_cpy {a.get_date()};
+    const std::string date_b_cpy {b.get_date()};
 
     int date_a {parse_date(date_a_cpy)};
     int date_b {parse_date(date_b_cpy)};

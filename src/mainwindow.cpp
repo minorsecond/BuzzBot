@@ -293,7 +293,7 @@ void MainWindow::submit_button_clicked() {
     const Drink entered_drink = get_drink_attributes_from_fields();
 
     // Prevent blank submissions
-    if (entered_drink.name.empty() || entered_drink.abv == 0.0 || entered_drink._size == 0.0 || entered_drink.producer.empty()) {
+    if (entered_drink.get_name().empty() || entered_drink.get_abv() == 0.0 || entered_drink.get_size() == 0.0 || entered_drink.get_producer().empty()) {
         QMessageBox::critical(nullptr, "Error", "Please enter drink name, ABV, producer, and size.");
     } else {
         // Handle updating existing rows
@@ -319,13 +319,13 @@ void MainWindow::populate_fields(const QItemSelection &, const QItemSelection &)
 
     const Drink drink_at_row = get_drink_at_selected_row();
 
-    if (drink_at_row.alcohol_type == "Beer") {
+    if (drink_at_row.get_alcohol_type() == "Beer") {
         populate_beer_fields(drink_at_row);
         ui->tabWidget->setCurrentIndex(0);
-    } else if (drink_at_row.alcohol_type == "Liquor") {
+    } else if (drink_at_row.get_alcohol_type() == "Liquor") {
         populate_liquor_fields(drink_at_row);
         ui->tabWidget->setCurrentIndex(1);
-    } else if (drink_at_row.alcohol_type == "Wine") {
+    } else if (drink_at_row.get_alcohol_type() == "Wine") {
         populate_wine_fields(drink_at_row);
         ui->tabWidget->setCurrentIndex(2);
     }
@@ -531,8 +531,8 @@ void MainWindow::tab_changed() {
      */
 
     const Drink selected_drink = get_drink_at_selected_row();
-    const std::string name = selected_drink.name;
-    const std::string selected_drink_alc_type = selected_drink.alcohol_type;
+    const std::string name = selected_drink.get_name();
+    const std::string selected_drink_alc_type = selected_drink.get_alcohol_type();
     const std::string new_tab = get_current_tab();
     update_stat_panel();
 
@@ -611,7 +611,7 @@ QDate MainWindow::format_date_for_input(const Drink& drink) {
      * @return date: A formatted QDate.
      */
 
-    return QDate::fromString(QString::fromUtf8(drink.date.c_str()), "yyyy-MM-dd");
+    return QDate::fromString(QString::fromUtf8(drink.get_date().c_str()), "yyyy-MM-dd");
 }
 
 void MainWindow::clicked_clear_button() {
@@ -795,7 +795,7 @@ void MainWindow::rename_duplicate_drink_names(std::vector<Drink> &drinks) {
     std::set<std::string> names_producers {};
 
     for (const Drink &drink : drinks) {
-        names_producers.insert(drink.name + "-" + drink.producer);
+        names_producers.insert(drink.get_name() + "-" + drink.get_producer());
     }
 
     for (const auto &name_prod_pair : names_producers) {
@@ -810,9 +810,9 @@ void MainWindow::rename_duplicate_drink_names(std::vector<Drink> &drinks) {
         if (elem.second > 1) {
             //count_map.erase(count_map.find(elem.first));  // Erase drinks with only one name entry
             for (Drink &drink : drinks) {
-                if (drink.name == elem.first) {
-                    if (!drink.producer.empty()) {
-                        drink.name += " -- (" + drink.producer + ")";
+                if (drink.get_name() == elem.first) {
+                    if (!drink.get_producer().empty()) {
+                        drink.get_name() += " -- (" + drink.get_producer() + ")";
                     }
                 }
             }

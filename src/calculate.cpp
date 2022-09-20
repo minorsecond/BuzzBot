@@ -10,30 +10,6 @@
 #include <algorithm>
 
 using namespace sqlite_orm;
-double Calculate::standard_drinks(const double &abv, const double &amount, const double &std_drink_size) {
-    /*
-     * Calculate the number of standard drinks in a drink.
-     * 1 Std. drink in the US is .6 oz pure alcohol. In Europe,
-     * it's 17.5 ml pure alcohol. These two measurements are
-     * roughly the same.
-     * @param abv: the alcohol by volume of the drink.
-     * @param amount: the amount of drink in the container.
-     * @param std_drink_size: the size of the standard drink, in the same unit as amount.
-     */
-
-    const double alcohol_amt = alcohol_volume(abv, amount);
-    return round_to_two_decimal_points(alcohol_amt / std_drink_size);
-}
-
-double Calculate::alcohol_volume(const double &abv, const double &amount) {
-    /*
-     * Calculate the volume of alcohol in a drink.
-     * @param abv: The alcohol by volume of the drink.
-     * @param amount: The amount of drink in the container.
-     */
-
-    return (abv/100)*amount;
-}
 
 double Calculate::standard_drinks_remaining(const Options& options, const double &standard_drinks_consumed) {
     /*
@@ -58,15 +34,6 @@ double Calculate::standard_drinks_remaining(const Options& options, const double
     return weekly_drinks_remaining;
 }
 
-double Calculate::round_to_two_decimal_points(const double &val) {
-    /*
-     * Round a double to two decimal points.
-     * @param val: The value that should be rounded.
-     */
-
-    return floor((val * 100) + .5)/100;
-}
-
 double Calculate::volume_alcohol_remaining(const Options& options, const double &volume_consumed) {
     /*
      * Calculate the amount of alcohol the user has remaining based on their sex.
@@ -85,7 +52,7 @@ double Calculate::volume_alcohol_remaining(const Options& options, const double 
         }
     }
 
-    return round_to_two_decimal_points(vol_alcohol_remaining);
+    return utilities::round_to_two_decimal_points(vol_alcohol_remaining);
 }
 
 std::string Calculate::favorite_producer(const Storage& storage, const std::string& drink_type) {
@@ -172,7 +139,7 @@ double Calculate::mean_abv(const Storage& storage, const std::string& drink_type
         abv_sum += drink.abv;
     }
 
-    return round_to_two_decimal_points(abv_sum / drink_count);
+    return utilities::round_to_two_decimal_points(abv_sum / drink_count);
 }
 
 double Calculate::mean_ibu(const Storage& storage, const std::string& drink_type) {

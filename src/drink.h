@@ -6,6 +6,8 @@
 #define BUZZBOT_DRINK_H
 
 #include <string>
+#include "utilities.h"
+#include "options.h"
 
 class Drink {
 private:
@@ -25,8 +27,13 @@ private:
     std::string timestamp;
     int sort_order;
 
+    friend class Calculate;
+    friend class Database;
+    friend auto initStorage(const std::string& file_name, int db_version);
+
 public:
     // Setters
+    void set_id(const int &in_id);
     void set_date(const std::string &in_date);
     void set_name(const std::string &in_name);
     void set_type(const std::string &in_type);
@@ -43,20 +50,25 @@ public:
     void set_sort_order(const int &in_sort_order);
 
     // Getters
-    std::string get_date();
-    std::string get_name();
-    std::string get_type();
-    std::string get_subtype();
-    std::string get_producer();
-    double get_abv();
-    double get_ibu();
-    double get_size();
-    int get_rating();
-    std::string get_notes();
-    int get_vintage();
-    std::string get_alcohol_type();
-    std::string get_timestamp();
-    int get_sort_order();
+    int get_id() const;
+    std::string get_date() const;
+    std::string get_name() const;
+    std::string get_type() const;
+    std::string get_subtype() const;
+    std::string get_producer() const;
+    double get_abv() const;
+    double get_ibu() const;
+    double get_size() const;
+    int get_rating() const;
+    std::string get_notes() const;
+    int get_vintage() const;
+    std::string get_alcohol_type() const;
+    std::string get_timestamp() const;
+    int get_sort_order() const;
+
+    // Methods
+    double standard_drinks() const;
+    double get_alcohol_volume() const;
 };
 
 #endif //BUZZBOT_DRINK_H

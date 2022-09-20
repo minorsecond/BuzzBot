@@ -28,11 +28,11 @@ std::vector<std::set<QString>> MainWindow::generate_filter_item_sets() {
     std::vector<Drink> all_drinks = Database::read(storage);
     rename_duplicate_drink_names(all_drinks);
     for (const auto& drink : all_drinks) {
-        const QString drink_name = QString::fromStdString(drink.name);
-        const QString drink_type = QString::fromStdString(drink.type);
-        const QString drink_subtype = QString::fromStdString(drink.subtype);
-        const QString producer = QString::fromStdString(drink.producer);
-        const QString rating = QString::fromStdString(std::to_string(drink.rating));
+        const QString drink_name = QString::fromStdString(drink.get_name());
+        const QString drink_type = QString::fromStdString(drink.get_type());
+        const QString drink_subtype = QString::fromStdString(drink.get_subtype());
+        const QString producer = QString::fromStdString(drink.get_producer());
+        const QString rating = QString::fromStdString(std::to_string(drink.get_rating()));
 
         drink_names.insert(drink_name);
         drink_types.insert(drink_type);
