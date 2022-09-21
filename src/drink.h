@@ -19,7 +19,8 @@ private:
     std::string producer;
     double abv;
     double ibu;
-    double _size;  // TODO: Rename to size
+    double _size;  // TODO: Remove after moving to size column
+    double size;
     int rating;
     std::string notes;
     int vintage;
