@@ -15,14 +15,6 @@ StandardDrinkCalc::StandardDrinkCalc(const double std_drink_size, const std::str
     this->setFixedSize(275, 175);
     ui.standardDrinksOutput->setText("0");
 
-    ui.stdDrinkInput->setValue(std_drink_size);
-
-    if (units == "Metric") {
-        ui.stdDrinkLabel->setText("1 Std. Drink (ml alcohol)");
-    } else {
-        ui.stdDrinkLabel->setText("1 std. Drink (oz alcohol)");
-    }
-
     connect(ui.abvInput, &QDoubleSpinBox::textChanged, this, &StandardDrinkCalc::abv_changed);
     connect(ui.volumeInput, &QDoubleSpinBox::textChanged, this, &StandardDrinkCalc::volume_changed);
     connect(ui.stdDrinkCalcOkButton, &QPushButton::clicked, this, &StandardDrinkCalc::close);
