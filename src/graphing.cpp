@@ -307,7 +307,7 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
     std::sort(all_drinks.begin(), all_drinks.end(), GraphingCalculations::compare_by_date);
 
 
-    for (Drink all_drink : all_drinks) {
+    for (const Drink all_drink : all_drinks) {
         //date_tmp = parse_date(all_drink.date);
         std::string date_tmp = all_drink.get_date();
 
@@ -327,7 +327,7 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
         }
 
         // Add to the map of dates & std drinks
-        add_std_drinks(date, all_drink.standard_drinks(), date_std_drinks);
+        add_std_drinks(date, all_drink.get_standard_drinks(), date_std_drinks);
     }
 
     add_empty_drinks(first_year, last_year, max_date, min_date, date_std_drinks);

@@ -67,7 +67,7 @@ public:
     int get_sort_order() const;
 
     // Methods
-    double standard_drinks() const;
+    double get_standard_drinks() const;
     double get_alcohol_volume() const;
 };
 

@@ -274,7 +274,7 @@ int Drink::get_sort_order() const {
     return sort_order;
 }
 
-double Drink::standard_drinks() const {
+double Drink::get_standard_drinks() const {
     /*
      * Calculate the number of standard drinks in a drink.
      * 1 Std. drink in the US is .6 oz pure alcohol. In Europe,

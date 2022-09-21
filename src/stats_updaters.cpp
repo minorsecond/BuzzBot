@@ -29,7 +29,7 @@ void MainWindow::update_stat_panel() {
 
     std::cout << "Using std drink size of " << options.std_drink_size << " in stats calculation" << std::endl;
     for (const auto& drink : drinks_this_week) {
-        standard_drinks += drink.standard_drinks();
+        standard_drinks += drink.get_standard_drinks();
     }
 
     if (options.units == "Imperial") {
@@ -59,7 +59,7 @@ void MainWindow::update_stat_panel() {
 void MainWindow::update_drinks_this_week(double standard_drinks, const std::string& weekday_name) {
     /*
      * Update the standard drinks this week output label.
-     * @param standard_drinks: a double denoting the number of standard drinks consumed.
+     * @param get_standard_drinks: a double denoting the number of standard drinks consumed.
      * @param weekday_name: The day the calculation began on.
      */
 
@@ -220,7 +220,7 @@ void MainWindow::update_std_drinks_today() {
     const std::vector<Drink> drinks_today = Database::filter("After Date", query_date, storage);
 
     for (auto& drink : drinks_today) {
-        std_drinks_today += drink.standard_drinks();
+        std_drinks_today += drink.get_standard_drinks();
     }
 
     ui->stdDrinksTodayOutput->setText(QString::fromStdString(Calculate::double_to_string(std_drinks_today)));

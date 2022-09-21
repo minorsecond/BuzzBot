@@ -120,7 +120,7 @@ void MainWindow::update_table() {
         auto *subtype = new QTableWidgetItem(drink.get_subtype().c_str());
         auto *producer = new QTableWidgetItem(drink.get_producer().c_str());
         auto *abv = new QTableWidgetItem(Calculate::double_to_string(drink.get_abv()).c_str());
-        auto *standard_drinks = new QTableWidgetItem(Calculate::double_to_string(drink.standard_drinks()).c_str());
+        auto *standard_drinks = new QTableWidgetItem(Calculate::double_to_string(drink.get_standard_drinks()).c_str());
         auto *rating = new QTableWidgetItem(std::to_string(drink.get_rating()).c_str());
         auto *id = new QTableWidgetItem;
         auto *timestamp = new QTableWidgetItem(drink.get_timestamp().c_str());

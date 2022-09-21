@@ -29,7 +29,7 @@ void StandardDrinkCalc::volume_changed() {
     drink.set_size(ui.volumeInput->value());
     drink.set_abv(ui.abvInput->value());
 
-    const double std_drink {drink.standard_drinks()};
+    const double std_drink {drink.get_standard_drinks()};
     if (std_drink > 0) {
         std::string standard_drinks = Calculate::double_to_string(std_drink);
         ui.standardDrinksOutput->setText(QString::fromStdString(standard_drinks));
@@ -47,7 +47,7 @@ void StandardDrinkCalc::abv_changed() {
     drink.set_size(ui.volumeInput->value());
     drink.set_abv(ui.abvInput->value());
 
-    const double std_drink {drink.standard_drinks()};
+    const double std_drink {drink.get_standard_drinks()};
     if (std_drink > 0) {
         std::string standard_drinks = Calculate::double_to_string(std_drink);
         ui.standardDrinksOutput->setText(QString::fromStdString(standard_drinks));

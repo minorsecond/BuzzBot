@@ -14,7 +14,6 @@ public:
     static std::string get_local_date();
     static std::string get_home_path();
     static double round_to_two_decimal_points(const double &val);
-    static double get_std_drink_size_from_options();
     static double get_std_drink_size();
 };
 

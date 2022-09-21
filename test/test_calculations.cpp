@@ -28,10 +28,10 @@ TEST_CASE("Standard Drinks", "[Drink Calculations]") {
     asahi.set_abv(5.2);
     asahi.set_size(12);
 
-    REQUIRE(mosaic.standard_drinks() == 1.72);
-    REQUIRE(etrwo.standard_drinks() == 1.30);
-    REQUIRE(old_rasputin.standard_drinks() == 1.80);
-    REQUIRE(asahi.standard_drinks() == 1.04);
+    REQUIRE(mosaic.get_standard_drinks() == 1.72);
+    REQUIRE(etrwo.get_standard_drinks() == 1.30);
+    REQUIRE(old_rasputin.get_standard_drinks() == 1.80);
+    REQUIRE(asahi.get_standard_drinks() == 1.04);
 }
 
 TEST_CASE("Oz Alcohol", "[Drink Calculations]") {
