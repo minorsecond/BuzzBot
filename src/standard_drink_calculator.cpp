@@ -15,17 +15,8 @@ StandardDrinkCalc::StandardDrinkCalc(const double std_drink_size, const std::str
     this->setFixedSize(275, 175);
     ui.standardDrinksOutput->setText("0");
 
-    ui.stdDrinkInput->setValue(std_drink_size);
-
-    if (units == "Metric") {
-        ui.stdDrinkLabel->setText("1 Std. Drink (ml alcohol)");
-    } else {
-        ui.stdDrinkLabel->setText("1 std. Drink (oz alcohol)");
-    }
-
     connect(ui.abvInput, &QDoubleSpinBox::textChanged, this, &StandardDrinkCalc::abv_changed);
     connect(ui.volumeInput, &QDoubleSpinBox::textChanged, this, &StandardDrinkCalc::volume_changed);
-    connect(ui.stdDrinkInput, &QDoubleSpinBox::textChanged, this, &StandardDrinkCalc::std_drinks_changed);
     connect(ui.stdDrinkCalcOkButton, &QPushButton::clicked, this, &StandardDrinkCalc::close);
 }
 
@@ -34,12 +25,13 @@ void StandardDrinkCalc::volume_changed() {
      * Calculate standard drinks when volume number changes.
      */
 
-    const double volume = ui.volumeInput->value();
-    const double abv = ui.abvInput->value();
-    const double std_drink = ui.stdDrinkInput->value();
+    Drink drink;
+    drink.set_size(ui.volumeInput->value());
+    drink.set_abv(ui.abvInput->value());
 
+    const double std_drink {drink.get_standard_drinks()};
     if (std_drink > 0) {
-        std::string standard_drinks = Calculate::double_to_string(Calculate::standard_drinks(abv, volume, std_drink));
+        std::string standard_drinks = Calculate::double_to_string(std_drink);
         ui.standardDrinksOutput->setText(QString::fromStdString(standard_drinks));
     } else {
         ui.standardDrinksOutput->setText(QString::fromStdString("Std. Drinks = 0"));
@@ -51,29 +43,13 @@ void StandardDrinkCalc::abv_changed() {
      * Calculate standard drinks when ABV value changes.
      */
 
-    const double abv = ui.abvInput->value();
-    const double volume = ui.volumeInput->value();
-    const double std_drink = ui.stdDrinkInput->value();
+    Drink drink;
+    drink.set_size(ui.volumeInput->value());
+    drink.set_abv(ui.abvInput->value());
 
+    const double std_drink {drink.get_standard_drinks()};
     if (std_drink > 0) {
-        std::string standard_drinks = Calculate::double_to_string(Calculate::standard_drinks(abv, volume, std_drink));
-        ui.standardDrinksOutput->setText(QString::fromStdString(standard_drinks));
-    } else {
-        ui.standardDrinksOutput->setText(QString::fromStdString("Std. Drinks = 0"));
-    }
-}
-
-void StandardDrinkCalc::std_drinks_changed() {
-    /*
-     * Calculate standard drinks when std drink value changes.
-     */
-
-    const double abv = ui.abvInput->value();
-    const double volume = ui.volumeInput->value();
-    const double std_drink = ui.stdDrinkInput->value();
-
-    if (std_drink > 0) {
-        std::string standard_drinks = Calculate::double_to_string(Calculate::standard_drinks(abv, volume, std_drink));
+        std::string standard_drinks = Calculate::double_to_string(std_drink);
         ui.standardDrinksOutput->setText(QString::fromStdString(standard_drinks));
     } else {
         ui.standardDrinksOutput->setText(QString::fromStdString("Std. Drinks = 0"));

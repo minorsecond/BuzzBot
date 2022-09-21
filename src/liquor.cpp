@@ -37,10 +37,10 @@ void MainWindow::update_liquor_fields() {
     rename_duplicate_drink_names(all_liquor);
 
     for (const auto& liquor : all_liquor) {
-        const QString distiller_name = QString::fromStdString(liquor.producer);
-        const QString liquor_type = QString::fromStdString(liquor.type);
-        const QString liquor_subtype = QString::fromStdString(liquor.subtype);
-        const std::string liquor_name = liquor.name;
+        const QString distiller_name = QString::fromStdString(liquor.get_producer());
+        const QString liquor_type = QString::fromStdString(liquor.get_type());
+        const QString liquor_subtype = QString::fromStdString(liquor.get_subtype());
+        const std::string liquor_name = liquor.get_name();
 
         distilleries.insert(distiller_name);
         types.insert(liquor_type);
@@ -93,15 +93,15 @@ void MainWindow::populate_liquor_fields(const Drink& drink_at_row) {
      */
 
     const QDate date = format_date_for_input(drink_at_row);
-    const std::string notes = get_latest_notes(drink_at_row.name);
+    const std::string notes = get_latest_notes(drink_at_row.get_name());
     ui->liquorDateInput->setDate(date);
-    ui->liquorNameInput->setCurrentText(drink_at_row.name.c_str());
-    ui->liquorTypeInput->setCurrentText(drink_at_row.type.c_str());
-    ui->liquorSubtypeInput->setCurrentText(drink_at_row.subtype.c_str());
-    ui->liquorDistillerInput->setCurrentText(drink_at_row.producer.c_str());
-    ui->liquorAbvInput->setValue(drink_at_row.abv);
-    ui->liquorSizeInput->setValue(drink_at_row._size);
-    ui->liquorRatingInput->setValue(drink_at_row.rating);
+    ui->liquorNameInput->setCurrentText(drink_at_row.get_name().c_str());
+    ui->liquorTypeInput->setCurrentText(drink_at_row.get_type().c_str());
+    ui->liquorSubtypeInput->setCurrentText(drink_at_row.get_subtype().c_str());
+    ui->liquorDistillerInput->setCurrentText(drink_at_row.get_producer().c_str());
+    ui->liquorAbvInput->setValue(drink_at_row.get_abv());
+    ui->liquorSizeInput->setValue(drink_at_row.get_size());
+    ui->liquorRatingInput->setValue(drink_at_row.get_rating());
     ui->liquorNotesInput->setText(notes.c_str());
 
     // Switch to the liquor tab
@@ -128,20 +128,20 @@ void MainWindow::update_liquor_types_producers() {
         selected_liquor = Database::get_drink_by_name(storage, "Liquor", input_liquor);
     }
 
-    if (!selected_liquor.id || selected_liquor.id == -1) {
+    if (!selected_liquor.get_id() || selected_liquor.get_id() == -1) {
         clear_fields("Liquor");
     } else {
-        const std::string liquor_type = selected_liquor.type;
-        const std::string liquor_subtype = selected_liquor.subtype;
-        const std::string producer = selected_liquor.producer;
-        const double abv = selected_liquor.abv;
-        double size = selected_liquor._size;
+        const std::string liquor_type = selected_liquor.get_type();
+        const std::string liquor_subtype = selected_liquor.get_subtype();
+        const std::string producer = selected_liquor.get_producer();
+        const double abv = selected_liquor.get_abv();
+        double size = selected_liquor.get_size();
 
         if (options.units == "Metric") {
             size = Calculate::oz_to_ml(size);
         }
 
-        const int rating = selected_liquor.rating;
+        const int rating = selected_liquor.get_rating();
         ui->liquorTypeInput->setCurrentText(QString::fromStdString(liquor_type));
         ui->liquorSubtypeInput->setCurrentText(QString::fromStdString(liquor_subtype));
         ui->liquorDistillerInput->setCurrentText(QString::fromStdString(producer));
@@ -170,18 +170,18 @@ Drink MainWindow::get_liquor_attrs_from_fields(std::string alcohol_type) {
     }
 
     const std::string drink_date = ui->liquorDateInput->date().toString("yyyy-MM-dd").toStdString();
-    drink.date = drink_date;
-    drink.name = drink_name;
-    drink.type = ui->liquorTypeInput->currentText().toStdString();
-    drink.subtype = ui->liquorSubtypeInput->currentText().toStdString();
-    drink.producer = ui->liquorDistillerInput->currentText().toStdString();
-    drink.vintage = -999;
-    drink.abv = ui->liquorAbvInput->value();
-    drink.ibu = -1.0;  // -1 denotes no IBU value
-    drink._size = ui->liquorSizeInput->value();
-    drink.rating = ui->liquorRatingInput->value();
-    drink.notes = ui->liquorNotesInput->toPlainText().toStdString();
-    drink.alcohol_type = std::move(alcohol_type);
+    drink.set_date(drink_date);
+    drink.set_name(drink_name);
+    drink.set_type(ui->liquorTypeInput->currentText().toStdString());
+    drink.set_subtype(ui->liquorSubtypeInput->currentText().toStdString());
+    drink.set_producer(ui->liquorDistillerInput->currentText().toStdString());
+    drink.set_vintage(-999);
+    drink.set_abv(ui->liquorAbvInput->value());
+    drink.set_ibu(-1.0);  // -1 denotes no IBU value
+    drink.set_size(ui->liquorSizeInput->value());
+    drink.set_rating(ui->liquorRatingInput->value());
+    drink.set_notes(ui->liquorNotesInput->toPlainText().toStdString());
+    drink.set_alcohol_type(alcohol_type);
 
     return drink;
 }

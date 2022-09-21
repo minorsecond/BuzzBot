@@ -15,7 +15,6 @@ public:
     static double standard_drinks(const double &abv, const double &amount, const double &std_drink_size);
     static double standard_drinks_remaining(const Options& options, const double &standard_drinks_consumed);
     static double volume_alcohol_remaining(const Options& options, const double &volume_consumed);
-    static double round_to_two_decimal_points(const double &val);
     static std::string favorite_producer(const Storage& storage, const std::string& drink_type);
     static std::string favorite_drink(const Storage& storage, const std::string& drink_type);
     static std::string favorite_type(const Storage& storage, const std::string& drink_type);
