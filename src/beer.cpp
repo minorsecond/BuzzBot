@@ -32,10 +32,10 @@ void MainWindow::update_beer_fields() {
     rename_duplicate_drink_names(all_beers);
 
     for (const auto& beer : all_beers) {
-        const QString brewery_name = QString::fromStdString(beer.producer);
-        const QString beer_type = QString::fromStdString(beer.type);
-        const QString beer_subtype = QString::fromStdString(beer.subtype);
-        const std::string name = beer.name;
+        const QString brewery_name = QString::fromStdString(beer.get_producer());
+        const QString beer_type = QString::fromStdString(beer.get_type());
+        const QString beer_subtype = QString::fromStdString(beer.get_subtype());
+        const std::string name = beer.get_name();
 
         breweries.insert(brewery_name);
         types.insert(beer_type);
@@ -89,17 +89,17 @@ void MainWindow::populate_beer_fields(const Drink& drink_at_row) {
 
     const QDate date = format_date_for_input(drink_at_row);
     // Only update the beer fields if the user is currently on the beer tab
-    const std::string notes = get_latest_notes(drink_at_row.name);
+    const std::string notes = get_latest_notes(drink_at_row.get_name());
     ui->beerDateInput->setDate(date);
-    ui->beerNameInput->setCurrentText(drink_at_row.name.c_str());
-    ui->beerTypeInput->setCurrentText(drink_at_row.type.c_str());
-    ui->beerSubtypeInput->setCurrentText(drink_at_row.subtype.c_str());
-    ui->beerBreweryInput->setCurrentText(drink_at_row.producer.c_str());
-    ui->beerAbvInput->setValue(drink_at_row.abv);
-    ui->beerIbuInput->setValue(drink_at_row.ibu);
-    ui->beerRatingInput->setValue(drink_at_row.rating);
+    ui->beerNameInput->setCurrentText(drink_at_row.get_name().c_str());
+    ui->beerTypeInput->setCurrentText(drink_at_row.get_type().c_str());
+    ui->beerSubtypeInput->setCurrentText(drink_at_row.get_subtype().c_str());
+    ui->beerBreweryInput->setCurrentText(drink_at_row.get_producer().c_str());
+    ui->beerAbvInput->setValue(drink_at_row.get_abv());
+    ui->beerIbuInput->setValue(drink_at_row.get_ibu());
+    ui->beerRatingInput->setValue(drink_at_row.get_rating());
     ui->beerNotesInput->setText(notes.c_str());
-    ui->beerSizeInput->setValue(drink_at_row._size);
+    ui->beerSizeInput->setValue(drink_at_row.get_size());
 
     // Switch to the beer tab
     ui->tabWidget->setCurrentIndex(0);
@@ -121,27 +121,27 @@ void MainWindow::update_beer_types_producers() {
         producer_name = producer_name.substr(0, producer_name.size() - 1);
         const std::string beer_name {input_beer.substr(0, input_beer.find(" -- ("))};
         selected_beer = Database::get_drink_by_name(storage, "Beer", beer_name, producer_name);
-        std::cout << selected_beer.id << std::endl;
+        std::cout << selected_beer.get_id() << std::endl;
     } else {
         selected_beer = Database::get_drink_by_name(storage, "Beer", input_beer);
     }
 
-    if (!selected_beer.id || selected_beer.id == -1) {  // Clear fields if new name
+    if (!selected_beer.get_id() || selected_beer.get_id() == -1) {  // Clear fields if new name
         clear_fields("Beer");
         ui->beerIbuInput->setValue(-1);
     } else {
-        const std::string beer_type = selected_beer.type;
-        const std::string beer_subtype = selected_beer.subtype;
-        const std::string brewery = selected_beer.producer;
-        const double abv = selected_beer.abv;
-        const double ibu = selected_beer.ibu;
-        double size = selected_beer._size;
+        const std::string beer_type = selected_beer.get_type();
+        const std::string beer_subtype = selected_beer.get_subtype();
+        const std::string brewery = selected_beer.get_producer();
+        const double abv = selected_beer.get_abv();
+        const double ibu = selected_beer.get_ibu();
+        double size = selected_beer.get_size();
 
         if (options.units == "Metric") {
             size = Calculate::oz_to_ml(size);
         }
 
-        const int rating = selected_beer.rating;
+        const int rating = selected_beer.get_rating();
         ui->beerTypeInput->setCurrentText(QString::fromStdString(beer_type));
         ui->beerSubtypeInput->setCurrentText(QString::fromStdString(beer_subtype));
         ui->beerBreweryInput->setCurrentText(QString::fromStdString(brewery));
@@ -170,19 +170,19 @@ Drink MainWindow::get_beer_attrs_from_fields(std::string alcohol_type) {
     }
 
     const std::string drink_date = ui->beerDateInput->date().toString("yyyy-MM-dd").toStdString();
-    drink.date = drink_date;
-    drink.name = drink_name;
-    drink.type = ui->beerTypeInput->currentText().toStdString();
-    drink.subtype = ui->beerSubtypeInput->currentText().toStdString();
-    drink.producer = ui->beerBreweryInput->currentText().toStdString();
-    drink.vintage = -999;
-    drink.ibu = ui->beerIbuInput->value();
-    std::cout << "IBU: " << drink.ibu << std::endl;
-    drink.abv = ui->beerAbvInput->value();
-    drink._size = ui->beerSizeInput->value();
-    drink.rating = ui->beerRatingInput->value();
-    drink.notes = ui->beerNotesInput->toPlainText().toStdString();
-    drink.alcohol_type = std::move(alcohol_type);
+    drink.set_date(drink_date);
+    drink.set_name(drink_name);;
+    drink.set_type(ui->beerTypeInput->currentText().toStdString());
+    drink.set_subtype(ui->beerSubtypeInput->currentText().toStdString());
+    drink.set_producer(ui->beerBreweryInput->currentText().toStdString());
+    drink.set_vintage(-999);
+    drink.set_ibu(ui->beerIbuInput->value());
+    std::cout << "IBU: " << drink.get_ibu() << std::endl;
+    drink.set_abv(ui->beerAbvInput->value());
+    drink.set_size(ui->beerSizeInput->value());
+    drink.set_rating(ui->beerRatingInput->value());
+    drink.set_notes(ui->beerNotesInput->toPlainText().toStdString());
+    drink.set_alcohol_type(alcohol_type);
 
     return drink;
 }

@@ -6,8 +6,8 @@
 ### Build Status
 | Branch  | macOS Build Status                                                                                                                      | Linux Build Status                                                                                                        | Code Review                                                                                                                                                                                                                 |
 |---------|-----------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| master  | [![Actions Status](https://github.com/minorsecond/BuzzBot/workflows/Master/badge.svg)](https://github.com/minorsecond/BuzzBot/actions)  | [![Build Status](https://ci.wardrup.me/buildStatus/icon?job=BuzzBot-master)](https://ci.wardrup.me/job/BuzzBot-Develop/)  | [![CodeFactor](https://www.codefactor.io/repository/github/minorsecond/buzzbot/badge/master?s=7d0189852bedaddcb41bc7579892f35d6cca05b3)](https://www.codefactor.io/repository/github/minorsecond/buzzbot/overview/master)   |
-| develop | [![Actions Status](https://github.com/minorsecond/BuzzBot/workflows/Develop/badge.svg)](https://github.com/minorsecond/BuzzBot/actions) | [![Build Status](https://ci.wardrup.me/buildStatus/icon?job=BuzzBot-Develop)](https://ci.wardrup.me/job/BuzzBot-Develop/) | [![CodeFactor](https://www.codefactor.io/repository/github/minorsecond/buzzbot/badge/develop?s=7d0189852bedaddcb41bc7579892f35d6cca05b3)](https://www.codefactor.io/repository/github/minorsecond/buzzbot/overview/develop) |
+| master  | [![Actions Status](https://github.com/minorsecond/BuzzBot/workflows/Master/badge.svg)](https://github.com/minorsecond/BuzzBot/actions)  | [![Build Status](https://ci.wardrup.me/buildStatus/icon?job=BuzzBot-MasterPRMerge)](https://ci.wardrup.me/job/BuzzBot-MasterPRMerge/)  | [![CodeFactor](https://www.codefactor.io/repository/github/minorsecond/buzzbot/badge/master?s=7d0189852bedaddcb41bc7579892f35d6cca05b3)](https://www.codefactor.io/repository/github/minorsecond/buzzbot/overview/master)   |
+| develop | [![Actions Status](https://github.com/minorsecond/BuzzBot/workflows/Develop/badge.svg)](https://github.com/minorsecond/BuzzBot/actions) | [![Build Status](https://ci.wardrup.me/buildStatus/icon?job=BuzzBot-DevelopPRMerge)](https://ci.wardrup.me/job/BuzzBot-DevelopPRMerge/) | [![CodeFactor](https://www.codefactor.io/repository/github/minorsecond/buzzbot/badge/develop?s=7d0189852bedaddcb41bc7579892f35d6cca05b3)](https://www.codefactor.io/repository/github/minorsecond/buzzbot/overview/develop) |
 
 ### Keep track of:
 - Your favorite drinks
@@ -22,7 +22,7 @@
 - `cd BuzzBot`
 - `mkdir build && cd build`
 - `cmake ..`
-- `cmake --build . --target BuzzBot`
+- `cmake --build . --target BuzzBot`. If you want to run tests, run `cmake --build . --target functions_test`.
 - If you're running macOS, you'll have a `BuzzBot.app` file in the `build` directory.
 - If you're running Linux, you can install the app in `~/.local/bin` by running `cmake --install .`. 
 The app should then be available in your app menu.
@@ -34,5 +34,5 @@ The app should then be available in your app menu.
     - Boost 1.79 or greater
     - Sqlite3
     - Catch2 (3.0 or greater)
-- CLion is the preferred IDE, but you can obviously use anything
-- Please run unit tests after making your changes. A CI system is in place to protect against bad PRs but you will save yourself time by doing so
+- CLion is the preferred IDE, but you can obviously use anything.
+- Please run unit tests after making your changes. A CI system is in place to protect against bad PRs but you will save yourself time by doing so.

@@ -3,7 +3,9 @@
 //
 
 #include "utilities.h"
+#include "drink_standards.h"
 #include <sstream>
+#include <cmath>
 #ifdef __linux
     #include <chrono>
     #include <boost/format.hpp>
@@ -63,4 +65,31 @@ std::string utilities::get_local_date() {
 
 std::string utilities::get_home_path() {
     return std::getenv("HOME");
+}
+
+double utilities::round_to_two_decimal_points(const double &val) {
+    /*
+     * Round a double to two decimal points.
+     * @param val: The value that should be rounded.
+     */
+
+    return floor((val * 100) + .5)/100;
+}
+
+double utilities::get_std_drink_size() {
+    /*
+     * Get standard drink size from either options or map.
+     * @return: Standard drink size
+     */
+
+    Options options;
+    double standard_drink_size {0.0};
+
+    if (options.std_drink_country == "Custom") {
+        standard_drink_size = std::stod(options.std_drink_size);
+    } else {
+        standard_drink_size = std_drink_standards.find(options.std_drink_country)->second;
+    }
+
+    return standard_drink_size;
 }

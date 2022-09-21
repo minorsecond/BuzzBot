@@ -41,33 +41,33 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
     output_csv << "ID\n";
 
     for (const auto& drink : drinks) {
-        const std::string ibu = (drink.ibu == -1) ? "" : std::to_string(drink.ibu);
-        const std::string vintage = (drink.vintage == -999) ? "" : std::to_string(drink.vintage);
+        const std::string ibu = (drink.get_ibu() == -1) ? "" : std::to_string(drink.get_ibu());
+        const std::string vintage = (drink.get_vintage() == -999) ? "" : std::to_string(drink.get_vintage());
 
-        const std::string drink_name = '"' + drink.name + '"';
-        const std::string drink_type = '"' + drink.type + '"';
-        const std::string drink_subtype = '"' + drink.subtype + '"';
-        const std::string drink_producer = '"' + drink.producer + '"';
-        const std::string drink_notes = '"' + drink.notes + '"';
+        const std::string drink_name = '"' + drink.get_name() + '"';
+        const std::string drink_type = '"' + drink.get_type() + '"';
+        const std::string drink_subtype = '"' + drink.get_subtype() + '"';
+        const std::string drink_producer = '"' + drink.get_producer() + '"';
+        const std::string drink_notes = '"' + drink.get_notes() + '"';
 
         // Convert size to ml if metric option is selected
-        const std::string size = (units == "Metric") ? std::to_string(Calculate::oz_to_ml(drink._size)) :
-                std::to_string(drink._size);
+        const std::string size = (units == "Metric") ? std::to_string(Calculate::oz_to_ml(drink.get_size())) :
+                std::to_string(drink.get_size());
 
-        output_csv << drink.date + ",";
+        output_csv << drink.get_date() + ",";
         output_csv << drink_name + ",";
         output_csv << drink_type + ",";
         output_csv << drink_subtype + ",";
         output_csv << drink_producer + ",";
         output_csv << vintage + ",";
-        output_csv << std::to_string(drink.abv) + ",";
+        output_csv << std::to_string(drink.get_abv()) + ",";
         output_csv << ibu + ",";
         output_csv << size + ",";
-        output_csv << std::to_string(drink.rating) + ",";
+        output_csv << std::to_string(drink.get_rating()) + ",";
         output_csv << drink_notes + ",";
-        output_csv << drink.alcohol_type + ",";
-        output_csv << drink.timestamp + ",";
-        output_csv << std::to_string(drink.id) + "\n";
+        output_csv << drink.get_alcohol_type() + ",";
+        output_csv << drink.get_timestamp() + ",";
+        output_csv << std::to_string(drink.get_id()) + "\n";
     }
 
     output_csv.close();
