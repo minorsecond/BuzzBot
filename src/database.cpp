@@ -244,8 +244,7 @@ int Database::get_version(Storage storage) { // NOLINT(performance-unnecessary-v
 
 int Database::increment_version(Storage storage, int current_version) {
     /*
-     * Increment database version to current version. This is used to implement
-     * database changes in place across versions
+     * Increment database version to current version.
      * @param storage: A storage instance.
      * @param current_version: The version that the DB should be incremented to.
      * @return: An integer denoting new DB version, straight from the DB.
@@ -253,14 +252,11 @@ int Database::increment_version(Storage storage, int current_version) {
 
     std::cout << "Using DB version " << storage.pragma.user_version() << std::endl;
     const int version = get_version(storage);
-    if (version < 8 && current_version == 9) {  //version 9 implements the new size column and version 10 will remove the _size column
+    if (version < 8 && current_version == 8) {
         std::cout << "*** Upgrading DB from version " << storage.pragma.user_version() <<  " to " << current_version << std::endl;
 
-        if (version != 0) {
-            std::cout << "Not dropping _size column until db version 10." << std::endl;
-            /* TODO: At DB version 10, we will want to copy all values of _size to size column and then drop _size.
-             * It will be necessary to update code in mainwindow.cpp (and probably elsewhere) to then use this new
-             * size column.*/
+        if (version != 0) {  // DB will be version 0 if app is a new install, so table will not be called beers.
+            storage.rename_table("beers", "drinks");
         }
     }
     // Set to new version number
