@@ -53,10 +53,10 @@ add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cp
         src/standard_drink_calculator.cpp src/standard_drink_calculator.h src/confirm_dialog.cpp src/confirm_dialog.h
         src/graphing.cpp src/graphing.h include/qcustomplot.h include/qcustomplot.cpp
         src/table_manipulation.cpp src/stats_updaters.cpp src/utilities.cpp src/utilities.h src/drink.h
-        src/graphing_calculations.h src/graphing_calculations.cpp src/options.h src/drink.cpp src/drink_standards.h)
+        src/graphing_calculations.h src/graphing_calculations.cpp src/options.h src/drink.cpp src/drink_standards.h src/drink_standards.cpp)
 add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h
         test/test_database_functions.cpp test/test_calculations.cpp test/test_graph_calculations.cpp
-        src/utilities.cpp src/utilities.h src/drink.h src/graphing_calculations.h src/graphing_calculations.cpp src/options.h src/drink.cpp src/drink_standards.h)
+        src/utilities.cpp src/utilities.h src/drink.h src/graphing_calculations.h src/graphing_calculations.cpp src/options.h src/drink.cpp src/drink_standards.h src/drink_standards.cpp)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     message("Building debug")
