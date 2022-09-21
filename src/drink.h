@@ -6,6 +6,8 @@
 #define BUZZBOT_DRINK_H
 
 #include <string>
+#include "utilities.h"
+#include "options.h"
 
 class Drink {
 private:
@@ -63,6 +65,10 @@ public:
     std::string get_alcohol_type() const;
     std::string get_timestamp() const;
     int get_sort_order() const;
+
+    // Methods
+    double standard_drinks() const;
+    double get_alcohol_volume() const;
 };
 
 #endif //BUZZBOT_DRINK_H

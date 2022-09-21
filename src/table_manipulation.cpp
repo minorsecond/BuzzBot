@@ -25,11 +25,11 @@ void MainWindow::update_selected_row(QItemSelectionModel* select, Drink entered_
         std::cout << "Updating row " << row_to_update << " Timestamp: " << timestamp << std::endl;
 
         // Update the variables in the drink struct
-        entered_drink.id = row_to_update;
-        entered_drink.timestamp = timestamp;
+        entered_drink.set_id(row_to_update);
+        entered_drink.set_timestamp(timestamp);
 
         if (options.units == "Metric") {
-            entered_drink._size = Calculate::ml_to_oz(entered_drink._size);
+            entered_drink.set_size(Calculate::ml_to_oz(entered_drink.get_size()));
         }
 
         Database::update(storage, entered_drink);
@@ -44,11 +44,11 @@ void MainWindow::add_new_row(Drink entered_drink) {
 
     // New row. Get a new timestamp
     std::string timestamp = storage.select(sqlite_orm::datetime("now")).front();
-    entered_drink.timestamp = timestamp;
+    entered_drink.set_timestamp(timestamp);
 
     // Convert ml to oz
     if (options.units == "Metric") {
-        entered_drink._size = Calculate::ml_to_oz(entered_drink._size);
+        entered_drink.set_size(Calculate::ml_to_oz(entered_drink.get_size()));
     }
     Database::write(entered_drink, storage);
 }
@@ -108,27 +108,26 @@ void MainWindow::update_table() {
     Database::sort_by_date_id(drinks);
 
     ui->drinkLogTable->setRowCount(0);
-    for (const auto& drink : drinks) {
+    for (const Drink& drink : drinks) {
         // These don't need to be deleted. The table widget takes ownership of these pointers and
         // will delete them as needed.
-        const double std_drinks {Calculate::standard_drinks(drink.abv, drink._size, std::stod(options.std_drink_size))};
         int table_row_num = ui->drinkLogTable->rowCount();
         ui->drinkLogTable->insertRow(table_row_num);
-        QDate date = QDate::fromString(QString::fromStdString(drink.date), "yyyy-MM-dd");
+        QDate date = QDate::fromString(QString::fromStdString(drink.get_date()), "yyyy-MM-dd");
         auto *date_qtw = new QTableWidgetItem;
-        auto *name = new QTableWidgetItem(drink.name.c_str());
-        auto *type = new QTableWidgetItem(drink.type.c_str());
-        auto *subtype = new QTableWidgetItem(drink.subtype.c_str());
-        auto *producer = new QTableWidgetItem(drink.producer.c_str());
-        auto *abv = new QTableWidgetItem(Calculate::double_to_string(drink.abv).c_str());
-        auto *standard_drinks = new QTableWidgetItem(Calculate::double_to_string(std_drinks).c_str());
-        auto *rating = new QTableWidgetItem(std::to_string(drink.rating).c_str());
+        auto *name = new QTableWidgetItem(drink.get_name().c_str());
+        auto *type = new QTableWidgetItem(drink.get_type().c_str());
+        auto *subtype = new QTableWidgetItem(drink.get_subtype().c_str());
+        auto *producer = new QTableWidgetItem(drink.get_producer().c_str());
+        auto *abv = new QTableWidgetItem(Calculate::double_to_string(drink.get_abv()).c_str());
+        auto *standard_drinks = new QTableWidgetItem(Calculate::double_to_string(drink.standard_drinks()).c_str());
+        auto *rating = new QTableWidgetItem(std::to_string(drink.get_rating()).c_str());
         auto *id = new QTableWidgetItem;
-        auto *timestamp = new QTableWidgetItem(drink.timestamp.c_str());
-        auto *sort_order =  new QTableWidgetItem(drink.sort_order);
+        auto *timestamp = new QTableWidgetItem(drink.get_timestamp().c_str());
+        auto *sort_order =  new QTableWidgetItem(drink.get_sort_order());
 
         // Calculate & Display size
-        double drink_size = drink._size;
+        double drink_size = drink.get_size();
         if (options.units == "Metric") {
             drink_size = Calculate::oz_to_ml(drink_size);
 
@@ -138,14 +137,14 @@ void MainWindow::update_table() {
         auto *size = new QTableWidgetItem(Calculate::double_to_string(drink_size).c_str());
 
         // Sort ID numerically
-        id->setData(Qt::DisplayRole, drink.id);
-        sort_order->setData(Qt::DisplayRole, drink.sort_order);
+        id->setData(Qt::DisplayRole, drink.get_id());
+        sort_order->setData(Qt::DisplayRole, drink.get_sort_order());
         date_qtw->setData(Qt::DisplayRole, date);
 
-        std::string notes = drink.notes;
+        std::string notes = drink.get_notes();
 
         // Handle blank IBU
-        auto *ibu = (drink.ibu == -1.0) ? new QTableWidgetItem("") : new QTableWidgetItem(Calculate::double_to_string(drink.ibu).c_str());
+        auto *ibu = (drink.get_ibu() == -1.0) ? new QTableWidgetItem("") : new QTableWidgetItem(Calculate::double_to_string(drink.get_ibu()).c_str());
 
         ui->drinkLogTable->setItem(table_row_num, 0, date_qtw);
         ui->drinkLogTable->setItem(table_row_num, 1, name);
@@ -208,7 +207,7 @@ Drink MainWindow::get_drink_at_selected_row() {
         selected_drink = Database::read_row(row_to_get, storage);
 
         if (options.units == "Metric") {
-            selected_drink._size = Calculate::oz_to_ml(selected_drink._size);
+            selected_drink.set_size(Calculate::oz_to_ml(selected_drink.get_size()));
         }
     }
     return selected_drink;
@@ -225,10 +224,10 @@ std::string MainWindow::get_latest_notes(const std::string& name) {
 
     // First, try to get notes at the selected row
     Drink drink = get_drink_at_selected_row();
-    notes = drink.notes;
+    notes = drink.get_notes();
 
     // Only run if notes are empty, or if the selected drink's alcohol type doesn't match that of the current tab
-    if (notes.empty() || drink.alcohol_type != get_current_tab()) {
+    if (notes.empty() || drink.get_alcohol_type() != get_current_tab()) {
         // Get latest notes entered for the selected drink
         if (ui->tabWidget->currentIndex() == 0) {  // Update beer notes
             notes = Database::get_latest_notes(storage, name, "Beer");

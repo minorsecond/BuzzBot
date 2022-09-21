@@ -273,3 +273,31 @@ int Drink::get_sort_order() const {
      */
     return sort_order;
 }
+
+double Drink::standard_drinks() const {
+    /*
+     * Calculate the number of standard drinks in a drink.
+     * 1 Std. drink in the US is .6 oz pure alcohol. In Europe,
+     * it's 17.5 ml pure alcohol. These two measurements are
+     * roughly the same.
+     * @param abv: the alcohol by volume of the drink.
+     * @param amount: the amount of drink in the container.
+     * @param std_drink_size: the size of the standard drink, in the same unit as amount.
+     */
+
+    Options options;
+    const double alcohol_amt = get_alcohol_volume();
+    const double std_drink_size {utilities::get_std_drink_size()};
+
+    return utilities::round_to_two_decimal_points(alcohol_amt / std_drink_size);
+}
+
+double Drink::get_alcohol_volume() const {
+    /*
+     * Calculate the volume of alcohol in a drink.
+     * @param abv: The alcohol by volume of the drink.
+     * @param amount: The amount of drink in the container.
+     */
+
+    return (abv/100)*_size;
+}
