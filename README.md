@@ -17,6 +17,24 @@
 - Average ABV & IBU per drink
 - Drink notes
 
+---------
+
+<p align="center">
+BuzzBot on KDE Plasma
+
+![BuzzBot on KDE](res/buzzbot_kde.png?raw=true)
+
+</p>
+
+<p align="center">
+BuzzBot on macOS
+
+![BuzzBot on macOS](res/buzzbot_macOS.png?raw=true)
+</p>
+
+
+---------
+
 ### Installation instructions
 - `git clone https://github.com/minorsecond/BuzzBot.git`
 - `cd BuzzBot`
