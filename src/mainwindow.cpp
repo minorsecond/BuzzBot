@@ -589,20 +589,16 @@ Drink MainWindow::get_drink_attributes_from_fields() {
      * @return drink: A Drink instance containing user-input data.
      */
 
-    Drink drink;
-
     // Size values are converted to/from ml and oz in add_new_row()
     if (const std::string alcohol_type {get_current_tab()}; alcohol_type == "Beer") {
-        drink = get_beer_attrs_from_fields(alcohol_type);
+        return get_beer_attrs_from_fields(alcohol_type);
     } else if (alcohol_type == "Liquor") {
-        drink = get_liquor_attrs_from_fields(alcohol_type);
+        return get_liquor_attrs_from_fields(alcohol_type);
     } else if (alcohol_type == "Wine") {
-        drink = get_wine_attrs_from_fields(alcohol_type);
+        return get_wine_attrs_from_fields(alcohol_type);
     } else {
         std::cout << "Somehow got illegal alcohol type." << std::endl;
     }
-
-    return drink;
 }
 
 QDate MainWindow::format_date_for_input(const Drink& drink) {

@@ -33,6 +33,37 @@ private:
     friend auto initStorage(const std::string& file_name, int db_version);
 
 public:
+    explicit Drink(int id,
+          std::string date,
+          std::string name,
+          std::string type,
+          std::string subtype,
+          std::string producer,
+          double abv,
+          double ibu,
+          double size,
+          int rating,
+          std::string notes,
+          int vintage,
+          std::string alcohol_type,
+          std::string timestamp,
+          int sort_order):
+          id(id),
+          date(date),
+          name(name),
+          type(type),
+          subtype(subtype),
+          producer(producer),
+          abv(abv),
+          ibu(ibu),
+          size(size),
+          rating(rating),
+          notes(notes),
+          vintage(vintage),
+          alcohol_type(alcohol_type),
+          timestamp(timestamp),
+          sort_order(sort_order){}
+
     // Setters
     void set_id(const int &in_id);
     void set_date(const std::string &in_date);
