@@ -26,6 +26,7 @@ public:
     static bool compare_strings(std::string lhs, std::string rhs);
     static int weekly_limit(const Options& options);
     static int days_in_row(Storage &storage);
+    static bool equal_double(const double a, const double b);
 
 private:
     static void decrement_day(std::tm &date);
