@@ -325,4 +325,53 @@ void UserSettings::set_day_of_week_setting_state(const Options& options) {
     }
 }
 
+void UserSettings::set_custom_database_status(bool db_status) {
+    /*
+     * Sets the DB customize status
+     * @param db_status: Bool - true if using custom DB, else false
+     * @return: None
+     */
+
+    if (db_status) {  // Custom location
+        ui.defaultLocationRadioBtn->setChecked(false);
+        ui.customLocationRadioBtn->setChecked(true);
+    } else {
+        ui.defaultLocationRadioBtn->setChecked(true);
+        ui.customLocationRadioBtn->setChecked(false);
+    }
+}
+
+void UserSettings::set_database_path(const std::string &db_path) {
+    /*
+     * Sets the DB path input box according to the DB path
+     * @param db_path: string denoting DB path
+     */
+
+    ui.dbLocationTextInput->setText(QString::fromStdString(db_path));
+}
+
+bool UserSettings::get_custom_database_status() {
+    /*
+     * Get database status from pref pane
+     * @param: None
+     * @return: Bool - true if custom DB path, else false
+     */
+
+    if (ui.customLocationRadioBtn->isChecked()) {
+        return true;
+    }
+
+    return false;
+}
+
+std::string UserSettings::get_database_path() {
+    /*
+     * Get DB path from pref pane
+     * @param: None
+     * @return: String denoting DB path
+     */
+
+    return ui.dbLocationTextInput->text().toStdString();
+}
+
 // LCOV_EXCL_STOP

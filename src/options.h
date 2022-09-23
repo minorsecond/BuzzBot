@@ -8,6 +8,8 @@
 #include <string>
 
 struct Options {
+    bool custom_database{false};
+    bool database_path{""}; // To be set once app is first run, as it is OS dependent
     std::string sex = "male";
     std::string date_calculation_method = "Fixed";
     std::string weekday_start = "Sunday";
