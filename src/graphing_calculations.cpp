@@ -130,9 +130,7 @@ int GraphingCalculations::date_from_week_num(const std::string& week_num) {
 
     struct tm tm{};
     const std::string week_num_tmp {week_num + "-1"};
-    auto week_char = std::make_unique<char[]>(week_num_tmp.length() + 1);
-    strcpy(week_char.get(), week_num_tmp.c_str());
-    strptime(week_char.get(), "%Y-%W-%w", &tm);
+    strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
 
     std::string year {std::to_string(tm.tm_year +1900)};
     std::string month {std::to_string(tm.tm_mon + 1)};
