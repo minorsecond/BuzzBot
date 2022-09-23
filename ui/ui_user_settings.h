@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'user_settings.ui'
 **
-** Created by: Qt User Interface Compiler version 6.0.0
+** Created by: Qt User Interface Compiler version 6.2.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -21,6 +21,7 @@
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpacerItem>
@@ -29,10 +30,18 @@
 
 QT_BEGIN_NAMESPACE
 
-class Ui_userSettingsDialog
-{
+class Ui_userSettingsDialog {
 public:
     QGridLayout *gridLayout_2;
+    QFrame *frame_4;
+    QGridLayout *gridLayout_9;
+    QGroupBox *unitsGroup;
+    QGridLayout *gridLayout_10;
+    QRadioButton *metricRadioButton;
+    QRadioButton *imperialRadioButton;
+    QFrame *frame_3;
+    QGridLayout *gridLayout_8;
+    QPushButton *clearDataButton;
     QFrame *frame;
     QGridLayout *gridLayout_5;
     QGroupBox *sexGroup;
@@ -70,25 +79,64 @@ public:
     QLabel *label;
     QSpacerItem *verticalSpacer;
     QSpacerItem *verticalSpacer_6;
-    QFrame *frame_4;
-    QGridLayout *gridLayout_9;
-    QGroupBox *unitsGroup;
-    QGridLayout *gridLayout_10;
-    QRadioButton *metricRadioButton;
-    QRadioButton *imperialRadioButton;
     QDialogButtonBox *userSettingsButtonBox;
-    QFrame *frame_3;
-    QGridLayout *gridLayout_8;
-    QPushButton *clearDataButton;
+    QGroupBox *groupBox;
+    QGridLayout *gridLayout_12;
+    QLineEdit *dbLocationTextInput;
+    QRadioButton *defaultLocationRadioBtn;
+    QRadioButton *customLocationRadioBtn;
+    QPushButton *dbLocationBrowseButton;
 
-    void setupUi(QDialog *userSettingsDialog)
-    {
+    void setupUi(QDialog *userSettingsDialog) {
         if (userSettingsDialog->objectName().isEmpty())
             userSettingsDialog->setObjectName(QString::fromUtf8("userSettingsDialog"));
-        userSettingsDialog->resize(885, 398);
+        userSettingsDialog->resize(885, 541);
         userSettingsDialog->setModal(true);
         gridLayout_2 = new QGridLayout(userSettingsDialog);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        frame_4 = new QFrame(userSettingsDialog);
+        frame_4->setObjectName(QString::fromUtf8("frame_4"));
+        frame_4->setFrameShape(QFrame::StyledPanel);
+        frame_4->setFrameShadow(QFrame::Raised);
+        gridLayout_9 = new QGridLayout(frame_4);
+        gridLayout_9->setObjectName(QString::fromUtf8("gridLayout_9"));
+        unitsGroup = new QGroupBox(frame_4);
+        unitsGroup->setObjectName(QString::fromUtf8("unitsGroup"));
+        unitsGroup->setAlignment(Qt::AlignCenter);
+        unitsGroup->setFlat(true);
+        gridLayout_10 = new QGridLayout(unitsGroup);
+        gridLayout_10->setObjectName(QString::fromUtf8("gridLayout_10"));
+        metricRadioButton = new QRadioButton(unitsGroup);
+        metricRadioButton->setObjectName(QString::fromUtf8("metricRadioButton"));
+
+        gridLayout_10->addWidget(metricRadioButton, 1, 0, 1, 1);
+
+        imperialRadioButton = new QRadioButton(unitsGroup);
+        imperialRadioButton->setObjectName(QString::fromUtf8("imperialRadioButton"));
+        imperialRadioButton->setChecked(true);
+
+        gridLayout_10->addWidget(imperialRadioButton, 0, 0, 1, 1);
+
+
+        gridLayout_9->addWidget(unitsGroup, 0, 0, 1, 1);
+
+
+        gridLayout_2->addWidget(frame_4, 2, 0, 1, 1);
+
+        frame_3 = new QFrame(userSettingsDialog);
+        frame_3->setObjectName(QString::fromUtf8("frame_3"));
+        frame_3->setFrameShape(QFrame::StyledPanel);
+        frame_3->setFrameShadow(QFrame::Raised);
+        gridLayout_8 = new QGridLayout(frame_3);
+        gridLayout_8->setObjectName(QString::fromUtf8("gridLayout_8"));
+        clearDataButton = new QPushButton(frame_3);
+        clearDataButton->setObjectName(QString::fromUtf8("clearDataButton"));
+
+        gridLayout_8->addWidget(clearDataButton, 0, 1, 1, 1);
+
+
+        gridLayout_2->addWidget(frame_3, 3, 0, 1, 1);
+
         frame = new QFrame(userSettingsDialog);
         frame->setObjectName(QString::fromUtf8("frame"));
         frame->setFrameShape(QFrame::StyledPanel);
@@ -284,69 +332,63 @@ public:
         horizontalLayout->addLayout(verticalLayout_5);
 
 
-        gridLayout_2->addLayout(horizontalLayout, 0, 2, 4, 1);
-
-        frame_4 = new QFrame(userSettingsDialog);
-        frame_4->setObjectName(QString::fromUtf8("frame_4"));
-        frame_4->setFrameShape(QFrame::StyledPanel);
-        frame_4->setFrameShadow(QFrame::Raised);
-        gridLayout_9 = new QGridLayout(frame_4);
-        gridLayout_9->setObjectName(QString::fromUtf8("gridLayout_9"));
-        unitsGroup = new QGroupBox(frame_4);
-        unitsGroup->setObjectName(QString::fromUtf8("unitsGroup"));
-        unitsGroup->setAlignment(Qt::AlignCenter);
-        unitsGroup->setFlat(true);
-        gridLayout_10 = new QGridLayout(unitsGroup);
-        gridLayout_10->setObjectName(QString::fromUtf8("gridLayout_10"));
-        metricRadioButton = new QRadioButton(unitsGroup);
-        metricRadioButton->setObjectName(QString::fromUtf8("metricRadioButton"));
-
-        gridLayout_10->addWidget(metricRadioButton, 1, 0, 1, 1);
-
-        imperialRadioButton = new QRadioButton(unitsGroup);
-        imperialRadioButton->setObjectName(QString::fromUtf8("imperialRadioButton"));
-        imperialRadioButton->setChecked(true);
-
-        gridLayout_10->addWidget(imperialRadioButton, 0, 0, 1, 1);
-
-
-        gridLayout_9->addWidget(unitsGroup, 0, 0, 1, 1);
-
-
-        gridLayout_2->addWidget(frame_4, 1, 0, 1, 1);
+        gridLayout_2->addLayout(horizontalLayout, 0, 2, 5, 1);
 
         userSettingsButtonBox = new QDialogButtonBox(userSettingsDialog);
         userSettingsButtonBox->setObjectName(QString::fromUtf8("userSettingsButtonBox"));
         userSettingsButtonBox->setOrientation(Qt::Vertical);
-        userSettingsButtonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        userSettingsButtonBox->setStandardButtons(QDialogButtonBox::Cancel | QDialogButtonBox::Ok);
 
         gridLayout_2->addWidget(userSettingsButtonBox, 0, 3, 1, 1);
 
-        frame_3 = new QFrame(userSettingsDialog);
-        frame_3->setObjectName(QString::fromUtf8("frame_3"));
-        frame_3->setFrameShape(QFrame::StyledPanel);
-        frame_3->setFrameShadow(QFrame::Raised);
-        gridLayout_8 = new QGridLayout(frame_3);
-        gridLayout_8->setObjectName(QString::fromUtf8("gridLayout_8"));
-        clearDataButton = new QPushButton(frame_3);
-        clearDataButton->setObjectName(QString::fromUtf8("clearDataButton"));
+        groupBox = new QGroupBox(userSettingsDialog);
+        groupBox->setObjectName(QString::fromUtf8("groupBox"));
+        groupBox->setMinimumSize(QSize(0, 0));
+        groupBox->setAlignment(Qt::AlignCenter);
+        gridLayout_12 = new QGridLayout(groupBox);
+        gridLayout_12->setObjectName(QString::fromUtf8("gridLayout_12"));
+        dbLocationTextInput = new QLineEdit(groupBox);
+        dbLocationTextInput->setObjectName(QString::fromUtf8("dbLocationTextInput"));
+        dbLocationTextInput->setEnabled(false);
+        dbLocationTextInput->setClearButtonEnabled(false);
 
-        gridLayout_8->addWidget(clearDataButton, 0, 1, 1, 1);
+        gridLayout_12->addWidget(dbLocationTextInput, 2, 0, 1, 1);
+
+        defaultLocationRadioBtn = new QRadioButton(groupBox);
+        defaultLocationRadioBtn->setObjectName(QString::fromUtf8("defaultLocationRadioBtn"));
+        defaultLocationRadioBtn->setChecked(true);
+
+        gridLayout_12->addWidget(defaultLocationRadioBtn, 0, 0, 1, 1);
+
+        customLocationRadioBtn = new QRadioButton(groupBox);
+        customLocationRadioBtn->setObjectName(QString::fromUtf8("customLocationRadioBtn"));
+
+        gridLayout_12->addWidget(customLocationRadioBtn, 1, 0, 1, 1);
+
+        dbLocationBrowseButton = new QPushButton(groupBox);
+        dbLocationBrowseButton->setObjectName(QString::fromUtf8("dbLocationBrowseButton"));
+
+        gridLayout_12->addWidget(dbLocationBrowseButton, 2, 1, 1, 1);
 
 
-        gridLayout_2->addWidget(frame_3, 2, 0, 1, 1);
+        gridLayout_2->addWidget(groupBox, 1, 0, 1, 1);
 
 
         retranslateUi(userSettingsDialog);
-        QObject::connect(userSettingsButtonBox, &QDialogButtonBox::accepted, userSettingsDialog, &QDialog::accept);
-        QObject::connect(userSettingsButtonBox, &QDialogButtonBox::rejected, userSettingsDialog, &QDialog::reject);
+        QObject::connect(userSettingsButtonBox, &QDialogButtonBox::accepted, userSettingsDialog,
+                         qOverload<>(&QDialog::accept));
+        QObject::connect(userSettingsButtonBox, &QDialogButtonBox::rejected, userSettingsDialog,
+                         qOverload<>(&QDialog::reject));
 
         QMetaObject::connectSlotsByName(userSettingsDialog);
     } // setupUi
 
-    void retranslateUi(QDialog *userSettingsDialog)
-    {
+    void retranslateUi(QDialog *userSettingsDialog) {
         userSettingsDialog->setWindowTitle(QCoreApplication::translate("userSettingsDialog", "User Settings", nullptr));
+        unitsGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Units", nullptr));
+        metricRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Metric (ml)", nullptr));
+        imperialRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Imperial (oz)", nullptr));
+        clearDataButton->setText(QCoreApplication::translate("userSettingsDialog", "Clear Data", nullptr));
         sexGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Sex", nullptr));
         maleSelection->setText(QCoreApplication::translate("userSettingsDialog", "Male", nullptr));
         femaleSelection->setText(QCoreApplication::translate("userSettingsDialog", "Female", nullptr));
@@ -369,10 +411,11 @@ public:
         niaaaStandardsRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "CDC/NIAAA", nullptr));
         customLimitLabel->setText(QCoreApplication::translate("userSettingsDialog", "Custom Limit* :", nullptr));
         label->setText(QCoreApplication::translate("userSettingsDialog", "* Standard drinks", nullptr));
-        unitsGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Units", nullptr));
-        metricRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Metric (ml)", nullptr));
-        imperialRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Imperial (oz)", nullptr));
-        clearDataButton->setText(QCoreApplication::translate("userSettingsDialog", "Clear Data", nullptr));
+        groupBox->setTitle(QCoreApplication::translate("userSettingsDialog", "Database Location", nullptr));
+        defaultLocationRadioBtn->setText(
+                QCoreApplication::translate("userSettingsDialog", "Default location", nullptr));
+        customLocationRadioBtn->setText(QCoreApplication::translate("userSettingsDialog", "Custom location", nullptr));
+        dbLocationBrowseButton->setText(QCoreApplication::translate("userSettingsDialog", "Browse", nullptr));
     } // retranslateUi
 
 };
