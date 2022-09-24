@@ -7,6 +7,7 @@
 #include "database.h"
 #include <iostream>
 #include <regex>
+#include <filesystem>
 
 // LCOV_EXCL_START
 UserSettings::UserSettings(const Options& options, const std::map<std::string, double>& country_info) {
@@ -381,14 +382,25 @@ bool UserSettings::get_custom_database_status() {
     return false;
 }
 
-std::string UserSettings::get_database_path() {
+std::string UserSettings::get_database_path(bool custom_db) {
     /*
      * Get DB path from pref pane
      * @param: None
      * @return: String denoting DB get_db_path
      */
 
-    return ui.dbLocationTextInput->text().toStdString();
+    Options options;  // Reads options from FS
+    std::string full_path{};
+    if (!custom_db) {
+        // Find get_db_path to application support directory
+        const std::string directory{utilities::get_application_data_path()};
+        full_path = directory + "/buzzbot.db";
+        std::filesystem::create_directory(directory);
+    } else {  // Custom DB get_db_path
+        full_path = ui.dbLocationTextInput->text().toStdString();
+    }
+
+    return full_path;
 }
 
 void UserSettings::clicked_browse_db_path() {

@@ -362,10 +362,11 @@ void MainWindow::open_user_settings() {
     user_settings.setModal(true);
     std::string std_drink_size = options.std_drink_size;
 
-    const bool current_custom_db_setting{options.custom_database};
     const std::string current_db_path_setting{options.database_path};
+    bool custom_db {options.custom_database};
 
     if (user_settings.exec() == QDialog::Accepted) {  // Update settings when OK button is clicked
+        custom_db = user_settings.get_custom_database_status();
         options.sex = user_settings.get_sex();
         options.date_calculation_method = user_settings.get_date_calculation_method();
         options.weekday_start = user_settings.get_weekday_start();
@@ -374,10 +375,14 @@ void MainWindow::open_user_settings() {
         options.units = user_settings.get_units();
         std_drink_size = Calculate::double_to_string(user_settings.get_std_drink_size());
         options.std_drink_country = user_settings.get_std_drink_country();
-        options.custom_database = user_settings.get_custom_database_status();
-        options.database_path = user_settings.get_database_path();
+        options.custom_database = custom_db;
+        options.database_path = user_settings.get_database_path(custom_db);//user_settings.get_database_path();
         update_stat_panel();
     }
+
+    //options.path is getting set when moving to a custom db path, but not when moving from custom to std.
+    //path being passed into move_db still contains the default path and it's trying to copy a non existing
+    // file into itself
 
     if (options.units == "Metric") {
         ui->beerSizeLabel->setText("Size (ml)");
@@ -397,7 +402,7 @@ void MainWindow::open_user_settings() {
     update_types_and_producers();
     if (current_db_path_setting != options.database_path) {
         // User changed DB get_db_path settings
-        if (Database::move_db(options.custom_database) == 1) {
+        if (Database::move_db(options.custom_database,  current_db_path_setting, options.database_path) == 1) {
             // TODO: Something bad happened when trying to move DB file. Raise an error window.
         } else { // Prompt user to reopen app and close automatically (else it will crash)
             ConfirmDialog close_dialog("Moved DB");

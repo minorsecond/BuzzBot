@@ -37,7 +37,7 @@ public:
 
     bool get_custom_database_status();
 
-    std::string get_database_path();
+    std::string get_database_path(bool custom_db);
 
     int populate_country_cbox(const std::map<std::string, double> &country_info);
 

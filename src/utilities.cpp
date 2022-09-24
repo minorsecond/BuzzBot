@@ -6,6 +6,7 @@
 #include "options.h"
 #include "utilities.h"
 #include "drink_standards.h"
+#include "usersettings.h"
 #include <QStandardPaths>
 #include <cmath>
 #include <fstream>

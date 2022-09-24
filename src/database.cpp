@@ -302,56 +302,35 @@ void Database::sort_by_date_id(std::vector<Drink> &drinks) {
 }
 
 
-int Database::move_db(bool from_std_path) {
+int Database::move_db(bool from_std_path, const std::string &current_path, const std::string& new_path) {
     /*
      * Move DB file if user selects a new get_db_path option.
      * @param: None
      * @return: 0 if move is successful, else 1
      */
 
-
-    Options options;  // Reads options from FS
-    const std::string custom_path{options.database_path};
     const std::string std_path{utilities::get_application_data_path() + "/buzzbot.db"};
 
-    if (from_std_path) {
-        try {
-            if (utilities::file_exists(custom_path)) {
-                std::filesystem::remove(custom_path);
-            }
-            if (utilities::file_exists(std_path + ".bak")) {
-                std::filesystem::remove(std_path + ".bak");
-            }
-            std::filesystem::copy(std_path, std_path + ".bak");
-            std::filesystem::copy(std_path, custom_path);
-            if (utilities::file_exists(custom_path)) {
-                std::filesystem::remove(std_path);
-            }
-            return 0;
-        } catch (std::filesystem::filesystem_error &e) {
-            std::cout << e.what() << std::endl;
-            std::cout << "Restoring backup!" << std::endl;
-            std::filesystem::copy(std_path + ".bak", std_path);
+    if (utilities::file_exists(std_path + ".bak")) {
+        std::filesystem::remove(std_path + ".bak");
+    }
+
+    std::filesystem::copy(current_path, std_path + ".bak");
+
+    try {
+        if (utilities::file_exists(new_path)) {
+            std::filesystem::remove(new_path);
         }
-    } else { // Moving from custom path back to standard get_db_path
-        try {
-            if (utilities::file_exists(std_path)) {
-                std::filesystem::remove(std_path);
-            }
-            if (utilities::file_exists(std_path + ".bak")) {
-                std::filesystem::remove(std_path + ".bak");
-            }
-            std::filesystem::copy(custom_path, std_path + ".bak");
-            std::filesystem::copy(custom_path, std_path);
-            if (utilities::file_exists(std_path)) {
-                std::filesystem::remove(custom_path);
-            }
-            return 0;
-        } catch (std::filesystem::filesystem_error &e) {
-            std::cout << e.what() << std::endl;
-            std::cout << "Restoring backup!" << std::endl;
-            std::filesystem::copy(std_path + ".bak", custom_path);
+
+        std::filesystem::copy(current_path, new_path);
+        if (utilities::file_exists(current_path)) {
+            std::filesystem::remove(current_path);
         }
+        return 0;
+    } catch (std::filesystem::filesystem_error &e) {
+        std::cout << e.what() << std::endl;
+        std::cout << "Restoring backup!" << std::endl;
+        std::filesystem::copy(std_path + ".bak", std_path);
     }
 
     return 1;
