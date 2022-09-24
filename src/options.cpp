@@ -9,7 +9,7 @@
 #include <string>
 #include <filesystem>
 
-int Options::write_options() {
+int Options::write_options() const {
     /*
      * Read or write to/from the settings file.
      * @param sex: Sex of user.

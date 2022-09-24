@@ -25,7 +25,7 @@ public:
     Options();
 
 // Methods
-    int write_options();
+    int write_options() const;
 };
 
 
