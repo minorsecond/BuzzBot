@@ -374,6 +374,8 @@ void MainWindow::open_user_settings() {
         options.units = user_settings.get_units();
         std_drink_size = Calculate::double_to_string(user_settings.get_std_drink_size());
         options.std_drink_country = user_settings.get_std_drink_country();
+        options.custom_database = user_settings.get_custom_database_status();
+        options.database_path = user_settings.get_database_path();
         update_stat_panel();
     }
 
@@ -393,6 +395,7 @@ void MainWindow::open_user_settings() {
     update_table();
     update_stat_panel();
     update_types_and_producers();
+    // TODO: Update the DB path here
     std::cout << "Custom standard drink size: " << std_drink_size << std::endl;
 }
 

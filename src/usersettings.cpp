@@ -67,6 +67,7 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
     ui.clearDataButton->setPalette(pal);
     ui.clearDataButton->update();
 
+
     update_std_drink_size_label();
 
     // Connections
@@ -75,6 +76,7 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
     connect(ui.niaaaStandardsRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_limit_setting);
     connect(ui.customLimitRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_limit_setting);
     connect(ui.clearDataButton, &QPushButton::clicked, this, &UserSettings::clicked_clear_data);
+    connect(ui.dbLocationBrowseButton, &QPushButton::clicked, this, &UserSettings::clicked_browse_db_path);
     connect(ui.imperialRadioButton, &QRadioButton::clicked, this, &UserSettings::update_std_drink_size_label);
     connect(ui.metricRadioButton, &QRadioButton::clicked, this, &UserSettings::update_std_drink_size_label);
     connect(ui.stdDrinkDefComboBox, QOverload<int>::of(&QComboBox::activated), this, &UserSettings::std_drink_country_changed);
@@ -372,6 +374,23 @@ std::string UserSettings::get_database_path() {
      */
 
     return ui.dbLocationTextInput->text().toStdString();
+}
+
+std::string UserSettings::clicked_browse_db_path() {
+    /*
+     * Action for when user clicks the DB browse button.
+     * @param: None
+     * @return: None
+     */
+
+    const QString desktop_path = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0);
+    const QString preferred_path = desktop_path + "/buzzbot.db";
+
+    QString filter = "SQLite Files (*.db)";
+    const QString filepath_qstring = QFileDialog::getSaveFileName(nullptr, "Save File",
+                                                                  preferred_path, filter, &filter);
+
+    return filepath_qstring.toStdString();
 }
 
 // LCOV_EXCL_STOP
