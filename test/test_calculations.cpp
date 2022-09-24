@@ -119,7 +119,7 @@ TEST_CASE("Mean ABV", "[Drink Calculations]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -192,7 +192,7 @@ TEST_CASE("Mean IBU", "[Drink Calculations]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -266,7 +266,7 @@ TEST_CASE("Favorite Brewery", "[Favorite Calculations]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -340,7 +340,7 @@ TEST_CASE("Favorite Drink", "[Favorite Calculations]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -414,7 +414,7 @@ TEST_CASE("Favorite Type", "[Favorite Calculations]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;

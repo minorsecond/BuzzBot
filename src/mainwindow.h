@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <QtWidgets/QMainWindow>
 #include "database.h"
 #include "../include/qcustomplot.h"
 #include "../ui/ui_mainwindow.h"
