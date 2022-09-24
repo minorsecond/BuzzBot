@@ -61,7 +61,7 @@ private slots:
 
     static void clicked_clear_data();
 
-    static std::string clicked_browse_db_path();
+    void clicked_browse_db_path();
 
     void update_std_drink_size_label();
 

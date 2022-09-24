@@ -170,7 +170,7 @@ void UserSettings::clicked_clear_data() {
 
     ConfirmDialog confirmation_dialog = ConfirmDialog("Clear Data");
     if (confirmation_dialog.exec() == QDialog::Accepted) {
-        Storage storage = initStorage(Database::path(), Database::db_version);
+        Storage storage = initStorage(utilities::get_db_path(), Database::db_version);
         Database::truncate(storage);
         std::cout << "*** Truncated the database ***" << std::endl;
     }
@@ -346,7 +346,7 @@ void UserSettings::set_custom_database_status(bool db_status) {
 void UserSettings::set_database_path(const std::string &db_path) {
     /*
      * Sets the DB path input box according to the DB path
-     * @param db_path: string denoting DB path
+     * @param db_path: string denoting DB get_db_path
      */
 
     ui.dbLocationTextInput->setText(QString::fromStdString(db_path));
@@ -356,7 +356,7 @@ bool UserSettings::get_custom_database_status() {
     /*
      * Get database status from pref pane
      * @param: None
-     * @return: Bool - true if custom DB path, else false
+     * @return: Bool - true if custom DB get_db_path, else false
      */
 
     if (ui.customLocationRadioBtn->isChecked()) {
@@ -370,13 +370,13 @@ std::string UserSettings::get_database_path() {
     /*
      * Get DB path from pref pane
      * @param: None
-     * @return: String denoting DB path
+     * @return: String denoting DB get_db_path
      */
 
     return ui.dbLocationTextInput->text().toStdString();
 }
 
-std::string UserSettings::clicked_browse_db_path() {
+void UserSettings::clicked_browse_db_path() {
     /*
      * Action for when user clicks the DB browse button.
      * @param: None
@@ -389,8 +389,7 @@ std::string UserSettings::clicked_browse_db_path() {
     QString filter = "SQLite Files (*.db)";
     const QString filepath_qstring = QFileDialog::getSaveFileName(nullptr, "Save File",
                                                                   preferred_path, filter, &filter);
-
-    return filepath_qstring.toStdString();
+    ui.dbLocationTextInput->setText(filepath_qstring);
 }
 
 // LCOV_EXCL_STOP

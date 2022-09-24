@@ -36,10 +36,6 @@ MainWindow::MainWindow(QWidget *parent)
     // Select entire row vs just a cell
     ui->drinkLogTable->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    // Read options and create if the file doesn't exist
-    program_options(false);
-    program_options(true);
-
     // Change unit text depending on settings
     if (options.units == "Metric") {
         ui->volAlcoholRemainingLabel->setText("ml. Alcohol Remaining:");
@@ -365,6 +361,10 @@ void MainWindow::open_user_settings() {
     UserSettings user_settings = UserSettings(options, std_drink_standards);
     user_settings.setModal(true);
     std::string std_drink_size = options.std_drink_size;
+
+    const bool current_custom_db_setting{options.custom_database};
+    const std::string current_db_path_setting{options.database_path};
+
     if (user_settings.exec() == QDialog::Accepted) {  // Update settings when OK button is clicked
         options.sex = user_settings.get_sex();
         options.date_calculation_method = user_settings.get_date_calculation_method();
@@ -391,95 +391,17 @@ void MainWindow::open_user_settings() {
         options.std_drink_size = std_drink_size;
     }
 
-    program_options(true);
+    this->options.write_options();
     update_table();
     update_stat_panel();
     update_types_and_producers();
-    // TODO: Update the DB path here
-    std::cout << "Custom standard drink size: " << std_drink_size << std::endl;
-}
-
-std::string MainWindow::settings_path() {
-    /*
-     * Find database path and create it if it doesn't exist.
-     * @return full_path Path where database file should be stored.
-     */
-
-    // Find path to application support directory
-    const std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
-    const std::string settings_path = directory + "/buzzbot_settings.conf";
-    std::filesystem::create_directory(directory);
-
-    return settings_path;
-}
-
-void MainWindow::program_options(bool write) {
-    /*
-     * Read or write to/from the settings file.
-     * @param sex: Sex of user.
-     * @param write: Boolean denoting whether function should write to the file or not.
-     * If false, assume should read.
-     */
-
-    std::string path = settings_path();
-    std::string read_sex;
-
-    if (write) {
-        std::cout << "Writing user settings to " << path << std::endl;
-        const std::string sex_setting = "sex:" + options.sex;
-        const std::string start_day = "start_day:" + options.weekday_start;
-        const std::string date_calculation_method = "date_calculation_method:" + options.date_calculation_method;
-        const std::string limit_standard = "limit_standard:" + options.limit_standard;
-        const std::string weekly_limit = "custom_weekly_limit:" + std::to_string(options.weekly_limit);
-        const std::string units = "units:" + options.units;
-        const std::string std_drink_size = "std_drink_size:" + options.std_drink_size;
-        const std::string std_drink_country = "std_drink_country:" + options.std_drink_country;
-        std::ofstream out_data;
-
-        if (!out_data) {
-            std::cerr << "Error: settings file could not be opened." << std::endl;  // TODO: Raise error window
-            exit(1);
-        }
-
-        out_data.open(path);
-        out_data << sex_setting + '\n';
-        out_data << start_day + '\n';
-        out_data << date_calculation_method + '\n';
-        out_data << limit_standard + '\n';
-        out_data << weekly_limit + '\n';
-        out_data << units + '\n';
-        out_data << std_drink_size + '\n';
-        out_data << std_drink_country + '\n';
-        out_data.close();
-    } else {
-        std::cout << "Reading user settings from " << path << std::endl;
-        int line_counter = 0;
-        // Read from the file
-        std::string line;
-        std::ifstream options_file(path);
-        if (options_file.is_open()) {
-            while (std::getline(options_file, line)) {
-                if (line_counter == 0) {  // First line should be sex
-                    options.sex = line.substr(line.find(':') + 1);
-                } else if (line_counter == 1) { // Second line should be week start day
-                    options.weekday_start = line.substr(line.find(':') + 1);
-                } else if (line_counter == 2) { // Third line should be the date calculation method
-                    options.date_calculation_method = line.substr(line.find(':') + 1);
-                } else if (line_counter == 3) { // Fourth line should be limit standard setting
-                    options.limit_standard = line.substr(line.find(':') + 1);
-                } else if (line_counter == 4) { // Fifth line should be the weekly limit that is custom set
-                    options.weekly_limit = std::stoi(line.substr(line.find(':') + 1));
-                } else if (line_counter == 5) { // Sixth line should be the selected units, either Metric or Imperial
-                    options.units = line.substr(line.find(':') + 1);
-                } else if (line_counter == 6) { // Seventh line should be the std drink size (stored in oz)
-                    options.std_drink_size = line.substr(line.find(':') + 1);
-                } else if (line_counter == 7) { // Eigth line should be the std drink country
-                    options.std_drink_country = line.substr(line.find(':') + 1);
-                }
-                line_counter += 1;
-            }
+    if (current_db_path_setting != options.database_path) {
+        // User changed DB get_db_path settings
+        if (Database::move_db(!options.custom_database) == 1) {
+            // TODO: Something bad happened when trying to move DB file. Raise an error window.
         }
     }
+    std::cout << "Custom standard drink size: " << std_drink_size << std::endl;
 }
 
 void MainWindow::update_types_and_producers() {
@@ -778,7 +700,7 @@ void MainWindow::open_graphs() {
      * Create graphs of drink data.
      */
 
-    const std::string db_path = Database::path();
+    const std::string db_path = utilities::get_db_path();
     const std::vector<Drink> all_drinks = Database::read(storage);
     const double std_drink_size = get_std_drink_size_from_options();
     auto *graphing_window = new Graphing(all_drinks, std_drink_size, options);

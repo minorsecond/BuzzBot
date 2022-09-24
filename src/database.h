@@ -11,12 +11,7 @@ inline auto initStorage(const std::string& file_name, int db_version) {
      * Initialize the DB
      */
 
-    std::string table_name = "beers";
-    // Set table name based on DB version
-    if (db_version > 7) {
-        table_name = "drinks";
-    }
-
+    const std::string table_name = "drinks";
     return sqlite_orm::make_storage(file_name,
                                     sqlite_orm::make_table(table_name,
                                                           sqlite_orm::make_column("id", &Drink::id, sqlite_orm::autoincrement(), sqlite_orm::primary_key()),
@@ -63,7 +58,7 @@ private:
     static void populate_size_field();
 
 public:
-    static std::string path();
+    static int move_db(bool from_std_path);
 };
 
 #endif // DATABASE_H

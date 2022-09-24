@@ -34,7 +34,7 @@ About::About() {
     const CFStringRef mac_path = CFURLCopyFileSystemPath(app_url_ref, kCFURLPOSIXPathStyle);
     const QString icon_path_qstring = CFStringGetCStringPtr(mac_path, CFStringGetSystemEncoding());
 
-    // Set path to icon
+    // Set get_db_path to icon
     const std::string icon_path = icon_path_qstring.toStdString() + "/Contents/Resources/mini-icon.png";
     CFRelease(app_url_ref);
     CFRelease(mac_path);
