@@ -3,6 +3,7 @@
 //
 
 #include "../src/database.h"
+#include "../src/calculate.h"
 #include <cstdio>
 #include <iostream>
 #include <sys/stat.h>
@@ -286,7 +287,7 @@ TEST_CASE("Read Row", "[DB Functions]") {
 
     REQUIRE(mosaic_read.get_id() == 2);
     REQUIRE(mosaic_read.get_name() == "Mosaic");
-    REQUIRE(mosaic.get_abv() == 8.4);
+    REQUIRE(Calculate::equal_double(mosaic.get_abv(), 8.4));
     REQUIRE(etrwo_read.get_id() == 1);
     REQUIRE(etrwo_read.get_ibu() == 60.0);
     REQUIRE(etrwo_read.get_notes() == "Very good hazy IPA.");

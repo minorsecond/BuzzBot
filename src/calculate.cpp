@@ -339,3 +339,14 @@ void Calculate::decrement_day(std::tm &date) {
     date.tm_mon = search_date->tm_mon;
     date.tm_mday = search_date->tm_mday;
 }
+
+bool Calculate::equal_double(const double a, const double b) {
+    /*
+     * Compare two floats.
+     * @param a: Float A
+     * @param b: Float B
+     * @return: Boolean denoting whether a == b
+     */
+
+    return fabs(a - b) < std::numeric_limits<double>::epsilon();
+}
