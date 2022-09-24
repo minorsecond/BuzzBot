@@ -30,15 +30,10 @@
 
 QT_BEGIN_NAMESPACE
 
-class Ui_userSettingsDialog {
+class Ui_userSettingsDialog
+{
 public:
     QGridLayout *gridLayout_2;
-    QFrame *frame_4;
-    QGridLayout *gridLayout_9;
-    QGroupBox *unitsGroup;
-    QGridLayout *gridLayout_10;
-    QRadioButton *metricRadioButton;
-    QRadioButton *imperialRadioButton;
     QFrame *frame_3;
     QGridLayout *gridLayout_8;
     QPushButton *clearDataButton;
@@ -56,8 +51,8 @@ public:
     QGridLayout *gridLayout;
     QLabel *weekdayStartLabel;
     QComboBox *weekdayStartInput;
-    QRadioButton *fixedDateRadioButton;
     QRadioButton *rollingDateRadioButton;
+    QRadioButton *fixedDateRadioButton;
     QSpacerItem *verticalSpacer_2;
     QFrame *frame_5;
     QGridLayout *gridLayout_11;
@@ -69,60 +64,39 @@ public:
     QVBoxLayout *verticalLayout_5;
     QFrame *weeklyLimitFrame;
     QGridLayout *gridLayout_7;
+    QLabel *label;
     QGroupBox *weeklyLimitGroup;
     QGridLayout *gridLayout_6;
-    QRadioButton *customLimitRadioButton;
     QRadioButton *niaaaStandardsRadioButton;
-    QSpacerItem *verticalSpacer_3;
-    QSpinBox *customLimitSpinBox;
     QLabel *customLimitLabel;
-    QLabel *label;
+    QSpinBox *customLimitSpinBox;
+    QRadioButton *customLimitRadioButton;
+    QSpacerItem *verticalSpacer_3;
     QSpacerItem *verticalSpacer;
     QSpacerItem *verticalSpacer_6;
-    QDialogButtonBox *userSettingsButtonBox;
+    QFrame *frame_4;
+    QGridLayout *gridLayout_9;
+    QGroupBox *unitsGroup;
+    QGridLayout *gridLayout_10;
+    QRadioButton *metricRadioButton;
+    QRadioButton *imperialRadioButton;
     QGroupBox *groupBox;
     QGridLayout *gridLayout_12;
     QLineEdit *dbLocationTextInput;
+    QPushButton *dbLocationBrowseButton;
     QRadioButton *defaultLocationRadioBtn;
     QRadioButton *customLocationRadioBtn;
-    QPushButton *dbLocationBrowseButton;
+    QVBoxLayout *verticalLayout_2;
+    QDialogButtonBox *userSettingsButtonBox;
 
-    void setupUi(QDialog *userSettingsDialog) {
+    void setupUi(QDialog *userSettingsDialog)
+    {
         if (userSettingsDialog->objectName().isEmpty())
             userSettingsDialog->setObjectName(QString::fromUtf8("userSettingsDialog"));
-        userSettingsDialog->resize(885, 541);
+        userSettingsDialog->resize(1010, 807);
         userSettingsDialog->setModal(true);
         gridLayout_2 = new QGridLayout(userSettingsDialog);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
-        frame_4 = new QFrame(userSettingsDialog);
-        frame_4->setObjectName(QString::fromUtf8("frame_4"));
-        frame_4->setFrameShape(QFrame::StyledPanel);
-        frame_4->setFrameShadow(QFrame::Raised);
-        gridLayout_9 = new QGridLayout(frame_4);
-        gridLayout_9->setObjectName(QString::fromUtf8("gridLayout_9"));
-        unitsGroup = new QGroupBox(frame_4);
-        unitsGroup->setObjectName(QString::fromUtf8("unitsGroup"));
-        unitsGroup->setAlignment(Qt::AlignCenter);
-        unitsGroup->setFlat(true);
-        gridLayout_10 = new QGridLayout(unitsGroup);
-        gridLayout_10->setObjectName(QString::fromUtf8("gridLayout_10"));
-        metricRadioButton = new QRadioButton(unitsGroup);
-        metricRadioButton->setObjectName(QString::fromUtf8("metricRadioButton"));
-
-        gridLayout_10->addWidget(metricRadioButton, 1, 0, 1, 1);
-
-        imperialRadioButton = new QRadioButton(unitsGroup);
-        imperialRadioButton->setObjectName(QString::fromUtf8("imperialRadioButton"));
-        imperialRadioButton->setChecked(true);
-
-        gridLayout_10->addWidget(imperialRadioButton, 0, 0, 1, 1);
-
-
-        gridLayout_9->addWidget(unitsGroup, 0, 0, 1, 1);
-
-
-        gridLayout_2->addWidget(frame_4, 2, 0, 1, 1);
-
         frame_3 = new QFrame(userSettingsDialog);
         frame_3->setObjectName(QString::fromUtf8("frame_3"));
         frame_3->setFrameShape(QFrame::StyledPanel);
@@ -135,7 +109,7 @@ public:
         gridLayout_8->addWidget(clearDataButton, 0, 1, 1, 1);
 
 
-        gridLayout_2->addWidget(frame_3, 3, 0, 1, 1);
+        gridLayout_2->addWidget(frame_3, 4, 0, 1, 1);
 
         frame = new QFrame(userSettingsDialog);
         frame->setObjectName(QString::fromUtf8("frame"));
@@ -153,18 +127,18 @@ public:
         maleSelection->setObjectName(QString::fromUtf8("maleSelection"));
         maleSelection->setChecked(true);
 
-        gridLayout_4->addWidget(maleSelection, 0, 0, 1, 1);
+        gridLayout_4->addWidget(maleSelection, 1, 0, 1, 1);
 
         femaleSelection = new QRadioButton(sexGroup);
         femaleSelection->setObjectName(QString::fromUtf8("femaleSelection"));
 
-        gridLayout_4->addWidget(femaleSelection, 1, 0, 1, 1);
+        gridLayout_4->addWidget(femaleSelection, 2, 0, 1, 1);
 
 
-        gridLayout_5->addWidget(sexGroup, 0, 0, 1, 1);
+        gridLayout_5->addWidget(sexGroup, 1, 0, 1, 1);
 
 
-        gridLayout_2->addWidget(frame, 0, 0, 1, 1);
+        gridLayout_2->addWidget(frame, 1, 0, 1, 1);
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
@@ -199,16 +173,16 @@ public:
 
         gridLayout->addWidget(weekdayStartInput, 5, 0, 1, 1);
 
-        fixedDateRadioButton = new QRadioButton(dateCalculationGroup);
-        fixedDateRadioButton->setObjectName(QString::fromUtf8("fixedDateRadioButton"));
-
-        gridLayout->addWidget(fixedDateRadioButton, 1, 0, 1, 1);
-
         rollingDateRadioButton = new QRadioButton(dateCalculationGroup);
         rollingDateRadioButton->setObjectName(QString::fromUtf8("rollingDateRadioButton"));
         rollingDateRadioButton->setChecked(true);
 
         gridLayout->addWidget(rollingDateRadioButton, 0, 0, 1, 1);
+
+        fixedDateRadioButton = new QRadioButton(dateCalculationGroup);
+        fixedDateRadioButton->setObjectName(QString::fromUtf8("fixedDateRadioButton"));
+
+        gridLayout->addWidget(fixedDateRadioButton, 1, 0, 1, 1);
 
         verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -271,6 +245,12 @@ public:
         weeklyLimitFrame->setFrameShadow(QFrame::Raised);
         gridLayout_7 = new QGridLayout(weeklyLimitFrame);
         gridLayout_7->setObjectName(QString::fromUtf8("gridLayout_7"));
+        label = new QLabel(weeklyLimitFrame);
+        label->setObjectName(QString::fromUtf8("label"));
+        label->setAlignment(Qt::AlignCenter);
+
+        gridLayout_7->addWidget(label, 1, 0, 1, 1);
+
         weeklyLimitGroup = new QGroupBox(weeklyLimitFrame);
         weeklyLimitGroup->setObjectName(QString::fromUtf8("weeklyLimitGroup"));
         weeklyLimitGroup->setToolTipDuration(-1);
@@ -278,19 +258,15 @@ public:
         weeklyLimitGroup->setFlat(true);
         gridLayout_6 = new QGridLayout(weeklyLimitGroup);
         gridLayout_6->setObjectName(QString::fromUtf8("gridLayout_6"));
-        customLimitRadioButton = new QRadioButton(weeklyLimitGroup);
-        customLimitRadioButton->setObjectName(QString::fromUtf8("customLimitRadioButton"));
-
-        gridLayout_6->addWidget(customLimitRadioButton, 2, 0, 1, 1);
-
         niaaaStandardsRadioButton = new QRadioButton(weeklyLimitGroup);
         niaaaStandardsRadioButton->setObjectName(QString::fromUtf8("niaaaStandardsRadioButton"));
 
         gridLayout_6->addWidget(niaaaStandardsRadioButton, 1, 0, 1, 1);
 
-        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        customLimitLabel = new QLabel(weeklyLimitGroup);
+        customLimitLabel->setObjectName(QString::fromUtf8("customLimitLabel"));
 
-        gridLayout_6->addItem(verticalSpacer_3, 6, 0, 1, 1);
+        gridLayout_6->addWidget(customLimitLabel, 7, 0, 1, 1);
 
         customLimitSpinBox = new QSpinBox(weeklyLimitGroup);
         customLimitSpinBox->setObjectName(QString::fromUtf8("customLimitSpinBox"));
@@ -303,19 +279,17 @@ public:
 
         gridLayout_6->addWidget(customLimitSpinBox, 8, 0, 1, 1);
 
-        customLimitLabel = new QLabel(weeklyLimitGroup);
-        customLimitLabel->setObjectName(QString::fromUtf8("customLimitLabel"));
+        customLimitRadioButton = new QRadioButton(weeklyLimitGroup);
+        customLimitRadioButton->setObjectName(QString::fromUtf8("customLimitRadioButton"));
 
-        gridLayout_6->addWidget(customLimitLabel, 7, 0, 1, 1);
+        gridLayout_6->addWidget(customLimitRadioButton, 2, 0, 1, 1);
+
+        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_6->addItem(verticalSpacer_3, 6, 0, 1, 1);
 
 
         gridLayout_7->addWidget(weeklyLimitGroup, 0, 0, 1, 1);
-
-        label = new QLabel(weeklyLimitFrame);
-        label->setObjectName(QString::fromUtf8("label"));
-        label->setAlignment(Qt::AlignCenter);
-
-        gridLayout_7->addWidget(label, 1, 0, 1, 1);
 
         verticalSpacer = new QSpacerItem(20, 55, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -332,14 +306,36 @@ public:
         horizontalLayout->addLayout(verticalLayout_5);
 
 
-        gridLayout_2->addLayout(horizontalLayout, 0, 2, 5, 1);
+        gridLayout_2->addLayout(horizontalLayout, 1, 1, 5, 1);
 
-        userSettingsButtonBox = new QDialogButtonBox(userSettingsDialog);
-        userSettingsButtonBox->setObjectName(QString::fromUtf8("userSettingsButtonBox"));
-        userSettingsButtonBox->setOrientation(Qt::Vertical);
-        userSettingsButtonBox->setStandardButtons(QDialogButtonBox::Cancel | QDialogButtonBox::Ok);
+        frame_4 = new QFrame(userSettingsDialog);
+        frame_4->setObjectName(QString::fromUtf8("frame_4"));
+        frame_4->setFrameShape(QFrame::StyledPanel);
+        frame_4->setFrameShadow(QFrame::Raised);
+        gridLayout_9 = new QGridLayout(frame_4);
+        gridLayout_9->setObjectName(QString::fromUtf8("gridLayout_9"));
+        unitsGroup = new QGroupBox(frame_4);
+        unitsGroup->setObjectName(QString::fromUtf8("unitsGroup"));
+        unitsGroup->setAlignment(Qt::AlignCenter);
+        unitsGroup->setFlat(true);
+        gridLayout_10 = new QGridLayout(unitsGroup);
+        gridLayout_10->setObjectName(QString::fromUtf8("gridLayout_10"));
+        metricRadioButton = new QRadioButton(unitsGroup);
+        metricRadioButton->setObjectName(QString::fromUtf8("metricRadioButton"));
 
-        gridLayout_2->addWidget(userSettingsButtonBox, 0, 3, 1, 1);
+        gridLayout_10->addWidget(metricRadioButton, 1, 0, 1, 1);
+
+        imperialRadioButton = new QRadioButton(unitsGroup);
+        imperialRadioButton->setObjectName(QString::fromUtf8("imperialRadioButton"));
+        imperialRadioButton->setChecked(true);
+
+        gridLayout_10->addWidget(imperialRadioButton, 0, 0, 1, 1);
+
+
+        gridLayout_9->addWidget(unitsGroup, 0, 0, 1, 1);
+
+
+        gridLayout_2->addWidget(frame_4, 3, 0, 1, 1);
 
         groupBox = new QGroupBox(userSettingsDialog);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
@@ -352,42 +348,50 @@ public:
         dbLocationTextInput->setEnabled(false);
         dbLocationTextInput->setClearButtonEnabled(false);
 
-        gridLayout_12->addWidget(dbLocationTextInput, 2, 0, 1, 1);
+        gridLayout_12->addWidget(dbLocationTextInput, 2, 1, 1, 1);
+
+        dbLocationBrowseButton = new QPushButton(groupBox);
+        dbLocationBrowseButton->setObjectName(QString::fromUtf8("dbLocationBrowseButton"));
+
+        gridLayout_12->addWidget(dbLocationBrowseButton, 2, 2, 1, 1);
 
         defaultLocationRadioBtn = new QRadioButton(groupBox);
         defaultLocationRadioBtn->setObjectName(QString::fromUtf8("defaultLocationRadioBtn"));
         defaultLocationRadioBtn->setChecked(true);
 
-        gridLayout_12->addWidget(defaultLocationRadioBtn, 0, 0, 1, 1);
+        gridLayout_12->addWidget(defaultLocationRadioBtn, 0, 1, 1, 1);
 
         customLocationRadioBtn = new QRadioButton(groupBox);
         customLocationRadioBtn->setObjectName(QString::fromUtf8("customLocationRadioBtn"));
 
-        gridLayout_12->addWidget(customLocationRadioBtn, 1, 0, 1, 1);
+        gridLayout_12->addWidget(customLocationRadioBtn, 1, 1, 1, 1);
 
-        dbLocationBrowseButton = new QPushButton(groupBox);
-        dbLocationBrowseButton->setObjectName(QString::fromUtf8("dbLocationBrowseButton"));
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
 
-        gridLayout_12->addWidget(dbLocationBrowseButton, 2, 1, 1, 1);
+        gridLayout_12->addLayout(verticalLayout_2, 0, 0, 1, 1);
 
 
-        gridLayout_2->addWidget(groupBox, 1, 0, 1, 1);
+        gridLayout_2->addWidget(groupBox, 0, 0, 1, 2);
+
+        userSettingsButtonBox = new QDialogButtonBox(userSettingsDialog);
+        userSettingsButtonBox->setObjectName(QString::fromUtf8("userSettingsButtonBox"));
+        userSettingsButtonBox->setOrientation(Qt::Vertical);
+        userSettingsButtonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+
+        gridLayout_2->addWidget(userSettingsButtonBox, 0, 2, 1, 1);
 
 
         retranslateUi(userSettingsDialog);
-        QObject::connect(userSettingsButtonBox, &QDialogButtonBox::accepted, userSettingsDialog,
-                         qOverload<>(&QDialog::accept));
-        QObject::connect(userSettingsButtonBox, &QDialogButtonBox::rejected, userSettingsDialog,
-                         qOverload<>(&QDialog::reject));
+        QObject::connect(userSettingsButtonBox, &QDialogButtonBox::accepted, userSettingsDialog, qOverload<>(&QDialog::accept));
+        QObject::connect(userSettingsButtonBox, &QDialogButtonBox::rejected, userSettingsDialog, qOverload<>(&QDialog::reject));
 
         QMetaObject::connectSlotsByName(userSettingsDialog);
     } // setupUi
 
-    void retranslateUi(QDialog *userSettingsDialog) {
+    void retranslateUi(QDialog *userSettingsDialog)
+    {
         userSettingsDialog->setWindowTitle(QCoreApplication::translate("userSettingsDialog", "User Settings", nullptr));
-        unitsGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Units", nullptr));
-        metricRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Metric (ml)", nullptr));
-        imperialRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Imperial (oz)", nullptr));
         clearDataButton->setText(QCoreApplication::translate("userSettingsDialog", "Clear Data", nullptr));
         sexGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Sex", nullptr));
         maleSelection->setText(QCoreApplication::translate("userSettingsDialog", "Male", nullptr));
@@ -402,20 +406,22 @@ public:
         weekdayStartInput->setItemText(5, QCoreApplication::translate("userSettingsDialog", "Friday", nullptr));
         weekdayStartInput->setItemText(6, QCoreApplication::translate("userSettingsDialog", "Saturday", nullptr));
 
-        fixedDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Reset on day", nullptr));
         rollingDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Rolling", nullptr));
+        fixedDateRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Reset on day", nullptr));
         stdDrinkDefTitle->setText(QCoreApplication::translate("userSettingsDialog", "Std. Drink Definition:", nullptr));
         stdDrinkDefLabel->setText(QCoreApplication::translate("userSettingsDialog", "Oz. Alcohol", nullptr));
+        label->setText(QCoreApplication::translate("userSettingsDialog", "* Standard drinks", nullptr));
         weeklyLimitGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Weekly Limit Standard", nullptr));
-        customLimitRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Custom", nullptr));
         niaaaStandardsRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "CDC/NIAAA", nullptr));
         customLimitLabel->setText(QCoreApplication::translate("userSettingsDialog", "Custom Limit* :", nullptr));
-        label->setText(QCoreApplication::translate("userSettingsDialog", "* Standard drinks", nullptr));
+        customLimitRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Custom", nullptr));
+        unitsGroup->setTitle(QCoreApplication::translate("userSettingsDialog", "Units", nullptr));
+        metricRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Metric (ml)", nullptr));
+        imperialRadioButton->setText(QCoreApplication::translate("userSettingsDialog", "Imperial (oz)", nullptr));
         groupBox->setTitle(QCoreApplication::translate("userSettingsDialog", "Database Location", nullptr));
-        defaultLocationRadioBtn->setText(
-                QCoreApplication::translate("userSettingsDialog", "Default location", nullptr));
-        customLocationRadioBtn->setText(QCoreApplication::translate("userSettingsDialog", "Custom location", nullptr));
         dbLocationBrowseButton->setText(QCoreApplication::translate("userSettingsDialog", "Browse", nullptr));
+        defaultLocationRadioBtn->setText(QCoreApplication::translate("userSettingsDialog", "Default location", nullptr));
+        customLocationRadioBtn->setText(QCoreApplication::translate("userSettingsDialog", "Custom location", nullptr));
     } // retranslateUi
 
 };

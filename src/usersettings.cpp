@@ -19,7 +19,7 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
      */
 
     ui.setupUi(this);
-    this->setFixedSize(675, 375);
+    this->setFixedSize(700, 450);
 
     const int std_drink_cbox_index = populate_country_cbox(country_info);
     ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString("Custom"));

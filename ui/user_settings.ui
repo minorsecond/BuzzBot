@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>885</width>
-    <height>541</height>
+    <width>1010</width>
+    <height>807</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,51 +17,7 @@
    <bool>true</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="2" column="0">
-    <widget class="QFrame" name="frame_4">
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_9">
-      <item row="0" column="0">
-       <widget class="QGroupBox" name="unitsGroup">
-        <property name="title">
-         <string>Units</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_10">
-         <item row="1" column="0">
-          <widget class="QRadioButton" name="metricRadioButton">
-           <property name="text">
-            <string>Metric (ml)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QRadioButton" name="imperialRadioButton">
-           <property name="text">
-            <string>Imperial (oz)</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <widget class="QFrame" name="frame_3">
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -80,7 +36,7 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="0">
+   <item row="1" column="0">
     <widget class="QFrame" name="frame">
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -89,7 +45,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_5">
-      <item row="0" column="0">
+      <item row="1" column="0">
        <widget class="QGroupBox" name="sexGroup">
         <property name="title">
          <string>Sex</string>
@@ -101,7 +57,7 @@
          <bool>true</bool>
         </property>
         <layout class="QGridLayout" name="gridLayout_4">
-         <item row="0" column="0">
+         <item row="1" column="0">
           <widget class="QRadioButton" name="maleSelection">
            <property name="text">
             <string>Male</string>
@@ -111,7 +67,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item row="2" column="0">
           <widget class="QRadioButton" name="femaleSelection">
            <property name="text">
             <string>Female</string>
@@ -124,7 +80,7 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="2" rowspan="5">
+   <item row="1" column="1" rowspan="5">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -195,13 +151,6 @@
                </item>
               </widget>
              </item>
-             <item row="1" column="0">
-              <widget class="QRadioButton" name="fixedDateRadioButton">
-               <property name="text">
-                <string>Reset on day</string>
-               </property>
-              </widget>
-             </item>
              <item row="0" column="0">
               <widget class="QRadioButton" name="rollingDateRadioButton">
                <property name="text">
@@ -209,6 +158,13 @@
                </property>
                <property name="checked">
                 <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QRadioButton" name="fixedDateRadioButton">
+               <property name="text">
+                <string>Reset on day</string>
                </property>
               </widget>
              </item>
@@ -307,6 +263,16 @@
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout_7">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>* Standard drinks</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QGroupBox" name="weeklyLimitGroup">
             <property name="toolTipDuration">
@@ -322,17 +288,40 @@
              <bool>true</bool>
             </property>
             <layout class="QGridLayout" name="gridLayout_6" rowstretch="0,0,0,0,0,0,0,0,0" columnstretch="0">
-             <item row="2" column="0">
-              <widget class="QRadioButton" name="customLimitRadioButton">
-               <property name="text">
-                <string>Custom</string>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="0">
               <widget class="QRadioButton" name="niaaaStandardsRadioButton">
                <property name="text">
                 <string>CDC/NIAAA</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="0">
+              <widget class="QLabel" name="customLimitLabel">
+               <property name="text">
+                <string>Custom Limit* :</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="0">
+              <widget class="QSpinBox" name="customLimitSpinBox">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QRadioButton" name="customLimitRadioButton">
+               <property name="text">
+                <string>Custom</string>
                </property>
               </widget>
              </item>
@@ -352,40 +341,7 @@
                </property>
               </spacer>
              </item>
-             <item row="8" column="0">
-              <widget class="QSpinBox" name="customLimitSpinBox">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item row="7" column="0">
-              <widget class="QLabel" name="customLimitLabel">
-               <property name="text">
-                <string>Custom Limit* :</string>
-               </property>
-              </widget>
-             </item>
             </layout>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>* Standard drinks</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
            </widget>
           </item>
           <item row="2" column="0">
@@ -421,17 +377,51 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="3">
-    <widget class="QDialogButtonBox" name="userSettingsButtonBox">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+   <item row="3" column="0">
+    <widget class="QFrame" name="frame_4">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
+     <layout class="QGridLayout" name="gridLayout_9">
+      <item row="0" column="0">
+       <widget class="QGroupBox" name="unitsGroup">
+        <property name="title">
+         <string>Units</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_10">
+         <item row="1" column="0">
+          <widget class="QRadioButton" name="metricRadioButton">
+           <property name="text">
+            <string>Metric (ml)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="imperialRadioButton">
+           <property name="text">
+            <string>Imperial (oz)</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="0" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox">
      <property name="minimumSize">
       <size>
@@ -446,7 +436,7 @@
       <set>Qt::AlignCenter</set>
      </property>
      <layout class="QGridLayout" name="gridLayout_12">
-      <item row="2" column="0">
+      <item row="2" column="1">
        <widget class="QLineEdit" name="dbLocationTextInput">
         <property name="enabled">
          <bool>false</bool>
@@ -456,7 +446,14 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
+      <item row="2" column="2">
+       <widget class="QPushButton" name="dbLocationBrowseButton">
+        <property name="text">
+         <string>Browse</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
        <widget class="QRadioButton" name="defaultLocationRadioBtn">
         <property name="text">
          <string>Default location</string>
@@ -466,21 +463,27 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="1" column="1">
        <widget class="QRadioButton" name="customLocationRadioBtn">
         <property name="text">
          <string>Custom location</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QPushButton" name="dbLocationBrowseButton">
-        <property name="text">
-         <string>Browse</string>
-        </property>
-       </widget>
+      <item row="0" column="0">
+       <layout class="QVBoxLayout" name="verticalLayout_2"/>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QDialogButtonBox" name="userSettingsButtonBox">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
     </widget>
    </item>
   </layout>
