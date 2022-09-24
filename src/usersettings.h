@@ -49,7 +49,7 @@ public:
 
     void set_frame_style();
 
-    void set_custom_database_status(const bool db_status);
+    void set_custom_database_status();
 
     void set_database_path(const std::string &db_path);
 

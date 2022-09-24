@@ -67,6 +67,19 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
     ui.clearDataButton->setPalette(pal);
     ui.clearDataButton->update();
 
+    ui.dbLocationTextInput->setText(QString::fromStdString(options.database_path));
+    if (options.custom_database) {
+        ui.customLocationRadioBtn->setChecked(true);
+        ui.defaultLocationRadioBtn->setChecked(false);
+        ui.dbLocationTextInput->setEnabled(true);
+        ui.dbLocationBrowseButton->setEnabled(true);
+    } else {
+        ui.defaultLocationRadioBtn->setChecked(true);
+        ui.customLocationRadioBtn->setChecked(false);
+        ui.dbLocationTextInput->setEnabled(false);
+        ui.dbLocationBrowseButton->setEnabled(false);
+    }
+
 
     update_std_drink_size_label();
 
@@ -75,6 +88,8 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
     connect(ui.fixedDateRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_date_calc);
     connect(ui.niaaaStandardsRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_limit_setting);
     connect(ui.customLimitRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_limit_setting);
+    connect(ui.defaultLocationRadioBtn, &QRadioButton::clicked, this, &UserSettings::set_custom_database_status);
+    connect(ui.customLocationRadioBtn, &QRadioButton::clicked, this, &UserSettings::set_custom_database_status);
     connect(ui.clearDataButton, &QPushButton::clicked, this, &UserSettings::clicked_clear_data);
     connect(ui.dbLocationBrowseButton, &QPushButton::clicked, this, &UserSettings::clicked_browse_db_path);
     connect(ui.imperialRadioButton, &QRadioButton::clicked, this, &UserSettings::update_std_drink_size_label);
@@ -327,19 +342,19 @@ void UserSettings::set_day_of_week_setting_state(const Options& options) {
     }
 }
 
-void UserSettings::set_custom_database_status(bool db_status) {
+void UserSettings::set_custom_database_status() {
     /*
      * Sets the DB customize status
      * @param db_status: Bool - true if using custom DB, else false
      * @return: None
      */
 
-    if (db_status) {  // Custom location
-        ui.defaultLocationRadioBtn->setChecked(false);
-        ui.customLocationRadioBtn->setChecked(true);
-    } else {
-        ui.defaultLocationRadioBtn->setChecked(true);
-        ui.customLocationRadioBtn->setChecked(false);
+    if (ui.defaultLocationRadioBtn->isChecked()) {
+        ui.dbLocationBrowseButton->setEnabled(false);
+        ui.dbLocationTextInput->setEnabled(false);
+    } else if (ui.customLocationRadioBtn->isChecked()){
+        ui.dbLocationBrowseButton->setEnabled(true);
+        ui.dbLocationTextInput->setEnabled(true);
     }
 }
 
