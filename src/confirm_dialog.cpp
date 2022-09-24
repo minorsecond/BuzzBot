@@ -19,5 +19,10 @@ ConfirmDialog::ConfirmDialog(const std::string& action) {
         ui.actionConfirmationLabel->setText("You are attempting to edit a row. Click OK to confirm.");
     } else if (action == "Clear Data") {
         ui.actionConfirmationLabel->setText("You are attempting to clear the database. Click OK to confirm.");
+    } else if (action == "Moving DB") {
+        ui.actionConfirmationLabel->setText(
+                "After moving the DB, the app will close. You will have to reopoen it after saving preferences.");
+    } else if (action == "Moved DB") {
+        ui.actionConfirmationLabel->setText("Closing app. Restart to load data from new location.");
     }
 }

@@ -397,8 +397,13 @@ void MainWindow::open_user_settings() {
     update_types_and_producers();
     if (current_db_path_setting != options.database_path) {
         // User changed DB get_db_path settings
-        if (Database::move_db(!options.custom_database) == 1) {
+        if (Database::move_db(options.custom_database) == 1) {
             // TODO: Something bad happened when trying to move DB file. Raise an error window.
+        } else { // Prompt user to reopen app and close automatically (else it will crash)
+            ConfirmDialog close_dialog("Moved DB");
+            if (close_dialog.exec() == QDialog::Accepted) {
+                exit(1);
+            }
         }
     }
     std::cout << "Custom standard drink size: " << std_drink_size << std::endl;

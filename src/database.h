@@ -6,7 +6,7 @@
 #include <vector>
 #include <QDate>
 
-inline auto initStorage(const std::string& file_name, int db_version) {
+inline auto initStorage(const std::string &file_name) {
     /*
      * Initialize the DB
      */
@@ -14,9 +14,13 @@ inline auto initStorage(const std::string& file_name, int db_version) {
     const std::string table_name = "drinks";
     return sqlite_orm::make_storage(file_name,
                                     sqlite_orm::make_table(table_name,
-                                                          sqlite_orm::make_column("id", &Drink::id, sqlite_orm::autoincrement(), sqlite_orm::primary_key()),
-                                                          sqlite_orm::make_column("date", &Drink::date, sqlite_orm::default_value("2020-01-01")),
-                                                          sqlite_orm::make_column("drink_name", &Drink::name),
+                                                           sqlite_orm::make_column("id", &Drink::id,
+                                                                                   sqlite_orm::autoincrement(),
+                                                                                   sqlite_orm::primary_key()),
+                                                           sqlite_orm::make_column("date", &Drink::date,
+                                                                                   sqlite_orm::default_value(
+                                                                                           "2020-01-01")),
+                                                           sqlite_orm::make_column("drink_name", &Drink::name),
                                                           sqlite_orm::make_column("drink_type", &Drink::type),
                                                           sqlite_orm::make_column("drink_subtype", &Drink::subtype, sqlite_orm::default_value("")),
                                                           sqlite_orm::make_column("producer", &Drink::producer, sqlite_orm::default_value("")),
@@ -30,7 +34,8 @@ inline auto initStorage(const std::string& file_name, int db_version) {
                                                           sqlite_orm::make_column("alcohol_type", &Drink::alcohol_type, sqlite_orm::default_value("Beer")),
                                                           sqlite_orm::make_column("timestamp", &Drink::timestamp, sqlite_orm::default_value(sqlite_orm::datetime("now", "localtime")))));
 }
-using Storage = decltype (initStorage("", -1));
+
+using Storage = decltype(initStorage(""));
 
 class Database
 {

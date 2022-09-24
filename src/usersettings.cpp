@@ -170,7 +170,7 @@ void UserSettings::clicked_clear_data() {
 
     ConfirmDialog confirmation_dialog = ConfirmDialog("Clear Data");
     if (confirmation_dialog.exec() == QDialog::Accepted) {
-        Storage storage = initStorage(utilities::get_db_path(), Database::db_version);
+        Storage storage = initStorage(utilities::get_db_path());
         Database::truncate(storage);
         std::cout << "*** Truncated the database ***" << std::endl;
     }
@@ -383,13 +383,17 @@ void UserSettings::clicked_browse_db_path() {
      * @return: None
      */
 
-    const QString desktop_path = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0);
-    const QString preferred_path = desktop_path + "/buzzbot.db";
+    ConfirmDialog change_db_path_confirm("Moving DB");
 
-    QString filter = "SQLite Files (*.db)";
-    const QString filepath_qstring = QFileDialog::getSaveFileName(nullptr, "Save File",
-                                                                  preferred_path, filter, &filter);
-    ui.dbLocationTextInput->setText(filepath_qstring);
+    if (change_db_path_confirm.exec() == QDialog::Accepted) {
+        const QString desktop_path = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0);
+        const QString preferred_path = desktop_path + "/buzzbot.db";
+
+        QString filter = "SQLite Files (*.db)";
+        const QString filepath_qstring = QFileDialog::getSaveFileName(nullptr, "Save File",
+                                                                      preferred_path, filter, &filter);
+        ui.dbLocationTextInput->setText(filepath_qstring);
+    }
 }
 
 // LCOV_EXCL_STOP

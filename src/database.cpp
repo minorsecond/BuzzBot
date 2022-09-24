@@ -319,6 +319,10 @@ int Database::move_db(bool from_std_path) {
             if (utilities::file_exists(custom_path)) {
                 std::filesystem::remove(custom_path);
             }
+            if (utilities::file_exists(std_path + ".bak")) {
+                std::filesystem::remove(std_path + ".bak");
+            }
+            std::filesystem::copy(std_path, std_path + ".bak");
             std::filesystem::copy(std_path, custom_path);
             if (utilities::file_exists(custom_path)) {
                 std::filesystem::remove(std_path);
@@ -326,12 +330,18 @@ int Database::move_db(bool from_std_path) {
             return 0;
         } catch (std::filesystem::filesystem_error &e) {
             std::cout << e.what() << std::endl;
+            std::cout << "Restoring backup!" << std::endl;
+            std::filesystem::copy(std_path + ".bak", std_path);
         }
     } else { // Moving from custom path back to standard get_db_path
         try {
             if (utilities::file_exists(std_path)) {
                 std::filesystem::remove(std_path);
             }
+            if (utilities::file_exists(std_path + ".bak")) {
+                std::filesystem::remove(std_path + ".bak");
+            }
+            std::filesystem::copy(custom_path, std_path + ".bak");
             std::filesystem::copy(custom_path, std_path);
             if (utilities::file_exists(std_path)) {
                 std::filesystem::remove(custom_path);
@@ -339,6 +349,8 @@ int Database::move_db(bool from_std_path) {
             return 0;
         } catch (std::filesystem::filesystem_error &e) {
             std::cout << e.what() << std::endl;
+            std::cout << "Restoring backup!" << std::endl;
+            std::filesystem::copy(std_path + ".bak", custom_path);
         }
     }
 

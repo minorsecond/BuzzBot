@@ -20,7 +20,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    Storage storage = initStorage(utilities::get_db_path(), Database::db_version);
+    Storage storage = initStorage(utilities::get_db_path());
 
     void populate_filter_menus(const std::string &filter_type);
 
