@@ -301,7 +301,7 @@ void Database::sort_by_date_id(std::vector<Drink> &drinks) {
 }
 
 
-int Database::move_db(bool from_std_path, const std::string &current_path, const std::string& new_path) {
+int Database::move_db(const std::string &current_path, const std::string &new_path) {
     /*
      * Move DB file if user selects a new get_db_path option.
      * @param: None

@@ -2,24 +2,21 @@
 // Created by Ross Wardrup on 9/28/21.
 //
 
-//#include "mainwindow.h"
 #include "options.h"
 #include "utilities.h"
 #include "drink_standards.h"
-#include "usersettings.h"
 #include <QStandardPaths>
 #include <cmath>
 #include <fstream>
 #include <filesystem>
 #include <iostream>
-
+#include <iomanip>
+#include <iosfwd>
+#include <sstream>
 #ifdef __linux
 
 #include <chrono>
 #include <boost/format.hpp>
-#include <unistd.h>
-#include <sys/types.h>
-#include <pwd.h>
 
 #endif
 
@@ -64,9 +61,19 @@ std::string utilities::get_local_date() {
         output += std::string(1, i);
     }
 #elif __linux
-    const int year {1900+now_tm.tm_year};
-    const int month {1+now_tm.tm_mon};
-    output = boost::str(boost::format("%1%-%2%-%3%") % year % month % now_tm.tm_mday);
+    const int year{1900 + now_tm.tm_year};
+
+    // 0-pad month
+    std::ostringstream month_ss;
+    month_ss << std::setw(2) << std::setfill('0') << now_tm.tm_mon + 1;
+    std::string formatted_month{month_ss.str()};
+
+    // 0-pad day
+    std::ostringstream day_ss;
+    day_ss << std::setw(2) << std::setfill('0') << now_tm.tm_mday;
+    std::string formatted_day{day_ss.str()};
+
+    output = boost::str(boost::format("%1%-%2%-%3%") % year % formatted_month % formatted_day);
 #endif
 
     return output;

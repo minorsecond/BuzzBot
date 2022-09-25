@@ -405,7 +405,7 @@ void MainWindow::open_user_settings() {
     update_types_and_producers();
     if (current_db_path_setting != options.database_path) {
         // User changed DB get_db_path settings
-        const int result{Database::move_db(options.custom_database, current_db_path_setting, options.database_path)};
+        const int result{Database::move_db(current_db_path_setting, options.database_path)};
         if (result == 1) {
             std::cout << "Error copying database from " << current_db_path_setting << " to " << options.database_path
                       << std::endl;
