@@ -1,33 +1,38 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <QtWidgets/QMainWindow>
 #include "database.h"
 #include "../include/qcustomplot.h"
 #include "../ui/ui_mainwindow.h"
 #include "options.h"
 #include "drink_standards.h"
 
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
+class MainWindow : public QMainWindow {
+Q_OBJECT
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+
     ~MainWindow() override;
-    Options options;
+
+    Options options;  // Reads options from FS
 
 private:
     Ui::MainWindow *ui;
-    Storage storage = initStorage(Database::path(), Database::db_version);
-    void populate_filter_menus(const std::string& filter_type);
+    Storage storage = initStorage(utilities::get_db_path());
+
+    void populate_filter_menus(const std::string &filter_type);
+
     void update_beer_fields();
+
     void update_stat_panel();
+
     void update_liquor_fields();
+
     void update_wine_fields();
+
     void rename_duplicate_drink_names(std::vector<Drink> &drinks);
-    static std::string settings_path();
-    void program_options(bool write);
     void update_drinks_this_week(double standard_drinks, const std::string& weekday_name);
     void update_standard_drinks_left_this_week(double std_drinks_consumed);
     double update_vol_alcohol_consumed_this_week(const std::vector<Drink>& drinks_this_week, const std::string& weekday_name);

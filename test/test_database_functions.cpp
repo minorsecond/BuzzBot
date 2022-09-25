@@ -28,7 +28,7 @@ TEST_CASE("Init DB", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage = initStorage(db_path, Database::db_version);
+    Storage storage = initStorage(db_path);
     Database::write_db_to_disk(storage);
     REQUIRE( exists(db_path) == true);
     std::remove(file_name);
@@ -43,7 +43,7 @@ TEST_CASE("DB IO", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -86,7 +86,7 @@ TEST_CASE("DB IO", "[DB Functions]") {
 
     Database::write_db_to_disk(storage_1);
 
-    Storage storage_2 = initStorage(db_path, Database::db_version);
+    Storage storage_2 = initStorage(db_path);
 
     auto etrwo_read = storage_2.get<Drink>(1);
     auto mosaic_read = storage_2.get<Drink>(2);
@@ -109,7 +109,7 @@ TEST_CASE("Truncate DB", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -171,7 +171,7 @@ TEST_CASE("Delete Row", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -240,7 +240,7 @@ TEST_CASE("Read Row", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -302,7 +302,7 @@ TEST_CASE("Write Row", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -340,7 +340,7 @@ TEST_CASE("Update Row", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -418,7 +418,7 @@ TEST_CASE("Increment Version", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version - 1);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     int base_version = Database::increment_version(storage_1, 8);
@@ -434,7 +434,7 @@ TEST_CASE("Filter DB", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -524,7 +524,7 @@ TEST_CASE("Get Drink By Name", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -601,7 +601,7 @@ TEST_CASE("Get Beers By Type", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -680,7 +680,7 @@ TEST_CASE("Get Beers By Brewery", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -759,7 +759,7 @@ TEST_CASE("DB Sort", "[DB Functions]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;

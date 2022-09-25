@@ -7,6 +7,7 @@
 #include "database.h"
 #include <iostream>
 #include <regex>
+#include <filesystem>
 
 // LCOV_EXCL_START
 UserSettings::UserSettings(const Options& options, const std::map<std::string, double>& country_info) {
@@ -18,7 +19,7 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
      */
 
     ui.setupUi(this);
-    this->setFixedSize(675, 300);
+    this->setFixedSize(700, 450);
 
     const int std_drink_cbox_index = populate_country_cbox(country_info);
     ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString("Custom"));
@@ -67,6 +68,20 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
     ui.clearDataButton->setPalette(pal);
     ui.clearDataButton->update();
 
+    ui.dbLocationTextInput->setText(QString::fromStdString(options.database_path));
+    if (options.custom_database) {
+        ui.customLocationRadioBtn->setChecked(true);
+        ui.defaultLocationRadioBtn->setChecked(false);
+        ui.dbLocationTextInput->setEnabled(true);
+        ui.dbLocationBrowseButton->setEnabled(true);
+    } else {
+        ui.defaultLocationRadioBtn->setChecked(true);
+        ui.customLocationRadioBtn->setChecked(false);
+        ui.dbLocationTextInput->setEnabled(false);
+        ui.dbLocationBrowseButton->setEnabled(false);
+    }
+
+
     update_std_drink_size_label();
 
     // Connections
@@ -74,7 +89,10 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
     connect(ui.fixedDateRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_date_calc);
     connect(ui.niaaaStandardsRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_limit_setting);
     connect(ui.customLimitRadioButton, &QRadioButton::clicked, this, &UserSettings::changed_limit_setting);
+    connect(ui.defaultLocationRadioBtn, &QRadioButton::clicked, this, &UserSettings::set_custom_database_status);
+    connect(ui.customLocationRadioBtn, &QRadioButton::clicked, this, &UserSettings::set_custom_database_status);
     connect(ui.clearDataButton, &QPushButton::clicked, this, &UserSettings::clicked_clear_data);
+    connect(ui.dbLocationBrowseButton, &QPushButton::clicked, this, &UserSettings::clicked_browse_db_path);
     connect(ui.imperialRadioButton, &QRadioButton::clicked, this, &UserSettings::update_std_drink_size_label);
     connect(ui.metricRadioButton, &QRadioButton::clicked, this, &UserSettings::update_std_drink_size_label);
     connect(ui.stdDrinkDefComboBox, QOverload<int>::of(&QComboBox::activated), this, &UserSettings::std_drink_country_changed);
@@ -168,7 +186,7 @@ void UserSettings::clicked_clear_data() {
 
     ConfirmDialog confirmation_dialog = ConfirmDialog("Clear Data");
     if (confirmation_dialog.exec() == QDialog::Accepted) {
-        Storage storage = initStorage(Database::path(), Database::db_version);
+        Storage storage = initStorage(utilities::get_db_path());
         Database::truncate(storage);
         std::cout << "*** Truncated the database ***" << std::endl;
     }
@@ -322,6 +340,86 @@ void UserSettings::set_day_of_week_setting_state(const Options& options) {
         ui.weekdayStartInput->setEnabled(false);
         ui.fixedDateRadioButton->setChecked(false);
         ui.rollingDateRadioButton->setChecked(true);
+    }
+}
+
+void UserSettings::set_custom_database_status() {
+    /*
+     * Sets the DB customize status
+     * @param db_status: Bool - true if using custom DB, else false
+     * @return: None
+     */
+
+    if (ui.defaultLocationRadioBtn->isChecked()) {
+        ui.dbLocationBrowseButton->setEnabled(false);
+        ui.dbLocationTextInput->setEnabled(false);
+    } else if (ui.customLocationRadioBtn->isChecked()){
+        ui.dbLocationBrowseButton->setEnabled(true);
+        ui.dbLocationTextInput->setEnabled(true);
+    }
+}
+
+void UserSettings::set_database_path(const std::string &db_path) {
+    /*
+     * Sets the DB path input box according to the DB path
+     * @param db_path: string denoting DB get_db_path
+     */
+
+    ui.dbLocationTextInput->setText(QString::fromStdString(db_path));
+}
+
+bool UserSettings::get_custom_database_status() {
+    /*
+     * Get database status from pref pane
+     * @param: None
+     * @return: Bool - true if custom DB get_db_path, else false
+     */
+
+    if (ui.customLocationRadioBtn->isChecked()) {
+        return true;
+    }
+
+    return false;
+}
+
+std::string UserSettings::get_database_path(bool custom_db) {
+    /*
+     * Get DB path from pref pane
+     * @param: None
+     * @return: String denoting DB get_db_path
+     */
+
+    std::string full_path{};
+    if (!custom_db) {
+        // Find get_db_path to application support directory
+        const std::string directory{utilities::get_application_data_path()};
+        full_path = directory + "/buzzbot.db";
+        std::filesystem::create_directory(directory);
+    } else {  // Custom DB get_db_path
+        full_path = ui.dbLocationTextInput->text().toStdString();
+    }
+
+    return full_path;
+}
+
+void UserSettings::clicked_browse_db_path() {
+    /*
+     * Action for when user clicks the DB browse button.
+     * @param: None
+     * @return: None
+     */
+
+    ConfirmDialog change_db_path_confirm("Moving DB");
+
+    if (change_db_path_confirm.exec() == QDialog::Accepted) {
+        const QString desktop_path = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0);
+        const QString preferred_path = desktop_path + "/buzzbot.db";
+
+        QString filepath {QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                                                  desktop_path, QFileDialog::ShowDirsOnly |
+                                                                  QFileDialog::DontResolveSymlinks)};
+        filepath += QString::fromStdString("/buzzbot.db");
+        ui.dbLocationTextInput->setText(filepath);
     }
 }
 
