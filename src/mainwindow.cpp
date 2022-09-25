@@ -380,10 +380,6 @@ void MainWindow::open_user_settings() {
         update_stat_panel();
     }
 
-    //options.path is getting set when moving to a custom db path, but not when moving from custom to std.
-    //path being passed into move_db still contains the default path and it's trying to copy a non existing
-    // file into itself
-
     if (options.units == "Metric") {
         ui->beerSizeLabel->setText("Size (ml)");
         ui->liquorSizeLabel->setText("Size (ml)");
