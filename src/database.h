@@ -63,7 +63,7 @@ private:
     static void populate_size_field();
 
 public:
-    static int move_db(bool from_std_path, const std::string &current_path, const std::string& new_path);
+    static int move_db(const std::string &current_path, const std::string &new_path);
 };
 
 #endif // DATABASE_H
