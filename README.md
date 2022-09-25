@@ -42,8 +42,11 @@ BuzzBot on macOS
 - `cmake ..`
 - `cmake --build . --target BuzzBot`. If you want to run tests, run `cmake --build . --target functions_test`.
 - If you're running macOS, you'll have a `BuzzBot.app` file in the `build` directory.
-- If you're running Linux, you can install the app in `~/.local/bin` by running `cmake --install .`. 
-The app should then be available in your app menu.
+- If you're running Linux, you can install the app in `~/.local/bin` by running `cmake --install .`.
+  The app should then be available in your app menu.
+- If using a Samba share in Linux to share your database across multiple devices, be sure to add the
+  `nobrl` mount option for the share that the DB file will reside on. This prevents your SMB client from sending byte
+  range locks to the server. Without this addition, you will get a locked database error.
 
 ### Developing BuzzBot
 - Dependencies:
