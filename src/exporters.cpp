@@ -17,7 +17,7 @@ void exporters::to_csv(const std::vector<Drink> &drinks, const std::string &path
     /*
      * Creates a CSV file containing the current DB contents.
      * @param drinks: A vector of Drinks.
-     * @param path: Path where CSV should be saved.
+     * @param get_db_path: Path where CSV should be saved.
      */
 
     std::ofstream output_csv(path);

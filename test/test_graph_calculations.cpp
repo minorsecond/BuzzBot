@@ -3,7 +3,6 @@
 //
 
 #include "src/graphing_calculations.h"
-#include <iostream>
 #include <map>
 #if __has_include("catch2/catch_test_macros.hpp")
 #include <catch2/catch_test_macros.hpp>
@@ -20,7 +19,7 @@ TEST_CASE("IBU Vector Creation", "[Graph Data Compilation]") {
     Drink etrwo2;
     Drink titos;
 
-    etrwo.set_id(-1); // 1
+    etrwo.set_id(-1);
     etrwo.set_date("2020-09-08");
     etrwo.set_name("Everything Rhymes with Orange");
     etrwo.set_type("IPA");

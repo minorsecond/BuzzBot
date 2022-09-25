@@ -19,7 +19,7 @@ About::About() {
     this->setFixedSize(237, 272);
 
     // Version text
-    const std::string version = "2.3.0";
+    const std::string version = "2.4.0";
     ui.versionLabel->setText(QString::fromStdString("Version " + version));
 
     // Make Qt URL clickable
@@ -34,7 +34,7 @@ About::About() {
     const CFStringRef mac_path = CFURLCopyFileSystemPath(app_url_ref, kCFURLPOSIXPathStyle);
     const QString icon_path_qstring = CFStringGetCStringPtr(mac_path, CFStringGetSystemEncoding());
 
-    // Set path to icon
+    // Set get_db_path to icon
     const std::string icon_path = icon_path_qstring.toStdString() + "/Contents/Resources/mini-icon.png";
     CFRelease(app_url_ref);
     CFRelease(mac_path);

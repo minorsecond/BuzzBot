@@ -30,7 +30,7 @@ private:
 
     friend class Calculate;
     friend class Database;
-    friend auto initStorage(const std::string& file_name, int db_version);
+    friend auto initStorage(const std::string &file_name);
 
 public:
     // Setters

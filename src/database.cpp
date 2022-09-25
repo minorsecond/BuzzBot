@@ -1,25 +1,11 @@
 #include "database.h"
+#include "utilities.h"
 #include <utility>
 #include <iostream>
-#include <QStandardPaths>
 #include <filesystem>
+#include <string>
 
 using namespace sqlite_orm;
-std::string Database::path() {
-    /*
-     * Find database path and create it if it doesn't exist.
-     * @return full_path Path where database file should be stored.
-     */
-
-    // Find path to application support directory
-    const std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
-    const std::string full_path = directory + "/buzzbot.db";
-    std::filesystem::create_directory(directory);
-
-    std::cout << "Using DB located at " << full_path << std::endl;
-
-    return full_path;
-}
 
 std::vector<Drink> Database::read(Storage storage) {
     /*
@@ -28,6 +14,7 @@ std::vector<Drink> Database::read(Storage storage) {
      */
 
     const std::vector<Drink> all_drinks = storage.get_all<Drink>();
+    std::cout << "Read " + std::to_string(all_drinks.size()) + " drinks from DB" << std::endl;
 
     return all_drinks;
 }
@@ -47,7 +34,7 @@ Storage Database::write(Drink drink, Storage storage) {
      * @return Storage: The storage instance
      */
 
-    const std::string database_path = path();
+    const std::string database_path = utilities::get_db_path();
     const int inserted_id = storage.insert(drink);
     drink.id = inserted_id;
     write_db_to_disk(storage);
@@ -311,4 +298,41 @@ void Database::sort_by_date_id(std::vector<Drink> &drinks) {
         drinks[i].sort_order = sort_order;
         sort_order++;
     }
+}
+
+
+int Database::move_db(const std::string &current_path, const std::string &new_path) {
+    /*
+     * Move DB file if user selects a new get_db_path option.
+     * @param: None
+     * @return: 0 if move is successful, else 1
+     */
+
+    const std::string std_path{utilities::get_application_data_path() + "/buzzbot.db"};
+
+    if (utilities::file_exists(std_path + ".bak")) {
+        std::filesystem::remove(std_path + ".bak");
+    }
+
+    std::filesystem::copy(current_path, std_path + ".bak");
+
+    if (!utilities::file_exists(new_path))
+    {
+        try {
+            std::filesystem::copy(current_path, new_path);
+            if (utilities::file_exists(current_path)) {
+                std::filesystem::remove(current_path);
+            }
+            return 0;
+        } catch (std::filesystem::filesystem_error &e) {
+            std::cout << e.what() << std::endl;
+            std::cout << "Restoring backup!" << std::endl;
+            std::filesystem::copy(std_path + ".bak", std_path);
+        }
+    } else {
+        std::cout << new_path << " already exists. Not overwriting with " << current_path << std::endl;
+        return 2;
+    }
+
+    return 1;
 }

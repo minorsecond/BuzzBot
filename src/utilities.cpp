@@ -2,16 +2,22 @@
 // Created by Ross Wardrup on 9/28/21.
 //
 
+#include "options.h"
 #include "utilities.h"
 #include "drink_standards.h"
-#include <sstream>
+#include <QStandardPaths>
 #include <cmath>
+#include <fstream>
+#include <filesystem>
+#include <iostream>
+#include <iomanip>
+#include <iosfwd>
+#include <sstream>
 #ifdef __linux
-    #include <chrono>
-    #include <boost/format.hpp>
-    #include <unistd.h>
-    #include <sys/types.h>
-    #include <pwd.h>
+
+#include <chrono>
+#include <boost/format.hpp>
+
 #endif
 
 std::string utilities::zero_pad_string(unsigned integer) {
@@ -55,9 +61,19 @@ std::string utilities::get_local_date() {
         output += std::string(1, i);
     }
 #elif __linux
-    const int year {1900+now_tm.tm_year};
-    const int month {1+now_tm.tm_mon};
-    output = boost::str(boost::format("%1%-%2%-%3%") % year % month % now_tm.tm_mday);
+    const int year{1900 + now_tm.tm_year};
+
+    // 0-pad month
+    std::ostringstream month_ss;
+    month_ss << std::setw(2) << std::setfill('0') << now_tm.tm_mon + 1;
+    std::string formatted_month{month_ss.str()};
+
+    // 0-pad day
+    std::ostringstream day_ss;
+    day_ss << std::setw(2) << std::setfill('0') << now_tm.tm_mday;
+    std::string formatted_day{day_ss.str()};
+
+    output = boost::str(boost::format("%1%-%2%-%3%") % year % formatted_month % formatted_day);
 #endif
 
     return output;
@@ -82,8 +98,8 @@ double utilities::get_std_drink_size() {
      * @return: Standard drink size
      */
 
-    Options options;
-    double standard_drink_size {0.0};
+    Options options;  // Reads options from FS
+    double standard_drink_size{0.0};
 
     if (options.std_drink_country == "Custom") {
         standard_drink_size = std::stod(options.std_drink_size);
@@ -92,4 +108,62 @@ double utilities::get_std_drink_size() {
     }
 
     return standard_drink_size;
+}
+
+std::string utilities::get_application_data_path() {
+    /*
+     * Get data storage path for OS
+     * @param: None
+     * @return: an std::string denoting app data get_db_path
+     */
+
+    return QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0).toStdString();
+}
+
+bool utilities::file_exists(const std::string &path) {
+    /*
+     * Check if file exists.
+     * @param path: a string to file get_db_path
+     * @return: bool - true if file exists, else false
+     */
+
+    std::ifstream f(path.c_str());
+    return f.good();
+}
+
+std::string utilities::get_db_path() {
+    /*
+     * Find database get_db_path and create it if it doesn't exist.
+     * @return full_path Path where database file should be stored.
+     */
+
+    Options options;  // Reads options from FS
+    std::string full_path{};
+    if (!options.custom_database) {
+        // Find get_db_path to application support directory
+        const std::string directory{utilities::get_application_data_path()};
+        full_path = directory + "/buzzbot.db";
+        std::filesystem::create_directory(directory);
+    } else {  // Custom DB get_db_path
+        full_path = options.database_path;
+    }
+
+    std::cout << "Using DB located at " << full_path << std::endl;
+
+    return full_path;
+}
+
+std::string utilities::settings_path() {
+    /*
+     * Find database get_db_path and create it if it doesn't exist.
+     * @return full_path Path where database file should be stored.
+     */
+
+    // Find get_db_path to application support directory
+    const std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(
+            0).toStdString();
+    const std::string settings_path = directory + "/buzzbot_settings.conf";
+    std::filesystem::create_directory(directory);
+
+    return settings_path;
 }

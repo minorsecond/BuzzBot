@@ -285,9 +285,9 @@ double Drink::get_standard_drinks() const {
      * @param std_drink_size: the size of the standard drink, in the same unit as amount.
      */
 
-    Options options;
+    Options options;  // Reads options from FS
     const double alcohol_amt = get_alcohol_volume();
-    const double std_drink_size {utilities::get_std_drink_size()};
+    const double std_drink_size{utilities::get_std_drink_size()};
 
     return utilities::round_to_two_decimal_points(alcohol_amt / std_drink_size);
 }

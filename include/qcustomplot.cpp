@@ -10594,7 +10594,7 @@ void QCPAxisPainterPrivate::getMaxTickLabelSize(const QFont &font, const QString
   QCPScatterStyle supports drawing custom shapes and arbitrary pixmaps as scatter points.
 
   For custom shapes, you can provide a QPainterPath with the desired shape to the \ref
-  setCustomPath function or call the constructor that takes a painter path. The scatter shape will
+  setCustomPath function or call the constructor that takes a painter get_db_path. The scatter shape will
   automatically be set to \ref ssCustom.
   
   For pixmaps, you call \ref setPixmap with the desired QPixmap. Alternatively you can use the
@@ -10727,9 +10727,9 @@ QCPScatterStyle::QCPScatterStyle(const QPixmap &pixmap) :
   scatter shape is set to \ref ssCustom.
   
   The custom shape line will be drawn with \a pen and filled with \a brush. The size has a slightly
-  different meaning than for built-in scatter points: The custom path will be drawn scaled by a
-  factor of \a size/6.0. Since the default \a size is 6, the custom path will appear in its
-  original size by default. To for example double the size of the path, set \a size to 12.
+  different meaning than for built-in scatter points: The custom get_db_path will be drawn scaled by a
+  factor of \a size/6.0. Since the default \a size is 6, the custom get_db_path will appear in its
+  original size by default. To for example double the size of the get_db_path, set \a size to 12.
 */
 QCPScatterStyle::QCPScatterStyle(const QPainterPath &customPath, const QPen &pen, const QBrush &brush, double size) :
   mSize(size),

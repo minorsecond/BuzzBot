@@ -3,7 +3,6 @@
 //
 
 #include "../src/calculate.h"
-//#include "../src/mainwindow.h"
 #include <filesystem>
 #include <iostream>
 #if __has_include("catch2/catch_test_macros.hpp")
@@ -28,10 +27,10 @@ TEST_CASE("Standard Drinks", "[Drink Calculations]") {
     asahi.set_abv(5.2);
     asahi.set_size(12);
 
-    REQUIRE(mosaic.get_standard_drinks() == 1.72);
-    REQUIRE(etrwo.get_standard_drinks() == 1.30);
-    REQUIRE(old_rasputin.get_standard_drinks() == 1.80);
-    REQUIRE(asahi.get_standard_drinks() == 1.04);
+    REQUIRE(Calculate::equal_double(mosaic.get_standard_drinks(), 1.72));
+    REQUIRE(Calculate::equal_double(etrwo.get_standard_drinks(), 1.30));
+    REQUIRE(Calculate::equal_double(old_rasputin.get_standard_drinks(), 1.80));
+    REQUIRE(Calculate::equal_double(asahi.get_standard_drinks(), 1.04));
 }
 
 TEST_CASE("Oz Alcohol", "[Drink Calculations]") {
@@ -47,9 +46,9 @@ TEST_CASE("Oz Alcohol", "[Drink Calculations]") {
     old_rasputin.set_abv(9);
     old_rasputin.set_size(12);
 
-    REQUIRE(mosaic.get_alcohol_volume() == 1.032);
-    REQUIRE(etrwo.get_alcohol_volume() == 0.78);
-    REQUIRE(old_rasputin.get_alcohol_volume() == 1.08);
+    REQUIRE(Calculate::equal_double(mosaic.get_alcohol_volume(), 1.032));
+    REQUIRE(Calculate::equal_double(etrwo.get_alcohol_volume(), 0.78));
+    REQUIRE(Calculate::equal_double(old_rasputin.get_alcohol_volume(), 1.08));
 }
 
 TEST_CASE("Std Drinks Remaining - male, NIAAA", "[Drink Calculations]") {
@@ -60,7 +59,7 @@ TEST_CASE("Std Drinks Remaining - male, NIAAA", "[Drink Calculations]") {
 
     double male_drinks_remaining = Calculate::standard_drinks_remaining(options, 4.6);
 
-    REQUIRE(male_drinks_remaining == 9.4);
+    REQUIRE(Calculate::equal_double(male_drinks_remaining, 9.4));
 }
 
 TEST_CASE("Std Drinks Remaining - female, Custom", "[Drink Calculations]") {
@@ -70,7 +69,7 @@ TEST_CASE("Std Drinks Remaining - female, Custom", "[Drink Calculations]") {
     options.weekly_limit = 5;
 
     double female_drinks_remaining = Calculate::standard_drinks_remaining(options, 8);
-    REQUIRE(female_drinks_remaining == -3.0);
+    REQUIRE(Calculate::equal_double(female_drinks_remaining, -3.0));
 }
 
 TEST_CASE("Std Drinks Remaining - female, NIAAA 1", "[Drink Calculations]") {
@@ -80,7 +79,7 @@ TEST_CASE("Std Drinks Remaining - female, NIAAA 1", "[Drink Calculations]") {
     options.weekly_limit = 0;
 
     double female_drinks_remaining_2 = Calculate::standard_drinks_remaining(options, 4);
-    REQUIRE(female_drinks_remaining_2 == 3);
+    REQUIRE(Calculate::equal_double(female_drinks_remaining_2, 3));
 }
 
 TEST_CASE("Std Drinks Remaining - female, NIAAA 2", "[Drink Calculations]") {
@@ -91,7 +90,7 @@ TEST_CASE("Std Drinks Remaining - female, NIAAA 2", "[Drink Calculations]") {
 
     double female_drinks_remaining_3 = Calculate::standard_drinks_remaining(options, 12);
 
-    REQUIRE(female_drinks_remaining_3 == -5);
+    REQUIRE(Calculate::equal_double(female_drinks_remaining_3, -5));
 }
 
 TEST_CASE("Oz Alcohol Remaining", "[Drink Calculations]") {
@@ -106,8 +105,8 @@ TEST_CASE("Oz Alcohol Remaining", "[Drink Calculations]") {
     options.weekly_limit = 10;
     double female_oz_remaining = Calculate::volume_alcohol_remaining(options, 5.5);
 
-    REQUIRE(male_oz_remaining == 4.1);
-    REQUIRE(female_oz_remaining == 0.5);
+    REQUIRE(Calculate::equal_double(male_oz_remaining, 4.1));
+    REQUIRE(Calculate::equal_double(female_oz_remaining, 0.5));
 }
 
 TEST_CASE("Mean ABV", "[Drink Calculations]") {
@@ -119,7 +118,7 @@ TEST_CASE("Mean ABV", "[Drink Calculations]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -180,7 +179,7 @@ TEST_CASE("Mean ABV", "[Drink Calculations]") {
     Database::write_db_to_disk(storage_1);
     double mean_abv = Calculate::mean_abv(storage_1, "Beer");
 
-    REQUIRE(mean_abv == 8.13);
+    REQUIRE(Calculate::equal_double(mean_abv, 8.13));
 }
 
 TEST_CASE("Mean IBU", "[Drink Calculations]") {
@@ -192,7 +191,7 @@ TEST_CASE("Mean IBU", "[Drink Calculations]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -254,7 +253,7 @@ TEST_CASE("Mean IBU", "[Drink Calculations]") {
     Database::write_db_to_disk(storage_1);
     double mean_ibu = Calculate::mean_ibu(storage_1, "Beer");
 
-    REQUIRE(mean_ibu == 65);
+    REQUIRE(Calculate::equal_double(mean_ibu, 65));
 }
 
 TEST_CASE("Favorite Brewery", "[Favorite Calculations]") {
@@ -266,7 +265,7 @@ TEST_CASE("Favorite Brewery", "[Favorite Calculations]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -340,7 +339,7 @@ TEST_CASE("Favorite Drink", "[Favorite Calculations]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
@@ -414,7 +413,7 @@ TEST_CASE("Favorite Type", "[Favorite Calculations]") {
         std::cout << "Removed existing testdb.sqlite file" << std::endl;
     }
 
-    Storage storage_1 = initStorage(db_path, Database::db_version);
+    Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
     Drink etrwo;
