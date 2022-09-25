@@ -389,7 +389,6 @@ std::string UserSettings::get_database_path(bool custom_db) {
      * @return: String denoting DB get_db_path
      */
 
-    Options options;  // Reads options from FS
     std::string full_path{};
     if (!custom_db) {
         // Find get_db_path to application support directory
@@ -416,10 +415,11 @@ void UserSettings::clicked_browse_db_path() {
         const QString desktop_path = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0);
         const QString preferred_path = desktop_path + "/buzzbot.db";
 
-        QString filter = "SQLite Files (*.db)";
-        const QString filepath_qstring = QFileDialog::getSaveFileName(nullptr, "Save File",
-                                                                      preferred_path, filter, &filter);
-        ui.dbLocationTextInput->setText(filepath_qstring);
+        QString filepath {QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                                                  desktop_path, QFileDialog::ShowDirsOnly |
+                                                                  QFileDialog::DontResolveSymlinks)};
+        filepath += QString::fromStdString("/buzzbot.db");
+        ui.dbLocationTextInput->setText(filepath);
     }
 }
 

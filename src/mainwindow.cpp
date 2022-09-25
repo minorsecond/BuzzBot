@@ -376,7 +376,7 @@ void MainWindow::open_user_settings() {
         std_drink_size = Calculate::double_to_string(user_settings.get_std_drink_size());
         options.std_drink_country = user_settings.get_std_drink_country();
         options.custom_database = custom_db;
-        options.database_path = user_settings.get_database_path(custom_db);//user_settings.get_database_path();
+        options.database_path = user_settings.get_database_path(custom_db);
         update_stat_panel();
     }
 
@@ -396,19 +396,37 @@ void MainWindow::open_user_settings() {
         options.std_drink_size = std_drink_size;
     }
 
+    if (options.database_path == utilities::get_application_data_path() + "/buzzbot.db" && options.custom_database) {
+        // User didn't change the path from the default path but select custom DB. set option back to default
+        options.custom_database = false;
+        ConfirmDialog path_unchanged("NoDbPathChange");
+        path_unchanged.exec();
+    }
+
     this->options.write_options();
     update_table();
     update_stat_panel();
     update_types_and_producers();
     if (current_db_path_setting != options.database_path) {
         // User changed DB get_db_path settings
-        if (Database::move_db(options.custom_database,  current_db_path_setting, options.database_path) == 1) {
+        const int result{Database::move_db(options.custom_database, current_db_path_setting, options.database_path)};
+        if (result == 1) {
+            std::cout << "Error copying database from " << current_db_path_setting << " to " << options.database_path
+                      << std::endl;
             // TODO: Something bad happened when trying to move DB file. Raise an error window.
-        } else { // Prompt user to reopen app and close automatically (else it will crash)
+        } else if (result == 0) { // Prompt user to reopen app and close automatically (else it will crash)
             ConfirmDialog close_dialog("Moved DB");
             if (close_dialog.exec() == QDialog::Accepted) {
                 exit(1);
             }
+        } else if (result == 2) {
+            // Move didn't happen because destination file already exists
+            ConfirmDialog file_exists("DestFileExists");
+            if (file_exists.exec() == QDialog::Accepted) {
+                // User wants to delete current file and keep destination file
+                std::filesystem::remove(current_db_path_setting);
+            }
+            exit(1);
         }
     }
     std::cout << "Custom standard drink size: " << std_drink_size << std::endl;

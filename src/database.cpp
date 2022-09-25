@@ -2,7 +2,6 @@
 #include "utilities.h"
 #include <utility>
 #include <iostream>
-#include <QStandardPaths>
 #include <filesystem>
 #include <string>
 
@@ -317,20 +316,22 @@ int Database::move_db(bool from_std_path, const std::string &current_path, const
 
     std::filesystem::copy(current_path, std_path + ".bak");
 
-    try {
-        if (utilities::file_exists(new_path)) {
-            std::filesystem::remove(new_path);
+    if (!utilities::file_exists(new_path))
+    {
+        try {
+            std::filesystem::copy(current_path, new_path);
+            if (utilities::file_exists(current_path)) {
+                std::filesystem::remove(current_path);
+            }
+            return 0;
+        } catch (std::filesystem::filesystem_error &e) {
+            std::cout << e.what() << std::endl;
+            std::cout << "Restoring backup!" << std::endl;
+            std::filesystem::copy(std_path + ".bak", std_path);
         }
-
-        std::filesystem::copy(current_path, new_path);
-        if (utilities::file_exists(current_path)) {
-            std::filesystem::remove(current_path);
-        }
-        return 0;
-    } catch (std::filesystem::filesystem_error &e) {
-        std::cout << e.what() << std::endl;
-        std::cout << "Restoring backup!" << std::endl;
-        std::filesystem::copy(std_path + ".bak", std_path);
+    } else {
+        std::cout << new_path << " already exists. Not overwriting with " << current_path << std::endl;
+        return 2;
     }
 
     return 1;

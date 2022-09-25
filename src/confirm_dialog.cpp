@@ -24,5 +24,11 @@ ConfirmDialog::ConfirmDialog(const std::string& action) {
                 "After moving the DB, the app will close. You will have to reopoen it after saving preferences.");
     } else if (action == "Moved DB") {
         ui.actionConfirmationLabel->setText("Closing app. Restart to load data from new location.");
+    } else if (action == "NoDbPathChange") {
+        ui.actionConfirmationLabel->setText("Database path unchanged. It is not being moved.");
+    } else if (action == "DestFileExists") {
+        ui.actionConfirmationLabel->setText("Destination file already exists. BuzzBot will load it upon next launch. \n"
+                                            "Do you want to delete the current file, keeping the destination file?\n"
+                                            "BuzzBot will close after your response.");
     }
 }
