@@ -2,7 +2,6 @@
 // Created by Ross Wardrup on 9/28/21.
 //
 
-//#include "mainwindow.h"
 #include "options.h"
 #include "utilities.h"
 #include "drink_standards.h"
@@ -12,13 +11,11 @@
 #include <filesystem>
 #include <iostream>
 #include <iomanip>
+#include <iosfwd>
 #ifdef __linux
 
 #include <chrono>
 #include <boost/format.hpp>
-#include <unistd.h>
-#include <sys/types.h>
-#include <pwd.h>
 
 #endif
 
