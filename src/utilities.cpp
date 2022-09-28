@@ -16,7 +16,6 @@
 #ifdef __linux
 
 #include <chrono>
-#include <boost/format.hpp>
 
 #endif
 
@@ -72,8 +71,7 @@ std::string utilities::get_local_date() {
     std::ostringstream day_ss;
     day_ss << std::setw(2) << std::setfill('0') << now_tm.tm_mday;
     std::string formatted_day{day_ss.str()};
-
-    output = boost::str(boost::format("%1%-%2%-%3%") % year % formatted_month % formatted_day);
+    output = std::to_string(year) + "-" + formatted_month + "-" + formatted_day;
 #endif
 
     return output;
