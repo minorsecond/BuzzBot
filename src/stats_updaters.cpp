@@ -188,7 +188,7 @@ void MainWindow::update_mean_abv(const std::string& drink_type) {
      */
 
     std::string mean_abv = Calculate::double_to_string(Calculate::mean_abv(storage, drink_type));
-    if (mean_abv == "nan" || mean_abv.empty()) {
+    if (mean_abv == "nan" || mean_abv == "-nan" || mean_abv.empty()) {
         mean_abv = "No " + drink_type + " entered";
     }
     ui->avgAbvDrinkOutput->setText(QString::fromStdString(mean_abv));
@@ -201,7 +201,7 @@ void MainWindow::update_mean_ibu(const std::string& drink_type) {
 
     if (drink_type == "Beer") {
         std::string mean_ibu = Calculate::double_to_string(Calculate::mean_ibu(storage, drink_type));
-        if (mean_ibu == "nan" || mean_ibu.empty()) {
+        if (mean_ibu == "nan" || mean_ibu == "-nan" || mean_ibu.empty()) {
             mean_ibu = "No " + drink_type + " entered";
         }
         ui->avgIbuDrinkOutput->setText(QString::fromStdString(mean_ibu));
