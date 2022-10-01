@@ -108,6 +108,7 @@ ELSEIF(UNIX AND NOT APPLE)
 
 ELSEIF(WIN32)
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/res)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/styles)
     add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/previous.png
             ${CMAKE_CURRENT_BINARY_DIR}/res/previous.png)
     add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/next.png
@@ -116,6 +117,9 @@ ELSEIF(WIN32)
             ${CMAKE_CURRENT_BINARY_DIR}/res/mini-icon.png)
     add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/big_sur_icon.png
             ${CMAKE_CURRENT_BINARY_DIR}/res/big_sur_icon.png)
+    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
+            "C:/msys64/mingw64/share/qt6/plugins/styles/qwindowsvistastyle.dll"
+            ${CMAKE_CURRENT_BINARY_DIR}/styles/qwindowsvistastyle.dll)
 ENDIF()
 
 IF(APPLE)

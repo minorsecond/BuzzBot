@@ -34,6 +34,9 @@ MainWindow::MainWindow(QWidget *parent)
      */
 
     ui->setupUi(this);
+#ifdef __WIN32
+    QApplication::setStyle("fusion");
+#endif
 
     // Select entire row vs just a cell
     ui->drinkLogTable->setSelectionBehavior(QAbstractItemView::SelectRows);
