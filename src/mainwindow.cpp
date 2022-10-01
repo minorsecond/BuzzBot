@@ -109,8 +109,10 @@ void MainWindow::add_menubar_items() {
     /*
      * Add items to the system menubar.
      */
-
-    QMenu * app_menu = menuBar()->addMenu("App Menu");
+    #ifdef __linux__
+        QMenu * app_menu = menuBar()->addMenu("App Menu");
+    #else
+        QMenu * app_menu = menuBar()->addMenu("App Menu");
     auto * preferences_action = new QAction("Preferences", this);
     auto * about_action = new QAction("About", this);
     auto * export_action = new QAction("Export...", this);
