@@ -47,7 +47,7 @@ IF(APPLE)
     file(COPY ${ICON_PATH} DESTINATION "BuzzBot.app/Contents/Resources")
 ENDIF()
 
-add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp
+set(PROJECT_SRC_FILES src/main.cpp src/mainwindow.cpp src/database.cpp
         src/usersettings.cpp src/calculate.cpp src/beer.cpp
         src/liquor.cpp src/wine.cpp src/filters.cpp src/about.cpp src/exporters.cpp
         src/standard_drink_calculator.cpp src/confirm_dialog.cpp
@@ -55,6 +55,15 @@ add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cp
         src/table_manipulation.cpp src/stats_updaters.cpp src/utilities.cpp
         src/graphing_calculations.cpp src/drink.cpp
         src/drink_standards.cpp src/options.cpp)
+
+IF(APPLE)
+    add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} ${PROJECT_SRC_FILES})
+ELSEIF(UNIX AND NOT APPLE)
+    add_executable(BuzzBot ${PROJECT_SRC_FILES})
+ELSE()
+    add_executable(BuzzBot WIN32 ${PROJECT_SRC_FILES})
+ENDIF()
+
 add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h
         test/test_database_functions.cpp test/test_calculations.cpp test/test_graph_calculations.cpp
         src/utilities.cpp src/utilities.h src/drink.h src/graphing_calculations.h src/graphing_calculations.cpp
@@ -108,6 +117,7 @@ ELSEIF(UNIX AND NOT APPLE)
 
 ELSEIF(WIN32)
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/res)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/styles)
     add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/previous.png
             ${CMAKE_CURRENT_BINARY_DIR}/res/previous.png)
     add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/next.png
@@ -116,6 +126,9 @@ ELSEIF(WIN32)
             ${CMAKE_CURRENT_BINARY_DIR}/res/mini-icon.png)
     add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/big_sur_icon.png
             ${CMAKE_CURRENT_BINARY_DIR}/res/big_sur_icon.png)
+    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
+            "C:/msys64/mingw64/share/qt6/plugins/styles/qwindowsvistastyle.dll"
+            ${CMAKE_CURRENT_BINARY_DIR}/styles/qwindowsvistastyle.dll)
 ENDIF()
 
 IF(APPLE)
