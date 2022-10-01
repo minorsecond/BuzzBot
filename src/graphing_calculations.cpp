@@ -8,6 +8,10 @@
 #include <sstream>
 #include "graphing_calculations.h"
 
+#ifdef __WIN32
+    #include "utilities.h"  // For strptime
+#endif
+
 std::vector<double> GraphingCalculations::get_beer_ibus(const std::vector<Drink>& all_drinks) {
     /*
      * Create a vector containing IBU values of all beers.
@@ -111,7 +115,11 @@ std::string GraphingCalculations::week_number(const int date) {
 
     constexpr int days_per_week {7};
     struct tm tm{};
+#ifdef __WIN32
+    utilities::strptime(std::to_string(date).c_str(), "%Y%m%d", &tm);
+#else
     strptime(std::to_string(date).c_str(), "%Y%m%d", &tm);
+#endif
 
     const int wday {tm.tm_wday};
     const int delta {wday ? wday - 1 : days_per_week - 1};
@@ -130,7 +138,11 @@ int GraphingCalculations::date_from_week_num(const std::string& week_num) {
 
     struct tm tm{};
     const std::string week_num_tmp {week_num + "-1"};
+#ifdef __WIN32
+    utilities::strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+#else
     strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+#endif
 
     std::string year {std::to_string(tm.tm_year +1900)};
     std::string month {std::to_string(tm.tm_mon + 1)};

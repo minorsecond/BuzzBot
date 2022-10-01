@@ -59,7 +59,7 @@ std::string utilities::get_local_date() {
     for (char i : query_date) {
         output += std::string(1, i);
     }
-#elif __linux
+#else
     const int year{1900 + now_tm.tm_year};
 
     // 0-pad month

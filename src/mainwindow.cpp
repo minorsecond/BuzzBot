@@ -21,6 +21,8 @@
 
 #ifdef __APPLE__
     #include <CoreFoundation/CFBundle.h>
+#elif _WIN32
+    #include <unistd.h>
 #endif
 
 MainWindow::MainWindow(QWidget *parent)
@@ -149,6 +151,10 @@ void MainWindow::configure_calendar() {
     const std::string home_path = utilities::get_home_path();
     const std::string next_month_arrow = home_path + "/.local/share/icons/com.rwardrup.buzzbot/next.png";
     const std::string previous_month_arrow = home_path + "/.local/share/icons/com.rwardrup.buzzbot/previous.png";
+#elif _WIN32
+    const std::string current_path {utilities::exe_path()};
+    const std::string next_month_arrow {current_path + "/res/next.png"};
+    const std::string previous_month_arrow {current_path + "/res/previous.png"};
 #endif
 
     const std::string stylesheet_text = "QCalendarWidget QWidget#qt_calendar_navigationbar\n"
@@ -171,9 +177,11 @@ void MainWindow::configure_calendar() {
                                   "QCalendarWidget QToolButton#qt_calendar_nextmonth \n"
                                   "{\n"
                                   "\tqproperty-icon: url(" + next_month_arrow + ");\n""}";
+#if __linux__ || __APPLE__
     ui->beerDateInput->setStyleSheet(QString::fromStdString(stylesheet_text));
     ui->liquorDateInput->setStyleSheet(QString::fromStdString(stylesheet_text));
     ui->wineDateInput->setStyleSheet(QString::fromStdString(stylesheet_text));
+#endif
 }
 
 void MainWindow::configure_table() {
