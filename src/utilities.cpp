@@ -16,7 +16,6 @@
 #ifdef __linux
 
 #include <chrono>
-#include <boost/format.hpp>
 
 #endif
 
@@ -52,7 +51,7 @@ std::string utilities::get_local_date() {
 
     const auto todays_date = std::chrono::system_clock::now();
     const auto now_c = std::chrono::system_clock::to_time_t(todays_date);
-    std::tm now_tm = *std::localtime(&now_c);
+    const std::tm now_tm = *std::localtime(&now_c);
 #ifdef __APPLE__
     char query_date[10];
     std::strftime(query_date, sizeof query_date, "%Y-%m-%d", &now_tm);
@@ -60,20 +59,19 @@ std::string utilities::get_local_date() {
     for (char i : query_date) {
         output += std::string(1, i);
     }
-#elif __linux
+#else
     const int year{1900 + now_tm.tm_year};
 
     // 0-pad month
     std::ostringstream month_ss;
     month_ss << std::setw(2) << std::setfill('0') << now_tm.tm_mon + 1;
-    std::string formatted_month{month_ss.str()};
+    const std::string formatted_month{month_ss.str()};
 
     // 0-pad day
     std::ostringstream day_ss;
     day_ss << std::setw(2) << std::setfill('0') << now_tm.tm_mday;
-    std::string formatted_day{day_ss.str()};
-
-    output = boost::str(boost::format("%1%-%2%-%3%") % year % formatted_month % formatted_day);
+    const std::string formatted_day{day_ss.str()};
+    output = std::to_string(year) + "-" + formatted_month + "-" + formatted_day;
 #endif
 
     return output;

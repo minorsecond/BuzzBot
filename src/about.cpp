@@ -6,7 +6,7 @@
 #include <QDir>
 #ifdef __APPLE__
     #include <CoreFoundation/CFBundle.h>
-#elif __linux
+#else
     #include "utilities.h"
 #endif
 
@@ -38,6 +38,9 @@ About::About() {
     const std::string icon_path = icon_path_qstring.toStdString() + "/Contents/Resources/mini-icon.png";
     CFRelease(app_url_ref);
     CFRelease(mac_path);
+#elif _WIN32
+    std::string current_path = utilities::exe_path();
+    const std::string icon_path {current_path + "\\res\\mini-icon.png"};
 #endif
     // Set icon
     QPixmap pixmap(QString::fromStdString(icon_path));
