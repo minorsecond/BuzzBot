@@ -19,7 +19,7 @@ About::About() {
     this->setFixedSize(237, 272);
 
     // Version text
-    const std::string version = "2.4.0";
+    const std::string version = "v2.4.1";
     ui.versionLabel->setText(QString::fromStdString("Version " + version));
 
     // Make Qt URL clickable
