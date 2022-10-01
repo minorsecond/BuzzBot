@@ -20,7 +20,11 @@ inline bool exists (const std::string& name) {
 }
 
 TEST_CASE("Init DB", "[DB Functions]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -35,7 +39,12 @@ TEST_CASE("Init DB", "[DB Functions]") {
 }
 
 TEST_CASE("DB IO", "[DB Functions]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -101,7 +110,12 @@ TEST_CASE("DB IO", "[DB Functions]") {
 }
 
 TEST_CASE("Truncate DB", "[DB Functions]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -160,7 +174,12 @@ TEST_CASE("Truncate DB", "[DB Functions]") {
 }
 
 TEST_CASE("Delete Row", "[DB Functions]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -232,7 +251,12 @@ TEST_CASE("Delete Row", "[DB Functions]") {
 }
 
 TEST_CASE("Read Row", "[DB Functions]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -294,7 +318,12 @@ TEST_CASE("Read Row", "[DB Functions]") {
 }
 
 TEST_CASE("Write Row", "[DB Functions]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -332,7 +361,12 @@ TEST_CASE("Write Row", "[DB Functions]") {
 }
 
 TEST_CASE("Update Row", "[DB Functions]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -410,7 +444,12 @@ TEST_CASE("Update Row", "[DB Functions]") {
 }
 
 TEST_CASE("Increment Version", "[DB Functions]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -426,7 +465,12 @@ TEST_CASE("Increment Version", "[DB Functions]") {
 }
 
 TEST_CASE("Filter DB", "[DB Functions]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -516,7 +560,12 @@ TEST_CASE("Filter DB", "[DB Functions]") {
 }
 
 TEST_CASE("Get Drink By Name", "[DB Functions]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -593,7 +642,12 @@ TEST_CASE("Get Drink By Name", "[DB Functions]") {
 }
 
 TEST_CASE("Get Beers By Type", "[DB Functions]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -672,7 +726,12 @@ TEST_CASE("Get Beers By Type", "[DB Functions]") {
 }
 
 TEST_CASE("Get Beers By Brewery", "[DB Functions]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -751,7 +810,12 @@ TEST_CASE("Get Beers By Brewery", "[DB Functions]") {
 }
 
 TEST_CASE("DB Sort", "[DB Functions]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 

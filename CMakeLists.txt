@@ -47,16 +47,18 @@ IF(APPLE)
     file(COPY ${ICON_PATH} DESTINATION "BuzzBot.app/Contents/Resources")
 ENDIF()
 
-add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp src/mainwindow.h
-        src/database.h src/usersettings.cpp src/usersettings.h src/calculate.cpp src/calculate.h src/beer.cpp
-        src/liquor.cpp src/wine.cpp src/filters.cpp src/about.cpp src/about.h src/exporters.cpp src/exporters.h
-        src/standard_drink_calculator.cpp src/standard_drink_calculator.h src/confirm_dialog.cpp src/confirm_dialog.h
-        src/graphing.cpp src/graphing.h include/qcustomplot.h include/qcustomplot.cpp
-        src/table_manipulation.cpp src/stats_updaters.cpp src/utilities.cpp src/utilities.h src/drink.h
-        src/graphing_calculations.h src/graphing_calculations.cpp src/options.h src/drink.cpp src/drink_standards.h src/drink_standards.cpp src/options.cpp)
+add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} src/main.cpp src/mainwindow.cpp src/database.cpp
+        src/usersettings.cpp src/calculate.cpp src/beer.cpp
+        src/liquor.cpp src/wine.cpp src/filters.cpp src/about.cpp src/exporters.cpp
+        src/standard_drink_calculator.cpp src/confirm_dialog.cpp
+        src/graphing.cpp include/qcustomplot.cpp
+        src/table_manipulation.cpp src/stats_updaters.cpp src/utilities.cpp
+        src/graphing_calculations.cpp src/drink.cpp
+        src/drink_standards.cpp src/options.cpp)
 add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h
         test/test_database_functions.cpp test/test_calculations.cpp test/test_graph_calculations.cpp
-        src/utilities.cpp src/utilities.h src/drink.h src/graphing_calculations.h src/graphing_calculations.cpp src/options.h src/drink.cpp src/drink_standards.h src/drink_standards.cpp src/options.cpp)
+        src/utilities.cpp src/utilities.h src/drink.h src/graphing_calculations.h src/graphing_calculations.cpp
+        src/options.h src/drink.cpp src/drink_standards.h src/drink_standards.cpp src/options.cpp)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     message("Building debug")
@@ -103,6 +105,17 @@ ELSEIF(UNIX AND NOT APPLE)
             $ENV{HOME}/.local/share/icons/big_sur_icon.png)
     add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/buzzbot.desktop
             $ENV{HOME}/.local/share/applications/buzzbot.desktop)
+
+ELSEIF(WIN32)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/res)
+    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/previous.png
+            ${CMAKE_CURRENT_BINARY_DIR}/res/previous.png)
+    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/next.png
+            ${CMAKE_CURRENT_BINARY_DIR}/res/next.png)
+    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/mini-icon.png
+            ${CMAKE_CURRENT_BINARY_DIR}/res/mini-icon.png)
+    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/big_sur_icon.png
+            ${CMAKE_CURRENT_BINARY_DIR}/res/big_sur_icon.png)
 ENDIF()
 
 IF(APPLE)

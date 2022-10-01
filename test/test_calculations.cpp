@@ -110,7 +110,12 @@ TEST_CASE("Oz Alcohol Remaining", "[Drink Calculations]") {
 }
 
 TEST_CASE("Mean ABV", "[Drink Calculations]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -183,7 +188,12 @@ TEST_CASE("Mean ABV", "[Drink Calculations]") {
 }
 
 TEST_CASE("Mean IBU", "[Drink Calculations]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -257,7 +267,12 @@ TEST_CASE("Mean IBU", "[Drink Calculations]") {
 }
 
 TEST_CASE("Favorite Brewery", "[Favorite Calculations]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -331,7 +346,12 @@ TEST_CASE("Favorite Brewery", "[Favorite Calculations]") {
 }
 
 TEST_CASE("Favorite Drink", "[Favorite Calculations]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
@@ -405,7 +425,12 @@ TEST_CASE("Favorite Drink", "[Favorite Calculations]") {
 }
 
 TEST_CASE("Favorite Type", "[Favorite Calculations]") {
-    std::string current_path = std::filesystem::current_path();
+#ifdef __WIN32
+    const std::string current_path {std::filesystem::current_path().string()};
+#else
+    const std::string current_path = std::filesystem::current_path();
+#endif
+
     const char *file_name = "testdb.db";
     std::string db_path = current_path + "/" + file_name;
 
