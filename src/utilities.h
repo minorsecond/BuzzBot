@@ -52,6 +52,7 @@ public:
         return (char*)(s + input.tellg());
     }
 
+#ifdef __WIN32
     static std::string exe_path() {
         TCHAR buffer[MAX_PATH] = { 0 };
         GetModuleFileName( NULL, buffer, MAX_PATH );
@@ -60,6 +61,7 @@ public:
         std::string str(ws.begin(), ws.end());
         return str;
     }
+#endif
 };
 
 
