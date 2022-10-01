@@ -36,6 +36,7 @@ IF( NOT Qt6_FOUND )
     find_package(Qt6 COMPONENTS Core Widgets PrintSupport Gui REQUIRED)
 ENDIF()
 
+find_package(SQLite3 REQUIRED)
 find_package(Catch2 3 REQUIRED)
 
 IF(APPLE)
