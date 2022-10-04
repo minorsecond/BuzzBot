@@ -32,7 +32,11 @@ BuzzBot on macOS
 ![BuzzBot on macOS](res/buzzbot_macOS.png?raw=true)
 </p>
 
+<p align="center">
+BuzzBot on Windows
 
+![BuzzBot on Windows](res/buzzbot_windows.png?raw=true)
+</p>
 ---------
 
 ### Installation instructions
