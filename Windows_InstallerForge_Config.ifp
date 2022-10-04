@@ -3,7 +3,7 @@
 ProjectFileVersion = 1.1
 [General]
 Program name = BuzzBot
-Program version = 2.4.0
+Program version = 2.4.1
 Windows 2000 = 0
 Windows XP = 0
 Windows Server 2003 = 0
@@ -37,9 +37,9 @@ CustomDisplayIcon = <InstallPath>\
 [Licence]
 Licence dialog = 0
 [Finish]
-Sart program = 0
+Sart program = 1
 Reboot computer = 0
-Program = <InstallPath>\
+Program = <InstallPath>\BuzzBot.exe
 ProgramArguments = 
 [Shortcuts]
 Allowtc = 0
@@ -55,7 +55,7 @@ Time = 2
 PlaySound = 0
 Allow = 0
 [Build]
-File = C:\Users\rossw\Desktop\BuzzBot-Setup.exe
+File = C:\Users\user\Desktop\BuzzBot-Setup.exe
 SetupIconPath = ..\icons\ancient.ico
 UninstallIconPath = ..\icons\ancient.ico
 CompressionMethod = 0
@@ -75,12 +75,6 @@ Execdlls = 0
 [Languages]
 1
 [Files/Dirs]
-C:\Users\rossw\CLionProjects\BuzzBot\cmake-build-release\BuzzBot.exe
-3.8 MB
-exe
-C:\Users\rossw\CLionProjects\BuzzBot\cmake-build-release\res\
-N/A
-[Folder]
 C:\msys64\mingw64\bin\libsqlite3-0.dll
 1.4 MB
 dll
@@ -153,16 +147,28 @@ dll
 C:\msys64\mingw64\bin\libiconv-2.dll
 1.1 MB
 dll
-C:\Users\rossw\CLionProjects\BuzzBot\cmake-build-release\platforms\
+C:\msys64\mingw64\bin\libgcc_s_seh-1.dll
+105.2 KB
+dll
+C:\msys64\mingw64\bin\libstdc++-6.dll
+1.9 MB
+dll
+C:\msys64\mingw64\bin\libwinpthread-1.dll
+56.7 KB
+dll
+C:\Users\user\CLionProjects\BuzzBot\cmake-build-release\BuzzBot.exe
+3.8 MB
+exe
+C:\Users\user\CLionProjects\BuzzBot\cmake-build-release\res\
 N/A
 [Folder]
-C:\Users\rossw\CLionProjects\BuzzBot\cmake-build-release\styles\
+C:\Users\user\CLionProjects\BuzzBot\cmake-build-release\styles\
 N/A
 [Folder]
 [Licence_Begin]
-38632
+38628
 {\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
-\viewkind4\uc1\pard\cf0\fs20                     GNU GENERAL PUBLIC LICENSE\par
+\viewkind4\uc1\pard\fs20                     GNU GENERAL PUBLIC LICENSE\par
                        Version 3, 29 June 2007\par
 \par
  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>\par
