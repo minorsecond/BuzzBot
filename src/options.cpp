@@ -64,7 +64,7 @@ Options::Options() {
         limit_standard = config_data["limit_standard"];
         weekly_limit =  std::stoi(config_data["custom_weekly_limit"].get_ref<std::string&>());
         units = config_data["units"];
-        std_drink_size = std::stoi(config_data["std_drink_size"].get_ref<std::string&>());
+        std_drink_size = std::stod(config_data["std_drink_size"].get_ref<std::string&>());
         std_drink_country = config_data["std_drink_country"];
         custom_database = custom_db_setting;
         database_path = config_data["database_path"];
