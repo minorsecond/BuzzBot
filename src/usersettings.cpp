@@ -43,7 +43,7 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
 
     set_limit_standard_states(options);
 
-    ui.stdDrinkDefInput->setValue(std::stod(options.std_drink_size));
+    ui.stdDrinkDefInput->setValue(options.std_drink_size);
 
     if (options.units == "Metric") {
         ui.metricRadioButton->setChecked(true);

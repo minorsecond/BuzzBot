@@ -371,7 +371,7 @@ void MainWindow::open_user_settings() {
 
     UserSettings user_settings = UserSettings(options, std_drink_standards);
     user_settings.setModal(true);
-    std::string std_drink_size = options.std_drink_size;
+    double std_drink_size = options.std_drink_size;
 
     const std::string current_db_path_setting{options.database_path};
     bool custom_db {options.custom_database};
@@ -384,7 +384,7 @@ void MainWindow::open_user_settings() {
         options.limit_standard = user_settings.get_limit_standard();
         options.weekly_limit = user_settings.get_drink_limit();
         options.units = user_settings.get_units();
-        std_drink_size = Calculate::double_to_string(user_settings.get_std_drink_size());
+        std_drink_size = user_settings.get_std_drink_size();
         options.std_drink_country = user_settings.get_std_drink_country();
         options.custom_database = custom_db;
         options.database_path = user_settings.get_database_path(custom_db);
@@ -395,7 +395,7 @@ void MainWindow::open_user_settings() {
         ui->beerSizeLabel->setText("Size (ml)");
         ui->liquorSizeLabel->setText("Size (ml)");
         ui->wineSizeLabel->setText("Size (ml)");
-        options.std_drink_size = Calculate::double_to_string(Calculate::ml_to_oz(std::stod(std_drink_size)));
+        options.std_drink_size =Calculate::ml_to_oz(std_drink_size);
     } else {
         ui->beerSizeLabel->setText("Size (oz)");
         ui->liquorSizeLabel->setText("Size (oz)");
@@ -630,7 +630,7 @@ void MainWindow::open_std_drink_calculator() const {
      * Open the standard drink calculator dialog box.
      */
 
-    auto * std_drink_calculator = new StandardDrinkCalc(std::stod(options.std_drink_size), options.units);
+    auto * std_drink_calculator = new StandardDrinkCalc(options.std_drink_size, options.units);
     std_drink_calculator->setAttribute(Qt::WA_DeleteOnClose);  // Delete pointer on window close
     std_drink_calculator->show();
 }

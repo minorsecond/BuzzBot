@@ -61,7 +61,7 @@ IF(APPLE)
 ELSEIF(UNIX AND NOT APPLE)
     add_executable(BuzzBot ${PROJECT_SRC_FILES})
 ELSE()
-    add_executable(BuzzBot WIN32 ${PROJECT_SRC_FILES})
+    add_executable(BuzzBot ${PROJECT_SRC_FILES})
 ENDIF()
 
 add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h

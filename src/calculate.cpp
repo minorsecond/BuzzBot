@@ -43,12 +43,12 @@ double Calculate::volume_alcohol_remaining(const Options& options, const double 
     double vol_alcohol_remaining {0};
 
     if (options.limit_standard == "Custom") {
-        vol_alcohol_remaining = (std::stod(options.std_drink_size) * options.weekly_limit) - volume_consumed;
+        vol_alcohol_remaining = (options.std_drink_size * options.weekly_limit) - volume_consumed;
     } else {
         if (options.sex == "male") {
-            vol_alcohol_remaining = (std::stod(options.std_drink_size) * 14) - volume_consumed;
+            vol_alcohol_remaining = (options.std_drink_size * 14) - volume_consumed;
         } else if (options.sex == "female") {
-            vol_alcohol_remaining = (std::stod(options.std_drink_size) * 7) - volume_consumed;
+            vol_alcohol_remaining = (options.std_drink_size * 7) - volume_consumed;
         }
     }
 
