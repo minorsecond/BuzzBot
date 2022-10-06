@@ -274,7 +274,7 @@ double MainWindow::get_std_drink_size_from_options() {
 
     double std_drink_size {0.6}; // Default to US
     if (options.std_drink_country == "Custom") {
-        std_drink_size = std::stod(options.std_drink_size);
+        std_drink_size = options.std_drink_size;
     } else {
         std_drink_size = std_drink_standards.find(options.std_drink_country)->second;
     }
