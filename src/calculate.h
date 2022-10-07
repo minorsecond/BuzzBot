@@ -25,10 +25,14 @@ public:
     static double ml_to_oz(const double &input_ml);
     static bool compare_strings(std::string lhs, std::string rhs);
     static int weekly_limit(const Options& options);
-    static int days_in_row(Storage &storage);
+    static unsigned days_in_row(Storage &storage);
     static bool equal_double(const double a, const double b);
+    static double round_to_decimal_place(const double input_val, const unsigned places);
+    static double get_volume_alcohol(const double abv, const double drink_size);
 
 private:
+    constexpr us_male_limit {14};
+    constexpr us_female_limit {7};
     static void decrement_day(std::tm &date);
 };
 

@@ -402,7 +402,7 @@ void MainWindow::open_user_settings() {
         ui->beerSizeLabel->setText("Size (ml)");
         ui->liquorSizeLabel->setText("Size (ml)");
         ui->wineSizeLabel->setText("Size (ml)");
-        options.std_drink_size =Calculate::ml_to_oz(std_drink_size);
+        options.std_drink_size = Calculate::ml_to_oz(std_drink_size);
     } else {
         ui->beerSizeLabel->setText("Size (oz)");
         ui->liquorSizeLabel->setText("Size (oz)");
@@ -735,12 +735,10 @@ std::string MainWindow::format_date(std::chrono::year_month_day date) {
 
     const std::string year = std::to_string((int)date.year());
 
-    const std::string month = utilities::zero_pad_string((unsigned)date.month());
-    const std::string day = utilities::zero_pad_string((unsigned)date.day());
+    const std::string month = utilities::zero_pad_string(static_cast<unsigned>(date.month()));
+    const std::string day = utilities::zero_pad_string(static_cast<unsigned>(date.day()));
 
-    const std::string query_date = year + "-" + month + "-" + day;
-
-    return query_date;
+    return year + "-" + month + "-" + day;
 }
 
 void MainWindow::open_graphs() {
@@ -781,7 +779,6 @@ void MainWindow::rename_duplicate_drink_names(std::vector<Drink> &drinks) {
 
     for (const auto &elem : count_map) {
         if (elem.second > 1) {
-            //count_map.erase(count_map.find(elem.first));  // Erase drinks with only one name entry
             for (Drink &drink : drinks) {
                 if (drink.get_name() == elem.first) {
                     if (!drink.get_producer().empty()) {

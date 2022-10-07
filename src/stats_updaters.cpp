@@ -108,11 +108,11 @@ double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink
     for (const auto& drink : drinks_this_week) {
         double drinks_vol_alcohol;
         if (options.units == "Imperial") {
-            drinks_vol_alcohol = (drink.get_abv() / 100) * drink.get_size();
+            drinks_vol_alcohol = Calculate::get_volume_alcohol(drink.get_abv, drink_size);
         } else {
             // Everything is stored in DB as oz. Convert back to ml for display.
             const double drink_size = Calculate::oz_to_ml(drink.get_size());
-            drinks_vol_alcohol = (drink.get_abv() / 100) * drink_size;
+            drinks_vol_alcohol = Calculate::get_volume_alcohol(drink.get_abv, drink_size);
         }
         volume_consumed += drinks_vol_alcohol;
     }
@@ -121,7 +121,7 @@ double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink
         ui->volAlcoholConsumedOutput->setText("0.0");
     } else {
         // Round to tenth place
-        volume_consumed = floor(volume_consumed * 10 + 0.5) / 10;
+        volume_consumed = Calculate::round_to_decimal_place(volume_consumed, 1);
         ui->volAlcoholConsumedOutput->setText(QString::fromStdString(Calculate::double_to_string(volume_consumed)));
     }
 
@@ -146,7 +146,7 @@ void MainWindow::update_volume_alcohol_remaining(double volume_alcohol_consumed)
         volume_alcohol_remaining = Calculate::oz_to_ml(volume_alcohol_remaining);
 
         // Round to tenth place
-        volume_alcohol_remaining = floor(volume_alcohol_remaining * 10 + 0.5) / 10;
+        volume_alcohol_remaining = Calculate::round_to_decimal_place(volume_alcohol_remaining, 1);
     }
     ui->volAlcoholRemainingOutput->setText(QString::fromStdString(Calculate::double_to_string(volume_alcohol_remaining)));
 

@@ -132,7 +132,7 @@ void MainWindow::update_table() {
             drink_size = Calculate::oz_to_ml(drink_size);
 
             // Round to tenth place
-            drink_size = floor(drink_size * 10 + 0.5) / 10;
+            drink_size = Calculate::round_to_decimal_place(drink_size, 1);
         }
         auto *size = new QTableWidgetItem(Calculate::double_to_string(drink_size).c_str());
 

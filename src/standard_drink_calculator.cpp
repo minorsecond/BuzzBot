@@ -57,7 +57,6 @@ void StandardDrinkCalc::abv_changed() {
 }
 
 StandardDrinkCalc::~StandardDrinkCalc() {
-    std::cout << "Deleted StandardDrinkCalc" << std::endl;
 }
 
 

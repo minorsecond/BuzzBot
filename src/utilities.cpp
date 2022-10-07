@@ -81,15 +81,6 @@ std::string utilities::get_home_path() {
     return std::getenv("HOME");
 }
 
-double utilities::round_to_two_decimal_points(const double &val) {
-    /*
-     * Round a double to two decimal points.
-     * @param val: The value that should be rounded.
-     */
-
-    return floor((val * 100) + .5)/100;
-}
-
 double utilities::get_std_drink_size() {
     /*
      * Get standard drink size from either options or map.
