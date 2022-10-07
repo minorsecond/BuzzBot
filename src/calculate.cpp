@@ -74,7 +74,7 @@ std::string Calculate::favorite_producer(const Storage& storage, const std::stri
         producers.push_back(drink.producer);
     }
     for (const auto& producer : producers) {
-        int producer_count = std::count(producers.begin(), producers.end(), producer);
+        size_t producer_count = std::count(producers.begin(), producers.end(), producer);
         producer_counts[producer] = producer_count;
     }
 
@@ -107,7 +107,7 @@ std::string Calculate::favorite_drink(const Storage& storage, const std::string&
         drinks.push_back(drink.name);
     }
     for (const auto& producer : drinks) {
-        int producer_count = std::count(drinks.begin(), drinks.end(), producer);
+        size_t producer_count = std::count(drinks.begin(), drinks.end(), producer);
         drink_counts[producer] = producer_count;
     }
 
@@ -182,7 +182,7 @@ std::string Calculate::favorite_type(const Storage& storage, const std::string& 
         types.push_back(drink.type);
     }
     for (const auto& type : types) {
-        int producer_count = std::count(types.begin(), types.end(), type);
+        size_t producer_count = std::count(types.begin(), types.end(), type);
         type_counts[type] = producer_count;
     }
 
@@ -268,7 +268,7 @@ int Calculate::weekly_limit(const Options& options) {
         } else if (sex == "female") {
             drink_limit = 7;
         } else {
-            std::cout << "Sex is incorrectly set: " << sex << std::endl;  //TODO: Handle this
+            std::cout << "Sex is incorrectly set: " << sex << std::endl;
         }
     }
 
