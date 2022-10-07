@@ -406,7 +406,7 @@ void MainWindow::open_user_settings() {
     if (options.database_path == utilities::get_application_data_path() + "/buzzbot.db" && options.custom_database) {
         // User didn't change the path from the default path but select custom DB. set option back to default
         options.custom_database = false;
-        ConfirmDialog path_unchanged("NoDbPathChange");
+        ConfirmDialog path_unchanged(ConfirmStatus::NoDbPathChange);
         path_unchanged.exec();
     }
 
@@ -420,15 +420,21 @@ void MainWindow::open_user_settings() {
         if (result == 1) {
             std::cout << "Error copying database from " << current_db_path_setting << " to " << options.database_path
                       << std::endl;
-            // TODO: Something bad happened when trying to move DB file. Raise an error window.
+            ConfirmDialog warning{ConfirmStatus::ErrorMovingDbFile};
+            if(warning.exec() == QDialog::Accepted) {
+                const std::string backup_loc {current_db_path_setting + ".bak"};
+                Database::move_db(backup_loc, current_db_path_setting);
+            } else {
+                exit(1);
+            }
         } else if (result == 0) { // Prompt user to reopen app and close automatically (else it will crash)
-            ConfirmDialog close_dialog("Moved DB");
+            ConfirmDialog close_dialog(ConfirmStatus::MovedDb);
             if (close_dialog.exec() == QDialog::Accepted) {
                 exit(1);
             }
         } else if (result == 2) {
             // Move didn't happen because destination file already exists
-            ConfirmDialog file_exists("DestFileExists");
+            ConfirmDialog file_exists(ConfirmStatus::DestFileExists);
             if (file_exists.exec() == QDialog::Accepted) {
                 // User wants to delete current file and keep destination file
                 std::filesystem::remove(current_db_path_setting);
