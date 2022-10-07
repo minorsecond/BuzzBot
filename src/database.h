@@ -56,8 +56,7 @@ inline auto initStorage(const std::string &file_name) {
 
 using Storage = decltype(initStorage(""));
 
-class Database
-{
+class Database {
 public:
     static const int db_version {8};
     static std::vector<Drink> read(Storage storage);
@@ -69,7 +68,8 @@ public:
     static std::vector<Drink> filter(const std::string& filter_type, const std::string& filter_text, Storage storage);
     static void write_db_to_disk(Storage &storage);
     static Drink get_drink_by_name(Storage &storage, const std::string &alcohol_type, const std::string &drink_name);
-    static Drink get_drink_by_name(Storage &storage, const std::string &alcohol_type, const std::string &drink_name, const std::string &producer);
+    static Drink get_drink_by_name(Storage &storage, const std::string &alcohol_type, const std::string &drink_name,
+                                   const std::string &producer);
     static std::vector<Drink> get_drinks_by_type(Storage &storage, std::string drink_type);
     static std::vector<Drink> get_drinks_by_producer(Storage &storage, std::string producer);
     static int get_version(Storage storage);

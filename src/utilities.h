@@ -22,8 +22,6 @@ public:
 
     static std::string get_home_path();
 
-    static double round_to_two_decimal_points(const double &val);
-
     static double get_std_drink_size();
 
     static std::string get_application_data_path();
