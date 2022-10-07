@@ -54,7 +54,7 @@ Options::Options() {
 
     const std::string path {utilities::settings_path()};
     if (std::filesystem::exists(path)) {
-        std::ifstream f(utilities::settings_path());
+        std::ifstream f(path);
         json config_data = json::parse(f);
         const bool custom_db_setting{ config_data["custom_db"] == "true" };
 
