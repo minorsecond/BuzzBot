@@ -279,8 +279,8 @@ unsigned Calculate::days_in_row(Storage &storage) {
     bool found_day_without_drink {false};
     int day_counter {0};
     const std::string date {utilities::get_local_date()};
-    constexpr unsigned tm_year_offset {1900};
-    constexpr unsigned tm_month_offset {1};
+    constexpr int tm_year_offset {1900};
+    constexpr int tm_month_offset {1};
 
     // Construct the initial date
     std::tm search_date{};
