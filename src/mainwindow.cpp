@@ -201,13 +201,20 @@ void MainWindow::configure_table() {
     ui->drinkLogTable->setSortingEnabled(true);
 
     // Set table filter options to default values (all)
-    ui->filterCategoryInput->addItem("None");
+    const std::array<std::string, 6> filter_types {
+        "None",
+        "Name",
+        "Type",
+        "Subtype",
+        "Producer",
+        "Rating"
+    };
+
+    for (const std::string &filter_name : filter_types) {
+        ui->filterCategoryInput->addItem(QString::fromStdString(filter_name));
+    }
+
     ui->filterCategoryInput->setCurrentText("None");
-    ui->filterCategoryInput->addItem("Name");
-    ui->filterCategoryInput->addItem("Type");
-    ui->filterCategoryInput->addItem("Subtype");
-    ui->filterCategoryInput->addItem("Producer");
-    ui->filterCategoryInput->addItem("Rating");
     ui->filterTextInput->setDisabled(true);
 
     // Set column widths
