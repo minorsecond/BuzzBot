@@ -6,6 +6,12 @@
 #include <vector>
 #include <QDate>
 
+enum class DbMoveStatus {
+    Success,
+    ErrorCopyingDb,
+    DestFileExists
+};
+
 inline auto initStorage(const std::string &file_name) {
     /*
      * Initialize the DB
@@ -63,7 +69,7 @@ private:
     static void populate_size_field();
 
 public:
-    static int move_db(const std::string &current_path, const std::string &new_path);
+    static DbMoveStatus move_db(const std::string &current_path, const std::string &new_path);
 };
 
 #endif // DATABASE_H
