@@ -8,7 +8,6 @@
 #include "calculate.h"
 #include "graphing.h"
 #include "utilities.h"
-#include "confirm_dialog.h"
 #include <iomanip>
 #include <filesystem>
 #include <iostream>
