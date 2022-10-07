@@ -44,6 +44,7 @@ int Options::write_options() const {
     } else {
         out_data.open(path);
         out_data << std::setw(4) << output_data << std::endl;
+        out_data.close();
     }
 
     return 0;
