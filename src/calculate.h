@@ -31,8 +31,8 @@ public:
     static double get_volume_alcohol(const double abv, const double drink_size);
 
 private:
-    constexpr us_male_limit {14};
-    constexpr us_female_limit {7};
+    constexpr unsigned us_male_limit {14};
+    constexpr unsigned us_female_limit {7};
     static void decrement_day(std::tm &date);
 };
 
