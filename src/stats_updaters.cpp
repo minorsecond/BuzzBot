@@ -108,11 +108,11 @@ double MainWindow::update_vol_alcohol_consumed_this_week(const std::vector<Drink
     for (const auto& drink : drinks_this_week) {
         double drinks_vol_alcohol;
         if (options.units == "Imperial") {
-            drinks_vol_alcohol = Calculate::get_volume_alcohol(drink.get_abv, drink_size);
+            drinks_vol_alcohol = Calculate::get_volume_alcohol(drink.get_abv(), drink.get_size());
         } else {
             // Everything is stored in DB as oz. Convert back to ml for display.
             const double drink_size = Calculate::oz_to_ml(drink.get_size());
-            drinks_vol_alcohol = Calculate::get_volume_alcohol(drink.get_abv, drink_size);
+            drinks_vol_alcohol = Calculate::get_volume_alcohol(drink.get_abv(), drink_size);
         }
         volume_consumed += drinks_vol_alcohol;
     }

@@ -48,7 +48,7 @@ double Calculate::volume_alcohol_remaining(const Options& options, const double 
         }
     }
 
-    return Calculate::round_to_decimal_place(vol_alcohol_remaining, 2);
+    return round_to_decimal_place(vol_alcohol_remaining, 2);
 }
 
 std::string Calculate::favorite_producer(const Storage& storage, const std::string& drink_type) {
@@ -135,7 +135,7 @@ double Calculate::mean_abv(const Storage& storage, const std::string& drink_type
         abv_sum += drink.abv;
     }
 
-    return Calculate::round_to_decimal_place(abv_sum/drink_count, 2);
+    return round_to_decimal_place(abv_sum/drink_count, 2);
 }
 
 double Calculate::mean_ibu(const Storage& storage, const std::string& drink_type) {
@@ -201,7 +201,7 @@ std::string Calculate::double_to_string(const double &input_double) {
      * @return output_string: string-formatted double with two decimal points.
      */
 
-    const double converted_double {Calculate::round_to_decimal_point(input_double, 2)};
+    const double converted_double {round_to_decimal_place(input_double, 2)};
     std::ostringstream output_string;
     output_string << converted_double;
 
@@ -328,7 +328,7 @@ void Calculate::decrement_day(std::tm &date) {
      * @param date: a tm object
      */
 
-    constexpr one_day {60*60*24};
+    constexpr unsigned one_day {60*60*24};
     std::time_t search_date_t {std::mktime(&date)};
     search_date_t -= one_day;
     const std::tm *search_date {std::localtime(&search_date_t)};
@@ -349,23 +349,24 @@ bool Calculate::equal_double(const double a, const double b) {
     return fabs(a - b) < std::numeric_limits<double>::epsilon();
 }
 
-double round_to_decimal_place(const double input_val, const unsigned places) {
+double Calculate::round_to_decimal_place(const double input_val, const unsigned places) {
     /*
      * Round input value to tenth place.
      * @param input_val: Value to round.
      * @return: a double rounded to the tenth place.
      */
 
+    unsigned divisor{};
     if (places == 1) {
-        const unsigned divisor {10};
+        divisor = 10;
     } else if (places == 2) {
-        const unsigned divisor {100};
+        divisor = 100;
     }
 
-    return floor((val * 100) + .5) / divisor;
+    return floor((input_val * 100) + .5) / divisor;
 }
 
-double get_volume_alcohol(const double abv, const double drink_size) {
+double Calculate::get_volume_alcohol(const double abv, const double drink_size) {
     /*
      * Calculate the drink alcohol volume.
      * @param abv: Drink's ABV.
@@ -373,5 +374,5 @@ double get_volume_alcohol(const double abv, const double drink_size) {
      * @return: Volume of alcohol in drink.
      */
 
-    return (abv / 100) * drink_size
+    return (abv / 100) * drink_size;
 }

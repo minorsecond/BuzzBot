@@ -27,12 +27,12 @@ public:
     static int weekly_limit(const Options& options);
     static unsigned days_in_row(Storage &storage);
     static bool equal_double(const double a, const double b);
-    static double round_to_decimal_place(const double input_val, const unsigned places);
+    static double round_to_decimal_place(double input_val, unsigned places);
     static double get_volume_alcohol(const double abv, const double drink_size);
 
 private:
-    constexpr unsigned us_male_limit {14};
-    constexpr unsigned us_female_limit {7};
+    static constexpr unsigned us_male_limit {14};
+    static constexpr unsigned us_female_limit {7};
     static void decrement_day(std::tm &date);
 };
 
