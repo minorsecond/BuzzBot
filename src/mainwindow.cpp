@@ -201,13 +201,20 @@ void MainWindow::configure_table() {
     ui->drinkLogTable->setSortingEnabled(true);
 
     // Set table filter options to default values (all)
-    ui->filterCategoryInput->addItem("None");
+    const std::array<std::string, 6> filter_types {
+        "None",
+        "Name",
+        "Type",
+        "Subtype",
+        "Producer",
+        "Rating"
+    };
+
+    for (const std::string &filter_name : filter_types) {
+        ui->filterCategoryInput->addItem(QString::fromStdString(filter_name));
+    }
+
     ui->filterCategoryInput->setCurrentText("None");
-    ui->filterCategoryInput->addItem("Name");
-    ui->filterCategoryInput->addItem("Type");
-    ui->filterCategoryInput->addItem("Subtype");
-    ui->filterCategoryInput->addItem("Producer");
-    ui->filterCategoryInput->addItem("Rating");
     ui->filterTextInput->setDisabled(true);
 
     // Set column widths
@@ -416,8 +423,8 @@ void MainWindow::open_user_settings() {
     update_types_and_producers();
     if (current_db_path_setting != options.database_path) {
         // User changed DB get_db_path settings
-        const int result{Database::move_db(current_db_path_setting, options.database_path)};
-        if (result == 1) {
+        const DbMoveStatus result{Database::move_db(current_db_path_setting, options.database_path)};
+        if (result == DbMoveStatus::ErrorCopyingDb) {
             std::cout << "Error copying database from " << current_db_path_setting << " to " << options.database_path
                       << std::endl;
             ConfirmDialog warning{ConfirmStatus::ErrorMovingDbFile};
@@ -427,12 +434,12 @@ void MainWindow::open_user_settings() {
             } else {
                 exit(1);
             }
-        } else if (result == 0) { // Prompt user to reopen app and close automatically (else it will crash)
+        } else if (result == DbMoveStatus::Success) { // Prompt user to reopen app and close automatically (else it will crash)
             ConfirmDialog close_dialog(ConfirmStatus::MovedDb);
             if (close_dialog.exec() == QDialog::Accepted) {
                 exit(1);
             }
-        } else if (result == 2) {
+        } else if (result == DbMoveStatus::DestFileExists) {
             // Move didn't happen because destination file already exists
             ConfirmDialog file_exists(ConfirmStatus::DestFileExists);
             if (file_exists.exec() == QDialog::Accepted) {

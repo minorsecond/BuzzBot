@@ -6,6 +6,12 @@
 #include <vector>
 #include <QDate>
 
+enum class DbMoveStatus {
+    Success,
+    ErrorCopyingDb,
+    DestFileExists
+};
+
 inline auto initStorage(const std::string &file_name) {
     /*
      * Initialize the DB
@@ -22,17 +28,30 @@ inline auto initStorage(const std::string &file_name) {
                                                                                            "2020-01-01")),
                                                            sqlite_orm::make_column("drink_name", &Drink::name),
                                                           sqlite_orm::make_column("drink_type", &Drink::type),
-                                                          sqlite_orm::make_column("drink_subtype", &Drink::subtype, sqlite_orm::default_value("")),
-                                                          sqlite_orm::make_column("producer", &Drink::producer, sqlite_orm::default_value("")),
+                                                          sqlite_orm::make_column("drink_subtype",
+                                                                                  &Drink::subtype,
+                                                                                  sqlite_orm::default_value("")),
+                                                          sqlite_orm::make_column("producer",
+                                                                                  &Drink::producer,
+                                                                                  sqlite_orm::default_value("")),
                                                           sqlite_orm::make_column("abv", &Drink::abv),
                                                           sqlite_orm::make_column("ibu", &Drink::ibu),
-                                                          sqlite_orm::make_column("_size", &Drink::_size, sqlite_orm::default_value(0.0)),
-                                                          sqlite_orm::make_column("size", &Drink::size, sqlite_orm::default_value(0.0)),
+                                                          sqlite_orm::make_column("_size", &Drink::_size,
+                                                                                  sqlite_orm::default_value(0.0)),
+                                                          sqlite_orm::make_column("size", &Drink::size,
+                                                                                  sqlite_orm::default_value(0.0)),
                                                           sqlite_orm::make_column("rating", &Drink::rating),
                                                           sqlite_orm::make_column("notes", &Drink::notes),
-                                                          sqlite_orm::make_column("vintage", &Drink::vintage, sqlite_orm::default_value(-999)),
-                                                          sqlite_orm::make_column("alcohol_type", &Drink::alcohol_type, sqlite_orm::default_value("Beer")),
-                                                          sqlite_orm::make_column("timestamp", &Drink::timestamp, sqlite_orm::default_value(sqlite_orm::datetime("now", "localtime")))));
+                                                          sqlite_orm::make_column("vintage", &Drink::vintage,
+                                                                                  sqlite_orm::default_value(-999)),
+                                                          sqlite_orm::make_column("alcohol_type",
+                                                                                  &Drink::alcohol_type,
+                                                                                  sqlite_orm::default_value("Beer")),
+                                                          sqlite_orm::make_column("timestamp",
+                                                                                  &Drink::timestamp,
+                                                                                  sqlite_orm::default_value(
+                                                                                          sqlite_orm::datetime(
+                                                                                                  "now", "localtime")))));
 }
 
 using Storage = decltype(initStorage(""));
@@ -60,10 +79,9 @@ public:
 
 private:
     static bool compare_date(const Drink &a, const Drink &b);
-    static void populate_size_field();
 
 public:
-    static int move_db(const std::string &current_path, const std::string &new_path);
+    static DbMoveStatus move_db(const std::string &current_path, const std::string &new_path);
 };
 
 #endif // DATABASE_H

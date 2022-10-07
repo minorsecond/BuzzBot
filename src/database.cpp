@@ -301,7 +301,7 @@ void Database::sort_by_date_id(std::vector<Drink> &drinks) {
 }
 
 
-int Database::move_db(const std::string &current_path, const std::string &new_path) {
+DbMoveStatus Database::move_db(const std::string &current_path, const std::string &new_path) {
     /*
      * Move DB file if user selects a new get_db_path option.
      * @param: None
@@ -323,7 +323,7 @@ int Database::move_db(const std::string &current_path, const std::string &new_pa
             if (utilities::file_exists(current_path)) {
                 std::filesystem::remove(current_path);
             }
-            return 0;
+            return DbMoveStatus::Success;
         } catch (std::filesystem::filesystem_error &e) {
             std::cout << e.what() << std::endl;
             std::cout << "Restoring backup!" << std::endl;
@@ -331,8 +331,8 @@ int Database::move_db(const std::string &current_path, const std::string &new_pa
         }
     } else {
         std::cout << new_path << " already exists. Not overwriting with " << current_path << std::endl;
-        return 2;
+        return DbMoveStatus::DestFileExists;
     }
 
-    return 1;
+    return DbMoveStatus::ErrorCopyingDb;
 }
