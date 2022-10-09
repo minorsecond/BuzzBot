@@ -4,10 +4,10 @@
 # BuzzBot
 ## Track your consumption of your favorite alcoholic drinks
 ### Build Status
-| Branch  | macOS Build Status                                                                                                                      | Linux Build Status                                                                                                        | Code Review                                                                                                                                                                                                                 |
-|---------|-----------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| master  | [![Actions Status](https://github.com/minorsecond/BuzzBot/workflows/Master/badge.svg)](https://github.com/minorsecond/BuzzBot/actions)  | [![Build Status](https://ci.wardrup.me/buildStatus/icon?job=BuzzBot-MasterPRMerge)](https://ci.wardrup.me/job/BuzzBot-MasterPRMerge/)  | [![CodeFactor](https://www.codefactor.io/repository/github/minorsecond/buzzbot/badge/master?s=7d0189852bedaddcb41bc7579892f35d6cca05b3)](https://www.codefactor.io/repository/github/minorsecond/buzzbot/overview/master)   |
-| develop | [![Actions Status](https://github.com/minorsecond/BuzzBot/workflows/Develop/badge.svg)](https://github.com/minorsecond/BuzzBot/actions) | [![Build Status](https://ci.wardrup.me/buildStatus/icon?job=BuzzBot-DevelopPRMerge)](https://ci.wardrup.me/job/BuzzBot-DevelopPRMerge/) | [![CodeFactor](https://www.codefactor.io/repository/github/minorsecond/buzzbot/badge/develop?s=7d0189852bedaddcb41bc7579892f35d6cca05b3)](https://www.codefactor.io/repository/github/minorsecond/buzzbot/overview/develop) |
+| Branch  | macOS Build Status                                                                                                                      | Linux Build Status                                                                                                                                    | Windows Build Status                                                                                                                                      | Code Review                                                                                                                                                                                                                 |
+|---------|-----------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| master  | [![Actions Status](https://github.com/minorsecond/BuzzBot/workflows/Master/badge.svg)](https://github.com/minorsecond/BuzzBot/actions)  | [![Build Status](https://ci.wardrup.me/buildStatus/icon?job=BuzzBot-Master-PRMerge-Linux)](https://ci.wardrup.me/job/BuzzBot-Master-PRMerge-Linux/)   | [![Build Status](https://ci.wardrup.me/buildStatus/icon?job=BuzzBot-MasterPRMerge-Windows)](https://ci.wardrup.me/job/BuzzBot-Master-PRMerge-Windows/)    | [![CodeFactor](https://www.codefactor.io/repository/github/minorsecond/buzzbot/badge/master?s=7d0189852bedaddcb41bc7579892f35d6cca05b3)](https://www.codefactor.io/repository/github/minorsecond/buzzbot/overview/master)   |
+| develop | [![Actions Status](https://github.com/minorsecond/BuzzBot/workflows/Develop/badge.svg)](https://github.com/minorsecond/BuzzBot/actions) | [![Build Status](https://ci.wardrup.me/buildStatus/icon?job=BuzzBot-Develop-PRMerge-Linux)](https://ci.wardrup.me/job/BuzzBot-Develop-PRMerge-Linux/) | [![Build Status](https://ci.wardrup.me/buildStatus/icon?job=BuzzBot-Develop-PRMerge-Windows)](https://ci.wardrup.me/job/BuzzBot-Develop-PRMerge-Windows/) | [![CodeFactor](https://www.codefactor.io/repository/github/minorsecond/buzzbot/badge/develop?s=7d0189852bedaddcb41bc7579892f35d6cca05b3)](https://www.codefactor.io/repository/github/minorsecond/buzzbot/overview/develop) |
 
 ### Keep track of:
 - Your favorite drinks
@@ -16,6 +16,7 @@
 - Number of standard drinks left for the weeks
 - Average ABV & IBU per drink
 - Drink notes
+- Graphs
 
 ---------
 
@@ -32,14 +33,18 @@ BuzzBot on macOS
 ![BuzzBot on macOS](res/buzzbot_macOS.png?raw=true)
 </p>
 
+<p align="center">
+BuzzBot on Windows
 
+![BuzzBot on Windows](res/buzzbot_windows.png?raw=true)
+</p>
 ---------
 
 ### Installation instructions
 - `git clone https://github.com/minorsecond/BuzzBot.git`
 - `cd BuzzBot`
 - `mkdir build && cd build`
-- `cmake ..`
+- `cmake -DCMAKE_BUILD_TYPE=Release ..`
 - `cmake --build . --target BuzzBot`. If you want to run tests, run `cmake --build . --target functions_test`.
 - If you're running macOS, you'll have a `BuzzBot.app` file in the `build` directory.
 - If you're running Linux, you can install the app in `~/.local/bin` by running `cmake --install .`.

@@ -14,7 +14,7 @@ void MainWindow::update_selected_row(QItemSelectionModel* select, Drink entered_
      * @param entered_drink: A Drink containing data from the database.
      */
 
-    ConfirmDialog confirmation_dialog = ConfirmDialog("Update");
+    ConfirmDialog confirmation_dialog = ConfirmDialog(ConfirmStatus::Update);
     if (confirmation_dialog.exec() == QDialog::Accepted) {
         // Get the selected row
         int selection = select->selectedRows().at(0).row();
@@ -132,7 +132,7 @@ void MainWindow::update_table() {
             drink_size = Calculate::oz_to_ml(drink_size);
 
             // Round to tenth place
-            drink_size = floor(drink_size * 10 + 0.5) / 10;
+            drink_size = Calculate::round_to_decimal_place(drink_size, 1);
         }
         auto *size = new QTableWidgetItem(Calculate::double_to_string(drink_size).c_str());
 
@@ -168,7 +168,7 @@ void MainWindow::delete_row() {
      * Delete the row in the database that corresponds to the row selected in the table.
      */
 
-    ConfirmDialog confirmation_dialog = ConfirmDialog("Delete");
+    ConfirmDialog confirmation_dialog = ConfirmDialog(ConfirmStatus::Delete);
     if (confirmation_dialog.exec() == QDialog::Accepted) {
         int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
         int row_to_delete = (ui->drinkLogTable->item(select, 10)->text().toUtf8().toInt());

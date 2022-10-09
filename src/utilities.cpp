@@ -81,15 +81,6 @@ std::string utilities::get_home_path() {
     return std::getenv("HOME");
 }
 
-double utilities::round_to_two_decimal_points(const double &val) {
-    /*
-     * Round a double to two decimal points.
-     * @param val: The value that should be rounded.
-     */
-
-    return floor((val * 100) + .5)/100;
-}
-
 double utilities::get_std_drink_size() {
     /*
      * Get standard drink size from either options or map.
@@ -100,7 +91,7 @@ double utilities::get_std_drink_size() {
     double standard_drink_size{0.0};
 
     if (options.std_drink_country == "Custom") {
-        standard_drink_size = std::stod(options.std_drink_size);
+        standard_drink_size = options.std_drink_size;
     } else {
         standard_drink_size = std_drink_standards.find(options.std_drink_country)->second;
     }
@@ -160,7 +151,7 @@ std::string utilities::settings_path() {
     // Find get_db_path to application support directory
     const std::string directory = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(
             0).toStdString();
-    const std::string settings_path = directory + "/buzzbot_settings.conf";
+    const std::string settings_path = directory + "/buzzbot_settings.json";
     std::filesystem::create_directory(directory);
 
     return settings_path;

@@ -25,13 +25,8 @@ double Calculate::standard_drinks_remaining(const Options& options, const double
      * @param standard_drinks_consumed: The number of standard drinks consumed so far this week.
      */
 
-    double weekly_drinks_remaining;
-
     const int drink_limit = Calculate::weekly_limit(options);
-
-    weekly_drinks_remaining = drink_limit - standard_drinks_consumed;
-
-    return weekly_drinks_remaining;
+    return drink_limit - standard_drinks_consumed;
 }
 
 double Calculate::volume_alcohol_remaining(const Options& options, const double &volume_consumed) {
@@ -43,16 +38,16 @@ double Calculate::volume_alcohol_remaining(const Options& options, const double 
     double vol_alcohol_remaining {0};
 
     if (options.limit_standard == "Custom") {
-        vol_alcohol_remaining = (std::stod(options.std_drink_size) * options.weekly_limit) - volume_consumed;
+        vol_alcohol_remaining = (options.std_drink_size * options.weekly_limit) - volume_consumed;
     } else {
         if (options.sex == "male") {
-            vol_alcohol_remaining = (std::stod(options.std_drink_size) * 14) - volume_consumed;
+            vol_alcohol_remaining = (options.std_drink_size * us_male_limit) - volume_consumed;
         } else if (options.sex == "female") {
-            vol_alcohol_remaining = (std::stod(options.std_drink_size) * 7) - volume_consumed;
+            vol_alcohol_remaining = (options.std_drink_size * us_female_limit) - volume_consumed;
         }
     }
 
-    return utilities::round_to_two_decimal_points(vol_alcohol_remaining);
+    return round_to_decimal_place(vol_alcohol_remaining, 2);
 }
 
 std::string Calculate::favorite_producer(const Storage& storage, const std::string& drink_type) {
@@ -74,7 +69,7 @@ std::string Calculate::favorite_producer(const Storage& storage, const std::stri
         producers.push_back(drink.producer);
     }
     for (const auto& producer : producers) {
-        int producer_count = std::count(producers.begin(), producers.end(), producer);
+        size_t producer_count = std::count(producers.begin(), producers.end(), producer);
         producer_counts[producer] = producer_count;
     }
 
@@ -107,7 +102,7 @@ std::string Calculate::favorite_drink(const Storage& storage, const std::string&
         drinks.push_back(drink.name);
     }
     for (const auto& producer : drinks) {
-        int producer_count = std::count(drinks.begin(), drinks.end(), producer);
+        size_t producer_count = std::count(drinks.begin(), drinks.end(), producer);
         drink_counts[producer] = producer_count;
     }
 
@@ -139,7 +134,7 @@ double Calculate::mean_abv(const Storage& storage, const std::string& drink_type
         abv_sum += drink.abv;
     }
 
-    return utilities::round_to_two_decimal_points(abv_sum / drink_count);
+    return round_to_decimal_place(abv_sum/drink_count, 2);
 }
 
 double Calculate::mean_ibu(const Storage& storage, const std::string& drink_type) {
@@ -182,7 +177,7 @@ std::string Calculate::favorite_type(const Storage& storage, const std::string& 
         types.push_back(drink.type);
     }
     for (const auto& type : types) {
-        int producer_count = std::count(types.begin(), types.end(), type);
+        size_t producer_count = std::count(types.begin(), types.end(), type);
         type_counts[type] = producer_count;
     }
 
@@ -205,9 +200,7 @@ std::string Calculate::double_to_string(const double &input_double) {
      * @return output_string: string-formatted double with two decimal points.
      */
 
-    double converted_double;
-    converted_double = std::floor((input_double * 100.0) + .5) / 100.0;
-
+    const double converted_double {round_to_decimal_place(input_double, 2)};
     std::ostringstream output_string;
     output_string << converted_double;
 
@@ -264,18 +257,18 @@ int Calculate::weekly_limit(const Options& options) {
 
     if (standard == "NIAAA") {
         if (sex == "male") {
-            drink_limit = 14;
+            drink_limit = us_male_limit;
         } else if (sex == "female") {
-            drink_limit = 7;
+            drink_limit = us_female_limit;
         } else {
-            std::cout << "Sex is incorrectly set: " << sex << std::endl;  //TODO: Handle this
+            std::cout << "Sex is incorrectly set: " << sex << std::endl;
         }
     }
 
     return drink_limit;
 }
 
-int Calculate::days_in_row(Storage &storage) {
+unsigned Calculate::days_in_row(Storage &storage) {
     /*
      * Calculates the number of days in a row one has consumed alcohol.
      * @param storage: a storage object
@@ -285,17 +278,19 @@ int Calculate::days_in_row(Storage &storage) {
     bool found_day_without_drink {false};
     int day_counter {0};
     const std::string date {utilities::get_local_date()};
+    constexpr int tm_year_offset {1900};
+    constexpr int tm_month_offset {1};
 
     // Construct the initial date
     std::tm search_date{};
-    search_date.tm_year = std::stoi(date.substr(0, 4)) - 1900;  // tm takes year - 1900
-    search_date.tm_mon = std::stoi(date.substr(5, 7)) - 1;  // tm month is 0-indexed
+    search_date.tm_year = std::stoi(date.substr(0, 4)) - tm_year_offset;
+    search_date.tm_mon = std::stoi(date.substr(5, 7)) - tm_month_offset;
     search_date.tm_mday = std::stoi(date.substr(8, 9));
 
     decrement_day(search_date);
 
-    std::string prev_day {std::to_string(search_date.tm_year + 1900) + '-'
-                          + utilities::zero_pad_string(search_date.tm_mon + 1) + '-' +
+    std::string prev_day {std::to_string(search_date.tm_year + tm_year_offset) + '-'
+                          + utilities::zero_pad_string(search_date.tm_mon + tm_month_offset) + '-' +
                           utilities::zero_pad_string(search_date.tm_mday)};
 
     bool scanned_today {false};
@@ -315,8 +310,9 @@ int Calculate::days_in_row(Storage &storage) {
             }
             day_counter ++;
             decrement_day(search_date);
-            prev_day = std::to_string(search_date.tm_year + 1900) + '-' + utilities::zero_pad_string(search_date.tm_mon + 1) + '-'
-                       + utilities::zero_pad_string(search_date.tm_mday);
+            prev_day = std::to_string(search_date.tm_year + tm_year_offset) + '-' +
+                    utilities::zero_pad_string(search_date.tm_mon + tm_month_offset) + '-'
+                    + utilities::zero_pad_string(search_date.tm_mday);
 
             if (storage.get_all<Drink>(where(c(&Drink::date) == prev_day)).empty()) {
                 found_day_without_drink = true;
@@ -331,8 +327,9 @@ void Calculate::decrement_day(std::tm &date) {
      * @param date: a tm object
      */
 
+    constexpr unsigned one_day {60*60*24};
     std::time_t search_date_t {std::mktime(&date)};
-    search_date_t -= 60*60*24;
+    search_date_t -= one_day;
     const std::tm *search_date {std::localtime(&search_date_t)};
 
     date.tm_year = search_date->tm_year;
@@ -349,4 +346,32 @@ bool Calculate::equal_double(const double a, const double b) {
      */
 
     return fabs(a - b) < std::numeric_limits<double>::epsilon();
+}
+
+double Calculate::round_to_decimal_place(const double input_val, const unsigned places) {
+    /*
+     * Round input value to tenth place.
+     * @param input_val: Value to round.
+     * @return: a double rounded to the tenth place.
+     */
+
+    unsigned factor{};
+    if (places == 1) {
+        factor = 10;
+    } else if (places == 2) {
+        factor = 100;
+    }
+
+    return floor(input_val * factor + .5) / factor;
+}
+
+double Calculate::get_volume_alcohol(const double abv, const double drink_size) {
+    /*
+     * Calculate the drink alcohol volume.
+     * @param abv: Drink's ABV.
+     * @param drink_size: Drink's volume.
+     * @return: Volume of alcohol in drink.
+     */
+
+    return (abv / 100) * drink_size;
 }

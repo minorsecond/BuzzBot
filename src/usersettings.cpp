@@ -43,7 +43,7 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
 
     set_limit_standard_states(options);
 
-    ui.stdDrinkDefInput->setValue(std::stod(options.std_drink_size));
+    ui.stdDrinkDefInput->setValue(options.std_drink_size);
 
     if (options.units == "Metric") {
         ui.metricRadioButton->setChecked(true);
@@ -184,7 +184,7 @@ void UserSettings::clicked_clear_data() {
      * Clear the data if user so desires.
      */
 
-    ConfirmDialog confirmation_dialog = ConfirmDialog("Clear Data");
+    ConfirmDialog confirmation_dialog = ConfirmDialog(ConfirmStatus::ClearData);
     if (confirmation_dialog.exec() == QDialog::Accepted) {
         Storage storage = initStorage(utilities::get_db_path());
         Database::truncate(storage);
@@ -409,7 +409,7 @@ void UserSettings::clicked_browse_db_path() {
      * @return: None
      */
 
-    ConfirmDialog change_db_path_confirm("Moving DB");
+    ConfirmDialog change_db_path_confirm(ConfirmStatus::MovingDb);
 
     if (change_db_path_confirm.exec() == QDialog::Accepted) {
         const QString desktop_path = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0);

@@ -3,6 +3,7 @@
 //
 
 #include "drink.h"
+#include "calculate.h"
 
 void Drink::set_id(const int &in_id) {
     /*
@@ -289,7 +290,7 @@ double Drink::get_standard_drinks() const {
     const double alcohol_amt = get_alcohol_volume();
     const double std_drink_size{utilities::get_std_drink_size()};
 
-    return utilities::round_to_two_decimal_points(alcohol_amt / std_drink_size);
+    return Calculate::round_to_decimal_place(alcohol_amt / std_drink_size, 2);
 }
 
 double Drink::get_alcohol_volume() const {

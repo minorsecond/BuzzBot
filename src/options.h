@@ -19,7 +19,7 @@ public:
     std::string limit_standard = "NIAAA";
     std::string units = "Imperial";
     std::string std_drink_country = "United States";
-    std::string std_drink_size = "0.6";  // Store as ounces
+    double std_drink_size = 0.6;  // Store as ounces
     int weekly_limit = -1;
 
     Options();

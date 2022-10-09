@@ -201,13 +201,20 @@ void MainWindow::configure_table() {
     ui->drinkLogTable->setSortingEnabled(true);
 
     // Set table filter options to default values (all)
-    ui->filterCategoryInput->addItem("None");
+    const std::array<std::string, 6> filter_types {
+        "None",
+        "Name",
+        "Type",
+        "Subtype",
+        "Producer",
+        "Rating"
+    };
+
+    for (const std::string &filter_name : filter_types) {
+        ui->filterCategoryInput->addItem(QString::fromStdString(filter_name));
+    }
+
     ui->filterCategoryInput->setCurrentText("None");
-    ui->filterCategoryInput->addItem("Name");
-    ui->filterCategoryInput->addItem("Type");
-    ui->filterCategoryInput->addItem("Subtype");
-    ui->filterCategoryInput->addItem("Producer");
-    ui->filterCategoryInput->addItem("Rating");
     ui->filterTextInput->setDisabled(true);
 
     // Set column widths
@@ -371,7 +378,7 @@ void MainWindow::open_user_settings() {
 
     UserSettings user_settings = UserSettings(options, std_drink_standards);
     user_settings.setModal(true);
-    std::string std_drink_size = options.std_drink_size;
+    double std_drink_size = options.std_drink_size;
 
     const std::string current_db_path_setting{options.database_path};
     bool custom_db {options.custom_database};
@@ -384,7 +391,7 @@ void MainWindow::open_user_settings() {
         options.limit_standard = user_settings.get_limit_standard();
         options.weekly_limit = user_settings.get_drink_limit();
         options.units = user_settings.get_units();
-        std_drink_size = Calculate::double_to_string(user_settings.get_std_drink_size());
+        std_drink_size = user_settings.get_std_drink_size();
         options.std_drink_country = user_settings.get_std_drink_country();
         options.custom_database = custom_db;
         options.database_path = user_settings.get_database_path(custom_db);
@@ -395,7 +402,7 @@ void MainWindow::open_user_settings() {
         ui->beerSizeLabel->setText("Size (ml)");
         ui->liquorSizeLabel->setText("Size (ml)");
         ui->wineSizeLabel->setText("Size (ml)");
-        options.std_drink_size = Calculate::double_to_string(Calculate::ml_to_oz(std::stod(std_drink_size)));
+        options.std_drink_size = Calculate::ml_to_oz(std_drink_size);
     } else {
         ui->beerSizeLabel->setText("Size (oz)");
         ui->liquorSizeLabel->setText("Size (oz)");
@@ -406,7 +413,7 @@ void MainWindow::open_user_settings() {
     if (options.database_path == utilities::get_application_data_path() + "/buzzbot.db" && options.custom_database) {
         // User didn't change the path from the default path but select custom DB. set option back to default
         options.custom_database = false;
-        ConfirmDialog path_unchanged("NoDbPathChange");
+        ConfirmDialog path_unchanged(ConfirmStatus::NoDbPathChange);
         path_unchanged.exec();
     }
 
@@ -416,19 +423,25 @@ void MainWindow::open_user_settings() {
     update_types_and_producers();
     if (current_db_path_setting != options.database_path) {
         // User changed DB get_db_path settings
-        const int result{Database::move_db(current_db_path_setting, options.database_path)};
-        if (result == 1) {
+        const DbMoveStatus result{Database::move_db(current_db_path_setting, options.database_path)};
+        if (result == DbMoveStatus::ErrorCopyingDb) {
             std::cout << "Error copying database from " << current_db_path_setting << " to " << options.database_path
                       << std::endl;
-            // TODO: Something bad happened when trying to move DB file. Raise an error window.
-        } else if (result == 0) { // Prompt user to reopen app and close automatically (else it will crash)
-            ConfirmDialog close_dialog("Moved DB");
+            ConfirmDialog warning{ConfirmStatus::ErrorMovingDbFile};
+            if(warning.exec() == QDialog::Accepted) {
+                const std::string backup_loc {current_db_path_setting + ".bak"};
+                Database::move_db(backup_loc, current_db_path_setting);
+            } else {
+                exit(1);
+            }
+        } else if (result == DbMoveStatus::Success) { // Prompt user to reopen app and close automatically (else it will crash)
+            ConfirmDialog close_dialog(ConfirmStatus::MovedDb);
             if (close_dialog.exec() == QDialog::Accepted) {
                 exit(1);
             }
-        } else if (result == 2) {
+        } else if (result == DbMoveStatus::DestFileExists) {
             // Move didn't happen because destination file already exists
-            ConfirmDialog file_exists("DestFileExists");
+            ConfirmDialog file_exists(ConfirmStatus::DestFileExists);
             if (file_exists.exec() == QDialog::Accepted) {
                 // User wants to delete current file and keep destination file
                 std::filesystem::remove(current_db_path_setting);
@@ -630,7 +643,7 @@ void MainWindow::open_std_drink_calculator() const {
      * Open the standard drink calculator dialog box.
      */
 
-    auto * std_drink_calculator = new StandardDrinkCalc(std::stod(options.std_drink_size), options.units);
+    auto * std_drink_calculator = new StandardDrinkCalc(options.std_drink_size, options.units);
     std_drink_calculator->setAttribute(Qt::WA_DeleteOnClose);  // Delete pointer on window close
     std_drink_calculator->show();
 }
@@ -722,12 +735,10 @@ std::string MainWindow::format_date(std::chrono::year_month_day date) {
 
     const std::string year = std::to_string((int)date.year());
 
-    const std::string month = utilities::zero_pad_string((unsigned)date.month());
-    const std::string day = utilities::zero_pad_string((unsigned)date.day());
+    const std::string month = utilities::zero_pad_string(static_cast<unsigned>(date.month()));
+    const std::string day = utilities::zero_pad_string(static_cast<unsigned>(date.day()));
 
-    const std::string query_date = year + "-" + month + "-" + day;
-
-    return query_date;
+    return year + "-" + month + "-" + day;
 }
 
 void MainWindow::open_graphs() {
@@ -768,11 +779,10 @@ void MainWindow::rename_duplicate_drink_names(std::vector<Drink> &drinks) {
 
     for (const auto &elem : count_map) {
         if (elem.second > 1) {
-            //count_map.erase(count_map.find(elem.first));  // Erase drinks with only one name entry
             for (Drink &drink : drinks) {
                 if (drink.get_name() == elem.first) {
                     if (!drink.get_producer().empty()) {
-                        drink.get_name() += " -- (" + drink.get_producer() + ")";
+                        drink.set_name(drink.get_name() += " -- (" + drink.get_producer() + ")");
                     }
                 }
             }

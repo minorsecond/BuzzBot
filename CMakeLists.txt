@@ -102,18 +102,6 @@ IF(APPLE)
             XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
             XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
             XCODE_ATTRIBUTE_EXECUTABLE_NAME "buzzbot")
-ELSEIF(UNIX AND NOT APPLE)
-    file(MAKE_DIRECTORY $ENV{HOME}/.local/share/com.rwardrup.buzzbot)
-    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/previous.png
-            $ENV{HOME}/.local/share/icons/com.rwardrup.buzzbot/previous.png)
-    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/next.png
-            $ENV{HOME}/.local/share/icons/com.rwardrup.buzzbot/next.png)
-    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/mini-icon.png
-            $ENV{HOME}/.local/share/icons/com.rwardrup.buzzbot/mini-icon.png)
-    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/big_sur_icon.png
-            $ENV{HOME}/.local/share/icons/big_sur_icon.png)
-    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/buzzbot.desktop
-            $ENV{HOME}/.local/share/applications/buzzbot.desktop)
 
 ELSEIF(WIN32)
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/res)
