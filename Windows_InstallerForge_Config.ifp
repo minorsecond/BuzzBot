@@ -55,7 +55,7 @@ Time = 2
 PlaySound = 0
 Allow = 0
 [Build]
-File = C:\Users\user\Desktop\BuzzBot-Setup.exe
+File = C:\Users/rossw\Desktop\BuzzBot-Setup.exe
 SetupIconPath = ..\icons\ancient.ico
 UninstallIconPath = ..\icons\ancient.ico
 CompressionMethod = 0
@@ -156,13 +156,13 @@ dll
 C:\msys64\mingw64\bin\libwinpthread-1.dll
 56.7 KB
 dll
-C:\Users\user\CLionProjects\BuzzBot\cmake-build-release\BuzzBot.exe
-3.8 MB
+C:\Users\rossw\CLionProjects\BuzzBot\cmake-build-release\BuzzBot.exe
+4 MB
 exe
-C:\Users\user\CLionProjects\BuzzBot\cmake-build-release\res\
+C:\Users\rossw\CLionProjects\BuzzBot\cmake-build-release\res\
 N/A
 [Folder]
-C:\Users\user\CLionProjects\BuzzBot\cmake-build-release\styles\
+C:\Users\rossw\CLionProjects\BuzzBot\cmake-build-release\styles\
 N/A
 [Folder]
 [Licence_Begin]
