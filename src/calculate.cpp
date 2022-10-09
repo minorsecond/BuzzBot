@@ -25,7 +25,6 @@ double Calculate::standard_drinks_remaining(const Options& options, const double
      * @param standard_drinks_consumed: The number of standard drinks consumed so far this week.
      */
 
-    double weekly_drinks_remaining;
     const int drink_limit = Calculate::weekly_limit(options);
     return drink_limit - standard_drinks_consumed;
 }
@@ -356,14 +355,14 @@ double Calculate::round_to_decimal_place(const double input_val, const unsigned 
      * @return: a double rounded to the tenth place.
      */
 
-    unsigned divisor{};
+    unsigned factor{};
     if (places == 1) {
-        divisor = 10;
+        factor = 10;
     } else if (places == 2) {
-        divisor = 100;
+        factor = 100;
     }
 
-    return floor((input_val * 100) + .5) / divisor;
+    return floor(input_val * factor + .5) / factor;
 }
 
 double Calculate::get_volume_alcohol(const double abv, const double drink_size) {
