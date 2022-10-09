@@ -782,7 +782,7 @@ void MainWindow::rename_duplicate_drink_names(std::vector<Drink> &drinks) {
             for (Drink &drink : drinks) {
                 if (drink.get_name() == elem.first) {
                     if (!drink.get_producer().empty()) {
-                        drink.get_name() += " -- (" + drink.get_producer() + ")";
+                        drink.set_name(drink.get_name() += " -- (" + drink.get_producer() + ")");
                     }
                 }
             }
