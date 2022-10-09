@@ -16,6 +16,7 @@
 - Number of standard drinks left for the weeks
 - Average ABV & IBU per drink
 - Drink notes
+- Graphs
 
 ---------
 
