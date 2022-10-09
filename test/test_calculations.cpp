@@ -5,11 +5,22 @@
 #include "../src/calculate.h"
 #include <filesystem>
 #include <iostream>
+
 #if __has_include("catch2/catch_test_macros.hpp")
+
 #include <catch2/catch_test_macros.hpp>
+
 #else
 #include <catch2/catch.hpp>
 #endif
+
+TEST_CASE("Rounding", "[Math Calculations]") {
+    const double result1{Calculate::round_to_decimal_place(4.56789, 1)};
+    const double result2{Calculate::round_to_decimal_place(4.56789, 2)};
+
+    REQUIRE(Calculate::equal_double(result1, 4.6));
+    REQUIRE(Calculate::equal_double(result2, 4.57));
+}
 
 TEST_CASE("Standard Drinks", "[Drink Calculations]") {
 
