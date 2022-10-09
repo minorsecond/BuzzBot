@@ -32,10 +32,10 @@ public:
 
     static std::string settings_path();
 
-    static void strptime(const char &s, const char &f, struct tm &tm) {
-        std::istringstream input(&s);
+    static void strptime(const char *s, const char *f, struct tm *tm) {
+        std::istringstream input(s);
         input.imbue(std::locale(setlocale(LC_ALL, nullptr)));
-        input >> std::get_time(&tm, &f);
+        input >> std::get_time(tm, f);
     }
 
 #ifdef __WIN32
