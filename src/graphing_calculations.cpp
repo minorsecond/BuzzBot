@@ -102,7 +102,7 @@ int GraphingCalculations::parse_date(const std::string &date) {
 
     date_str >> std::get_time(&t, "%Y%m%d");
     std::put_time(&t, "%c");
-    auto timet = (int)std::mktime(&t);
+    auto timet = static_cast<int>(std::mktime(&t));
 
     return timet;
 }

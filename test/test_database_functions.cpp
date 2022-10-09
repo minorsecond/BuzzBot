@@ -100,8 +100,8 @@ const std::string current_path = std::filesystem::current_path();
     auto etrwo_read = storage_2.get<Drink>(1);
     auto mosaic_read = storage_2.get<Drink>(2);
 
-    REQUIRE(etrwo_read.get_abv() == 8.0);
-    REQUIRE(etrwo_read.get_ibu() == 60.0);
+    REQUIRE(Calculate::equal_double(etrwo_read.get_abv(), 8.0));
+    REQUIRE(Calculate::equal_double(etrwo_read.get_ibu(), 60.0));
     REQUIRE(etrwo_read.get_name() == "Everything Rhymes with Orange");
     REQUIRE(etrwo_read.get_notes() == "Very good hazy IPA.");
     REQUIRE(mosaic_read.get_producer() == "Community Brewing");
@@ -313,7 +313,7 @@ TEST_CASE("Read Row", "[DB Functions]") {
     REQUIRE(mosaic_read.get_name() == "Mosaic");
     REQUIRE(Calculate::equal_double(mosaic.get_abv(), 8.4));
     REQUIRE(etrwo_read.get_id() == 1);
-    REQUIRE(etrwo_read.get_ibu() == 60.0);
+    REQUIRE(Calculate::equal_double(etrwo_read.get_ibu(), 60.0));
     REQUIRE(etrwo_read.get_notes() == "Very good hazy IPA.");
 }
 
