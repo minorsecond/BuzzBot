@@ -50,7 +50,7 @@ ENDIF()
 set(PROJECT_SRC_FILES src/main.cpp src/mainwindow.cpp src/database.cpp
         src/usersettings.cpp src/calculate.cpp src/beer.cpp
         src/liquor.cpp src/wine.cpp src/filters.cpp src/about.cpp src/exporters.cpp
-        src/standard_drink_calculator.cpp src/confirm_dialog.cpp
+        src/standard_drink_calculator.cpp
         src/graphing.cpp include/qcustomplot.cpp
         src/table_manipulation.cpp src/stats_updaters.cpp src/utilities.cpp
         src/graphing_calculations.cpp src/drink.cpp

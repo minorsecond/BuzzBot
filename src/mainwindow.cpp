@@ -3,7 +3,6 @@
 #include "about.h"
 #include "../ui/ui_graph_window.h"
 #include "standard_drink_calculator.h"
-#include "confirm_dialog.h"
 #include "exporters.h"
 #include "calculate.h"
 #include "graphing.h"
@@ -413,8 +412,12 @@ void MainWindow::open_user_settings() {
     if (options.database_path == utilities::get_application_data_path() + "/buzzbot.db" && options.custom_database) {
         // User didn't change the path from the default path but select custom DB. set option back to default
         options.custom_database = false;
-        ConfirmDialog path_unchanged(ConfirmStatus::NoDbPathChange);
-        path_unchanged.exec();
+
+        QMessageBox::StandardButton reply{};
+        reply = QMessageBox::warning(this, QString::fromStdString("Path Unchanged"),
+                              QString::fromStdString("Database path unchanged. It is not being moved."),
+                              QMessageBox::Ok);
+
     }
 
     this->options.write_options();
@@ -427,22 +430,35 @@ void MainWindow::open_user_settings() {
         if (result == DbMoveStatus::ErrorCopyingDb) {
             std::cout << "Error copying database from " << current_db_path_setting << " to " << options.database_path
                       << std::endl;
-            ConfirmDialog warning{ConfirmStatus::ErrorMovingDbFile};
-            if(warning.exec() == QDialog::Accepted) {
+
+            QMessageBox::StandardButton reply{};
+            reply = QMessageBox::critical(this, QString::fromStdString("DB Operation Error"),
+                                          QString::fromStdString("Error copying file. Restore from backup? Cancelling will exit the app."),
+                                          QMessageBox::Yes|QMessageBox::No);
+            if(reply == QMessageBox::Yes) {
                 const std::string backup_loc {current_db_path_setting + ".bak"};
                 Database::move_db(backup_loc, current_db_path_setting);
             } else {
                 exit(1);
             }
         } else if (result == DbMoveStatus::Success) { // Prompt user to reopen app and close automatically (else it will crash)
-            ConfirmDialog close_dialog(ConfirmStatus::MovedDb);
-            if (close_dialog.exec() == QDialog::Accepted) {
+            QMessageBox::StandardButton reply{};
+            reply = QMessageBox::information(this, QString::fromStdString("Move Database"),
+                                          QString::fromStdString("Closing app. Restart to load data from new location."),
+                                          QMessageBox::Ok);
+            if (reply == QMessageBox::Ok) {
                 exit(1);
             }
         } else if (result == DbMoveStatus::DestFileExists) {
             // Move didn't happen because destination file already exists
-            ConfirmDialog file_exists(ConfirmStatus::DestFileExists);
-            if (file_exists.exec() == QDialog::Accepted) {
+            QMessageBox::StandardButton reply{};
+            reply = QMessageBox::information(this, QString::fromStdString("Move Database"),
+                                             QString::fromStdString("Destination file already exists.\n"
+                                                                    "BuzzBot will load it upon next launch. \n"
+                                                                    "Do you want to delete the current file, keeping the destination file?\n"
+                                                                    "BuzzBot will close after your response."),
+                                             QMessageBox::Yes|QMessageBox::No);
+            if (reply == QMessageBox::Yes) {
                 // User wants to delete current file and keep destination file
                 std::filesystem::remove(current_db_path_setting);
             }
