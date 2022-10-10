@@ -881,6 +881,7 @@ public:
         sizePolicy4.setVerticalStretch(0);
         sizePolicy4.setHeightForWidth(filterTextInput->sizePolicy().hasHeightForWidth());
         filterTextInput->setSizePolicy(sizePolicy4);
+        filterTextInput->setMinimumSize(QSize(300, 0));
 
         gridLayout->addWidget(filterTextInput, 1, 3, 1, 1);
 
@@ -888,6 +889,7 @@ public:
         filterCategoryInput->setObjectName(QString::fromUtf8("filterCategoryInput"));
         sizePolicy4.setHeightForWidth(filterCategoryInput->sizePolicy().hasHeightForWidth());
         filterCategoryInput->setSizePolicy(sizePolicy4);
+        filterCategoryInput->setMinimumSize(QSize(100, 0));
 
         gridLayout->addWidget(filterCategoryInput, 1, 1, 1, 1);
 
@@ -962,7 +964,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1006, 19));
+        menubar->setGeometry(QRect(0, 0, 1006, 22));
         MainWindow->setMenuBar(menubar);
         QWidget::setTabOrder(tabWidget, beerDateInput);
         QWidget::setTabOrder(beerDateInput, beerNameInput);

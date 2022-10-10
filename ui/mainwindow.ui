@@ -1246,6 +1246,12 @@ with Orange</string>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>0</height>
+          </size>
+         </property>
         </widget>
        </item>
        <item row="1" column="1">
@@ -1255,6 +1261,12 @@ with Orange</string>
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
          </property>
         </widget>
        </item>
@@ -1403,7 +1415,7 @@ with Orange</string>
      <x>0</x>
      <y>0</y>
      <width>1006</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
