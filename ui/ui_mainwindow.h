@@ -163,7 +163,7 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(centralwidget->sizePolicy().hasHeightForWidth());
         centralwidget->setSizePolicy(sizePolicy);
-        centralwidget->setMinimumSize(QSize(1006, 670));
+        centralwidget->setMinimumSize(QSize(800, 670));
         gridLayout_4 = new QGridLayout(centralwidget);
         gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
         frame_4 = new QFrame(centralwidget);
