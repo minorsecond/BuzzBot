@@ -3,7 +3,6 @@
 //
 
 #include "mainwindow.h"
-#include "confirm_dialog.h"
 #include "calculate.h"
 #include <iostream>
 
@@ -14,8 +13,11 @@ void MainWindow::update_selected_row(QItemSelectionModel* select, Drink entered_
      * @param entered_drink: A Drink containing data from the database.
      */
 
-    ConfirmDialog confirmation_dialog = ConfirmDialog(ConfirmStatus::Update);
-    if (confirmation_dialog.exec() == QDialog::Accepted) {
+    QMessageBox::StandardButton reply{};
+    reply = QMessageBox::question(this, QString::fromStdString("Delete Row..."),
+                                  QString::fromStdString("Do you want to delete the selected row?"),
+                                  QMessageBox::Yes | QMessageBox::No);
+    if (reply == QMessageBox::Yes) {
         // Get the selected row
         int selection = select->selectedRows().at(0).row();
         int row_to_update = ui->drinkLogTable->item(selection, 10)->text().toUtf8().toInt();
@@ -168,8 +170,11 @@ void MainWindow::delete_row() {
      * Delete the row in the database that corresponds to the row selected in the table.
      */
 
-    ConfirmDialog confirmation_dialog = ConfirmDialog(ConfirmStatus::Delete);
-    if (confirmation_dialog.exec() == QDialog::Accepted) {
+    QMessageBox::StandardButton reply{};
+    reply = QMessageBox::question(this, QString::fromStdString("Delete Row..."),
+                                  QString::fromStdString("Do you want to delete the selected row?"),
+                                  QMessageBox::Yes | QMessageBox::No);
+    if (reply == QMessageBox::Yes) {
         int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
         int row_to_delete = (ui->drinkLogTable->item(select, 10)->text().toUtf8().toInt());
         std::cout << "Deleting row " << row_to_delete << std::endl;
