@@ -155,7 +155,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(1006, 825);
+        MainWindow->resize(1006, 692);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
