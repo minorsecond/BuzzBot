@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'delete_confirm.ui'
 **
-** Created by: Qt User Interface Compiler version 6.0.0
+** Created by: Qt User Interface Compiler version 6.2.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -47,8 +47,8 @@ public:
 
 
         retranslateUi(confirmationDialog);
-        QObject::connect(confirmationButtonBox, &QDialogButtonBox::accepted, confirmationDialog, &QDialog::accept);
-        QObject::connect(confirmationButtonBox, &QDialogButtonBox::rejected, confirmationDialog, &QDialog::reject);
+        QObject::connect(confirmationButtonBox, &QDialogButtonBox::accepted, confirmationDialog, qOverload<>(&QDialog::accept));
+        QObject::connect(confirmationButtonBox, &QDialogButtonBox::rejected, confirmationDialog, qOverload<>(&QDialog::reject));
 
         QMetaObject::connectSlotsByName(confirmationDialog);
     } // setupUi

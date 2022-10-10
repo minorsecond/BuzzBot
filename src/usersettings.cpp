@@ -19,15 +19,11 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
      */
 
     ui.setupUi(this);
-    this->setFixedSize(700, 450);
 
     const int std_drink_cbox_index = populate_country_cbox(country_info);
     ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString("Custom"));
 
     set_std_drink_input_states(options);
-
-    // Rounded rect frames
-    set_frame_style();
 
     if (options.sex == "male") {
         ui.maleSelection->setChecked(true);
@@ -311,19 +307,6 @@ void UserSettings::set_limit_standard_states(const Options& options) {
         ui.customLimitRadioButton->setChecked(true);
         ui.customLimitSpinBox->setEnabled(true);
     }
-}
-
-void UserSettings::set_frame_style() {
-    /*
-     * Set style of frames.
-     */
-
-    ui.frame->setStyleSheet("QWidget#frame{ border: 1px solid grey; border-radius: 6px; }");
-    ui.frame_2->setStyleSheet("QWidget#frame_2{ border: 1px solid grey; border-radius: 6px; }");
-    ui.frame_3->setStyleSheet("QWidget#frame_3{ border: 1px solid grey; border-radius: 6px; }");
-    ui.frame_4->setStyleSheet("QWidget#frame_4{ border: 1px solid grey; border-radius: 6px; }");
-    ui.frame_5->setStyleSheet("QWidget#frame_5{ border: 1px solid grey; border-radius: 6px; }");
-    ui.weeklyLimitFrame->setStyleSheet("QWidget#weeklyLimitFrame{ border: 1px solid grey; border-radius: 6px; }");
 }
 
 void UserSettings::set_day_of_week_setting_state(const Options& options) {
