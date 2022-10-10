@@ -82,6 +82,7 @@ public:
     QSpacerItem *verticalSpacer;
     QVBoxLayout *verticalLayout_2;
     QDialogButtonBox *userSettingsButtonBox;
+    QSpacerItem *verticalSpacer_2;
 
     void setupUi(QDialog *userSettingsDialog)
     {
@@ -336,6 +337,10 @@ public:
         userSettingsButtonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
 
         verticalLayout_2->addWidget(userSettingsButtonBox);
+
+        verticalSpacer_2 = new QSpacerItem(20, 575, QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+        verticalLayout_2->addItem(verticalSpacer_2);
 
 
         gridLayout_3->addLayout(verticalLayout_2, 0, 1, 7, 1);

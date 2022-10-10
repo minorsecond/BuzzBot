@@ -417,7 +417,6 @@ void MainWindow::open_user_settings() {
         reply = QMessageBox::warning(this, QString::fromStdString("Path Unchanged"),
                               QString::fromStdString("Database path unchanged. It is not being moved."),
                               QMessageBox::Ok);
-
     }
 
     this->options.write_options();
