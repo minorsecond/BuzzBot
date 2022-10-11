@@ -110,10 +110,10 @@ void MainWindow::add_menubar_items() {
     /*
      * Add items to the system menubar.
      */
-#ifdef __WIN32
-    QMenu *app_menu = menuBar()->addMenu("File");
+#ifdef __APPLE__`
+    QMenu *app_menu = menuBar()->addMenu("App Menu");
 #else
-    QMenu * app_menu = menuBar()->addMenu("App Menu");
+    QMenu *app_menu = menuBar()->addMenu("File");
 #endif
     auto * preferences_action = new QAction("Preferences", this);
     auto * about_action = new QAction("About", this);
