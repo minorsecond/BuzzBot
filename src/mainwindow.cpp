@@ -110,7 +110,7 @@ void MainWindow::add_menubar_items() {
     /*
      * Add items to the system menubar.
      */
-#ifdef __APPLE__`
+#ifdef __APPLE__
     QMenu *app_menu = menuBar()->addMenu("App Menu");
 #else
     QMenu *app_menu = menuBar()->addMenu("File");
