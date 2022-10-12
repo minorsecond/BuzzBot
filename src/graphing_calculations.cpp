@@ -144,7 +144,7 @@ int GraphingCalculations::date_from_week_num(const std::string& week_num) {
     utilities::strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
     while (tm.tm_mday < 1) {
         day_num += 1;
-        week_num_tmp {week_num + "-" + std::to_string(day_num)};
+        week_num_tmp = week_num + "-" + std::to_string(day_num);
         utilities::strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
     }
 #else
