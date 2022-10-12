@@ -187,3 +187,7 @@ TEST_CASE("Count Values in Vector", "[Graph Data Compilation]") {
 
     REQUIRE(output_values == expected_values);
 }
+
+TEST_CASE("Date From Week Number", "[Graph Data Compilation]") {
+    REQUIRE(GraphingCalculations::date_from_week_num("2020-47") == 20201123);
+}
