@@ -138,11 +138,22 @@ int GraphingCalculations::date_from_week_num(const std::string& week_num) {
      */
 
     struct tm tm{};
-    const std::string week_num_tmp {week_num + "-1"};
+    int day_num {1};
+    std::string week_num_tmp {week_num + "-" + std::to_string(day_num)};
 #ifdef __WIN32
     utilities::strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+    while (tm.tm_mday < 1) {
+        day_num += 1;
+        week_num_tmp {week_num + "-" + std::to_string(day_num)};
+        utilities::strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+    }
 #else
     strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+    while (tm.tm_mday < 1) {
+        day_num += 1;
+        week_num_tmp = week_num + "-" + std::to_string(day_num);
+        strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+    }
 #endif
 
     std::string year {std::to_string(tm.tm_year +1900)};
