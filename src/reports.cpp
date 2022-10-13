@@ -30,6 +30,4 @@ void Reports::run_query() {
         ui.queryResults->setItem(table_row_num, 3, producer);
         ui.queryResults->setItem(table_row_num, 4, table_rating);
     }
-
-    //ui.queryResults->sortItems(4, Qt::DescendingOrder);
 }

@@ -240,10 +240,10 @@ int Database::increment_version(Storage storage, int current_version) {
      */
 
     std::cout << "Using DB version " << storage.pragma.user_version() << std::endl;
-    populate_date_sort_field(storage);
     const int version = get_version(storage);
     if (version < 8 && current_version == 9) {  //version 9 implements the new size column and version 10 will remove the _size column
         std::cout << "*** Upgrading DB from version " << storage.pragma.user_version() <<  " to " << current_version << std::endl;
+        populate_date_sort_field(storage);
 
         if (version != 0) {
             std::cout << "Not dropping _size column until db version 10." << std::endl;
@@ -385,7 +385,6 @@ void Database::populate_date_sort_field(Storage &storage) {
 }
 
 Drink Database::get_drink_at_place(Storage &storage, RecordPlace place) {
-
     int id {};
     if (place == RecordPlace::First) {
         id = *storage.min(&Drink::id).get();

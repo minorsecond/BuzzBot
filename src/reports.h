@@ -9,14 +9,12 @@
 #include "../ui/ui_drink_report.h"
 
 class Reports : public QDialog, public Ui::TopDrinkReportGui {
-
     Q_OBJECT
     Ui::TopDrinkReportGui ui{};
     Storage storage;
 
 public:
     Reports(const Storage &in_storage) : storage(in_storage) {
-
         ui.setupUi(this);
 
         Drink first_drink {Database::get_drink_at_place(storage, Database::RecordPlace::First)};
