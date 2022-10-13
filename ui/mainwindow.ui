@@ -655,6 +655,13 @@ with Orange</string>
         <string>Beer</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_14">
+        <item row="5" column="1">
+         <widget class="QLabel" name="beerSubtypeLabel">
+          <property name="text">
+           <string>Subtype:</string>
+          </property>
+         </widget>
+        </item>
         <item row="2" column="0">
          <widget class="QLabel" name="beerBreweryLabel">
           <property name="sizePolicy">
@@ -680,79 +687,6 @@ with Orange</string>
            <string>Type:</string>
           </property>
          </widget>
-        </item>
-        <item row="5" column="0">
-         <widget class="QComboBox" name="beerSubtypeInput">
-          <property name="editable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="0" rowspan="3">
-         <widget class="QTextEdit" name="beerNotesInput">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::ClickFocus</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1" rowspan="2">
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <widget class="QLabel" name="beerRatingLabel">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Rating:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="beerSizeLabel">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Size (oz):</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QSpinBox" name="beerRatingInput">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximum">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QDoubleSpinBox" name="beerSizeInput">
-            <property name="decimals">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <double>10000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-         </layout>
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="drinkDateLabel">
@@ -786,13 +720,6 @@ with Orange</string>
           </property>
           <property name="calendarPopup">
            <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="beerSubtypeLabel">
-          <property name="text">
-           <string>Subtype:</string>
           </property>
          </widget>
         </item>
@@ -830,7 +757,7 @@ with Orange</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
+        <item row="8" column="0">
          <widget class="QLabel" name="beerNotesLabel">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -843,9 +770,65 @@ with Orange</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="1" rowspan="2">
-         <layout class="QGridLayout" name="gridLayout_2">
+        <item row="6" column="1">
+         <widget class="QComboBox" name="beerSubtypeInput">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0" rowspan="2">
+         <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0">
+           <widget class="QLabel" name="beerRatingLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Rating:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QDoubleSpinBox" name="beerAbvInput">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximum">
+             <double>100.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDoubleSpinBox" name="beerSizeInput">
+            <property name="decimals">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <double>10000.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="beerSizeLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Size (oz):</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
            <widget class="QLabel" name="beerAbvLabel">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -858,7 +841,20 @@ with Orange</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="beerRatingInput">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximum">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
            <widget class="QLabel" name="beerIbuLabel">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -874,7 +870,7 @@ with Orange</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="1" column="3">
            <widget class="QDoubleSpinBox" name="beerIbuInput">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -890,20 +886,20 @@ with Orange</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QDoubleSpinBox" name="beerAbvInput">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximum">
-             <double>100.000000000000000</double>
-            </property>
-           </widget>
-          </item>
          </layout>
+        </item>
+        <item row="9" column="0" rowspan="3" colspan="2">
+         <widget class="QTextEdit" name="beerNotesInput">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::ClickFocus</enum>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -1426,8 +1422,6 @@ with Orange</string>
   <tabstop>beerNameInput</tabstop>
   <tabstop>beerBreweryInput</tabstop>
   <tabstop>beerTypeInput</tabstop>
-  <tabstop>beerAbvInput</tabstop>
-  <tabstop>beerIbuInput</tabstop>
   <tabstop>beerRatingInput</tabstop>
   <tabstop>beerSizeInput</tabstop>
   <tabstop>liquorDateInput</tabstop>
