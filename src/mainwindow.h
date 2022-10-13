@@ -32,7 +32,7 @@ private:
 
     void update_wine_fields();
 
-    void rename_duplicate_drink_names(std::vector<Drink> &drinks);
+    static void rename_duplicate_drink_names(std::vector<Drink> &drinks);
     void update_drinks_this_week(double standard_drinks, const std::string& weekday_name);
     void update_standard_drinks_left_this_week(double std_drinks_consumed);
     double update_vol_alcohol_consumed_this_week(const std::vector<Drink>& drinks_this_week, const std::string& weekday_name);
@@ -72,6 +72,7 @@ private:
     static std::string format_date(std::chrono::year_month_day date);
     static std::string get_weekday_name(unsigned weekday_number);
     void open_graphs();
+    void open_reports();
     double get_std_drink_size_from_options();
 
 private slots:

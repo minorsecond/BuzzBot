@@ -18,6 +18,8 @@ inline auto initStorage(const std::string &file_name) {
      */
 
     const std::string table_name = "drinks";
+
+    // WARNING: When adding columns, if a default value isn't specified, the database will be erased!
     return sqlite_orm::make_storage(file_name,
                                     sqlite_orm::make_table(table_name,
                                                            sqlite_orm::make_column("id", &Drink::id,
@@ -51,14 +53,24 @@ inline auto initStorage(const std::string &file_name) {
                                                                                   &Drink::timestamp,
                                                                                   sqlite_orm::default_value(
                                                                                           sqlite_orm::datetime(
-                                                                                                  "now", "localtime")))));
+                                                                                                  "now", "localtime"))),
+                                                          sqlite_orm::make_column("sort_date",
+                                                                                  &Drink::sort_date,
+                                                                                  sqlite_orm::default_value(
+                                                                                          utilities::date_string_to_date_int(
+                                                                                                  utilities::get_local_date())
+                                                                                          ))));
 }
 
 using Storage = decltype(initStorage(""));
 
 class Database {
 public:
-    static const int db_version {8};
+    enum class RecordPlace {
+        First,
+        Last
+    };
+    static const int db_version {9};
     static std::vector<Drink> read(Storage storage);
     static Storage write(Drink drink, Storage storage);
     static void truncate(Storage storage);
@@ -76,9 +88,13 @@ public:
     static int increment_version(Storage storage, int current_version);
     static void sort_by_date_id(std::vector<Drink> &drinks);
     static std::string get_latest_notes(Storage &storage, const std::string& name, const std::string& alcohol_type);
+    static std::vector<Drink> report_query(Storage &storage, const unsigned rating, const unsigned num,
+                                    const std::string& types, const std::string& start_date, const std::string& end_date);
+    static Drink get_drink_at_place(Storage &storage, RecordPlace place);
 
 private:
     static bool compare_date(const Drink &a, const Drink &b);
+    static void populate_date_sort_field(Storage &storage);
 
 public:
     static DbMoveStatus move_db(const std::string &current_path, const std::string &new_path);

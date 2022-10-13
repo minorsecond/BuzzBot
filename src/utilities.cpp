@@ -156,3 +156,17 @@ std::string utilities::settings_path() {
 
     return settings_path;
 }
+
+int utilities::date_string_to_date_int(const std::string& in_date) {
+    /*
+     * Convert a YYYY-MM-DD date into a YYYYMMDD integer
+     */
+
+    const std::string year {in_date.substr(0, 4)};
+    const std::string month {in_date.substr(5, 2)};
+    const std::string day {in_date.substr(8, 2)};
+    const std::string full_string {year + month + day};
+    const int date_int {std::stoi(full_string)};
+
+    return date_int;
+}

@@ -54,7 +54,7 @@ set(PROJECT_SRC_FILES src/main.cpp src/mainwindow.cpp src/database.cpp
         src/graphing.cpp include/qcustomplot.cpp
         src/table_manipulation.cpp src/stats_updaters.cpp src/utilities.cpp
         src/graphing_calculations.cpp src/drink.cpp
-        src/drink_standards.cpp src/options.cpp)
+        src/drink_standards.cpp src/options.cpp src/reports.cpp src/reports.h)
 
 IF(APPLE)
     add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} ${PROJECT_SRC_FILES})
@@ -67,7 +67,7 @@ ENDIF()
 add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp src/calculate.h
         test/test_database_functions.cpp test/test_calculations.cpp test/test_graph_calculations.cpp
         src/utilities.cpp src/utilities.h src/drink.h src/graphing_calculations.h src/graphing_calculations.cpp
-        src/options.h src/drink.cpp src/drink_standards.h src/drink_standards.cpp src/options.cpp)
+        src/options.h src/drink.cpp src/drink_standards.h src/drink_standards.cpp src/options.cpp src/reports.cpp src/reports.h)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     message("Building debug")
