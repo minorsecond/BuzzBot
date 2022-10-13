@@ -363,7 +363,6 @@ std::vector<Drink> Database::report_query(Storage &storage, const unsigned ratin
                                                                 group_by(&Drink::name),
                                                                 order_by(cast<int>(&Drink::rating)).desc(),
                                                           limit(num));
-        //result = storage.select(columns(&Drink::name, &Drink::type, &Drink::subtype, &Drink::producer, &Drink::rating))
     } else {
         result = storage.get_all<Drink>(where(c(&Drink::rating) >= rating
                                    and c(&Drink::sort_date) >= start_date_int
