@@ -170,7 +170,9 @@ Drink MainWindow::get_liquor_attrs_from_fields(std::string alcohol_type) {
     }
 
     const std::string drink_date = ui->liquorDateInput->date().toString("yyyy-MM-dd").toStdString();
+    const int drink_date_int {utilities::date_string_to_date_int(drink_date)};
     drink.set_date(drink_date);
+    drink.set_sort_date(drink_date_int);
     drink.set_name(drink_name);
     drink.set_type(ui->liquorTypeInput->currentText().toStdString());
     drink.set_subtype(ui->liquorSubtypeInput->currentText().toStdString());

@@ -32,6 +32,8 @@ public:
 
     static std::string settings_path();
 
+    static int date_string_to_date_int(const std::string& in_date);
+
     static void strptime(const char *s, const char *f, struct tm *tm) {
         std::istringstream input(s);
         input.imbue(std::locale(setlocale(LC_ALL, nullptr)));

@@ -13,6 +13,7 @@ class Drink {
 private:
     int id;
     std::string date;
+    int sort_date;
     std::string name;
     std::string type;
     std::string subtype;
@@ -36,6 +37,7 @@ public:
     // Setters
     void set_id(const int &in_id);
     void set_date(const std::string &in_date);
+    void set_sort_date(const int &in_date);
     void set_name(const std::string &in_name);
     void set_type(const std::string &in_type);
     void set_subtype(const std::string &in_subtype);
@@ -53,6 +55,7 @@ public:
     // Getters
     int get_id() const;
     std::string get_date() const;
+    int get_sort_date() const;
     std::string get_name() const;
     std::string get_type() const;
     std::string get_subtype() const;

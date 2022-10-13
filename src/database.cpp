@@ -4,6 +4,7 @@
 #include <iostream>
 #include <filesystem>
 #include <string>
+#include <ctime>
 
 using namespace sqlite_orm;
 
@@ -242,6 +243,7 @@ int Database::increment_version(Storage storage, int current_version) {
     const int version = get_version(storage);
     if (version < 8 && current_version == 9) {  //version 9 implements the new size column and version 10 will remove the _size column
         std::cout << "*** Upgrading DB from version " << storage.pragma.user_version() <<  " to " << current_version << std::endl;
+        populate_date_sort_field(storage);
 
         if (version != 0) {
             std::cout << "Not dropping _size column until db version 10." << std::endl;
@@ -335,4 +337,60 @@ DbMoveStatus Database::move_db(const std::string &current_path, const std::strin
     }
 
     return DbMoveStatus::ErrorCopyingDb;
+}
+
+std::vector<Drink> Database::report_query(Storage &storage, const unsigned rating, const unsigned num,
+                                          const std::string& types, const std::string& start_date,
+                                          const std::string& end_date) {
+    /*
+     * Run a top n query for reports.
+     * @param num: number of results to get
+     * @param types: All, Beer, Liquor, or Wine
+     * @param start_date: Start date of query
+     * @parma end_date: End date of query
+     * @return: a vector of Drink objects within the query parameters
+     */
+
+    const int start_date_int {utilities::date_string_to_date_int(start_date)};
+    const int end_date_int {utilities::date_string_to_date_int(end_date)};
+    std::vector<Drink> result{};
+
+    if (types == "All Types") {
+        result = storage.get_all<Drink>(where(c(&Drink::rating) >= rating
+                                                          and c(&Drink::sort_date) >= start_date_int
+                                                          and c(&Drink::sort_date) <= end_date_int),
+                                                                group_by(&Drink::name),
+                                                                order_by(cast<int>(&Drink::rating)).desc(),
+                                                          limit(num));
+        //result = storage.select(columns(&Drink::name, &Drink::type, &Drink::subtype, &Drink::producer, &Drink::rating))
+    } else {
+        result = storage.get_all<Drink>(where(c(&Drink::rating) >= rating
+                                   and c(&Drink::sort_date) >= start_date_int
+                                   and c(&Drink::sort_date) <= end_date_int
+                                   and c(&Drink::alcohol_type) == types),
+                                        group_by(&Drink::name),
+                                        order_by(cast<int>(&Drink::rating)).desc(),
+                                   limit(num));
+    }
+
+    return result;
+}
+
+void Database::populate_date_sort_field(Storage &storage) {
+    for (Drink &drink : storage.get_all<Drink>()) {
+        const int date_int {utilities::date_string_to_date_int(drink.get_date())};
+        drink.set_sort_date(date_int);
+        storage.update(drink);
+    }
+}
+
+Drink Database::get_drink_at_place(Storage &storage, RecordPlace place) {
+    int id {};
+    if (place == RecordPlace::First) {
+        id = *storage.min(&Drink::id).get();
+    } else if (place == RecordPlace::Last) {
+        id = *storage.max(&Drink::id).get();
+    }
+
+    return storage.get_all<Drink>(where(c(&Drink::id) == id)).at(0);
 }

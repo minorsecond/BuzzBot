@@ -6,6 +6,7 @@
 #include "exporters.h"
 #include "calculate.h"
 #include "graphing.h"
+#include "reports.h"
 #include "utilities.h"
 #include <iomanip>
 #include <filesystem>
@@ -119,22 +120,26 @@ void MainWindow::add_menubar_items() {
     auto * about_action = new QAction("About", this);
     auto * export_action = new QAction("Export...", this);
     auto * graphs_action = new QAction("Graphs...", this);
+    auto * reports_action = new QAction("Reports...", this);
     auto * calc_std_drinks = new QAction("Calculate Std. Drinks...", this);
     preferences_action->setMenuRole(QAction::PreferencesRole);
     about_action->setMenuRole(QAction::AboutRole);
     export_action->setMenuRole(QAction::ApplicationSpecificRole);
     graphs_action->setMenuRole(QAction::ApplicationSpecificRole);
+    reports_action->setMenuRole(QAction::ApplicationSpecificRole);
     calc_std_drinks->setMenuRole(QAction::ApplicationSpecificRole);
     app_menu->addAction(preferences_action);
     app_menu->addAction(about_action);
     app_menu->addAction(export_action);
     app_menu->addAction(graphs_action);
+    app_menu->addAction(reports_action);
     app_menu->addAction(calc_std_drinks);
 
     connect(preferences_action, &QAction::triggered, this, &MainWindow::open_user_settings);
     connect(about_action, &QAction::triggered, this, &MainWindow::open_about_dialog);
     connect(export_action, &QAction::triggered, this, &MainWindow::open_export_dialog);
     connect(graphs_action, &QAction::triggered, this, &MainWindow::open_graphs);
+    connect(reports_action, &QAction::triggered, this, &MainWindow::open_reports);
     connect(calc_std_drinks, &QAction::triggered, this, &MainWindow::open_std_drink_calculator);
 }
 
@@ -768,6 +773,17 @@ void MainWindow::open_graphs() {
     graphing_window->setAttribute(Qt::WA_DeleteOnClose); // Delete pointer on window close
     graphing_window->setModal(false);
     graphing_window->show();
+}
+
+void MainWindow::open_reports() {
+    /*
+     * Open the reports dialog
+     */
+
+    auto *reports_window = new Reports(storage);
+    reports_window->setAttribute(Qt::WA_DeleteOnClose);
+    reports_window->setModal(false);
+    reports_window->show();
 }
 
 void MainWindow::rename_duplicate_drink_names(std::vector<Drink> &drinks) {

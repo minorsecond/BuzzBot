@@ -54,7 +54,7 @@ set(PROJECT_SRC_FILES src/main.cpp src/mainwindow.cpp src/database.cpp
         src/graphing.cpp include/qcustomplot.cpp
         src/table_manipulation.cpp src/stats_updaters.cpp src/utilities.cpp
         src/graphing_calculations.cpp src/drink.cpp
-        src/drink_standards.cpp src/options.cpp)
+        src/drink_standards.cpp src/options.cpp src/reports.cpp src/reports.h)
 
 IF(APPLE)
     add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} ${PROJECT_SRC_FILES})

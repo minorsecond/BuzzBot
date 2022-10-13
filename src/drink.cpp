@@ -25,6 +25,16 @@ void Drink::set_date(const std::string &in_date) {
     date = in_date;
 }
 
+void Drink::set_sort_date(const int &in_date) {
+    /*
+     * Set drink date.
+     * @param date: Date in YYYY-MM-DD format.
+     * @return: None.
+     */
+
+    sort_date = in_date;
+}
+
 void Drink::set_name(const std::string &in_name) {
     /*
      * Set drink name.
@@ -169,6 +179,14 @@ std::string Drink::get_date() const {
      * @return: Drink date
      */
     return date;
+}
+
+int Drink::get_sort_date() const {
+    /*
+     * Get drink date
+     * @return: Drink date
+     */
+    return sort_date;
 }
 
 std::string Drink::get_name() const {
