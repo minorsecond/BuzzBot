@@ -239,11 +239,12 @@ int Database::increment_version(Storage storage, int current_version) {
      * @return: An integer denoting new DB version, straight from the DB.
      */
 
+    populate_date_sort_field(storage);
+
     std::cout << "Using DB version " << storage.pragma.user_version() << std::endl;
     const int version = get_version(storage);
     if (version < 8 && current_version == 9) {  //version 9 implements the new size column and version 10 will remove the _size column
         std::cout << "*** Upgrading DB from version " << storage.pragma.user_version() <<  " to " << current_version << std::endl;
-        populate_date_sort_field(storage);
 
         if (version != 0) {
             std::cout << "Not dropping _size column until db version 10." << std::endl;
@@ -379,8 +380,11 @@ std::vector<Drink> Database::report_query(Storage &storage, const unsigned ratin
 void Database::populate_date_sort_field(Storage &storage) {
     for (Drink &drink : storage.get_all<Drink>()) {
         const int date_int {utilities::date_string_to_date_int(drink.get_date())};
-        drink.set_sort_date(date_int);
-        storage.update(drink);
+
+        if(drink.get_sort_date() != date_int) {
+            drink.set_sort_date(date_int);
+            storage.update(drink);
+        }
     }
 }
 
