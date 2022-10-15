@@ -41,6 +41,7 @@ public:
 
 private:
     void run_query();
+    static bool sort_by_rating_then_name(const Drink & d1, const Drink & d2);
 };
 
 
