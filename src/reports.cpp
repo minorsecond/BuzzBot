@@ -32,6 +32,7 @@ void Reports::run_query() {
         ui.queryResults->setItem(table_row_num, 3, producer);
         ui.queryResults->setItem(table_row_num, 4, table_rating);
     }
+    set_column_widths(results);
 }
 
 bool Reports::sort_by_rating_then_name(const Drink &d1, const Drink &d2) {
@@ -44,4 +45,16 @@ bool Reports::sort_by_rating_then_name(const Drink &d1, const Drink &d2) {
     if( d1.get_rating() != d2.get_rating())
         return (d1.get_rating() > d2.get_rating());
     return Calculate::compare_strings(d1.get_name(), d2.get_name());
+}
+
+void Reports::set_column_widths(std::vector<Drink> &drinks) {
+    /*
+     * Set the table column widgets depending on drink stat lengths
+     */
+
+    ui.queryResults->resizeColumnToContents(0);
+    ui.queryResults->resizeColumnToContents(1);
+    ui.queryResults->resizeColumnToContents(2);
+    ui.queryResults->resizeColumnToContents(3);
+    ui.queryResults->resizeColumnToContents(4);
 }
