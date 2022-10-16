@@ -354,26 +354,47 @@ std::vector<Drink> Database::report_query(Storage &storage, const unsigned ratin
 
     const int start_date_int {utilities::date_string_to_date_int(start_date)};
     const int end_date_int {utilities::date_string_to_date_int(end_date)};
-    std::vector<Drink> result{};
+    std::vector<std::tuple<std::unique_ptr<int, std::default_delete<int>>, std::string, std::string, int>> query_r{};
+    std::vector<Drink> drinks{};
 
     if (types == "All Types") {
-        result = storage.get_all<Drink>(where(c(&Drink::rating) >= rating
-                                                          and c(&Drink::sort_date) >= start_date_int
-                                                          and c(&Drink::sort_date) <= end_date_int),
-                                                                group_by(&Drink::name),
-                                                                order_by(cast<int>(&Drink::rating)).desc(),
-                                                          limit(num));
+        query_r = storage.select(columns(
+                    sqlite_orm::max(&Drink::id),
+                    &Drink::name,
+                    &Drink::producer,
+                    &Drink::rating),
+                where(c(&Drink::sort_date) >= start_date_int
+                and c(&Drink::sort_date) <= end_date_int),
+                sqlite_orm::group_by(&Drink::name),
+                sqlite_orm::order_by(&Drink::rating).desc());
     } else {
-        result = storage.get_all<Drink>(where(c(&Drink::rating) >= rating
-                                   and c(&Drink::sort_date) >= start_date_int
-                                   and c(&Drink::sort_date) <= end_date_int
-                                   and c(&Drink::alcohol_type) == types),
-                                        group_by(&Drink::name),
-                                        order_by(cast<int>(&Drink::rating)).desc(),
-                                   limit(num));
+        query_r = storage.select(columns(
+                                         sqlite_orm::max(&Drink::id),
+                                         &Drink::name,
+                                         &Drink::producer,
+                                         &Drink::rating),
+                                 where(c(&Drink::sort_date) >= start_date_int
+                                       and c(&Drink::sort_date) <= end_date_int
+                                       and c(&Drink::alcohol_type) == types),
+                                 sqlite_orm::group_by(&Drink::name),
+                                 sqlite_orm::order_by(&Drink::rating).desc());
     }
 
-    return result;
+    for (const auto &drink : query_r) {
+        const int _pkey {*std::get<0>(drink).get()};
+        const std::string _drink_name {std::get<1>(drink)};
+        const std::string _drink_producer {std::get<2>(drink)};
+        const int _rating {std::get<3>(drink)};
+
+        Drink _drink{};
+        _drink.set_id(_pkey);
+        _drink.set_name(_drink_name);
+        _drink.set_producer(_drink_producer);
+        _drink.set_rating(_rating);
+        drinks.push_back(_drink);
+    };
+
+    return drinks;
 }
 
 void Database::populate_date_sort_field(Storage &storage) {

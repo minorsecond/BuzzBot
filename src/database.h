@@ -91,13 +91,11 @@ public:
     static std::vector<Drink> report_query(Storage &storage, const unsigned rating, const unsigned num,
                                     const std::string& types, const std::string& start_date, const std::string& end_date);
     static Drink get_drink_at_place(Storage &storage, RecordPlace place);
+    static DbMoveStatus move_db(const std::string &current_path, const std::string &new_path);
 
 private:
     static bool compare_date(const Drink &a, const Drink &b);
     static void populate_date_sort_field(Storage &storage);
-
-public:
-    static DbMoveStatus move_db(const std::string &current_path, const std::string &new_path);
 };
 
 #endif // DATABASE_H
