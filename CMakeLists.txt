@@ -16,6 +16,19 @@ IF(APPLE)
     set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libproc.h")
 ENDIF()
 
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+    message("Building debug")
+    #add_compile_options(-Werror -g -O0 -pedantic)
+    # These warnings occur in include files and we don't want to modify them
+    add_compile_options(-Wall -Werror -Wextra -g -O0 - pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
+elseif(CMAKE_BUILD_TYPE MATCHES Release)
+    message(STATUS "Building release")
+    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
+elseif(CMAKE_BUILD_TYPE MATCHES RelLocalCpu)
+    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+endif ()
+
 project(BuzzBot)
 
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -70,19 +83,6 @@ add_executable(functions_test src/database.cpp src/database.h src/calculate.cpp 
         src/utilities.cpp src/utilities.h src/drink.h src/graphing_calculations.h src/graphing_calculations.cpp
         src/options.h src/drink.cpp src/drink_standards.h src/drink_standards.cpp src/options.cpp)
 
-if (CMAKE_BUILD_TYPE MATCHES Debug)
-    message("Building debug")
-    #add_compile_options(-Werror -g -O0 -pedantic)
-    # These warnings occur in include files and we don't want to modify them
-    add_compile_options(-Wall -Werror -Wextra -g -O0 - pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
-elseif(CMAKE_BUILD_TYPE MATCHES Release)
-    message(STATUS "Building release")
-    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
-elseif(CMAKE_BUILD_TYPE MATCHES RelLocalCpu)
-    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
-endif ()
-
 target_precompile_headers(BuzzBot PRIVATE include/sqlite_orm.h)
 
 IF(APPLE)
@@ -96,11 +96,11 @@ IF(APPLE)
 
     set_target_properties(BuzzBot PROPERTIES
             MACOSX_BUNDLE_BUNDLE_NAME "BuzzBot"
-            MACOSX_BUNDLE_BUNDLE_VERSION "v2.4.1"
+            MACOSX_BUNDLE_BUNDLE_VERSION "2.5.0"
             MACOSX_BUNDLE TRUE
             MACOSX_BUNDLE_ICON_FILE icon.icns
-            MACOSX_BUNDLE_LONG_VERSION_STRING "v2.4.1"
-            MACOSX_BUNDLE_SHORT_VERSION_STRING "v2.4.1"
+            MACOSX_BUNDLE_LONG_VERSION_STRING "2.5.0"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "2.5.0"
             MACOSX_BUNDLE_COPYRIGHT "2021 Ross Wardrup"
             MACOSX_BUNDLE_GUI_IDENTIFIER com.rwardrup.buzzbot
             XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
