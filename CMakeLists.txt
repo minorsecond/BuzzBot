@@ -15,6 +15,7 @@ IF(APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
     set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libproc.h")
 ENDIF()
+
 project(BuzzBot)
 
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -77,6 +78,9 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 elseif(CMAKE_BUILD_TYPE MATCHES Release)
     message(STATUS "Building release")
     add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
+elseif(CMAKE_BUILD_TYPE MATCHES RelLocalCpu)
+    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 endif ()
 
 target_precompile_headers(BuzzBot PRIVATE include/sqlite_orm.h)
