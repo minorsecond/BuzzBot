@@ -366,7 +366,8 @@ std::vector<Drink> Database::report_query(Storage &storage, const unsigned ratin
                 where(c(&Drink::sort_date) >= start_date_int
                 and c(&Drink::sort_date) <= end_date_int),
                 sqlite_orm::group_by(&Drink::name),
-                sqlite_orm::order_by(&Drink::rating).desc());
+                sqlite_orm::order_by(&Drink::rating).desc(),
+                sqlite_orm::limit(num));
     } else {
         query_r = storage.select(columns(
                                          sqlite_orm::max(&Drink::id),
@@ -377,7 +378,8 @@ std::vector<Drink> Database::report_query(Storage &storage, const unsigned ratin
                                        and c(&Drink::sort_date) <= end_date_int
                                        and c(&Drink::alcohol_type) == types),
                                  sqlite_orm::group_by(&Drink::name),
-                                 sqlite_orm::order_by(&Drink::rating).desc());
+                                 sqlite_orm::order_by(&Drink::rating).desc(),
+                                 sqlite_orm::limit(num));
     }
 
     for (const auto &drink : query_r) {
