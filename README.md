@@ -44,7 +44,8 @@ BuzzBot on Windows
 - `git clone https://github.com/minorsecond/BuzzBot.git`
 - `cd BuzzBot`
 - `mkdir build && cd build`
-- `cmake -DCMAKE_BUILD_TYPE=Release ..`
+- `cmake -DCMAKE_BUILD_TYPE=Release ..` If you'd like to build the app custom for your CPU, run
+`cmake -DCMAKE_BUILD_TYPE=RelLocalCpu`
 - `cmake --build . --target BuzzBot`. If you want to run tests, run `cmake --build . --target functions_test`.
 - If you're running macOS, you'll have a `BuzzBot.app` file in the `build` directory.
 - If you're running Linux, you can install the app in `~/.local/bin` by running `cmake --install .`.
