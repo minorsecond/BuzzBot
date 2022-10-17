@@ -15,6 +15,7 @@ IF(APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
     set(LIBPROC_SRC "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libproc.h")
 ENDIF()
+
 project(BuzzBot)
 
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -50,11 +51,11 @@ ENDIF()
 set(PROJECT_SRC_FILES src/main.cpp src/mainwindow.cpp src/database.cpp
         src/usersettings.cpp src/calculate.cpp src/beer.cpp
         src/liquor.cpp src/wine.cpp src/filters.cpp src/about.cpp src/exporters.cpp
-        src/standard_drink_calculator.cpp src/confirm_dialog.cpp
+        src/standard_drink_calculator.cpp
         src/graphing.cpp include/qcustomplot.cpp
         src/table_manipulation.cpp src/stats_updaters.cpp src/utilities.cpp
         src/graphing_calculations.cpp src/drink.cpp
-        src/drink_standards.cpp src/options.cpp)
+        src/drink_standards.cpp src/options.cpp src/reports.cpp src/reports.h)
 
 IF(APPLE)
     add_executable(BuzzBot MACOSX_BUNDLE ${ICON_PATH} ${PROJECT_SRC_FILES})
@@ -77,6 +78,12 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 elseif(CMAKE_BUILD_TYPE MATCHES Release)
     message(STATUS "Building release")
     add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
+elseif(CMAKE_BUILD_TYPE MATCHES RelLocalCpu)
+    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+elseif(CMAKE_BUILD_TYPE MATCHES AppleM1)
+    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mcpu=apple-m1")
 endif ()
 
 target_precompile_headers(BuzzBot PRIVATE include/sqlite_orm.h)
@@ -92,11 +99,11 @@ IF(APPLE)
 
     set_target_properties(BuzzBot PROPERTIES
             MACOSX_BUNDLE_BUNDLE_NAME "BuzzBot"
-            MACOSX_BUNDLE_BUNDLE_VERSION "v2.4.1"
+            MACOSX_BUNDLE_BUNDLE_VERSION "2.5.0"
             MACOSX_BUNDLE TRUE
             MACOSX_BUNDLE_ICON_FILE icon.icns
-            MACOSX_BUNDLE_LONG_VERSION_STRING "v2.4.1"
-            MACOSX_BUNDLE_SHORT_VERSION_STRING "v2.4.1"
+            MACOSX_BUNDLE_LONG_VERSION_STRING "2.5.0"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "2.5.0"
             MACOSX_BUNDLE_COPYRIGHT "2021 Ross Wardrup"
             MACOSX_BUNDLE_GUI_IDENTIFIER com.rwardrup.buzzbot
             XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"

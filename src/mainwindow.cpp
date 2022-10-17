@@ -3,10 +3,10 @@
 #include "about.h"
 #include "../ui/ui_graph_window.h"
 #include "standard_drink_calculator.h"
-#include "confirm_dialog.h"
 #include "exporters.h"
 #include "calculate.h"
 #include "graphing.h"
+#include "reports.h"
 #include "utilities.h"
 #include <iomanip>
 #include <filesystem>
@@ -83,10 +83,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->wineVintage->setMaximum(QDate::currentDate().year());
     ui->wineVintage->setMinimum(0);
 
-    // Rounded rect frames
-    ui->frame->setStyleSheet("QWidget#frame{ border: 1px solid grey; border-radius: 6px; }");
-    ui->frame_2->setStyleSheet("QWidget#frame_2{ border: 1px solid grey; border-radius: 6px; }");
-    ui->frame_4->setStyleSheet("QWidget#frame_4{ border: 1px solid grey; border-radius: 6px; }");
+    ui->frame->setStyleSheet("QWidget#frame{ border: 0; }");
+    ui->frame_2->setStyleSheet("QWidget#frame_2{ border: 0; }");
+    ui->frame_4->setStyleSheet("QWidget#frame_4{ border: 0; }");
 
     // Sort table by date column, by default
     reset_table_sort();
@@ -111,31 +110,35 @@ void MainWindow::add_menubar_items() {
     /*
      * Add items to the system menubar.
      */
-#ifdef __WIN32
-    QMenu *app_menu = menuBar()->addMenu("File");
+#ifdef __APPLE__
+    QMenu *app_menu = menuBar()->addMenu("App Menu");
 #else
-    QMenu * app_menu = menuBar()->addMenu("App Menu");
+    QMenu *app_menu = menuBar()->addMenu("File");
 #endif
     auto * preferences_action = new QAction("Preferences", this);
     auto * about_action = new QAction("About", this);
     auto * export_action = new QAction("Export...", this);
     auto * graphs_action = new QAction("Graphs...", this);
+    auto * reports_action = new QAction("Reports...", this);
     auto * calc_std_drinks = new QAction("Calculate Std. Drinks...", this);
     preferences_action->setMenuRole(QAction::PreferencesRole);
     about_action->setMenuRole(QAction::AboutRole);
     export_action->setMenuRole(QAction::ApplicationSpecificRole);
     graphs_action->setMenuRole(QAction::ApplicationSpecificRole);
+    reports_action->setMenuRole(QAction::ApplicationSpecificRole);
     calc_std_drinks->setMenuRole(QAction::ApplicationSpecificRole);
     app_menu->addAction(preferences_action);
     app_menu->addAction(about_action);
     app_menu->addAction(export_action);
     app_menu->addAction(graphs_action);
+    app_menu->addAction(reports_action);
     app_menu->addAction(calc_std_drinks);
 
     connect(preferences_action, &QAction::triggered, this, &MainWindow::open_user_settings);
     connect(about_action, &QAction::triggered, this, &MainWindow::open_about_dialog);
     connect(export_action, &QAction::triggered, this, &MainWindow::open_export_dialog);
     connect(graphs_action, &QAction::triggered, this, &MainWindow::open_graphs);
+    connect(reports_action, &QAction::triggered, this, &MainWindow::open_reports);
     connect(calc_std_drinks, &QAction::triggered, this, &MainWindow::open_std_drink_calculator);
 }
 
@@ -413,8 +416,11 @@ void MainWindow::open_user_settings() {
     if (options.database_path == utilities::get_application_data_path() + "/buzzbot.db" && options.custom_database) {
         // User didn't change the path from the default path but select custom DB. set option back to default
         options.custom_database = false;
-        ConfirmDialog path_unchanged(ConfirmStatus::NoDbPathChange);
-        path_unchanged.exec();
+
+        QMessageBox::StandardButton reply{};
+        reply = QMessageBox::warning(this, QString::fromStdString("Path Unchanged"),
+                              QString::fromStdString("Database path unchanged. It is not being moved."),
+                              QMessageBox::Ok);
     }
 
     this->options.write_options();
@@ -427,22 +433,35 @@ void MainWindow::open_user_settings() {
         if (result == DbMoveStatus::ErrorCopyingDb) {
             std::cout << "Error copying database from " << current_db_path_setting << " to " << options.database_path
                       << std::endl;
-            ConfirmDialog warning{ConfirmStatus::ErrorMovingDbFile};
-            if(warning.exec() == QDialog::Accepted) {
+
+            QMessageBox::StandardButton reply{};
+            reply = QMessageBox::critical(this, QString::fromStdString("DB Operation Error"),
+                                          QString::fromStdString("Error copying file. Restore from backup? Cancelling will exit the app."),
+                                          QMessageBox::Yes|QMessageBox::No);
+            if(reply == QMessageBox::Yes) {
                 const std::string backup_loc {current_db_path_setting + ".bak"};
                 Database::move_db(backup_loc, current_db_path_setting);
             } else {
                 exit(1);
             }
         } else if (result == DbMoveStatus::Success) { // Prompt user to reopen app and close automatically (else it will crash)
-            ConfirmDialog close_dialog(ConfirmStatus::MovedDb);
-            if (close_dialog.exec() == QDialog::Accepted) {
+            QMessageBox::StandardButton reply{};
+            reply = QMessageBox::information(this, QString::fromStdString("Move Database"),
+                                          QString::fromStdString("Closing app. Restart to load data from new location."),
+                                          QMessageBox::Ok);
+            if (reply == QMessageBox::Ok) {
                 exit(1);
             }
         } else if (result == DbMoveStatus::DestFileExists) {
             // Move didn't happen because destination file already exists
-            ConfirmDialog file_exists(ConfirmStatus::DestFileExists);
-            if (file_exists.exec() == QDialog::Accepted) {
+            QMessageBox::StandardButton reply{};
+            reply = QMessageBox::information(this, QString::fromStdString("Move Database"),
+                                             QString::fromStdString("Destination file already exists.\n"
+                                                                    "BuzzBot will load it upon next launch. \n"
+                                                                    "Do you want to delete the current file, keeping the destination file?\n"
+                                                                    "BuzzBot will close after your response."),
+                                             QMessageBox::Yes|QMessageBox::No);
+            if (reply == QMessageBox::Yes) {
                 // User wants to delete current file and keep destination file
                 std::filesystem::remove(current_db_path_setting);
             }
@@ -753,6 +772,17 @@ void MainWindow::open_graphs() {
     graphing_window->setAttribute(Qt::WA_DeleteOnClose); // Delete pointer on window close
     graphing_window->setModal(false);
     graphing_window->show();
+}
+
+void MainWindow::open_reports() {
+    /*
+     * Open the reports dialog
+     */
+
+    auto *reports_window = new Reports(storage);
+    reports_window->setAttribute(Qt::WA_DeleteOnClose);
+    reports_window->setModal(false);
+    reports_window->show();
 }
 
 void MainWindow::rename_duplicate_drink_names(std::vector<Drink> &drinks) {

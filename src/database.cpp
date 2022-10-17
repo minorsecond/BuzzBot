@@ -4,6 +4,7 @@
 #include <iostream>
 #include <filesystem>
 #include <string>
+#include <ctime>
 
 using namespace sqlite_orm;
 
@@ -238,6 +239,8 @@ int Database::increment_version(Storage storage, int current_version) {
      * @return: An integer denoting new DB version, straight from the DB.
      */
 
+    populate_date_sort_field(storage);
+
     std::cout << "Using DB version " << storage.pragma.user_version() << std::endl;
     const int version = get_version(storage);
     if (version < 8 && current_version == 9) {  //version 9 implements the new size column and version 10 will remove the _size column
@@ -335,4 +338,95 @@ DbMoveStatus Database::move_db(const std::string &current_path, const std::strin
     }
 
     return DbMoveStatus::ErrorCopyingDb;
+}
+
+std::vector<Drink> Database::report_query(Storage &storage, const unsigned rating, const unsigned num,
+                                          const std::string& types, const std::string& start_date,
+                                          const std::string& end_date) {
+    /*
+     * Run a top n query for reports.
+     * @param num: number of results to get
+     * @param types: All, Beer, Liquor, or Wine
+     * @param start_date: Start date of query
+     * @parma end_date: End date of query
+     * @return: a vector of Drink objects within the query parameters
+     */
+
+    const int start_date_int {utilities::date_string_to_date_int(start_date)};
+    const int end_date_int {utilities::date_string_to_date_int(end_date)};
+    std::vector<std::tuple<std::unique_ptr<int, std::default_delete<int>>, std::string, std::string, std::string, std::string, int>> query_r{};
+    std::vector<Drink> drinks{};
+
+    if (types == "All Types") {
+        query_r = storage.select(columns(
+                    sqlite_orm::max(&Drink::id),
+                    &Drink::name,
+                    &Drink::type,
+                    &Drink::subtype,
+                    &Drink::producer,
+                    &Drink::rating),
+                where(c(&Drink::rating) >= rating
+                and c(&Drink::sort_date) >= start_date_int
+                and c(&Drink::sort_date) <= end_date_int),
+                sqlite_orm::group_by(&Drink::name),
+                sqlite_orm::order_by(sqlite_orm::cast<int>(&Drink::rating)).desc(),
+                sqlite_orm::limit(num));
+    } else {
+        query_r = storage.select(columns(
+                                         sqlite_orm::max(&Drink::id),
+                                         &Drink::name,
+                                         &Drink::type,
+                                         &Drink::subtype,
+                                         &Drink::producer,
+                                         &Drink::rating),
+                                 where(c(&Drink::rating) >= rating
+                                       and c(&Drink::sort_date) >= start_date_int
+                                       and c(&Drink::sort_date) <= end_date_int
+                                       and c(&Drink::alcohol_type) == types),
+                                 sqlite_orm::group_by(&Drink::name),
+                                 sqlite_orm::order_by(sqlite_orm::cast<int>(&Drink::rating)).desc(),
+                                 sqlite_orm::limit(num));
+    }
+
+    for (const auto &drink : query_r) {
+        const int _pkey {*std::get<0>(drink).get()};
+        const std::string _drink_name {std::get<1>(drink)};
+        const std::string _drink_type {std::get<2>(drink)};
+        const std::string _drink_subtype {std::get<3>(drink)};
+        const std::string _drink_producer {std::get<4>(drink)};
+        const int _rating {std::get<5>(drink)};
+
+        Drink _drink{};
+        _drink.set_id(_pkey);
+        _drink.set_name(_drink_name);
+        _drink.set_type(_drink_type);
+        _drink.set_subtype(_drink_subtype);
+        _drink.set_producer(_drink_producer);
+        _drink.set_rating(_rating);
+        drinks.push_back(_drink);
+    };
+
+    return drinks;
+}
+
+void Database::populate_date_sort_field(Storage &storage) {
+    for (Drink &drink : storage.get_all<Drink>()) {
+        const int date_int {utilities::date_string_to_date_int(drink.get_date())};
+
+        if(drink.get_sort_date() != date_int) {
+            drink.set_sort_date(date_int);
+            storage.update(drink);
+        }
+    }
+}
+
+Drink Database::get_drink_at_place(Storage &storage, RecordPlace place) {
+    int id {};
+    if (place == RecordPlace::First) {
+        id = *storage.min(&Drink::id).get();
+    } else if (place == RecordPlace::Last) {
+        id = *storage.max(&Drink::id).get();
+    }
+
+    return storage.get_all<Drink>(where(c(&Drink::id) == id)).at(0);
 }

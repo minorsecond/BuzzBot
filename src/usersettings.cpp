@@ -3,7 +3,6 @@
 //
 
 #include "usersettings.h"
-#include "confirm_dialog.h"
 #include "database.h"
 #include <iostream>
 #include <regex>
@@ -19,15 +18,11 @@ UserSettings::UserSettings(const Options& options, const std::map<std::string, d
      */
 
     ui.setupUi(this);
-    this->setFixedSize(700, 450);
 
     const int std_drink_cbox_index = populate_country_cbox(country_info);
     ui.stdDrinkDefComboBox->insertItem(std_drink_cbox_index, QString::fromStdString("Custom"));
 
     set_std_drink_input_states(options);
-
-    // Rounded rect frames
-    set_frame_style();
 
     if (options.sex == "male") {
         ui.maleSelection->setChecked(true);
@@ -184,8 +179,11 @@ void UserSettings::clicked_clear_data() {
      * Clear the data if user so desires.
      */
 
-    ConfirmDialog confirmation_dialog = ConfirmDialog(ConfirmStatus::ClearData);
-    if (confirmation_dialog.exec() == QDialog::Accepted) {
+    QMessageBox::StandardButton reply{};
+    reply = QMessageBox::warning(nullptr, QString::fromStdString("Delete All Data"),
+                                  QString::fromStdString("You are attempting to clear the database. Click Yes to confirm."),
+                                  QMessageBox::Yes | QMessageBox::No);
+    if (reply == QMessageBox::Yes) {
         Storage storage = initStorage(utilities::get_db_path());
         Database::truncate(storage);
         std::cout << "*** Truncated the database ***" << std::endl;
@@ -313,19 +311,6 @@ void UserSettings::set_limit_standard_states(const Options& options) {
     }
 }
 
-void UserSettings::set_frame_style() {
-    /*
-     * Set style of frames.
-     */
-
-    ui.frame->setStyleSheet("QWidget#frame{ border: 1px solid grey; border-radius: 6px; }");
-    ui.frame_2->setStyleSheet("QWidget#frame_2{ border: 1px solid grey; border-radius: 6px; }");
-    ui.frame_3->setStyleSheet("QWidget#frame_3{ border: 1px solid grey; border-radius: 6px; }");
-    ui.frame_4->setStyleSheet("QWidget#frame_4{ border: 1px solid grey; border-radius: 6px; }");
-    ui.frame_5->setStyleSheet("QWidget#frame_5{ border: 1px solid grey; border-radius: 6px; }");
-    ui.weeklyLimitFrame->setStyleSheet("QWidget#weeklyLimitFrame{ border: 1px solid grey; border-radius: 6px; }");
-}
-
 void UserSettings::set_day_of_week_setting_state(const Options& options) {
     /*
      * Set the states for day of week setting.
@@ -409,9 +394,13 @@ void UserSettings::clicked_browse_db_path() {
      * @return: None
      */
 
-    ConfirmDialog change_db_path_confirm(ConfirmStatus::MovingDb);
+    QMessageBox::StandardButton reply{};
+    reply = QMessageBox::information(this, QString::fromStdString("DB Notification"),
+                                  QString::fromStdString("After moving the DB, the app will close. \n"
+                                                         "You will have to reopoen it after saving preferences."),
+                                  QMessageBox::Ok);
 
-    if (change_db_path_confirm.exec() == QDialog::Accepted) {
+    if (reply == QMessageBox::Ok) {
         const QString desktop_path = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0);
         const QString preferred_path = desktop_path + "/buzzbot.db";
 

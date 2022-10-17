@@ -35,7 +35,7 @@ Uninstaller filename = Uninstall
 UseCustomDisplayIcon = 0
 CustomDisplayIcon = <InstallPath>\
 [Licence]
-Licence dialog = 0
+Licence dialog = 1
 [Finish]
 Sart program = 1
 Reboot computer = 0
@@ -55,7 +55,7 @@ Time = 2
 PlaySound = 0
 Allow = 0
 [Build]
-File = C:\Users/rossw\Desktop\BuzzBot-Setup.exe
+File = C:\Users\rossw\CLionProjects\BuzzBot\cmake-build-release\BuzzBot-Setup.exe
 SetupIconPath = ..\icons\ancient.ico
 UninstallIconPath = ..\icons\ancient.ico
 CompressionMethod = 0
