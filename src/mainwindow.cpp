@@ -83,16 +83,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->wineVintage->setMaximum(QDate::currentDate().year());
     ui->wineVintage->setMinimum(0);
 
-#ifdef __APPLE__
-    // Rounded rect frames
-    ui->frame->setStyleSheet("QWidget#frame{ border: 1px solid grey; border-radius: 6px; }");
-    ui->frame_2->setStyleSheet("QWidget#frame_2{ border: 1px solid grey; border-radius: 6px; }");
-    ui->frame_4->setStyleSheet("QWidget#frame_4{ border: 1px solid grey; border-radius: 6px; }");
-#else
     ui->frame->setStyleSheet("QWidget#frame{ border: 0; }");
     ui->frame_2->setStyleSheet("QWidget#frame_2{ border: 0; }");
     ui->frame_4->setStyleSheet("QWidget#frame_4{ border: 0; }");
-#endif
 
     // Sort table by date column, by default
     reset_table_sort();
