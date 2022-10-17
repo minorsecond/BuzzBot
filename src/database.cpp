@@ -354,13 +354,15 @@ std::vector<Drink> Database::report_query(Storage &storage, const unsigned ratin
 
     const int start_date_int {utilities::date_string_to_date_int(start_date)};
     const int end_date_int {utilities::date_string_to_date_int(end_date)};
-    std::vector<std::tuple<std::unique_ptr<int, std::default_delete<int>>, std::string, std::string, int>> query_r{};
+    std::vector<std::tuple<std::unique_ptr<int, std::default_delete<int>>, std::string, std::string, std::string, std::string, int>> query_r{};
     std::vector<Drink> drinks{};
 
     if (types == "All Types") {
         query_r = storage.select(columns(
                     sqlite_orm::max(&Drink::id),
                     &Drink::name,
+                    &Drink::type,
+                    &Drink::subtype,
                     &Drink::producer,
                     &Drink::rating),
                 where(c(&Drink::sort_date) >= start_date_int
@@ -372,6 +374,8 @@ std::vector<Drink> Database::report_query(Storage &storage, const unsigned ratin
         query_r = storage.select(columns(
                                          sqlite_orm::max(&Drink::id),
                                          &Drink::name,
+                                         &Drink::type,
+                                         &Drink::subtype,
                                          &Drink::producer,
                                          &Drink::rating),
                                  where(c(&Drink::sort_date) >= start_date_int
@@ -385,12 +389,16 @@ std::vector<Drink> Database::report_query(Storage &storage, const unsigned ratin
     for (const auto &drink : query_r) {
         const int _pkey {*std::get<0>(drink).get()};
         const std::string _drink_name {std::get<1>(drink)};
-        const std::string _drink_producer {std::get<2>(drink)};
-        const int _rating {std::get<3>(drink)};
+        const std::string _drink_type {std::get<2>(drink)};
+        const std::string _drink_subtype {std::get<3>(drink)};
+        const std::string _drink_producer {std::get<4>(drink)};
+        const int _rating {std::get<5>(drink)};
 
         Drink _drink{};
         _drink.set_id(_pkey);
         _drink.set_name(_drink_name);
+        _drink.set_type(_drink_type);
+        _drink.set_subtype(_drink_subtype);
         _drink.set_producer(_drink_producer);
         _drink.set_rating(_rating);
         drinks.push_back(_drink);
