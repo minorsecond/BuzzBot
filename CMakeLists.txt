@@ -83,7 +83,7 @@ elseif(CMAKE_BUILD_TYPE MATCHES RelLocalCpu)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 elseif(CMAKE_BUILD_TYPE MATCHES AppleM1)
     add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" -mcpu=apple-m1)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mcpu=apple-m1")
 endif ()
 
 target_precompile_headers(BuzzBot PRIVATE include/sqlite_orm.h)
