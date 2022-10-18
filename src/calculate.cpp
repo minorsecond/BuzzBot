@@ -287,7 +287,7 @@ unsigned Calculate::days_in_row(Storage &storage) {
     search_date.tm_mon = std::stoi(date.substr(5, 7)) - tm_month_offset;
     search_date.tm_mday = std::stoi(date.substr(8, 9));
 
-    decrement_day(search_date);
+    search_date = decrement_day(search_date);
 
     std::string prev_day {std::to_string(search_date.tm_year + tm_year_offset) + '-'
                           + utilities::zero_pad_string(search_date.tm_mon + tm_month_offset) + '-' +
@@ -309,7 +309,7 @@ unsigned Calculate::days_in_row(Storage &storage) {
                 scanned_yesterday = true;
             }
             day_counter ++;
-            decrement_day(search_date);
+            search_date = decrement_day(search_date);
             prev_day = std::to_string(search_date.tm_year + tm_year_offset) + '-' +
                     utilities::zero_pad_string(search_date.tm_mon + tm_month_offset) + '-'
                     + utilities::zero_pad_string(search_date.tm_mday);
@@ -322,7 +322,7 @@ unsigned Calculate::days_in_row(Storage &storage) {
     return day_counter;
 }
 
-void Calculate::decrement_day(std::tm &date) {
+std::tm Calculate::decrement_day(std::tm date) {
     /* Decrements a time object by a day
      * @param date: a tm object
      */
@@ -335,6 +335,8 @@ void Calculate::decrement_day(std::tm &date) {
     date.tm_year = search_date->tm_year;
     date.tm_mon = search_date->tm_mon;
     date.tm_mday = search_date->tm_mday;
+
+    return date;
 }
 
 bool Calculate::equal_double(const double a, const double b) {
