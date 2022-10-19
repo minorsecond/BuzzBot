@@ -33,7 +33,7 @@ public:
 private:
     static constexpr unsigned us_male_limit {14};
     static constexpr unsigned us_female_limit {7};
-    static void decrement_day(std::tm &date);
+    static std::tm decrement_day(std::tm date);
 };
 
 
