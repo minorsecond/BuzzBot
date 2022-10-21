@@ -239,7 +239,11 @@ int Database::increment_version(Storage storage, int current_version) {
      * @return: An integer denoting new DB version, straight from the DB.
      */
 
-    populate_date_sort_field(storage);
+    try {
+        populate_date_sort_field(storage);
+    } catch (std::system_error &e) {
+        std::cout << e.what() << std::endl;
+    }
 
     std::cout << "Using DB version " << storage.pragma.user_version() << std::endl;
     const int version = get_version(storage);
