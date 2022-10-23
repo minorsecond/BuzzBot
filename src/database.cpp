@@ -14,10 +14,7 @@ std::vector<Drink> Database::read(Storage storage) {
      * @return all_drinks A vector containing Drink, storing all rows in the database.
      */
 
-    const std::vector<Drink> all_drinks = storage.get_all<Drink>();
-    std::cout << "Read " + std::to_string(all_drinks.size()) + " drinks from DB" << std::endl;
-
-    return all_drinks;
+    return storage.get_all<Drink>();
 }
 
 void Database::write_db_to_disk(Storage &storage) {
@@ -71,8 +68,7 @@ Drink Database::read_row(const int &row_num, Storage &storage) {
      * @return drink: The results of the database query.
      */
     
-    const auto drink = storage.get<Drink>(row_num);
-    return drink;
+    return storage.get<Drink>(row_num);
 }
 
 void Database::update(Storage storage, const Drink& drink) {
@@ -206,8 +202,7 @@ std::vector<Drink> Database::get_drinks_by_type(Storage &storage, std::string dr
      * @param drink_type: The type of drink to filter on.
      * @return: A vector of drinks that match drink_type.
      */
-    const std::vector<Drink> drinks_by_type = storage.get_all<Drink>(where(c(&Drink::type) == std::move(drink_type)));
-    return drinks_by_type;
+    return storage.get_all<Drink>(where(c(&Drink::type) == std::move(drink_type)));
 }
 
 std::vector<Drink> Database::get_drinks_by_producer(Storage &storage, std::string producer) {
@@ -217,8 +212,8 @@ std::vector<Drink> Database::get_drinks_by_producer(Storage &storage, std::strin
      * @param producer: The producer name to filter on.
      * @return: A vector of drinks produced by a producer.
      */
-    const std::vector<Drink> drinks_by_producer = storage.get_all<Drink>(where(c(&Drink::producer) == std::move(producer)));
-    return drinks_by_producer;
+
+    return storage.get_all<Drink>(where(c(&Drink::producer) == std::move(producer)));
 }
 
 int Database::get_version(Storage storage) { // NOLINT(performance-unnecessary-value-param)
