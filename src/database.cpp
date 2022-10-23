@@ -301,7 +301,7 @@ void Database::sort_by_date_id(std::vector<Drink> &drinks) {
     std::sort(drinks.begin(), drinks.end(), compare_date);
     // Now add sort order value
     int sort_order = 1;
-    for (unsigned i = 0; i < drinks.size(); ++i) { // NOLINT(modernize-loop-convert)
+    for (size_t i = 0; i < drinks.size(); ++i) { // NOLINT(modernize-loop-convert)
         drinks[i].sort_order = sort_order;
         sort_order++;
     }
