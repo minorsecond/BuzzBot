@@ -128,6 +128,8 @@ ELSEIF(WIN32)
     add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
             "C:/msys64/mingw64/share/qt6/plugins/platforms/qwindows.dll"
             ${CMAKE_CURRENT_BINARY_DIR}/platforms/qwindows.dll)
+    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/windows_icon.ico
+            ${CMAKE_CURRENT_BINARY_DIR}/res/windows_icon.ico)
 ENDIF()
 
 IF(APPLE)

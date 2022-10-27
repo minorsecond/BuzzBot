@@ -41,8 +41,7 @@ Source: "C:\msys64\mingw64\bin\Qt6PrintSupport.dll"; DestDir: "{app}"; Flags: ig
 Source: "C:\msys64\mingw64\bin\Qt6Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\msys64\mingw64\bin\libb2-1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\msys64\mingw64\bin\libdouble-conversion.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\msys64\mingw64\bin\libicuin71.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\msys64\mingw64\bin\libicuuc71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\msys64\mingw64\bin\libicuin72.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\msys64\mingw64\bin\libpcre2-16-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\msys64\mingw64\bin\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\msys64\mingw64\bin\libfreetype-6.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -51,7 +50,8 @@ Source: "C:\msys64\mingw64\bin\libmd4c.dll"; DestDir: "{app}"; Flags: ignorevers
 Source: "C:\msys64\mingw64\bin\libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\msys64\mingw64\bin\libbz2-1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\msys64\mingw64\bin\libbrotlidec.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\msys64\mingw64\bin\libicudt71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\msys64\mingw64\bin\libicudt72.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\msys64\mingw64\bin\libicuuc72.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\msys64\mingw64\bin\libglib-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\msys64\mingw64\bin\libsqlite3-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\msys64\mingw64\bin\libgraphite2.dll"; DestDir: "{app}"; Flags: ignoreversion
