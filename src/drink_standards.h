@@ -8,6 +8,6 @@
 #include <string>
 #include <map>
 
-extern std::map<std::string , double> std_drink_standards;
+const extern std::map<std::string , double> std_drink_standards;
 
 #endif //BUZZBOT_DRINK_STANDARDS_H
