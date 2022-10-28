@@ -7,7 +7,7 @@
 // Std drink sizes are all stored in Oz. Data are all from Wikipedia:
 // https://en.wikipedia.org/wiki/Standard_drink
 // Double values are in ounces.
-std::map<std::string , double> std_drink_standards = {
+const std::map<std::string , double> std_drink_standards = {
         {"Australia", 0.43},
         {"Austria", 0.86},
         {"Canada", 0.57},
