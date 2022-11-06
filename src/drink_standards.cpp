@@ -6,12 +6,13 @@
 
 // Std drink sizes are all stored in Oz. Data are all from Wikipedia:
 // https://en.wikipedia.org/wiki/Standard_drink
-std::map<std::string , double> std_drink_standards = {
+// Double values are in ounces.
+const std::map<std::string , double> std_drink_standards = {
         {"Australia", 0.43},
         {"Austria", 0.86},
         {"Canada", 0.57},
-        {"Denmark", 0.52},
-        {"Finland", 0.52},
+        {"Denmark", 0.51},
+        {"Finland", 0.51},
         {"France", 0.43},
         {"Germany", 0.47},
         {"Hong Kong", 0.43},
@@ -19,14 +20,16 @@ std::map<std::string , double> std_drink_standards = {
         {"Iceland", 0.34},
         {"Ireland", 0.43},
         {"Italy", 0.43},
-        {"Japan", 0.85},
+        {"Japan (MHLW)", 0.85},
+        {"Japan (WHO)", 0.43},
         {"Netherlands", 0.43},
         {"New Zealand", 0.43},
+        {"Norway", 0.50},
         {"Poland", 0.43},
         {"Portugal", 0.47},
         {"Spain", 0.43},
         {"Sweden", 0.51},
-        {"Switzerland", 0.52},
+        {"Switzerland", 0.51},
         {"United Kingdom", 0.34},
         {"United States", 0.60}
 };

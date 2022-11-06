@@ -77,12 +77,12 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
     add_compile_options(-Wall -Werror -Wextra -g -O0 - pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
 elseif(CMAKE_BUILD_TYPE MATCHES Release)
     message(STATUS "Building release")
-    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
+    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast -s)
 elseif(CMAKE_BUILD_TYPE MATCHES RelLocalCpu)
-    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast -s)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -s")
 elseif(CMAKE_BUILD_TYPE MATCHES AppleM1)
-    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast)
+    add_compile_options(-Wall -Werror -Wextra -gdwarf-2 -O2 -pedantic -Wno-error=deprecated-enum-enum-conversion -Wno-error=extra-semi -Wno-error=old-style-cast -s)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mcpu=apple-m1")
 endif ()
 
@@ -99,11 +99,11 @@ IF(APPLE)
 
     set_target_properties(BuzzBot PROPERTIES
             MACOSX_BUNDLE_BUNDLE_NAME "BuzzBot"
-            MACOSX_BUNDLE_BUNDLE_VERSION "2.5.0"
+            MACOSX_BUNDLE_BUNDLE_VERSION "v2.5.2"
             MACOSX_BUNDLE TRUE
             MACOSX_BUNDLE_ICON_FILE icon.icns
-            MACOSX_BUNDLE_LONG_VERSION_STRING "2.5.0"
-            MACOSX_BUNDLE_SHORT_VERSION_STRING "2.5.0"
+            MACOSX_BUNDLE_LONG_VERSION_STRING "v2.5.2"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "v2.5.2"
             MACOSX_BUNDLE_COPYRIGHT "2021 Ross Wardrup"
             MACOSX_BUNDLE_GUI_IDENTIFIER com.rwardrup.buzzbot
             XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
@@ -128,6 +128,8 @@ ELSEIF(WIN32)
     add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
             "C:/msys64/mingw64/share/qt6/plugins/platforms/qwindows.dll"
             ${CMAKE_CURRENT_BINARY_DIR}/platforms/qwindows.dll)
+    add_custom_command(TARGET BuzzBot POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/windows_icon.ico
+            ${CMAKE_CURRENT_BINARY_DIR}/res/windows_icon.ico)
 ENDIF()
 
 IF(APPLE)

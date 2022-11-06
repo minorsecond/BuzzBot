@@ -11,23 +11,23 @@
 
 class Drink {
 private:
-    int id;
-    std::string date;
-    int sort_date;
-    std::string name;
-    std::string type;
-    std::string subtype;
-    std::string producer;
-    double abv;
-    double ibu;
-    double _size;  // TODO: Remove after moving to size column
-    double size;
-    int rating;
-    std::string notes;
-    int vintage;
-    std::string alcohol_type;
-    std::string timestamp;
-    int sort_order;
+    int id{};
+    std::string date{utilities::get_local_date()};
+    int sort_date{utilities::date_string_to_date_int(date)};
+    std::string name{};
+    std::string type{};
+    std::string subtype{};
+    std::string producer{};
+    double abv{};
+    double ibu{};
+    double _size{};  // TODO: Remove after moving to size column
+    double size{};
+    int rating{};
+    std::string notes{};
+    int vintage{};
+    std::string alcohol_type{};
+    std::string timestamp{};
+    int sort_order{};
 
     friend class Calculate;
     friend class Database;
