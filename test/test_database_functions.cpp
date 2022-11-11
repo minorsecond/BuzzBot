@@ -460,8 +460,8 @@ TEST_CASE("Increment Version", "[DB Functions]") {
     Storage storage_1 = initStorage(db_path);
     Database::write_db_to_disk(storage_1);
 
-    int base_version = Database::increment_version(storage_1, 8);
-    REQUIRE(base_version == 8);
+    int base_version = Database::increment_version(storage_1, 9);
+    REQUIRE(base_version == 9);
 }
 
 TEST_CASE("Filter DB", "[DB Functions]") {

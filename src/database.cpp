@@ -242,7 +242,7 @@ int Database::increment_version(Storage storage, int current_version) {
 
     std::cout << "Using DB version " << storage.pragma.user_version() << std::endl;
     const int version = get_version(storage);
-    if (version < 8 && current_version == 9) {  //version 9 implements the new size column and version 10 will remove the _size column
+    if (version < 9 && current_version == 9) {  //version 9 implements the new size column and version 10 will remove the _size column
         std::cout << "*** Upgrading DB from version " << storage.pragma.user_version() <<  " to " << current_version << std::endl;
 
         if (version != 0) {
@@ -251,10 +251,10 @@ int Database::increment_version(Storage storage, int current_version) {
              * It will be necessary to update code in mainwindow.cpp (and probably elsewhere) to then use this new
              * size column.*/
         }
+        // Set to new version number
+        storage.pragma.user_version(current_version);
+        storage.sync_schema(true);
     }
-    // Set to new version number
-    storage.pragma.user_version(current_version);
-    storage.sync_schema(true);
 
     return storage.pragma.user_version();
 }
