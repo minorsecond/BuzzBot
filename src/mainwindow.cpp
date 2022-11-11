@@ -130,7 +130,7 @@ void MainWindow::add_menubar_items() {
     QMenu *app_menu = menuBar()->addMenu("App Menu");
     const std::string ellipses{"..."};
 
-    for (std::string &action_name : action_names) {
+    for (QString &action_name : action_names) {
         action_name += ellipses;
     }
 
