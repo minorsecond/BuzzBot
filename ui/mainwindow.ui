@@ -808,7 +808,7 @@ with Orange</string>
           <item row="1" column="1">
            <widget class="QDoubleSpinBox" name="beerSizeInput">
             <property name="decimals">
-             <number>1</number>
+             <number>2</number>
             </property>
             <property name="maximum">
              <double>10000.000000000000000</double>
@@ -1128,7 +1128,7 @@ with Orange</string>
              </sizepolicy>
             </property>
             <property name="decimals">
-             <number>1</number>
+             <number>2</number>
             </property>
             <property name="maximum">
              <double>10000.000000000000000</double>
@@ -1390,7 +1390,7 @@ with Orange</string>
              </sizepolicy>
             </property>
             <property name="decimals">
-             <number>1</number>
+             <number>2</number>
             </property>
             <property name="maximum">
              <double>10000.000000000000000</double>
@@ -1411,7 +1411,7 @@ with Orange</string>
      <x>0</x>
      <y>0</y>
      <width>1006</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
