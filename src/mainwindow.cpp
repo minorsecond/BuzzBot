@@ -103,7 +103,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Start the stat pane update stat_update_timer
     auto *stats_timer = new QTimer(this);
     connect(stats_timer, &QTimer::timeout, this, &MainWindow::update_stats_if_new_day);
-    stats_timer->start(5000);
+    stats_timer->start(1000);
 }
 
 void MainWindow::add_menubar_items() {
