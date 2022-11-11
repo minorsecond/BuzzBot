@@ -596,7 +596,7 @@ public:
 
         beerSizeInput = new QDoubleSpinBox(beerTab);
         beerSizeInput->setObjectName(QString::fromUtf8("beerSizeInput"));
-        beerSizeInput->setDecimals(1);
+        beerSizeInput->setDecimals(2);
         beerSizeInput->setMaximum(10000.000000000000000);
 
         gridLayout_3->addWidget(beerSizeInput, 1, 1, 1, 1);
@@ -788,7 +788,7 @@ public:
         liquorSizeInput->setObjectName(QString::fromUtf8("liquorSizeInput"));
         sizePolicy2.setHeightForWidth(liquorSizeInput->sizePolicy().hasHeightForWidth());
         liquorSizeInput->setSizePolicy(sizePolicy2);
-        liquorSizeInput->setDecimals(1);
+        liquorSizeInput->setDecimals(2);
         liquorSizeInput->setMaximum(10000.000000000000000);
 
         gridLayout_6->addWidget(liquorSizeInput, 1, 2, 1, 1);
@@ -943,7 +943,7 @@ public:
         wineSizeInput->setObjectName(QString::fromUtf8("wineSizeInput"));
         sizePolicy2.setHeightForWidth(wineSizeInput->sizePolicy().hasHeightForWidth());
         wineSizeInput->setSizePolicy(sizePolicy2);
-        wineSizeInput->setDecimals(1);
+        wineSizeInput->setDecimals(2);
         wineSizeInput->setMaximum(10000.000000000000000);
 
         gridLayout_9->addWidget(wineSizeInput, 1, 3, 1, 1);
@@ -958,7 +958,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1006, 24));
+        menubar->setGeometry(QRect(0, 0, 1006, 22));
         MainWindow->setMenuBar(menubar);
         QWidget::setTabOrder(tabWidget, beerDateInput);
         QWidget::setTabOrder(beerDateInput, beerNameInput);
