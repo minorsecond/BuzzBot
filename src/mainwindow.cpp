@@ -128,7 +128,7 @@ void MainWindow::add_menubar_items() {
 
 #ifdef __APPLE__
     QMenu *app_menu = menuBar()->addMenu("App Menu");
-    const std::string ellipses{"..."};
+    const QString ellipses{"..."};
 
     for (QString &action_name : action_names) {
         action_name += ellipses;
