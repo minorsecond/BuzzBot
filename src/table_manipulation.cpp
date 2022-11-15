@@ -14,8 +14,8 @@ void MainWindow::update_selected_row(QItemSelectionModel* select, Drink entered_
      */
 
     QMessageBox::StandardButton reply{};
-    reply = QMessageBox::question(this, QString::fromStdString("Delete Row..."),
-                                  QString::fromStdString("Do you want to delete the selected row?"),
+    reply = QMessageBox::question(this, QString::fromStdString("Edit Row..."),
+                                  QString::fromStdString("Do you want to edit the selected row?"),
                                   QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
         // Get the selected row
