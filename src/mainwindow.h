@@ -75,6 +75,16 @@ private:
     void open_reports();
     double get_std_drink_size_from_options();
 
+    struct Notification{
+        static inline const std::string delete_row{"Do you want to delete the selected row?"};
+        static inline const std::string edit_row{"Do you want to edit the selected row?"};
+    };
+
+    struct NotificationTitle {
+        static inline const std::string delete_row{"Delete row"};
+        static inline const std::string edit_row{"Edit row"};
+    };
+
 private slots:
     void submit_button_clicked();
     void reset_fields();
