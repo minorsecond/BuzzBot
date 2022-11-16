@@ -23,15 +23,10 @@ private:
     Storage storage = initStorage(utilities::get_db_path());
 
     void populate_filter_menus(const std::string &filter_type);
-
     void update_beer_fields();
-
     void update_stat_panel();
-
     void update_liquor_fields();
-
     void update_wine_fields();
-
     static void rename_duplicate_drink_names(std::vector<Drink> &drinks);
     void update_drinks_this_week(double standard_drinks, const std::string& weekday_name);
     void update_standard_drinks_left_this_week(double std_drinks_consumed);
@@ -74,6 +69,16 @@ private:
     void open_graphs();
     void open_reports();
     double get_std_drink_size_from_options();
+
+    struct Notification{
+        static inline const std::string delete_row{"Do you want to delete the selected row?"};
+        static inline const std::string edit_row{"Do you want to edit the selected row?"};
+    };
+
+    struct NotificationTitle {
+        static inline const std::string delete_row{"Delete row"};
+        static inline const std::string edit_row{"Edit row"};
+    };
 
 private slots:
     void submit_button_clicked();
