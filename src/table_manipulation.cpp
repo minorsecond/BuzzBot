@@ -14,8 +14,8 @@ void MainWindow::update_selected_row(QItemSelectionModel* select, Drink entered_
      */
 
     QMessageBox::StandardButton reply{};
-    reply = QMessageBox::question(this, QString::fromStdString("Delete Row..."),
-                                  QString::fromStdString("Do you want to delete the selected row?"),
+    reply = QMessageBox::question(this, QString::fromStdString(NotificationTitle::delete_row),
+                                  QString::fromStdString(Notification::edit_row),
                                   QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
         // Get the selected row
@@ -171,8 +171,8 @@ void MainWindow::delete_row() {
      */
 
     QMessageBox::StandardButton reply{};
-    reply = QMessageBox::question(this, QString::fromStdString("Delete Row..."),
-                                  QString::fromStdString("Do you want to delete the selected row?"),
+    reply = QMessageBox::question(this, QString::fromStdString(NotificationTitle::delete_row),
+                                  QString::fromStdString(Notification::delete_row),
                                   QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
         int select = ui->drinkLogTable->selectionModel()->currentIndex().row();
