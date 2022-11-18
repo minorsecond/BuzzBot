@@ -59,9 +59,6 @@ MainWindow::MainWindow(QWidget *parent)
         ui->wineSizeLabel->setText("Size (oz)");
     }
 
-    // Set size hints
-    ui->beerDateInput->setProperty("sizeHint", QVariant(QSizeF(241, 22)));
-
     // Set current tab to Beer tab
     ui->tabWidget->setCurrentIndex(0);
 
