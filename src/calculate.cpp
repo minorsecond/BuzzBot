@@ -66,7 +66,9 @@ std::string Calculate::favorite_producer(const Storage& storage, const std::stri
 
     producers.reserve(all_drinks.size());
     for (const auto& drink: all_drinks) {
-        producers.push_back(drink.producer);
+        if(!drink.get_producer().empty()) {
+            producers.push_back(drink.producer);
+        }
     }
     for (const auto& producer : producers) {
         size_t producer_count = std::count(producers.begin(), producers.end(), producer);
