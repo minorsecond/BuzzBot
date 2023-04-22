@@ -153,6 +153,16 @@ int GraphingCalculations::date_from_week_num(const std::string& week_num) {
         day_num += 1;
         week_num_tmp = week_num + "-" + std::to_string(day_num);
         strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+
+        if (day_num > 6) {
+            day_num = 0;
+            const size_t first {week_num_tmp.find('-')};
+            const size_t last {week_num_tmp.find_last_of('-')};
+            const std::string current_year {week_num_tmp.substr(0, first)};
+            const int current_week {std::stoi(week_num_tmp.substr(first, last-first)) + 1};
+            week_num_tmp = current_year + "-" + std::to_string(current_week) + "-" + std::to_string(day_num);
+            strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+        }
     }
 #endif
 

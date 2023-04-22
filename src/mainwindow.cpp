@@ -59,9 +59,6 @@ MainWindow::MainWindow(QWidget *parent)
         ui->wineSizeLabel->setText("Size (oz)");
     }
 
-    // Set size hints
-    ui->beerDateInput->setProperty("sizeHint", QVariant(QSizeF(241, 22)));
-
     // Set current tab to Beer tab
     ui->tabWidget->setCurrentIndex(0);
 
@@ -103,42 +100,75 @@ MainWindow::MainWindow(QWidget *parent)
     // Start the stat pane update stat_update_timer
     auto *stats_timer = new QTimer(this);
     connect(stats_timer, &QTimer::timeout, this, &MainWindow::update_stats_if_new_day);
-    stats_timer->start(5000);
+    stats_timer->start(1000);
 }
 
 void MainWindow::add_menubar_items() {
     /*
      * Add items to the system menubar.
      */
+
+    const QString pref_action_name{"Preferences"};
+    const QString about_action_name{"About"};
+    const QString export_action_name{"Export"};
+    const QString graphs_action_name{"Graphs"};
+    const QString table_action_name{"Tables"};
+    const QString calc_std_drinks_action_name{"Calculate Std. Drinks"};
+
+    std::array<QString, 5> action_names{
+        about_action_name,
+        export_action_name,
+        graphs_action_name,
+        table_action_name,
+        calc_std_drinks_action_name
+    };
+
 #ifdef __APPLE__
     QMenu *app_menu = menuBar()->addMenu("App Menu");
+    const QString ellipses{"..."};
+
+    for (QString &action_name : action_names) {
+        action_name += ellipses;
+    }
+
 #else
     QMenu *app_menu = menuBar()->addMenu("File");
+    QMenu *report_menu = menuBar()->addMenu("Reports");
+
 #endif
-    auto * preferences_action = new QAction("Preferences", this);
-    auto * about_action = new QAction("About", this);
-    auto * export_action = new QAction("Export...", this);
-    auto * graphs_action = new QAction("Graphs...", this);
-    auto * reports_action = new QAction("Reports...", this);
-    auto * calc_std_drinks = new QAction("Calculate Std. Drinks...", this);
+
+    auto *preferences_action = new QAction(pref_action_name, this);
+    auto *about_action = new QAction(action_names[0], this);
+    auto *export_action = new QAction(action_names[1], this);
+    auto *graphs_action = new QAction(action_names[2], this);
+    auto *table_action = new QAction(action_names[3], this);
+    auto *calc_std_drinks = new QAction(action_names[4], this);
+
     preferences_action->setMenuRole(QAction::PreferencesRole);
     about_action->setMenuRole(QAction::AboutRole);
     export_action->setMenuRole(QAction::ApplicationSpecificRole);
     graphs_action->setMenuRole(QAction::ApplicationSpecificRole);
-    reports_action->setMenuRole(QAction::ApplicationSpecificRole);
+    table_action->setMenuRole(QAction::ApplicationSpecificRole);
     calc_std_drinks->setMenuRole(QAction::ApplicationSpecificRole);
-    app_menu->addAction(preferences_action);
+
     app_menu->addAction(about_action);
+    app_menu->addAction(preferences_action);
     app_menu->addAction(export_action);
-    app_menu->addAction(graphs_action);
-    app_menu->addAction(reports_action);
     app_menu->addAction(calc_std_drinks);
+
+#ifdef __APPLE__
+    app_menu->addAction(graphs_action);
+    app_menu->addAction(table_action);
+#else
+    report_menu->addAction(graphs_action);
+    report_menu->addAction(table_action);
+#endif
 
     connect(preferences_action, &QAction::triggered, this, &MainWindow::open_user_settings);
     connect(about_action, &QAction::triggered, this, &MainWindow::open_about_dialog);
     connect(export_action, &QAction::triggered, this, &MainWindow::open_export_dialog);
     connect(graphs_action, &QAction::triggered, this, &MainWindow::open_graphs);
-    connect(reports_action, &QAction::triggered, this, &MainWindow::open_reports);
+    connect(table_action, &QAction::triggered, this, &MainWindow::open_reports);
     connect(calc_std_drinks, &QAction::triggered, this, &MainWindow::open_std_drink_calculator);
 }
 
