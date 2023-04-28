@@ -130,6 +130,20 @@ std::string GraphingCalculations::week_number(const int date) {
     return std::to_string(date).substr(0, 4) + '-' + std::to_string(week_num);
 }
 
+tm GraphingCalculations::update_week_number_and_day(std::string week_num_tmp, unsigned day_num, tm tm) {
+    if (day_num > 6) {
+        day_num = 0;
+        const size_t first {week_num_tmp.find('-')};
+        const size_t last {week_num_tmp.find_last_of('-')};
+        const std::string current_year {week_num_tmp.substr(0, first)};
+        const int current_week {std::stoi(week_num_tmp.substr(first, last-first)) + 1};
+        week_num_tmp = current_year + "-" + std::to_string(current_week) + "-" + std::to_string(day_num);
+        utilities::strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+    }
+
+    return tm;
+}
+
 int GraphingCalculations::date_from_week_num(const std::string& week_num) {
     /*
      * Calculates the date from a week number.
@@ -146,6 +160,8 @@ int GraphingCalculations::date_from_week_num(const std::string& week_num) {
         day_num += 1;
         week_num_tmp = week_num + "-" + std::to_string(day_num);
         utilities::strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+
+        tm = update_week_number_and_day(week_num_tmp, day_num, tm);
     }
 #else
     strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
@@ -154,15 +170,7 @@ int GraphingCalculations::date_from_week_num(const std::string& week_num) {
         week_num_tmp = week_num + "-" + std::to_string(day_num);
         strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
 
-        if (day_num > 6) {
-            day_num = 0;
-            const size_t first {week_num_tmp.find('-')};
-            const size_t last {week_num_tmp.find_last_of('-')};
-            const std::string current_year {week_num_tmp.substr(0, first)};
-            const int current_week {std::stoi(week_num_tmp.substr(first, last-first)) + 1};
-            week_num_tmp = current_year + "-" + std::to_string(current_week) + "-" + std::to_string(day_num);
-            strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
-        }
+        tm = update_week_number_and_day(week_num_tmp, day_num, tm);
     }
 #endif
 
