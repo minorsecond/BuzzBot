@@ -3,11 +3,13 @@
      
 # BuzzBot
 ## Track your consumption of your favorite alcoholic drinks
-It is estimated that [1 in 8 deaths of those between 20-64 years of age is attributable to excessive alcohol use.](https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2798004?utm_campaign=articlePDF&utm_medium=articlePDFlink&utm_source=articlePDF&utm_content=jamanetworkopen.2022.39485)
-Keeping tabs on how much alcohol you consume is essential for your health, and BuzzBot makes it easy to do.
-Simply log your drink and BuzzBot will display how many standard drinks you've consumed, and how close you are to the
-healthy limit. BuzzBot even features graphs and reports! You can visualize your alcohol consumption over time, and you
-can use the reports feature to see what drinks you have rated highest.
+[Excessive alcohol use is a significant factor contributing to 1 in 8 deaths among individuals aged 20-64](https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2798004?utm_campaign=articlePDF&utm_medium=articlePDFlink&utm_source=articlePDF&utm_content=jamanetworkopen.2022.39485). Monitoring and managing your alcohol consumption is crucial for maintaining good health, and that's where BuzzBot comes in. With BuzzBot, keeping track of your drinks has never been easier.
+
+By simply logging your drinks, BuzzBot provides a comprehensive overview of your alcohol intake. It calculates the number of standard drinks you've consumed and helps you gauge how close you are to the recommended limit for a healthy lifestyle. But BuzzBot offers even more than just tracking your intake.
+
+BuzzBot goes beyond basic functionality by offering intuitive graphs and insightful reports. You can visualize your alcohol consumption patterns over time, gaining a better understanding of your habits. Additionally, the reports feature allows you to identify and explore the drinks you have rated highest, giving you valuable insights into your preferences.
+
+With BuzzBot, you can take charge of your alcohol consumption and make informed decisions about your health. Start using BuzzBot today to prioritize your well-being and enjoy a balanced lifestyle.
 
 ### Build Status
 | Branch  | macOS Build Status                                                                                                                      | Linux Build Status                                                                                                                                    | Windows Build Status                                                                                                                                      | Code Review                                                                                                                                                                                                                 |
