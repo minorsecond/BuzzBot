@@ -154,25 +154,26 @@ int GraphingCalculations::date_from_week_num(const std::string& week_num) {
     struct tm tm{};
     int day_num {1};
     std::string week_num_tmp {week_num + "-" + std::to_string(day_num)};
+
 #ifdef __WIN32
-    utilities::strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
-    while (tm.tm_mday < 1) {
-        day_num += 1;
-        week_num_tmp = week_num + "-" + std::to_string(day_num);
+    std::function<void()> strptimeFunc = [&]() {
         utilities::strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
-
-        tm = update_week_number_and_day(week_num_tmp, day_num, tm);
-    }
+    };
 #else
-    strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+    std::function<void()> strptimeFunc = [&]() {
+        strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+    };
+#endif
+
+    strptimeFunc();
+
     while (tm.tm_mday < 1) {
         day_num += 1;
         week_num_tmp = week_num + "-" + std::to_string(day_num);
-        strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+        strptimeFunc();
 
         tm = update_week_number_and_day(week_num_tmp, day_num, tm);
     }
-#endif
 
     std::string year {std::to_string(tm.tm_year +1900)};
     std::string month {std::to_string(tm.tm_mon + 1)};
