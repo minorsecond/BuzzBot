@@ -260,33 +260,14 @@ QVector<QCPGraphData> Graphing::create_qvect(const std::map<int, double> &date_s
      * Create QVector of std drinks
      */
 
-    // Create the QVectof of QCPGraphData objects
-    QVector<QCPGraphData> time_data(static_cast<qsizetype>(date_std_drinks.size()));
-    qsizetype it_value {0};
-    for (auto it {date_std_drinks.begin()}; it != date_std_drinks.end(); it++) {
-        time_data[it_value].key = it->first;
-        time_data[it_value].value = it->second;
-        it_value += 1;
+    QVector<QCPGraphData> time_data;
+    time_data.reserve(date_std_drinks.size());
+
+    for (const auto& entry : date_std_drinks) {
+        time_data.push_back(QCPGraphData(entry.first, entry.second));
     }
 
     return time_data;
-}
-
-void Graphing::add_std_drinks(const int date, const double std_drinks, std::map<int, double> &date_std_drinks) {
-    /*
-     * Add std drinks to the map of std drinks
-     * @param std_drinks the number of std drinks to add
-     * @param date_std_drinks: The map of std drinks
-     */
-
-    if (date_std_drinks.find(date) == date_std_drinks.end()) {
-        // Date not in date_std_drinks
-        date_std_drinks[date] = std_drinks;
-    } else {
-        // Date already processed
-        auto it = date_std_drinks.find(date);
-        it->second += std_drinks;
-    }
 }
 
 QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drinks, double std_drink_size) {
@@ -327,7 +308,10 @@ QVector<QCPGraphData> Graphing::time_data_aggregator(std::vector<Drink> all_drin
         }
 
         // Add to the map of dates & std drinks
-        add_std_drinks(date, all_drink.get_standard_drinks(), date_std_drinks);
+        const double std_drinks {all_drink.get_standard_drinks()};
+        date_std_drinks[date] = date_std_drinks.find(date) == date_std_drinks.end()
+                ? std_drinks
+                : date_std_drinks[date] + std_drinks;
     }
 
     add_empty_drinks(first_year, last_year, max_date, min_date, date_std_drinks);

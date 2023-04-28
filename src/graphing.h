@@ -27,7 +27,6 @@ private:
     static void add_empty_drinks(const int first_year, const int last_year, const int max_date, const int min_date,
     std::map<int, double> &date_std_drinks);
     static QVector<QCPGraphData> create_qvect(const std::map<int, double> &date_std_drinks);
-    static void add_std_drinks(const int date, const double std_drinks, std::map<int, double> &date_std_drinks);
     static QVector<QCPGraphData> time_data_aggregator(std::vector<Drink> all_drinks, double std_drink_size);
 };
 
