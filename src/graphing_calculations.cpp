@@ -59,19 +59,15 @@ std::map<double, size_t> GraphingCalculations::count_values_in_vect(const std::v
      * @return: a map<double, int> of values (keys) and their counts (values).
      */
 
-    std::vector<double> ibu_copy {all_values};
-    std::map<double, size_t> ibu_counts {};
+    std::map<double, size_t> ibu_counts;
 
-    // Get count (y value) of each IBU (x value).
-    // First, get unique items in vector
-    std::sort(ibu_copy.begin(), ibu_copy.end());
-    ibu_copy.erase(unique(ibu_copy.begin(), ibu_copy.end()), ibu_copy.end());
-
-    // Create map where key is the IBU value and value is the count of the IBU in all_values.
-    for (const double &i : ibu_copy) {
-        const double ibu_value = i;
-        size_t ibu_count = std::count(all_values.begin(), all_values.end(), ibu_value);
-        ibu_counts[i] = ibu_count;
+    for (const auto& value : all_values) {
+        auto it = ibu_counts.find(value);
+        if (it == ibu_counts.end()) {
+            ibu_counts.emplace_hint(it, value, 1);
+        } else {
+            ++it->second;
+        }
     }
 
     return ibu_counts;
