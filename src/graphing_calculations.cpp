@@ -13,6 +13,10 @@
     #include "utilities.h"  // For strptime
 #endif
 
+const unsigned tm_year_base {1900};
+const unsigned tm_mday_base {1};
+const unsigned tm_wday_max {6};
+
 std::vector<double> GraphingCalculations::get_beer_ibus(const std::vector<Drink>& all_drinks) {
     /*
      * Create a vector containing IBU values of all beers.
@@ -131,7 +135,7 @@ std::string GraphingCalculations::week_number(const int date) {
 }
 
 tm GraphingCalculations::update_week_number_and_day(std::string week_num_tmp, unsigned day_num, tm tm) {
-    if (day_num > 6) {
+    if (day_num > tm_wday_max) {
         day_num = 0;
         const size_t first {week_num_tmp.find('-')};
         const size_t last {week_num_tmp.find_last_of('-')};
@@ -175,8 +179,8 @@ int GraphingCalculations::date_from_week_num(const std::string& week_num) {
         tm = update_week_number_and_day(week_num_tmp, day_num, tm);
     }
 
-    std::string year {std::to_string(tm.tm_year +1900)};
-    std::string month {std::to_string(tm.tm_mon + 1)};
+    std::string year {std::to_string(tm.tm_year + tm_year_base)};
+    std::string month {std::to_string(tm.tm_mon + tm_mday_base)};
     std::string day {std::to_string(tm.tm_mday)};
 
     month = (month.length() == 1) ? '0' + month : month; // Zero pad if single digit month
