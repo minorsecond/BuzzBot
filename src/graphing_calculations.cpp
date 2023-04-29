@@ -138,7 +138,12 @@ tm GraphingCalculations::update_week_number_and_day(std::string week_num_tmp, un
         const std::string current_year {week_num_tmp.substr(0, first)};
         const int current_week {std::stoi(week_num_tmp.substr(first, last-first)) + 1};
         week_num_tmp = current_year + "-" + std::to_string(current_week) + "-" + std::to_string(day_num);
+
+#ifdef _WIN32
         utilities::strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+#else
+        strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+#endif
     }
 
     return tm;
