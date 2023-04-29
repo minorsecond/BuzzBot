@@ -19,6 +19,9 @@ public:
     static int parse_date(const std::string &date);
     static std::string week_number(int date);
     static int date_from_week_num(const std::string& week_num);
+
+private:
+    static tm update_week_number_and_day(std::string week_num_tmp, unsigned day_num, tm tm);
 };
 
 

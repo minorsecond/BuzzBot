@@ -7,11 +7,16 @@
 #include <cstring>
 #include <sstream>
 #include <algorithm>
+#include <functional>
 #include "graphing_calculations.h"
 
 #ifdef __WIN32
     #include "utilities.h"  // For strptime
 #endif
+
+const unsigned tm_year_base {1900};
+const unsigned tm_mday_base {1};
+const unsigned tm_wday_max {6};
 
 std::vector<double> GraphingCalculations::get_beer_ibus(const std::vector<Drink>& all_drinks) {
     /*
@@ -55,19 +60,15 @@ std::map<double, size_t> GraphingCalculations::count_values_in_vect(const std::v
      * @return: a map<double, int> of values (keys) and their counts (values).
      */
 
-    std::vector<double> ibu_copy {all_values};
-    std::map<double, size_t> ibu_counts {};
+    std::map<double, size_t> ibu_counts;
 
-    // Get count (y value) of each IBU (x value).
-    // First, get unique items in vector
-    std::sort(ibu_copy.begin(), ibu_copy.end());
-    ibu_copy.erase(unique(ibu_copy.begin(), ibu_copy.end()), ibu_copy.end());
-
-    // Create map where key is the IBU value and value is the count of the IBU in all_values.
-    for (const double &i : ibu_copy) {
-        const double ibu_value = i;
-        size_t ibu_count = std::count(all_values.begin(), all_values.end(), ibu_value);
-        ibu_counts[i] = ibu_count;
+    for (const auto& value : all_values) {
+        auto it = ibu_counts.find(value);
+        if (it == ibu_counts.end()) {
+            ibu_counts.emplace_hint(it, value, 1);
+        } else {
+            ++it->second;
+        }
     }
 
     return ibu_counts;
@@ -130,6 +131,25 @@ std::string GraphingCalculations::week_number(const int date) {
     return std::to_string(date).substr(0, 4) + '-' + std::to_string(week_num);
 }
 
+tm GraphingCalculations::update_week_number_and_day(std::string week_num_tmp, unsigned day_num, tm tm) {
+    if (day_num > tm_wday_max) {
+        day_num = 0;
+        const size_t first {week_num_tmp.find('-')};
+        const size_t last {week_num_tmp.find_last_of('-')};
+        const std::string current_year {week_num_tmp.substr(0, first)};
+        const int current_week {std::stoi(week_num_tmp.substr(first, last-first)) + 1};
+        week_num_tmp = current_year + "-" + std::to_string(current_week) + "-" + std::to_string(day_num);
+
+#ifdef _WIN32
+        utilities::strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+#else
+        strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+#endif
+    }
+
+    return tm;
+}
+
 int GraphingCalculations::date_from_week_num(const std::string& week_num) {
     /*
      * Calculates the date from a week number.
@@ -140,34 +160,29 @@ int GraphingCalculations::date_from_week_num(const std::string& week_num) {
     struct tm tm{};
     int day_num {1};
     std::string week_num_tmp {week_num + "-" + std::to_string(day_num)};
-#ifdef __WIN32
-    utilities::strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
-    while (tm.tm_mday < 1) {
-        day_num += 1;
-        week_num_tmp = week_num + "-" + std::to_string(day_num);
-        utilities::strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
-    }
-#else
-    strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
-    while (tm.tm_mday < 1) {
-        day_num += 1;
-        week_num_tmp = week_num + "-" + std::to_string(day_num);
-        strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
 
-        if (day_num > 6) {
-            day_num = 0;
-            const size_t first {week_num_tmp.find('-')};
-            const size_t last {week_num_tmp.find_last_of('-')};
-            const std::string current_year {week_num_tmp.substr(0, first)};
-            const int current_week {std::stoi(week_num_tmp.substr(first, last-first)) + 1};
-            week_num_tmp = current_year + "-" + std::to_string(current_week) + "-" + std::to_string(day_num);
-            strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
-        }
-    }
+#ifdef __WIN32
+    std::function<void()> strptimeFunc = [&]() {
+        utilities::strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+    };
+#else
+    std::function<void()> strptimeFunc = [&]() {
+        strptime(week_num_tmp.c_str(), "%Y-%W-%w", &tm);
+    };
 #endif
 
-    std::string year {std::to_string(tm.tm_year +1900)};
-    std::string month {std::to_string(tm.tm_mon + 1)};
+    strptimeFunc();
+
+    while (tm.tm_mday < 1) {
+        day_num += 1;
+        week_num_tmp = week_num + "-" + std::to_string(day_num);
+        strptimeFunc();
+
+        tm = update_week_number_and_day(week_num_tmp, day_num, tm);
+    }
+
+    std::string year {std::to_string(tm.tm_year + tm_year_base)};
+    std::string month {std::to_string(tm.tm_mon + tm_mday_base)};
     std::string day {std::to_string(tm.tm_mday)};
 
     month = (month.length() == 1) ? '0' + month : month; // Zero pad if single digit month
