@@ -662,7 +662,6 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
             ui->beerIbuInput->clear();
             ui->beerSizeInput->setValue(0.0);
             ui->beerSizeInput->clear();
-            ui->beerRatingInput->setValue(0);
             ui->beerRatingInput->setValue(5);
             ui->beerNotesInput->clear();
         } else if (alcohol_type == "Liquor") {
@@ -670,7 +669,6 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
             ui->liquorAbvInput->clear();
             ui->liquorSizeInput->setValue(0.0);
             ui->liquorSizeInput->clear();
-            ui->liquorRatingInput->setValue(0);
             ui->liquorRatingInput->setValue(5);
             ui->liquorNotesInput->clear();
         } else if (alcohol_type == "Wine") {
@@ -678,7 +676,6 @@ void MainWindow::clear_fields(const std::string& alcohol_type) {
             ui->wineVintage->clear();
             ui->wineAbvInput->setValue(0.0);
             ui->wineAbvInput->clear();
-            ui->wineRatingInput->setValue(0);
             ui->wineRatingInput->setValue(5);
             ui->wineSizeInput->setValue(0.0);
             ui->wineSizeInput->clear();
