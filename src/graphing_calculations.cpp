@@ -7,6 +7,7 @@
 #include <cstring>
 #include <sstream>
 #include <algorithm>
+#include <functional>
 #include "graphing_calculations.h"
 
 #ifdef __WIN32
