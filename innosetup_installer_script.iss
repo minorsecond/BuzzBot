@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "BuzzBot"
-#define MyAppVersion "2.5.0"
+#define MyAppVersion "2.5.4"
 #define MyAppURL "www.github.com/minorsecond/BuzzBot"
 #define MyAppExeName "BuzzBot.exe"
 
